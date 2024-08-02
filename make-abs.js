@@ -27,7 +27,7 @@ function insertHereImportmap(objRelMap) {
                 Object.entries(objRelMap).map(entry => [entry[0], makeAbsLink(entry[1])])
             )
     }
-    const jsonAbsMap = JSON.stringify(objAbsMap);
+    const jsonAbsMap = JSON.stringify(objAbsMap, null, 2);
     console.log(jsonAbsMap);
     const eltMap = insertHereElement("script");
     eltMap.type = "importmap";
