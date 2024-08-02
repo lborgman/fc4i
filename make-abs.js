@@ -1,5 +1,7 @@
 // @ts-check
-console.log("here is make-abs.js");
+const MAKE_ABS_VER = "0.1.0";
+
+console.log(`here is make-abs.js ${MAKE_ABS_VER}`);
 
 /*
     Helper functions for developing locally and serving from GitHub.
@@ -9,10 +11,12 @@ console.log("here is make-abs.js");
     your dynamig import map. Just include this script right before.
 */
 
+let logAbs = false;
+
 function makeAbsLink(relLink) {
     const urlLink = new URL(relLink, location.href);
     const absLink = urlLink.href;
-    console.log("makeAbsScriptLink:", absLink);
+    if (logAbs) console.log("makeAbsScriptLink:", absLink);
     return absLink;
 }
 
@@ -28,7 +32,7 @@ function insertHereImportmap(objRelMap) {
             )
     }
     const jsonAbsMap = JSON.stringify(objAbsMap, null, 2);
-    console.log(jsonAbsMap);
+    if (logAbs) console.log(jsonAbsMap);
     const eltMap = insertHereElement("script");
     eltMap.type = "importmap";
     eltMap.textContent = jsonAbsMap;
@@ -54,7 +58,7 @@ function insertHereScript(relSrc, eventName) {
     if (eventName) {
         prom = simpleBlockUntilEvent(window, eventName);
         eltScript.onload = () => {
-            console.log("loaded ", relSrc, eventName);
+            if (logAbs) console.log("loaded ", relSrc, eventName);
             window.dispatchEvent(new CustomEvent(eventName))
         }
     }
