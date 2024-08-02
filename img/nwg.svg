@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to SVGRepo https://www.svgrepo.com -->
+<!-- https://css-tricks.com/svg-path-syntax-illustrated-guide/ -->
+<!-- https://css-tricks.com/transforms-on-svg-elements/ -->
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	x="0" y="0" viewBox="0 0 100 100" xml:space="preserve">
+    <rect width="100" height="100" fill="#000011" />
+    <g transform="translate(-8, -19) scale(0.97)">
+        <path fill="#602000" d="
+        M19 78
+        L40 41
+        L52 66
+        L40 95
+        Z" />
+        <path fill="#7272cc" d="
+        M40 41
+        52 66
+        87 69
+        89 42
+        Z" />
+        <path fill="#878700" d="
+        M52 66
+        40 95
+        82 103
+        87 69
+        Z" />
+        <rect x="54" y="56" width="16" height="10" fill="deepskyblue" />
+        <rect x="48" y="69" width="24" height="15" fill="cyan" />
+    </g>
+    <circle cx="50" cy="50" r="4" fill="rgba(255, 255, 0)" />
+    	<circle cx="50%" cy="50%" r="40%"
+	  fill="none" stroke="rgba(255,0,0,0.1)" stroke-width="0.5" />
+</svg>
+<!-- 
+    This is just a comment... - does it work?
+
+function showMousePos() {
+    const w = document.documentElement.clientWidth;
+    const h = document.documentElement.clientHeight;
+    console.log({w, h});
+    function showPos(evt) {
+        const x = Math.floor(evt.screenX * 100 / w);
+        const y = Math.floor(evt.screenY * 100 / h);
+        console.log(evt.screenX, x, evt.screenY, y);
+    }
+    const x = debounce(showPos, 1000);
+    document.body.addEventListener("mousemove", x)
+}
+showMousePos();
+
+19 78
+40 41
+52 66
+40 95
+
+40 41
+51 66
+87 69
+89 42
+
+51 66
+40 95
+82 103
+89 42
+    -->

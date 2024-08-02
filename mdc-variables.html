@@ -1,0 +1,672 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css"> -->
+<!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.css"> -->
+<link rel="stylesheet" href="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.css">
+<style>
+    :root {
+        font-size: 16px;
+    }
+
+    :root * {
+        font-size: 16px;
+    }
+
+    #my-title {
+        padding: 10px;
+    }
+
+    #my-cls-test-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    #my-cls-test-container div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 4px;
+        border: 1px solid rgba(255, 0, 0, 0.1);
+    }
+
+    #my-cls-test-container div div {
+        width: fit-content;
+        min-width: 100px;
+        max-width: 150px;
+        overflow-wrap: anywhere;
+        padding: 4px;
+    }
+
+    #my-cls-test-container div div div {
+        border: none;
+    }
+
+    #card-own {
+        padding: 20px;
+    }
+
+    #fetch-status {
+        visibility: visible;
+        color: red !important;
+        font-style: italic !important;
+    }
+
+    html.own-loaded #fetch-status {
+        color: unset !important;
+        font-style: unset !important;
+    }
+
+    /* mdc-theme--error is missing!? */
+    .mdc-theme--error {
+        background: red !important
+    }
+
+    #container-mdc-vars {
+        display: grid;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        background-color: hsl(0deg 0% 16%);
+    }
+
+    .ourmdc-var-key-val {
+        display: grid;
+        grid-template-columns: 1fr 100px;
+        gap: 1rem;
+        background-color: black;
+        color: white;
+        padding: 4px;
+        border-radius: 4px;
+    }
+
+
+    .ourmdc-var-key {
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+
+    .ourmdc-var-color-val {
+        display: inline-block;
+    }
+
+    .ourmdc-var-color {
+        width: 1rem;
+        height: 1rem;
+        display: inline-block;
+        border: 1px solid gray;
+        border-radius: 2px;
+    }
+
+    .ourmdc-var-ourown {
+        background: gray;
+        color: black;
+        padding: 4px;
+        border-radius: 4px;
+        opacity: 0.2;
+    }
+
+    html.including-own .ourmdc-var-ourown {
+        opacity: unset;
+    }
+
+    #download-css {
+        visibility: hidden;
+    }
+
+    html.can-save-css #download-css {
+        visibility: unset;
+    }
+
+    /*************** IRO */
+    #iro-body {
+        color: #fff;
+        background: #171F30;
+        line-height: 150%;
+    }
+
+    .iro-wrapper svg {}
+
+    .iro-wrap {
+        min-height: 100vh;
+        max-width: 720px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .iro-wrap .iro-half {
+        width: 50%;
+        padding: 32px 0;
+    }
+
+    .iro-title {
+        font-family: sans-serif;
+        line-height: 24px;
+        display: block;
+        padding: 8px 0;
+    }
+
+    .iro-swatch {
+        height: 32px;
+        margin: 4px 0;
+        border-radius: 4px;
+    }
+
+    #iro-colorList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        margin-bottom: 12px;
+        display: flex;
+    }
+
+    #iro-colorList .swatch {
+        border-radius: 0;
+    }
+
+    #iro-colorList li {
+        flex: 1;
+    }
+
+    #iro-colorList li:first-child .iro-swatch {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    #iro-colorList li:last-child .iro-swatch {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    #iro-activeColor .swatch {
+        width: 120px;
+    }
+
+    .iro-readout {
+        margin-top: 32px;
+        line-height: 180%;
+    }
+
+    #iro-values {
+        font-family: monospace;
+        line-height: 150%;
+    }
+
+    .iro-link {
+        margin-top: 16px;
+    }
+
+    .iro-link a {
+        color: MediumSlateBlue;
+    }
+</style>
+
+<body class="MYmdc-theme--dark">
+    <h1 id="my-title" class="mdc-theme--secondary-bg mdc-theme--on-secondary">MDC CSS Color Variables and Classes</h1>
+    <div id="card-own" class="mdc-card mdc-theme--on-primary mdc-theme--primary-bg">
+        <label>
+            <input type="checkbox" id="include-own">
+            Include your own --mdc-theme... color variables
+        </label>
+        <input type="url" id="own-url">
+        <div id="fetch-status">Not tried yet</div>
+        <a id="download-css" download="temp.css" class="mdc-button mdc-button--raised">Download new CSS</a>
+    </div>
+
+    <ul>
+        <li>
+            <a href="#container-mainbg-classes">Main MDC color+bg classes</a>
+        <li>
+            <a href="#container-all-classes">All MDC color classes</a>
+        <li>
+            <a href="mdc-vars">MDC color variables</a>
+        </li>
+    </ul>
+
+    <section id="my-cls-test-container">
+        <h1>Main MDC color bg classes</h1>
+        <div id="container-mainbg-classes"></div>
+
+        <h1>All MDC color classes</h1>
+        <div id="container-all-classes"></div>
+    </section>
+    <section id="mdc-vars">
+        <h1>MDC color variables</h1>
+        <div id="container-mdc-vars"></div>
+    </section>
+</body>
+<script>
+    // https://iro.js.org/advanced.html#multi-color-selections
+
+    // FIX-ME: Dark mode?
+    // https://stackoverflow.com/questions/56393880/how-do-i-detect-dark-mode-using-javascript
+
+    const readTxt = async (url) => {
+        const response = await fetch(url);
+        const result = await response.text().then((str) => { return str; });
+        return result;
+    };
+    function mkElt(type, attrib, inner) {
+        var elt = document.createElement(type);
+
+        function addInner(inr) {
+            if (inr instanceof Element) {
+                elt.appendChild(inr);
+            } else {
+                const txt = document.createTextNode(inr.toString());
+                elt.appendChild(txt);
+            }
+        }
+        if (inner) {
+            if (inner.length && typeof inner != "string") {
+                for (var i = 0; i < inner.length; i++)
+                    if (inner[i])
+                        addInner(inner[i]);
+            } else
+                addInner(inner);
+        }
+        for (var x in attrib) {
+            elt.setAttribute(x, attrib[x]);
+        }
+        return elt;
+    }
+    // https://dev.to/derder56/how-to-build-a-css-minifier-with-8-lines-of-javascript-4bj3
+    function minifyCSS(css) {
+        const minified = css
+            .replace(/([^0-9a-zA-Z\.#])\s+/g, "$1")
+            .replace(/\s([^0-9a-zA-Z\.#]+)/g, "$1")
+            .replace(/;}/g, "}")
+            .replace(/\/\*.*?\*\//gs, ""); // Note the /s
+        return minified;
+    }
+
+    let t0;
+
+    // Finding definitions, usage and classes in MDC material-components-web.css
+    // reDef = /[\r\n][ \t]*(--mdc[^ :]*):(.*?);/g;
+    reDef = /(--mdc[^ :]*):(.*?);/sg;
+
+    reUse = /var\([ ]*(--mdc[^,)]*)/g;
+    //reUse = /[^}]*+\{[^{]*var\([ ]*(--mdc[^,)]*[^}]*\})/g;
+    reUse = /[^\}]*[^\{]*var\([ ]*(--mdc[^,)]*)/g;
+
+    reCls = /\.([a-z_-]+)/g;
+
+
+    const filterMdcColors = (mdcVar) => {
+        if (mdcVar.startsWith("--mdc-theme-")) return true;
+        if (mdcVar.endsWith("-color")) return true;
+        return false;
+    }
+    const filterMdcColorCls = (mdcVar) => {
+        if (mdcVar.startsWith("mdc-theme-")) return true;
+        if (mdcVar.endsWith("-bg")) return true;
+        return false;
+    }
+    const unique = (arr) => {
+        const setUnique = new Set(arr);
+        return Array.from(setUnique);
+    }
+
+
+    // Values from material-components-web.css 
+    let defMdcColorVar;
+    let useMdcVar;
+    let useMdcClsAll;
+
+
+    const containerMdcVars = document.getElementById("container-mdc-vars");
+    const origMdcVars = {}
+    const eltsMdcVars = {}
+
+    async function getMdcOrig() {
+        t0 = await readTxt(document.styleSheets[0].href);
+        defMdcColorVar = [...t0.matchAll(reDef)].map(m => m[1]);
+        defMdcColorVar = defMdcColorVar.filter(filterMdcColors);
+        defMdcColorVar = unique(defMdcColorVar);
+        defMdcColorVar.sort();
+        console.log({ defMdcColorVar });
+        const styleComp = getComputedStyle(document.documentElement);
+        // console.log({ styleComp });
+
+        defMdcColorVar.forEach(key => {
+            const val = styleComp.getPropertyValue(key);
+            origMdcVars[key] = val;
+            const eltColor = mkElt("span", { class: "ourmdc-var-color" });
+            eltColor.style.backgroundColor = val;
+            const eltOrig = mkElt("span", { class: "ourmdc-var-orig" }, [
+                mkElt("span", { class: "ourmdc-var-key" }, key),
+                mkElt("span", { class: "ourmdc-var-color-val" }, [
+                    eltColor,
+                    " ",
+                    mkElt("span", { class: "ourmdc-var-val" }, val),
+                ])
+            ]);
+            const eltOurown = mkElt("span", {
+                class: "ourmdc-var-ourown"
+            }, [
+                mkElt("span", { style: "font-style: italic; margin-right: 1rem;" }, "Our own:"),
+                mkElt("span", { class: "ourown-var-color-val" })
+            ]);
+            const eltKeyVal = mkElt("div", { class: "ourmdc-var-key-val" }, [eltOrig, eltOurown]);
+            eltsMdcVars[key] = eltKeyVal;
+            containerMdcVars.appendChild(eltKeyVal);
+        });
+        console.log({ origMdcVars });
+
+
+        if (false) {
+            useMdcVar = [...t0.matchAll(reUse)].map(m => m[1]);
+            useMdcVar = useMdcVar.filter(filterMdcColors);
+            useMdcVar = unique(useMdcVar);
+            useMdcVar.sort();
+            console.warn({ useMdcVar });
+        }
+
+        // FIX-ME:  Only color variables
+        let n = 0;
+        // reUse = /[^\}]*[^\{]*var\([ ]*(--mdc[^,)]*)/g;
+        defMdcColorVar.forEach(key => {
+            if (n++ > 10) return;
+            // reUse = /[^\}]*[^\{]*var\([ ]*(--mdc[^,)]*)/g;
+            // const reKeyUse = /[^\}]*[^\{]*var\([ ]*(${key}[^,)]*)/g;
+
+            // const reKeyUse = new RegExp(`[^\}]*\}[^\{]*var\([ ]*${key}[^,)]*\)`, "g");
+            // const reKeyUse = new RegExp(`[^\}]*\{[^\{]*var\([ ]*${key}[^,)]*\)`, "g");
+            // const reKeyUse = new RegExp(`[ ]*${key}[^,)]*`, "g");
+
+            // const reKeyUse = new RegExp(`var\\([ ]*${key}.*?\\)`, "gs");
+            const reKeyUse = new RegExp(`([^\}]*)\{[^\{]*var\\([ ]*${key}.*?\\)`, "gs");
+            console.log(`%c${key}`, "color:red", { reKeyUse });
+            [...t0.matchAll(reKeyUse)].forEach(m => {
+                const m0 = m[0];
+                const m1 = m[1];
+                // console.log({ m, m1, key, m0 });
+                const varClassMatch = key.substring(2) == m1.substring(1).replaceAll("--", "-");
+                if (varClassMatch) {
+                    console.log(`%cmatch ${m1}`, "color:yellowgreen");
+                } else {
+                    console.log({ m1, });
+                }
+            })
+        });
+
+        if (false) {
+            let usesMdcVar = [...t0.matchAll(reUse)].map(m => m[0]);
+            usesMdcVar = unique(usesMdcVar);
+            console.warn({ usesMdcVar });
+        }
+
+        useMdcClsAll = [...t0.matchAll(reCls)].map(m => m[1]);
+        useMdcClsAll = useMdcClsAll.filter(filterMdcColorCls);
+        useMdcClsAll = unique(useMdcClsAll);
+        useMdcClsAll.sort();
+
+        // <div id="my-cls-test-container">
+        const addClassNameBox = (clsName, container) => {
+            const div = mkElt("div", { class: "mdc-card mdc-theme--secondary-bg" }, [
+                mkElt("div", { style: "font-style:italic; font-size:12px;" }, clsName),
+                mkElt("div", { class: clsName }, clsName)
+            ]);
+            return container.appendChild(div);
+        };
+        // <div id="container-all-classes"></div>
+        const containerAll = document.getElementById("container-all-classes");
+        containerAll.style.display = "none";
+        useMdcClsAll.forEach(clsName => { addClassNameBox(clsName, containerAll); });
+
+        // <div id="container-mainbg-classes"></div>
+        const containerMainBg = document.getElementById("container-mainbg-classes");
+        const useClsMain = useMdcClsAll.filter(clsName => /^mdc-theme--[^-]*$/.test(clsName));
+        console.log({ useClsMain });
+        useClsMain.forEach(clsName => {
+            const clsNameText = clsName.replace("--", "--on-");
+            let clsNameBg = `${clsName}-bg`;
+            // Sometimes this -bg class exists, sometimes not...
+            if (!useMdcClsAll.includes(clsNameBg)) clsNameBg = clsName;
+            const bothClasses = `${clsNameBg} ${clsNameText}`;
+            const added = addClassNameBox(bothClasses, containerMainBg);
+        });
+
+        // <div id="container-mainbg-with-on-classes"></div>
+    }
+
+
+    const inpOwnUrl = document.getElementById("own-url");
+    const chkOwnUrl = document.getElementById("include-own");
+    const idOurOwnCss = "our-own-css";
+    async function getOwnValues(hrefCss) {
+        let txtCss = await readTxt(hrefCss);
+        txtCss = minifyCSS(txtCss);
+        console.log({ txtCss });
+        const reRoot = /:root\{(.*?)\}/s;
+        const mRoot = txtCss.match(reRoot);
+        console.log({ mRoot })
+        const txtRoot = mRoot[1];
+        // defMdcVar = [...t0.matchAll(reDef)].map(m => m[1]);
+        const reDefMinimized = /(--mdc[^ :]*):(.*?);/g;
+        [...txtRoot.matchAll(reDefMinimized)].map(m => {
+            const key = m[1];
+            const val = m[2]
+            console.log({ m, key, val });
+            const eltKey = eltsMdcVars[key];
+            if (!eltKey) {
+                console.log("eltKey, no match for key", key);
+                return;
+            }
+            eltKey.style.border = "dotted yellow 1px";
+            const eltOwn = eltKey.querySelector(".ourown-var-color-val");
+            eltOwn.style.border = "dotted red 1px";
+            const eltColor = mkElt("span", { class: "ourmdc-var-color" });
+            eltColor.style.backgroundColor = val;
+            eltColor.addEventListener("click", evt => {
+                const target = evt.target;
+                // const inpColor = mkElt("input", { type: color });
+            });
+            eltInpColor = mkElt("input", { type: "color", value: val });
+            eltInpColor.addEventListener("change", evt => {
+                console.log("change", { evt });
+            });
+            eltInpColor.addEventListener("input", evt => {
+                document.documentElement.classList.add("can-save-css"); // FIX-ME:
+                const val = evt.target.value
+                console.log("input", { evt, val });
+                const styleRoot = document.querySelector(':root').style;
+                styleRoot.setProperty(key, val);
+            });
+            eltVal = mkElt("span", { class: "ourmdc-var-val" }, val);
+            const eltDisplayOwn = mkElt("span", { class: "ourmdc-var-color-val" }, [
+                // eltColor,
+                eltInpColor,
+                " ",
+                eltVal
+            ]);
+            // https://codepen.io/rakujira/pen/bGddRyq
+            function displayIro(eltColor, eltVal) {
+                // Create a new color picker instance
+                // https://iro.js.org/guide.html#getting-started
+
+                // Make wrapper
+                const eltColorPicker = mkElt("div", { class: "iro-color-picker" })
+                const eltLeftHalf = mkElt("div", { class: "iro-half" }, eltColorPicker);
+                const eltColorList = mkElt("ul", { id: "iro-colorList" });
+                const eltRightHalf = mkElt("div", { class: "iro-half" }, [
+                    mkElt("span".undefined, "Colors:"),
+                    eltColorList,
+                    mkElt("span", undefined, "Active Color:"),
+                    mkElt("div", { id: "iro-activeColor" }),
+
+                ]);
+                const eltWrap = mkElt("div", { class: "iro-wrap" }, [
+                    eltLeftHalf,
+
+                ]);
+
+                const colorPicker = new iro.ColorPicker(".colorPicker", {
+                    // color picker options
+                    // Option guide: https://iro.js.org/guide.html#color-picker-options
+                    width: 260,
+                    // Pure red, green and blue
+                    colors: [
+                        "rgb(255, 0, 0)",
+                        "rgb(0, 255, 0)",
+                        "rgb(0, 0, 255)",
+                    ],
+                    handleRadius: 9,
+                    borderWidth: 1,
+                    borderColor: "#fff",
+                });
+
+                const colorList = document.getElementById("colorList");
+                const activeColor = document.getElementById("activeColor");
+
+                function setColor(colorIndex) {
+                    // setActiveColor expects the color index!
+                    colorPicker.setActiveColor(colorIndex);
+                }
+
+                // https://iro.js.org/guide.html#color-picker-events
+                colorPicker.on(["mount", "color:change"], function () {
+                    colorList.innerHTML = '';
+                    colorPicker.colors.forEach(color => {
+                        const index = color.index;
+                        const hexString = color.hexString;
+                        colorList.innerHTML += `
+      <li onClick="setColor(${index})">
+        <div class="swatch" style="background: ${hexString}"></div>
+        <span>${index}: ${hexString}</span>
+      </li>
+    `;
+                    });
+                });
+
+                colorPicker.on(["mount", "color:setActive", "color:change"], function () {
+                    // colorPicker.color is always the active color
+                    const index = colorPicker.color.index;
+                    const hexString = colorPicker.color.hexString;
+                    activeColor.innerHTML = `
+    <div class="swatch" style="background: ${hexString}"></div>
+    <span>${index}: ${hexString}</span>
+  `;
+                })
+            }
+            eltOwn.appendChild(eltDisplayOwn);
+        });
+    }
+    chkOwnUrl.addEventListener("change", evt => {
+        const isChecked = chkOwnUrl.checked;
+        console.log({ isChecked });
+        const oldCssElement = document.getElementById(idOurOwnCss);
+        if (isChecked) {
+            document.documentElement.classList.add("including-own");
+            const href = inpOwnUrl.value;
+            const eltOwn = mkElt("link", { id: idOurOwnCss, rel: "stylesheet", href });
+            document.head.appendChild(eltOwn);
+            getOwnValues(href);
+        } else {
+            document.documentElement.classList.remove("including-own");
+            oldCssElement?.remove();
+        }
+    });
+    function getCurrentOurownMdc() {
+        let eltsVar = [...containerMdcVars.querySelectorAll(".ourmdc-var-key-val")];
+        // eltsVar = eltsVar.filter(elt => { return !!elt.querySelector("input"); });
+        console.log({ eltsVar });
+        const out = [];
+        out.push(":root {");
+        eltsVar.forEach(elt => {
+            const key = elt.querySelector(".ourmdc-var-key").textContent;
+            const inp = elt.querySelector("input");
+            const val = inp ? inp.value : "NONE";
+            console.log({ key, inp, val });
+            let row = `/* ${key} */`;
+            if (inp) {
+                row = `${key}: ${val};`;
+            }
+            out.push(row);
+        });
+        out.push("}");
+        return out.join("\n");
+    }
+
+    const eltFechStatus = document.getElementById("fetch-status");
+    addEventListener('DOMContentLoaded', async (event) => {
+        await getMdcOrig();
+        const valOwnUrl = localStorage.getItem("own-url");
+        if (valOwnUrl == null) return;
+        console.log("on load", { valOwnUrl });
+        inpOwnUrl.value = valOwnUrl;
+        checkOwnUrl();
+        const btnDownload = document.getElementById("download-css");
+        btnDownload.addEventListener("click", evt => {
+            const fileContent = getCurrentOurownMdc();
+            // evt.preventDefault(); return;
+            const blob = new Blob([fileContent], { type: 'text/css' });
+            const downloadName = "NEW-FROM-" + inpOwnUrl.value.match(/[^/]*$/)[0];
+            console.log("clicked download", { downloadName });
+            btnDownload.setAttribute("download", downloadName);
+            btnDownload.href = URL.createObjectURL(blob);
+        })
+    });
+    let controllerOwnUrl;
+    async function checkOwnUrl() {
+        const valOwnUrl = inpOwnUrl.value.trim();
+        controllerOwnUrl?.abort();
+        try {
+            controllerOwnUrl = new AbortController();
+            const resFechHead = await fetch(valOwnUrl, {
+                method: "HEAD",
+                signal: controllerOwnUrl.signal
+            });
+            console.log({ resFechHead });
+            const contentType = resFechHead.headers.get("content-type");
+            console.log({ contentType });
+            // const isCss = contentType.startsWith("text/css;");
+            const isCss = contentType == "text/css; charset=utf-8"
+            console.log({ isCss });
+            const headers = [...resFechHead.headers];
+            console.log({ headers });
+            document.documentElement.classList.remove("own-loaded");
+            if (resFechHead.ok) {
+                if (isCss) {
+                    document.documentElement.classList.add("own-loaded");
+                    eltFechStatus.textContent = "Found";
+                } else {
+                    eltFechStatus.textContent = "Found, but not CSS";
+                }
+            } else {
+                eltFechStatus.textContent = resFechHead.statusText;
+            }
+        } catch (err) {
+            console.error("fetch head", { err });
+        }
+    }
+    const restartSaveOwnUrl = (() => {
+        let tmr;
+        const msDelay = 2000;
+        return () => {
+            clearTimeout(tmr);
+            const doSet = () => {
+                const valOwnUrl = inpOwnUrl.value.trim();
+                localStorage.setItem("own-url", valOwnUrl);
+                console.log("saved own-url to localStorage", { valOwnUrl });
+                checkOwnUrl();
+            }
+            tmr = setTimeout(doSet, msDelay);
+        }
+    })();
+    inpOwnUrl.addEventListener("input", evt => { restartSaveOwnUrl(); })
+
+    function getColorThemeBrowser() {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) return "dark";
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) return "light";
+        return undefined;
+    }
+
+</script>
+<!-- <script src="https://raw.githubusercontent.com/jaames/iro.js/master/dist/iro.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>

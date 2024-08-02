@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Mindmaps web page that you can manipulate on your phone">
+    <link rel="manifest" href="manifest-fc4i-mm.json">
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>Mindmaps 4 Internet</title>
+    <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
+
+
+    <!-- for MWC, https://github.com/material-components/material-web -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Required styles for Material Web -->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css">
+    <!-- <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css"> -->
+
+    <link rel="stylesheet" href="css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="css/var-colors.css">
+
+
+    <script src="src/js/fc4i-importmaps.js"></script>
+
+
+    <script src="src/js/error.js"></script>
+    <script src="src/js/umd/idb.js"></script>
+    <!-- <script src="./src/js/is-displayed.js"></script> -->
+
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@0.5/style/jsmind.css" /> -->
+    <link rel="stylesheet" href="/ext/jsmind/jsmind.css" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.draggable-node.js"></script> -->
+    <!-- <script src="/ext/jsmind/230406-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/ext/jsmind/chrome-src-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+</head>
+
+<body>
+    <script>
+        setTimeout(() => {
+            const style =
+                `
+        position:fixed; bottom:0; right:0;
+        display: flex; justify-content: center;
+        width:fit-content; height:25px;
+        padding:2px 10px;
+        background:black; color:yellow;
+        opacity:0.5;
+        z-index:10;
+        `;
+            const myVer = mkElt("div", { id: "jsmind-test-my-ver", style }, "New version");
+            document.body.appendChild(myVer);
+        }, 1000);
+    </script>
+    <script src="/ext/mdc/material-components-web.js"></script>
+    <script>import("pwa");</script>
+
+    <div id="jsmind_container" class="jsmind_container"></div>
+
+    <!-- Mirror must be display:block for rendering -->
+    <div id="jsmind-draggable-container4mirror" style="left: -1000px;"></div>
+
+    <!-- <script src="/src/js/fc4i-mindmaps.js"></script> -->
+    <!-- <script src="/src/js/jsmind-edit-spec-fc4i.js"></script> -->
+
+    <!-- <script type="module" src="/src/js/jsmind-edit-spec-fc4i.js"></script> -->
+    <script>
+        (async () => {
+            const modEditFc4iMM = await import("jsmind-edit-spec-fc4i");
+            const modJsEditCommon = await import("jsmind-edit-common");
+            modJsEditCommon.basicInit4jsmind();
+            modJsEditCommon.setMindmapDialog(modEditFc4iMM.ourDialogMindmaps);
+            modJsEditCommon.pageSetup();
+        })();
+    </script>
+</body>
+
+</html>

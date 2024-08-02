@@ -1,0 +1,2042 @@
+:root {
+    --font-size: 16px;
+    font-size: var(--font-size);
+    --thumb-h: 40px;
+    --thumb-w: 40px;
+}
+
+*:not(h1|h2|h3|h4|h5|h6) {
+    font-size: 1em;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    padding: 1rem;
+}
+
+
+#div-please-install,
+#OLDnotifications-not-allowed {
+    background-color: var(--mdc-theme-secondary);
+    padding: 1rem;
+    box-shadow: darkolivegreen 1rem 1rem;
+    max-width: 300px;
+    position: absolute;
+    left: 10px;
+    top: 20px;
+}
+
+#notifications-not-allowed * {
+    color: darkred;
+}
+
+#debug-section {
+    background-color: darkgreen;
+    color: white;
+    padding: 0.5rem;
+    overflow-wrap: break-word;
+}
+
+#debug-section * {
+    color: white;
+}
+
+#debug-section>* {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 3px;
+}
+
+
+
+div.container-remember {
+    display: grid;
+    gap: 1rem;
+    padding: 10px;
+}
+
+.subject-card div.container-remember {
+    padding: 0;
+}
+
+div.container-remember .mdc-card {
+    padding: 10px;
+}
+
+/*
+.div-created { background-color: darkorchid; }
+*/
+
+.timers-container {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+
+/* table.timers-table { } */
+
+.timers-table th {
+    width: min-content;
+}
+
+.timers-table td {
+    width: min-content;
+}
+
+.timers-table td:nth-child(3) {
+    width: fit-content;
+}
+
+.timers-table tr {
+    width: min-content;
+}
+
+#temp-params {
+    background-color: red;
+    padding: 10px;
+    border: 2px solid black;
+}
+
+#temp-params * {
+    color: yellow;
+}
+
+#prompt4update {
+    background-color: black;
+    border-color: #00000082;
+    color: white;
+    color: yellow;
+    position: fixed;
+    z-index: 1000;
+    top: 60px;
+    left: 20px;
+    width: 250px;
+    display: grid;
+    gap: 10px;
+    box-shadow: 3px 5px 5px 0px rgba(255,255,0,0.75);
+}
+
+/* #prompt4update * { } */
+
+#prompt4update>* {
+    display: flex;
+    gap: 10px;
+}
+
+#prompt4update>form {
+    display: flex;
+    gap: 10px;
+}
+
+
+
+#menu-container>#main-menu-expander,
+#menu-container>#main-menu {
+    position: absolute;
+    left: 0;
+    left: -250px;
+    top: calc(2.5 * var(--font-size));
+    display: block;
+    transition: opacity 0.3s, left 0.3s;
+    background-color: color-mix(in srgb, var(--mdc-theme-primary) 60%, white);
+}
+
+/* Why is this not in material-components-web.css ??? */
+/* FIX-MENU: add class */
+#OLDmain-menu li.mdc-list-item {
+    min-height: 40px;
+    align-items: center;
+}
+
+div.is-menu-div li.mdc-list-item {
+    min-height: 40px;
+    align-items: center;
+}
+
+div.mdc-dialog__content ul.mdc-list[role=menu] li.mdc-list-item {
+    min-height: 32px;
+}
+
+/*
+#menu-container {
+    width: 40px;
+    height: 40px;
+    border: 1px solid green;
+}
+*/
+
+#menu-backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: calc(2.5 * var(--font-size));
+}
+
+#menu-container.open #menu-backdrop {
+    bottom: 0;
+    backdrop-filter: blur(2px);
+    background-color: black;
+    opacity: 0.3;
+}
+
+#menu-container.open #main-menu {
+    display: block;
+    opacity: 1;
+    left: 0;
+}
+
+#menu-close {
+    display: none;
+}
+
+#menu-open {
+    display: grid;
+}
+
+#menu-container.open #menu-close {
+    display: grid;
+}
+
+#menu-container.open #menu-open {
+    display: none;
+}
+
+#menu-toggle {
+    font-size: calc(1.5 * var(--font-size));
+    cursor: context-menu;
+}
+
+#main-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    /* for conf slider! */
+    height: calc(2.5 * var(--font-size));
+    right: 0;
+    background-color: skyblue;
+    background-color: var(--mdc-theme-primary);
+    display: grid;
+    grid-template-columns: calc(2.5 * var(--font-size)) 1fr calc(1.5 * 2.5 * var(--font-size));
+}
+
+#header-search-check {
+    position: relative;
+    display: none;
+}
+
+#page-home #header-search-check {
+    display: unset;
+}
+
+.icon-check-beside-search {
+    color: var(--mdc-theme-secondary);
+    fill: var(--mdc-theme-secondary);
+}
+
+.icon-search-beside-check {
+    position: absolute;
+    left: 15px;
+    color: black;
+}
+
+#header-title {
+    font-size: calc(1.25 * var(--font-size));
+    vertical-align: middle;
+    text-align: center;
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.one-child-fills {
+    display: inline-grid;
+    grid-template-areas: "x";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.center-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-button {
+    display: inline-block;
+    border: none;
+    font-size: inherit;
+    background-color: transparent;
+}
+
+#main-section {
+    margin-top: calc(calc(2.5 * var(--font-size)) + 1rem);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-wrap: break-word;
+}
+
+#page-about #main-section {
+    max-width: 400px;
+}
+
+body#page-about {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.input-save-div {
+    display: flex;
+    gap: 1rem;
+}
+
+
+
+.div-source-web-page {
+    background-color: aquamarine;
+    display: flex;
+    gap: 10px;
+}
+
+.div-input-url {
+    display: inline-grid;
+    grid-template-columns: 1fr 40px;
+    gap: 10px;
+}
+
+.div-input-url-new {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.div-url-top {
+    display: flex;
+    NOgap: 10px;
+    flex-wrap: wrap;
+}
+
+.div-url-top-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    /* for align-content??? */
+    align-content: center;
+}
+
+.div-url-right-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 40px;
+    Xbackground: red;
+}
+
+div.div-url-locked {
+    Xbackground: red;
+}
+
+div.div-url-locked-value {
+    background: grey;
+    opacity: 0.7;
+    padding: 4px;
+    overflow-wrap: anywhere;
+    border-radius: 3px;
+}
+
+div.div-url-locked-value[contenteditable] {
+    opacity: 1;
+    background: white;
+    outline: 1px solid red;
+}
+
+
+div.edit-url-unlocked div.div-url-locked {
+    display: none;
+}
+
+label.tf-url-edit {
+    display: none;
+}
+
+div.edit-url-unlocked label.tf-url-edit {
+    display: block;
+}
+
+
+
+.wastebasket-button {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 1.15rem;
+}
+
+.subjects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.subject-card {
+    padding: 10px;
+}
+
+.subject-summary-span {
+    display: inline-grid;
+    gap: 7px;
+    grid-template-columns: 7px 1fr;
+    width: 100%;
+    --thumb-w: 50px;
+    --thumb-h: calc(1.62 * 50px);
+    --thumb-w: 80px;
+    --thumb-h: 80px
+}
+
+.subject-summary-span.has-image {}
+
+.has-image>.subject-summary-span {
+    grid-template-columns: 7px var(--thumb-w) 1fr;
+}
+
+.subject-card>details:not([open])>summary {
+    list-style: none;
+}
+
+.body-reminder-dialog {
+    --thumb-w: 40px;
+    --thumb-h: 40px
+}
+
+/*
+.subject-card>details[open]>summary {
+    margin-bottom: -20px;
+}
+*/
+
+.subject-card>details[open] .rem-banner-title {
+    margin-top: 0;
+}
+
+/*
+.subject-card>details[open]>summary span.subject-summary-span {
+    Xdisplay: none;
+}
+*/
+
+.has-title {
+    min-width: 0;
+    /* prevent box overflow in display:grid; */
+}
+
+.subject-card>details[open]>summary span.subject-summary-span span.has-title {
+    visibility: hidden;
+}
+
+/*
+.subject-card>details[open]>summary span.image-thumb-size {
+    display: none;
+}
+*/
+
+.subject-card>details[open]>summary button {
+    display: none;
+}
+
+/*
+.subject-card>details[open]>summary .subject-summary-span {
+    Xpadding-left: 1rem;
+    Xgrid-template-columns: 1fr;
+}
+*/
+
+.xsubject-card>details[open]>summary .subject-summary-span.has-image {
+    padding-left: 1rem;
+    grid-template-columns: 40px 1fr;
+}
+
+/* .subject-card>details:not([open])>summary .subject-summary-span { } */
+
+details:not([open])>summary.no-closed-marker {
+    list-style: none;
+}
+
+.removeable {
+    transition-property: transform, opacity;
+}
+
+.removed {
+    /* transition-duration: 2s; */
+    transform: scale(0);
+    opacity: 0.5;
+}
+
+tr.timer_expired {
+    opacity: 0.5;
+}
+
+tr.timer_notified td {
+    background-color: greenyellow;
+}
+
+details.det-timers summary {
+    padding: 4px;
+}
+
+div.manual-timers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+div.manual-timers div.manual-timers {
+    flex-direction: row;
+}
+
+div#div-at-time {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+div#body-dlg-reminders {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+div#body-dlg-reminders header {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+div#body-dlg-reminders form {
+    margin-top: 0.5rem;
+}
+
+div#body-dlg-reminders fieldset {
+    border: none;
+}
+
+div#body-dlg-reminders fieldset[disabled] {
+    opacity: 0.5;
+}
+
+html.NOauto-reminders-off {
+    background-color: orange !important;
+}
+
+.only-icon-button {
+    max-width: 40px;
+    min-width: 40px;
+    width: 40px;
+    font-size: 1.15rem;
+}
+
+/*
+.NOopen-link-button {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1.15rem;
+}
+*/
+
+details[open]>summary button.wastebasket-button {
+    display: none;
+}
+
+.image-bg-cover {
+    background-size: cover;
+    background-position: center;
+}
+
+.image-bg-contain {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    /* background-image: url(image.jpg); */
+}
+
+span.image-thumb-size {
+    width: var(--thumb-w);
+    min-height: var(--thumb-h);
+    height: 100%;
+    display: inline-block;
+}
+
+span.image-bg-size {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    position: relative;
+}
+
+button.image-delete {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(0, 0, 0, 0.312);
+}
+
+.btn-add-image {
+    position: absolute;
+    top: -40px;
+    right: 10px;
+}
+
+div.div-images {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 10px;
+    position: relative;
+}
+
+NOcanvas {
+    border: 1px dotted red;
+    display: inline-block;
+    xheight: 200px;
+    xwidth: 200px;
+    position: absolut;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: unset;
+    height: unset;
+}
+
+.unsaved-marker-container.not-saved .unsaved-marker {
+    color: orange !important;
+}
+
+.unsaved-marker-container.not-saved .unsaved-marker * {
+    color: orange !important;
+}
+
+.mdc-card:has(details:not([open]).unsaved-marker-container.not-saved) * {
+    color: orange !important;
+}
+
+details.unsaved-marker-container summary {
+    padding: 5px;
+}
+
+#alert-no-images summary {
+    font-weight: bold;
+}
+
+.div-paste-debug {
+    background-color: yellowgreen;
+    overflow-wrap: break-word;
+    overflow: auto;
+    padding: 4px;
+    display: none;
+}
+
+.div-paste-debug div {
+    margin-bottom: 1rem;
+}
+
+.div-image-bg-debug {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 2px;
+    background: black;
+    color: yellow;
+    font-size: 0.6rem;
+    padding: 2px;
+}
+
+div.rem-list {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+details[open].older-rem-list {
+    margin-bottom: 10px;
+}
+
+/*
+details.older-rem-list {
+    Xmargin-top: 20px;
+}
+*/
+
+details.older-rem-list>summary {
+    padding: 0.7rem;
+    border-radius: 4px;
+    /* Below from mdc-card. mdc-card delete the list-style */
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}
+
+details.older-rem-list>div>div {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+details.older-rem-list>div>div>div {
+    NOpadding: 0 10px;
+}
+
+#home-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+#field-search {
+    display: none;
+}
+
+.is-search-field #field-search {
+    display: inline-block;
+}
+
+.is-search-field #home-title {
+    display: none;
+}
+
+#div-search-slider {
+    padding: 10px;
+    display: none;
+}
+
+.is-search-field #div-search-slider {
+    display: block;
+}
+
+#div-required-tags {
+    padding: 10px;
+    display: none;
+    background-color: lightskyblue;
+    background-color: yellowgreen;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.is-search-field #div-required-tags {
+    display: block;
+}
+
+
+
+.is-searching #h-your-num-hits {
+    display: none;
+}
+
+#h-your-show-searching {
+    display: none;
+}
+
+.is-searching #h-your-show-searching {
+    display: block;
+}
+
+
+
+#div-h-your-items {
+    padding: 4px;
+    margin-bottom: 2rem;
+}
+
+div.div-confidence-status {
+    display: grid;
+    NOgrid-template-columns: 7px 40px 1fr;
+    grid-template-columns: 7px 1fr;
+    gap: 10px;
+    position: relative;
+}
+
+#h-your-items {
+    display: grid;
+    gap: 5px;
+    grid-auto-flow: column;
+    grid-template-columns: 40px 1fr 40px 25px;
+    align-items: center;
+    height: 60px;
+}
+
+.rem-banner-title {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr max-content;
+    gap: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    --thumb-w: 80px;
+    --thumb-h: 80px
+}
+
+.rem-banner-title.has-image {
+    grid-template-columns: 1fr max-content;
+    grid-template-columns: var(--thumb-w) 1fr max-content;
+}
+
+div.input-save-div {
+    display: none;
+}
+
+.fc-confidence-slider {
+    margin: 0;
+    margin-top: -10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.card-confidence-slider {
+    margin-top: -10px;
+}
+
+.fab-add-flashcard {
+    position: absolute;
+    top: -40px;
+    right: 10px;
+}
+
+.flashcards-card {
+    display: block;
+}
+
+.flashcards-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: relative;
+}
+
+.flashcard-item {
+    display: block;
+}
+
+.flashcard-item .flashcard-back {
+    display: none;
+}
+
+.flashcard-item .flashcard-front {
+    display: block;
+}
+
+.flashcard-item.revealed .flashcard-back {
+    display: block;
+}
+
+.flashcard-item.revealed .flashcard-front {
+    display: none;
+}
+
+
+:root {
+    --flashcard-scale: 1.0;
+}
+
+
+/* https://stackoverflow.com/questions/37141902/transform-scale-keeps-the-original-space-around-the-scaled-element */
+.flashcard-scale-wrapper {
+    width: calc(var(--flashcard-scale) * 270px);
+    height: calc(var(--flashcard-scale) * calc(270px / 1.62));
+    overflow: hidden;
+    position: relative;
+    transition: scale 1s;
+}
+
+.flashcard-scene {
+    scale: var(--flashcard-scale);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: left top;
+}
+
+.flashcard-small {
+    --flashcard-scale: 0.6;
+}
+
+.flashcard-normal {
+    --flashcard-scale: 1.0;
+}
+
+
+
+/* https://3dtransforms.desandro.com/card-flip */
+.flashcard-scene {
+    width: 270px;
+    height: calc(270px / 1.62);
+    perspective: 600px;
+    display: inline-block;
+}
+
+.flipable-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flipable-card.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.flipable-card__face {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    padding: 70px 20px 20px 20px !important;
+}
+
+.flipable-card__face--front {
+    padding-top: 20px !important;
+}
+
+.flipable-card__face button.edit-flashcard {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.flipable-card__face button.delete-flashcard {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.flipable-card__face--back {
+    transform: rotateY(180deg);
+    padding: 20px 20px 70px 20px !important;
+}
+
+.flashcard-scene .flipable-card__face--front {
+    background: darkviolet;
+    font-size: 1.5rem;
+    border: 8px dotted red;
+}
+
+.flashcard-scene .flipable-card__face--back {
+    background: skyblue;
+}
+
+.just-a-test {
+    background: hsl(0deg 100% 50%);
+    /* red */
+    background: hsl(84deg 100% 59%);
+    /* greenyellow */
+    background: hsl(120deg 100% 25%);
+    /* green */
+    background: hsl(120deg 73% 75%);
+    /* lightgreen */
+    background: hsl(100deg 100% 40%);
+    /* greenyellow */
+}
+
+#div-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+#div-tools summary+* {
+    margin-top: 1rem;
+}
+
+
+span.has-indicator {
+    visibility: hidden;
+    font-size: 1rem;
+    opacity: 0.3;
+}
+
+/* details.flashcards-card:has(.flashcard-scene)>summary { } */
+
+details.flashcards-card:has(.flashcard-scene)>summary span.has-indicator {
+    visibility: unset;
+}
+
+details.images-card:has(.image-bg-size)>summary span.has-indicator {
+    visibility: unset;
+}
+
+html {
+    padding: 0;
+}
+
+div.div-a-url {
+    overflow-wrap: anywhere;
+    margin-top: 1rem;
+}
+
+.flashcard-answer {
+    overflow-y: auto;
+    white-space: break-spaces;
+}
+
+div.flashcard-conf {
+    position: absolute;
+    bottom: 5px;
+    left: 70px;
+    right: 70px;
+    height: 40px;
+}
+
+#div-dark-side {
+    color: #b4cfe8;
+    padding: 5px 1rem 1rem 1rem;
+    background: black;
+}
+
+#div-dark-side a {
+    color: #b4cfe8;
+}
+
+
+li.test-item {
+    background: gray;
+}
+
+li.test4all-item {
+    background: aquamarine;
+}
+
+body.no-test-items .test-item {
+    display: none !important;
+}
+
+
+
+.elt-tags {
+    position: relative;
+}
+
+
+#div-new-tag {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tags-list {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+    background-color: lightskyblue;
+    background-color: yellowgreen;
+}
+
+.tags-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: relative;
+    background-color: lightskyblue;
+    background-color: yellowgreen;
+    padding: 10px;
+    padding-left: 15px;
+}
+
+
+.tag-in-our-tags {
+    display: inline-flex;
+    height: 1.4em;
+    position: relative;
+    border: 1px solid olive;
+    border-radius: 2px;
+    NOmargin-left: 15px;
+    padding-left: 2px;
+    padding-right: 4px;
+    background-color: gray;
+    background-color: yellow;
+}
+
+/* https://css-tricks.com/the-shapes-of-css/ */
+.NOtag-in-our-tags::before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 0.7em solid transparent;
+    border-right: 1.4em solid olive;
+    border-bottom: 0.7em solid transparent;
+}
+
+
+#div-change-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#inp-new-tag {
+    min-width: 5rem !important;
+}
+
+#div-search-the-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+#btn-cleanup-tags {
+    border-radius: 50%;
+    background-color: gray;
+    border: 3px dotted yellow;
+}
+
+.tag-button {
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    color: inherit;
+    fill: currentColor;
+    user-select: none;
+}
+
+
+/* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
+.grow-wrap {
+    /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+    display: inline-grid;
+    margin-left: 0;
+    margin-right: 0;
+    background-color: goldenrod;
+}
+
+.grow-wrap::after {
+    /* Note the weird space! Needed to preventy jumpy behavior */
+    content: attr(data-replicated-value) " ";
+
+    /* This is how textarea text behaves */
+    white-space: pre-wrap;
+
+    /* Hidden from view, clicks, and screen readers */
+    visibility: hidden;
+
+    overflow-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    /*
+      Both inline-block and block works now?????
+    */
+    display: inline-block;
+
+
+    /*
+      FIX-ME: get those below from getComputedStyle() for the textarea.
+      Now implemented in updateGrowWrap.
+    */
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.15px;
+    line-height: 1.5rem;
+    margin-bottom: 9px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 23px;
+    min-height: 24px;
+    min-width: 0;
+    padding-bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 0px;
+    text-align: start;
+    text-decoration-line: none;
+    text-decoration-style: solid;
+    text-decoration-thickness: auto;
+    text-indent: 0;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    white-space: pre-wrap;
+    width: 100%;
+    word-spacing: 0;
+}
+
+.grow-wrap>textarea {
+    /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+    resize: none;
+
+    /* Firefox shows scrollbar on growth, you can hide like this. */
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin-left: 0;
+    margin-right: 0;
+    Xoutline: 4px dashed green;
+    xbackground-color: skyblue;
+}
+
+.grow-wrap>textarea,
+.grow-wrap::after {
+    /* Identical styling required!! */
+    /* border: 1px solid black; */
+    padding: 0.5rem;
+    font: inherit;
+    /* Don't ask me about the next 2 */
+    padding-top: 2rem;
+    margin-top: 1rem;
+
+    /* Place on top of each other */
+    grid-area: 1 / 1 / 2 / 2;
+    /*
+        I don't understand the next one?
+        And it hides the resizer...
+    */
+    margin-bottom: -1.5rem !important;
+}
+
+NObody {
+    margin: 2rem;
+    font: 1rem/1.4 system-ui, sans-serif;
+}
+
+NOlabel {
+    display: block;
+}
+
+/* body#page-home  */
+html:has(body#page-home) {
+    background: #7b3f00;
+}
+
+.text-on-page-home {
+    color: lightgoldenrodyellow;
+}
+
+
+
+/* body#page-about */
+html:has(body#page-about) {
+    background-color: papayawhip;
+    background-color: wheat;
+}
+
+/* body#page-imported */
+html:has(body#page-imported) {
+    background: olivedrab;
+}
+
+.sized-mdc-svg-icon {
+    font-size: 24px;
+    --icon-size: 1em;
+    height: var(--icon-size);
+    width: var(--icon-size);
+    display: inline-block;
+    fill: currentColor;
+}
+
+.div-all-imported {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+summary {
+    user-select: none;
+    min-height: 30px;
+}
+
+.icon-button-40 {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+/* 5/8 */
+.icon-button-30 {
+    font-size: 15px;
+    width: 30px;
+    height: 30px;
+    padding: 7.5px;
+    border-radius: 4px;
+}
+
+.NOMdc-icon-button {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    padding: 12px
+}
+
+
+/* https://css-tricks.com/css-grid-can-do-auto-height-transitions/ */
+/*
+.expander {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 1s;
+}
+
+.expander.expanded {
+    grid-template-rows: 1fr;
+}
+*/
+.expander {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    Xtransition: grid-template-rows 1s;
+    transition-duration: 1s;
+    transition-property: none;
+    /* https://matthewlein.com/tools/ceaser */
+    xtransition-timing-function: cubic-bezier(1.000, 0.010, 1.000, 0.225);
+}
+
+.expander:has(*:nth-child(10)) {
+    transition-timing-function: cubic-bezier(1.000, 0.010, 1.000, 0.225);
+}
+
+.expander-content {
+    min-height: 0;
+    transition: visibility 1s;
+    visibility: hidden;
+}
+
+.expander.expanded {
+    transition-property: grid-template-rows;
+    grid-template-rows: 1fr;
+}
+
+.expander.expanded .expander-content {
+    visibility: visible;
+}
+
+/*
+    This does not work. Chrome seems to cache the <details> content
+*/
+xdetails[open]:has(.expander)>.expander {
+    grid-template-rows: 1fr;
+}
+
+xdetails[open]:has(.expander)>.expander>.expander-content {
+    visibility: visible;
+}
+
+.div-short-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.btn-short-timer {
+    text-transform: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    min-width: 40px;
+}
+
+.mdc-chkbox-label-helper {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 48px 1fr;
+}
+
+.notification-header {
+    font-size: 1rem;
+    color: wheat;
+    background-color: purple;
+}
+
+.notification-header a {
+    color: wheat;
+}
+
+.icon-button-sized {
+    transform: scale(calc(var(--icon-button-size) / 48));
+    transform-origin: 0 0;
+}
+
+
+
+/********************* JsMind **************************************/
+#jsmind-ednode-debug-button {
+    right: 48;
+}
+
+#my-dialog-content:has(#jsmind-ednode) {
+    display: flex;
+}
+
+#jsmind-ednode {
+    display: grid;
+    grid-template-rows: min-content 40% 1fr;
+    grid-template-rows: min-content 1fr;
+    /* https://stackoverflow.com/questions/72137185/make-children-full-height-of-parent-flex-box-css */
+    flex-grow: 1;
+    NOborder: 1px dotted red;
+    NObackground: orange;
+}
+
+div.mdc-dialog__surface:has(#jsmind-ednode) {
+    min-height: calc(100% - 32px);
+}
+
+#jsmind-ednode>* {
+    min-height: 0;
+}
+
+#jsmind-ednode-parts {
+    display: grid;
+    grid-template-rows: 40% min-content 1fr;
+    /* https://css-tricks.com/animating-css-grid-how-to-examples/ */
+    transition: 1s;
+    NOborder: 2px dashed blueviolet;
+    NObackground: aqua;
+}
+
+#jsmind-ednode-parts>* {
+    /* https://css-tricks.com/preventing-a-grid-blowout/ */
+    min-width: 0;
+    NObackground: red;
+    NOborder: 2px dotted yellow;
+}
+
+#jsmind-ednode-parts div.tab-elts {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+#jsmind-ednode div.normal-content {
+    Xbackground: red;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+#jsmind-ednode-content {
+    dislay: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#jsmind-ednode-content div.topic-choice {
+    padding: 10px;
+    background: white;
+}
+
+#jsmind-ednode-content div.topic-choice>div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#jsmind-ednode-content div.topic-choice:has(input:checked) {
+    /* background: rgba(0, 255, 0, 0.15); MDC radio button not visible */
+    background-color: yellowgreen;
+}
+
+#jsmind-ednode-content div.topic-choice:has(input[disabled]) {
+    background: lightgray;
+}
+
+#dlg-body-node-background div {
+    line-height: 1;
+}
+
+.bg-choice>details>div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bg-choice {
+    display: grid;
+    grid-template-areas: "r l" ". d";
+    grid-template-columns: min-content 1fr;
+    gap: 0;
+    padding: 10px;
+    background: rgba(200, 200, 0, 0.15);
+}
+
+div.bg-choice:has(input[disabled]) {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+div.bg-choice:not(input[disabled]):has(input:checked) {
+    background: rgba(0, 255, 0, 0.25);
+}
+
+#bg-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#jsmind-test-div-debug-log {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    width: 100vw;
+    background: violet;
+    padding: 4px;
+}
+
+.show-jsmind-debug #jsmind-test-div-debug-log {
+    display: block;
+}
+
+.debug-row {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+}
+
+.debug-entry {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    padding-right: 4px;
+}
+
+.debug-counter {
+    display: flex;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+#jsmind-test-debug-header {
+    padding: 4px;
+    color: red;
+    font-weight: bold;
+}
+
+
+#jsmind-context-menu {
+    opacity: 1;
+    background-color: var(--mdc-theme-primary);
+    /* https://www.smashingmagazine.com/2022/06/simplify-color-palette-css-color-mix/ */
+    background-color: color-mix(in srgb, var(--mdc-theme-primary) 70%, white);
+    position: fixed;
+    left: 0;
+    top: calc(2.5 * var(--font-size));
+    display: block;
+    z-index: 11;
+}
+
+.jsmind-actions {
+    position: fixed;
+    top: 0;
+    background-color: var(--mdc-theme-primary);
+    z-index: 10;
+}
+
+#jsmind-menu-button {
+    left: 0;
+}
+
+#jsmind-search-div {
+    position: fixed;
+    left: 40px;
+    z-index: 10;
+    --icon-button-size: 40;
+}
+
+#jsmind-search-button {
+    left: 40;
+}
+
+#provider-hits {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    display: none;
+    background: red;
+}
+
+#jsmind-inp-node-search {
+    display: block;
+}
+
+#jsmind-search-inputs {
+    left: 80;
+    width: 200px;
+    min-height: fit-content;
+    margin-top: 10px;
+    display: none;
+    NObackground: orange;
+}
+
+#jsmind-search-inputs.showing-provider-hits #provider-hits {
+    display: flex;
+}
+
+#jsmind-search-inputs.showing-provider-hits #jsmind-inp-node-search {
+    display: none;
+}
+
+.display-jsmind-search #jsmind-search-inputs {
+    display: block;
+}
+
+.display-jsmind-search .OLDjsmind-search-match {
+    outline: 3px dotted greenyellow;
+}
+
+.jsmind_container {
+    xposition: relative;
+}
+
+.jsmind-menu-no-selected-node {
+    opacity: 0.5;
+    background-color: gray;
+}
+
+
+/********************/
+/* Dragging */
+
+.jsmind-inner {
+    --shsize: 20px;
+    --shup: 0px;
+}
+
+.jsmind-drag-dragged {
+    outline: 5px dotted yellow;
+}
+
+.jsmind-drag-target {
+    outline: 5px dotted red;
+}
+
+/*
+  :hover is not set for dragging 
+  And there seems to be a bug in Android on Pixel 7:
+  https: //bugs.chromium.org/p/chromium/issues/detail?id=1384181#c11
+*/
+
+@media (pointer:coarse) {}
+
+.jsmind-drag-target {
+    box-shadow: 0 var(--shup) var(--shsize) var(--shsize) red;
+    box-shadow: 0 var(--shup) var(--shsize) var(--shsize) blue;
+}
+
+.jsmind-drag-tparent {
+    outline: 5px dotted orange;
+}
+
+.jsmind-drag-tparent {
+    box-shadow: 0 var(--shup) calc(1.5 * var(--shsize)) calc(1.5 * var(--shsize)) orange;
+}
+
+.NOjsmind-drag-near-child {
+    outline: 2px dashed red;
+}
+
+.jsmind-drag-upper-child {
+    outline: 3px dashed red;
+    transform: translate(0, -15px);
+    transform-origin: top left;
+}
+
+.jsmind-drag-lower-child {
+    outline: 3px dashed red;
+    transform: translate(0, 15px);
+    transform-origin: bottom left;
+}
+
+.jsmind-drag-dropped-at {
+    outline: 7px dotted lawngreen;
+}
+
+#jsmind-drag-status {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 15px;
+    display: none;
+    z-index: 1000;
+}
+
+#jsmind-drag-status>div {
+    background-color: orange;
+    color: black;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+.jsmind_container jmnodes jmnode {
+    /*
+    max-width: 150px;
+    max-height: 94px;
+    display: grid;
+    grid-template-rows: 1fr;
+    */
+    transition-duration: 1s;
+    transition-property: left, top, width, height, transform 0.3s;
+    /* Try to handle overlfow in .jmnode-text with grid */
+}
+
+.jsmind_container jmnodes jmnode .jmnode-text {
+    overflow: hidden;
+}
+
+/* This does not display if I have set overflow:hidden on jmnode. */
+jmnode.has-children::after {
+    content: "+";
+    overflow: visible;
+    position: absolute;
+    font-size: 28px;
+    top: calc(50% - 32px / 2);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid green;
+    background: rgba(0, 255, 0, 0.8);
+    background: rgba(0, 255, 0, 0.9);
+    background: green;
+    color: white;
+    z-index: 100;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+jmnode.has-children.is-expanded::after {
+    content: "-";
+}
+
+jmnode.has-children.left-side::after {
+    left: -30px;
+}
+
+jmnode.has-children.right-side::after {
+    right: -30px;
+}
+
+#jsmind_container jmnodes jmexpander {
+    visibility: hidden;
+}
+
+
+
+
+jmnode.selected {
+    outline: 8px dotted blue;
+}
+
+.jsmind-renderer-img {
+    position: absolute;
+    bottom: -4;
+    left: -4;
+    NObackground: red;
+}
+
+.jsmind-renderer-img>button {
+    background-size: cover;
+    color: white;
+    border: 1px solid white;
+    NOborder-radius: 4px;
+    NOwidth: 40px;
+    NOheight: 40px;
+}
+
+.is-left .jsmind-renderer-img {
+    left: unset;
+    right: -4;
+}
+
+.is-left .jsmind-plain-link {
+    left: unset;
+    right: -4;
+}
+
+.jsmind-plain-link {
+    position: absolute;
+    bottom: -8;
+    left: -4;
+    NObackground: yellowgreen;
+    NObackground: skyblue;
+    NOborder: 1px solid black;
+    NOborder-radius: 4px;
+    NOborder-radius: 40%;
+    NOwidth: 48px;
+    NOheight: 48px;
+    background-size: cover
+}
+
+.jsmind-plain-link>button {
+    background: skyblue;
+    border: 1px solid blue;
+}
+
+
+
+
+
+.upper-left-remove-button {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/*
+#div-node-border-color div {
+    width: 130px;
+}
+
+#div-node-border-color input[type=color] {
+    width: 40px;
+    height: 40px;
+}
+*/
+
+/********* open/close **********/
+
+:root {
+    --size-open-close: 32px;
+}
+
+.open-close {
+    width: var(--size-open-close);
+    height: var(--size-open-close);
+    top: calc(50% - var(--size-open-close) / 2);
+    border-radius: 50%;
+    border: 2px solid red;
+    NOvisibility: hidden;
+}
+
+.open-close:hover {
+    background: yellow;
+}
+
+
+#jsmind-div-hits {
+    position: static;
+    /* left: 40; */
+    /* top: 40; */
+    /* z-index: 5; */
+    background: red;
+    background: greenyellow;
+    color: white;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    min-height: 36px;
+}
+
+#jsmind-div-hits button {
+    min-width: 32px;
+    color: white;
+    color: black;
+}
+
+jmnodes.showing-hits jmnode:not(.jsmind-hit)>* {
+    /* filter: grayscale(1) contrast(0.5) !important; */
+    filter: grayscale(1) contrast(0.5);
+}
+
+jmnodes.showing-hits jmnode:not(.jsmind-hit) {
+    filter: grayscale(1) contrast(0.5);
+}
+
+jmnode.jsmind-hit::after {
+    content: "Hit!";
+    filter: none !important;
+    background-color: red !important;
+    color: yellow !important;
+    font-size: 18px !important;
+    height: 28px !important;
+    width: 40px !important;
+    padding: 2px !important;
+    border: 2px solid yellow !important;
+    border-radius: 2px !important;
+    position: absolute !important;
+    top: 0;
+    top: 40%;
+    top: -10px;
+    right: 0;
+    right: 40%;
+    left: -10px;
+}
+
+
+
+
+.subject-card summary .for-details-open {
+    padding: 8px;
+    margin-bottom: 30px;
+    background-color: gray;
+    color: white;
+}
+
+details[open]>summary .for-details-closed {
+    display: none;
+}
+
+details:not([open])>summary .for-details-open {
+    display: none;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.thumb-40 {
+    --thumb-w: 40px;
+    --thumb-h: 40px
+}
+
+.thumb-60 {
+    --thumb-w: 60px;
+    --thumb-h: 60px
+}
+
+.thumb-80 {
+    --thumb-w: 80px;
+    --thumb-h: 80px
+}
+
+.thumb-100 {
+    --thumb-w: 100px;
+    --thumb-h: 100px
+}
+
+button.btn-edit-item-confidence {
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+    background: yellow;
+    opacity: 1;
+    z-index: 1;
+    border-radius: 50%;
+}
+
+
+/*
+    https://codefrontend.com/css-ellipsis/ 
+
+    However it does not clip the following lines in Chrome today (2023-07-06)
+    https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp
+*/
+.multiline-ellipsis {
+    overflow: hidden;
+    /*
+        FIX-ME:display:
+        The use of the experimental -webkit-line-clamp 
+        causes very, very strange rendering problems sometimes.
+        Maybe just use 1 line?
+    */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    /* start showing ellipsis when 3rd line is reached */
+    white-space: pre-wrap;
+    /* let the text wrap preserving spaces */
+}
+
+html.hide-error-popups .error-popup {
+    display: none !important;
+}
+
+
+
+/* Google Material Symbols */
+.pulse {
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        font-variation-settings: 'wght' 100;
+    }
+
+    50% {
+        font-variation-settings: 'wght' 700;
+    }
+
+    100% {
+        font-variation-settings: 'wght' 100;
+    }
+}
+
+
+
+
+
+
+.jsmind-test-custom-clip {
+    position: relative;
+    padding: 10px;
+    width: 150px;
+    height: 100px;
+    background: orange;
+    color: black;
+}
+
+.jsmind-test-custom-clip-inner {
+    display: grid;
+    grid-template-columns: 1fr var(--thumb-w);
+    align-items: end;
+    gap: 5px;
+    NOheight: 100%;
+    overflow: hidden;
+}
+
+.jsmind-test-custom-clip-inner>span:first-child {
+    NObackground-color: red;
+    line-height: normal;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.jsmind-test-custom-clip-inner>span:last-child {
+    white-space: wrap;
+}
+
+#jsmind-test-custom-clipboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#jsmind-test-custom-clipboard .jsmind-test-custom-clip {
+    width: 100%;
+    height: fit-content;
+}
+
+#jsmind-test-custom-paste {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}

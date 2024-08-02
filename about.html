@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- https://collegeinfogeek.com/spaced-repetition-memory-technique/ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Tools to help you learn from web pages">
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>About Flashcards 4 Internet & helpers</title>
+    <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
+
+    <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css">
+    <link rel="stylesheet" href="css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="css/var-colors.css">
+    <style>
+        /* https://gomakethings.com/smooth-scrolling-links-with-only-css/ */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        main {
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+
+        .header-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 2px;
+            width: 150px;
+            cursor: pointer;
+            scale: unset;
+        }
+
+        .header-images span {
+            display: none;
+        }
+
+        .header-images a img {
+            border-radius: 2px;
+        }
+
+
+        .open-and-top {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: -10px;
+        }
+
+        .my-mdc-card-styles {
+            padding: 10px;
+        }
+
+        /* https://css-tricks.com/examples/hrs/ */
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        .dark-side {
+            color: #b4cfe8;
+            background: black;
+        }
+
+        #header-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            NObackground-color: greenyellow;
+            width: 128vw;
+            margin-left: 10px;
+            margin-bottom: -30px;
+            transform-origin: top left;
+            transform: scale(0.6);
+        }
+
+        #header-images a {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        #header-images a span {
+            padding: 4px;
+        }
+
+        #temp-helper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+            background-color: chocolate;
+        }
+
+        .svg-symbol {
+            height: 1rem;
+            vertical-align: bottom;
+        }
+
+        #div-diff {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #div-diff summary {
+            font-weight: bold;
+        }
+    </style>
+    <script src="/src/js/fc4i-importmaps.js"></script>
+</head>
+
+<body id="page-about">
+    <main>
+        <h1>About Flashcards 4 Internet & helpers</h1>
+        <div id="header-images">
+            <a class="mdc-card" href="#fc4i">
+                <img src="/img/fc4i.svg" />
+                <span> Flashcards 4 Internet </span>
+            </a>
+            <a class="mdc-card" href="#mm4i">
+                <img src="/img/mm4i.svg" />
+                <span> Mindmaps 4 Internet </span>
+            </a>
+            <a class="mdc-card" href="#nwg">
+                <img src="/img/nwg.svg" />
+                <span> Network view</span>
+            </a>
+            <a class="mdc-card" href="#loci">
+                <img src="/img/loci.svg" />
+                <span> Memory Palace</span>
+            </a>
+            <a class="mdc-card" href="#tl">
+                <img src="/img/tl.svg" />
+                <span> Text + Link</span>
+            </a>
+        </div>
+
+        <section>
+            <div>
+                <p>
+                    Are you like me trying to learn from a lot of different things you find on the internet?
+                    Then these three small web apps might be something for you too.
+                </p>
+
+                <details class="mdc-card my-mdc-card-styles">
+                    <summary>Tips for learning</summary>
+                    <p>I am really no expert on learning, but here are some tips from other people:</p>
+                    <ul>
+                        <li>
+                            <p><a href="https://www.youtube.com/watch?v=24ecRKfEweU">How to Study Only 2 Hours a Day yet
+                                    STILL
+                                    Ace
+                                    your Exams</a></p>
+                        </li>
+                        <li>
+                            <p><a href="https://www.lifehack.org/articles/featured/back-to-basics-reminders.html">The
+                                    Importance
+                                    of
+                                    Reminders (And How to Make a Reminder Work)</a></p>
+                        </li>
+                        <li>
+                            <p><a href="https://www.sciencedaily.com/releases/2016/08/160822083446.htm">Sleep makes
+                                    relearning
+                                    faster and longer-lasting</a> (<a
+                                    href="https://www.hendrix.edu/uploadedFiles/Academics/Faculty_Resources/2016_FFC/Learn%20then%20sleep.pdf">PDF</a>)
+                            </p>
+                        </li>
+                    </ul>
+                </details>
+
+
+
+
+            </div>
+
+        </section>
+
+        <section id="fc4i">
+            <h2>Flashcards 4 Internet (fc4i)</h2>
+            <div class="open-and-top">
+                <a href="/fc4i/fc4i.html">Open</a>
+            </div>
+            <p>
+                <b>Fc4i</b> is yet another app for saving links to
+                web pages you are interested in
+                (by using share,
+                <img src="/img/share_FILL0_wght400_GRAD0_opsz24.svg" class="svg-symbol" />
+                , from the web page).
+
+                There are some very good apps for that (like
+                <a href="https://9to5google.com/2023/01/31/what-you-can-do-google-keep/">Google
+                    Keep</a>).
+                So why another one?
+            </p>
+            <p>
+                <b>Tools for learning:</b>
+                My reason for writing
+                Fc4i was to add integrated tools for learning, like flashcards, repeating reminders, etc.
+                I also included some tools to stimulate thinking:
+                <a href="#mm4i">mindmaps</a>, <a href="#nwg">network view</a>.
+            </p>
+            <div id="ask-for-reminders">
+                <p>
+                    <b>Reminders</b> in this app are not alarms.
+                    They are more like <i>"can you please tell me now if there is something I ought to repeat now?"</i>
+                    There is a good description here:
+                    <a href="https://www.lifehack.org/articles/featured/back-to-basics-reminders.html">The
+                        Importance of Reminders</a>
+                </p>
+            </div>
+
+            <div id="div-diff" class="mdc-card">
+                <details>
+                    <summary> Some things to notice </summary>
+                    <div style="margin-left:10px;">
+                        <details>
+                            <summary>Storing</summary>
+                            Apps like Google Keep has advanced storing where your data is
+                            backed up to your Google account.
+                            Fc4i just stores your data in your web browser.
+                        </details>
+                        <details>
+                            <summary>Native app vs web app</summary>
+                            The fc4i app and its companions are a
+                            <a href="https://en.wikipedia.org/wiki/Progressive_web_app">progressive web apps (PWA)</a>.
+                            Google Keep is a native app.
+                            <p>
+                                While I install a native app from Google without hesitating
+                                I rather avoid installing a native app from
+                                some unknown developer (like me).
+                                The reason is security concerns.
+                                A PWA is essentially just a web page.
+                                So it is normally not more dangerous to use than a web page.
+                            </p>
+                            <p>
+                                Another advantage of web apps is that they should work
+                                everywhere where there is an uptodate web browser.
+                                (But sadly, sharing to a web app is yet not standardised enough.
+                                It probably only works on Android mobiles and tablets.)
+                            </p>
+                        </details>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="mm4i">
+            <h2>Mindmaps 4 Internet (mm4i)</h2>
+            <div class="open-and-top">
+                <a href="/mm4i/mm4i.html">Open</a>
+            </div>
+            <p>
+                When I first heard about mindmaps I thought it looked like
+                a very good idea.
+                But I never tried to use it.
+                Until one day I talked with a woman studying the same subject as I at the university.
+                She said that she could read a book in one hour and remember it
+                with the help of mindmaps.
+            </p>
+            <p>
+                I still did not try mindmaps since I never had enough big papers and colored
+                pencils with me.
+                But I was determined to try.
+            </p>
+            <p>
+                Then one day I saw that there was a Javascript library for
+                creating mindmaps,
+                <a href="https://github.com/hizzgdev/jsmind">jsMind</a>.
+                Fantastic! It can be used in any modern web browser.
+                I decided to make something that you could use on a mobile phone
+                built on that Javascript library.
+                That became mm4i.
+            </p>
+            <p>
+                Mm4i is integrated with fc4i.
+                You can easily link to subjects in fc4i in a mindmap you create with mm4i.
+                However, mm4i can be used alone. No need to use fc4i.
+                (You can link to web pages in nodes in mindmaps if you want to.)
+            </p>
+        </section>
+
+        <hr>
+
+        <section id="nwg">
+            <h2>Network View</h2>
+            <div class="open-and-top">
+                <a href="/nwg/netwgraph.html">Open</a>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="loci">
+            <h2>Memory Palace</h2>
+            <div class="open-and-top">
+                <a href="/loci/loci.html">Open</a>
+            </div>
+            <h3>Sharp or blurry image?</h3>
+            <a href="https://www.sciencealert.com/autism-can-boost-cognitive-performance-and-we-may-finally-know-why">image
+                noise and brain</a>
+        </section>
+
+
+        <hr>
+        <section id="tl">
+            <h2>Text and Link</h2>
+            <div class="open-and-top">
+                <a href="/tl/text-and-link.html">Open</a>
+            </div>
+        </section>
+
+        <details class="mdc-card my-mdc-card-styles" style="background-color: rgb(24, 119, 242); color: white;">
+            <summary>Contact</summary>
+            <p>
+                <img src="/img/f_logo_RGB-White_58.png" style="width: 30px; float: left; margin-right: 10px">I
+                have
+                created a Facebook group, <a href="https://www.facebook.com/groups/flashcards4internet" target="_blank"
+                    style="color: white">Flashcards 4 Internet</a>, where you can comment
+                on this app.
+                Suggestions are very welcome!
+            </p>
+            <p>
+                If you find some bugs you can tell me in the Facebook group above.
+                I will be glad if you do. 🎃
+            </p>
+            <p>
+                If you are a bit technical it is often easier for me if you enter an issue
+                for the bug here at
+                <a href="https://github.com/lborgman/remember10min1h/issues">those web apps repository at
+                    GitHub</a>
+            </p>
+        </details>
+
+        <details class="mdc-card my-mdc-card-styles dark-side">
+            <summary>The dark side - Technology</summary>
+            <details class="mdc-card my-mdc-card-styles dark-side">
+                <summary>Your data is only saved on your current device</summary>
+                <p style="font-style:italic">
+                    Please notice that anything you save in those web apps is only saved on your device
+                    (in your web browser).
+                    If you want more permanent notes I recommend
+                    <a href="https://9to5google.com/2023/01/31/what-you-can-do-google-keep/" target="_blank">Google
+                        Keep</a>.
+                </p>
+            </details>
+            <details class="mdc-card my-mdc-card-styles dark-side">
+                <summary>The really dark side</summary>
+                <h2>Technology (advanced)</h2>
+                <p>This app is actually just a web site with two additions
+                    (made possible by that it is a PWA):
+                <div style="margin-top: 10px;">1) You can view it even if you are not online.</div>
+                <div>2) You can 'share' to it.</div>
+                </p>
+                <h3>Good security</h3>
+                <p>Because this app is just a web site it is just as secure as a web site.
+                    It can't harm your mobile or computer (more than a web site can).
+                </p>
+                <h3>Share currently works only on Android</h3>
+                <p>Unfortunately ´share´ to this app can only work on Android with Google Chrome today.
+                    It is the only case where the technical capabilities are available now.
+                    But you can still use this app now on for example both on iPhone and Windows.
+                    It is just the possibility to 'share' that does not work there.
+                </p>
+                <!-- 
+                    <h3 style="color:red">Reminders - do they work?</h3>
+                    <div>
+                        <p>Unfortunately <a href="https://github.com/beverloo/notification-triggers/issues/7"
+                                target="_blank">timers for reminders are not yet supported in PWA:s</a>.</p>
+                        <p>So I have added a workaround.
+                            And actually I think works perhaps even better. 😌
+                            At the top right there is a button.
+                            Just click that to check for reminders.</p>
+                        <p><img src="/img/btn-check-reminders.png" width="50%"></p>
+                    </div>
+                    -->
+            </details>
+        </details>
+
+    </main>
+
+    <div id="temp-helper"></div>
+
+    <script src="/src/js/error.js"></script>
+    <script src="/ext/mdc/material-components-web.js"></script>
+    <script>
+        [...document.body.querySelectorAll(".open-and-top")]
+            .forEach(div => {
+                const hiCopy = document.getElementById("header-images").cloneNode(true);
+                hiCopy.removeAttribute("id");
+                hiCopy.classList.add("header-images");
+                hiCopy.addEventListener("click", evt => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    window.scrollTo(0, 0);
+                });
+                hiCopy.title = "Scroll to top";
+                hiCopy.tabindex = 0;
+                [...hiCopy.querySelectorAll("a")]
+                    .forEach(a => { a.classList.remove("mdc-card"); });
+                div.appendChild(hiCopy);
+            })
+        setTimeout(() => {
+            console.log("here I am again");
+            (async () => {
+                const modPWA = await import("pwa");
+                setTimeout(async () => {
+                    const version = await modPWA.getSWversion();
+                    console.log({ version });
+                }, 1000);
+            })();
+        }, 1000);
+    </script>
+
+    <script>
+        const ms = [
+            "/manifest.json",
+            "/fc4i/manifest-fc4i.json",
+            "/mm4i/manifest-mm4i.json",
+            "/tl/manifest-tl.json",
+        ];
+        const eltTh = document.getElementById("temp-helper");
+        ms.forEach(m => {
+            const a = mkElt("a", { href: m }, m);
+            eltTh.appendChild(a);
+        })
+    </script>
+
+</body>

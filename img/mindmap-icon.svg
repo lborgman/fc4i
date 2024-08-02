@@ -1,0 +1,28 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="mindmap-symbol" viewBox="0 0 300 300">
+    <style>
+      .node {
+        fill: #FFFFFF;
+        stroke: #000000;
+        stroke-width: 2;
+      }
+      .line {
+        stroke: #000000;
+        stroke-width: 2;
+      }
+    </style>
+
+    <!-- Nodes -->
+    <circle class="node" cx="100" cy="100" r="50"/>
+    <circle class="node" cx="200" cy="100" r="50"/>
+    <circle class="node" cx="150" cy="200" r="50"/>
+
+    <!-- Lines -->
+    <line class="line" x1="100" y1="100" x2="200" y2="100"/>
+    <line class="line" x1="200" y1="100" x2="150" y2="200"/>
+    <line class="line" x1="150" y1="200" x2="100" y2="100"/>
+  </symbol>
+
+  <!-- Use the symbol and scale it to fit in a 32x32 box with 4px padding -->
+  <use href="#mindmap-symbol" transform="scale(0.08)" x="4" y="4"/>
+</svg>

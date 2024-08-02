@@ -1,0 +1,115 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Mindmaps web page that you can manipulate on your phone">
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>Mindmaps (Jsmind + editing)</title>
+    <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
+
+    <script>
+        // Add a dynamic manifest.json to make this a PWA.
+        // https://dev.to/progressier/create-a-pwa-app-manifest-dynamically-1b4b
+
+        //for brevity, we're not including the isDesktop function here
+        // let iconUrl = isDesktop() ? '/desktop.png' : '/mobile.png';
+        let iconUrl = "/img/rem10m1h.svg";
+        let manifest = {
+            name: "Mindmaps (Jsmind with added editing)",
+            icons: [{
+                src: iconUrl,
+                sizes: "any",
+                type: "image/svg+xml"
+            }]
+        };
+        const strManifest = JSON.stringify(manifest);
+        console.log({ strManifest });
+        let content = encodeURIComponent(JSON.stringify(manifest));
+        let url = "data:application/manifest+json," + content;
+        let element = document.createElement('link');
+        element.setAttribute('rel', 'manifest');
+        element.setAttribute('href', url);
+        document.querySelector('head').appendChild(element);
+        console.log("Added dynamic manifest.json", { element });
+    </script>
+
+    <!-- for MWC, https://github.com/material-components/material-web -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Required styles for Material Web -->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css">
+    <!-- <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css"> -->
+
+    <link rel="stylesheet" href="css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="css/var-colors.css">
+
+
+    <script src="src/js/fc4i-importmaps.js"></script>
+
+
+
+    <script src="src/js/error.js"></script>
+    <script src="src/js/umd/idb.js"></script>
+    <!-- <script src="./src/js/is-displayed.js"></script> -->
+
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@0.5/style/jsmind.css" /> -->
+    <link rel="stylesheet" href="/ext/jsmind/jsmind.css" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.draggable-node.js"></script> -->
+    <!-- <script src="/ext/jsmind/230406-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/ext/jsmind/chrome-src-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+</head>
+
+<body>
+    <script>
+        setTimeout(() => {
+            const style =
+                `
+        position:fixed; bottom:0; right:0;
+        display: flex; justify-content: center;
+        width:fit-content; height:25px;
+        padding:2px 10px;
+        background:black; color:yellow;
+        opacity:0.5;
+        z-index:10;
+        `;
+            const myVer = mkElt("div", { id: "jsmind-test-my-ver", style }, "New version");
+            document.body.appendChild(myVer);
+        }, 1000);
+    </script>
+    <script src="/ext/mdc/material-components-web.js"></script>
+    <div id="jsmind_container" class="jsmind_container"></div>
+
+    <!-- Mirror must be display:block for rendering -->
+    <div id="jsmind-draggable-container4mirror" style="left: -1000px;"></div>
+
+    <!-- <script src="/src/js/fc4i-mindmaps.js"></script> -->
+    <script>
+        console.log("jsmind-edit.html");
+        (async () => {
+            const modJsmindEdit = await import("/src/js/jsmind-edit-spec-jsmindedit.js");
+            const modJsEditCommon = await import("/src/js/jsmind-edit-common.js");
+            modJsEditCommon.basicInit4jsmind();
+            modJsEditCommon.setMindmapDialog(modJsmindEdit.ourDialogMindmaps);
+            modJsEditCommon.pageSetup();
+        })();
+    </script>
+</body>
+
+</html>

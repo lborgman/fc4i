@@ -1,0 +1,34 @@
+{
+    "short_name": "Text+Link",
+    "name": "Text and link - get the shared parameters",
+    "share_target": {
+        "action": "/tl/text-and-link.html",
+        "enctype": "application/x-www-form-urlencoded",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    },
+    "description": "Get the parameters shared from web pages",
+    "icons": [
+        {
+            "src": "/img/tl.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "/tl/text-and-link.html",
+    "scope": "/tl",
+    "display": "standalone",
+    "background_color": "olive",
+    "theme_color": "olive",
+    "categories": [
+        "utilities"
+    ],
+    "dir": "ltr",
+    "lang": "en",
+    "orientation": "portrait"
+}

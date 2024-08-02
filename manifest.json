@@ -1,0 +1,36 @@
+{
+    "short_name": "Flashcards 4 Internet",
+    "name": "Flashcards 4 Internet with Reminders",
+    "share_target": {
+        "action": "index.html",
+        "enctype": "application/x-www-form-urlencoded",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    },
+    "description": "Save links by sharing to this app. Add study notes, flashcards and reminders.",
+    "icons": [
+        {
+            "src": "/img/fc4i.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "olive",
+    "theme_color": "olive",
+    "categories": [
+        "education",
+        "productivity",
+        "utilities"
+    ],
+    "dir": "ltr",
+    "lang": "en",
+    "orientation": "portrait"
+}

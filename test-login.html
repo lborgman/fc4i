@@ -1,0 +1,138 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="src/js/error.js"></script>
+
+<body>
+    <!--
+    // https://stackoverflow.com/questions/39522098/how-to-take-users-to-android-tethering-menu-from-chrome-android-browser
+    // https://developer.chrome.com/docs/multidevice/android/intents/
+    <a id="a-intent-tethering">Android Intent tethering</a>
+    -->
+    <p id="no-handler-info" style="background:yellow;"></p>
+    <script>
+        // https://paul.kinlan.me/detecting-if-a-url-scheme-can-be-handled/
+        // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler
+        // https://stackoverflow.com/questions/73339521/handle-failed-to-launch-url-because-the-scheme-does-not-have-a-registered-ha
+        // https://stackoverflow.com/questions/74270262/failed-to-load-url-because-the-scheme-does-not-have-a-registered-handler-using
+        // https://stackoverflow.com/questions/66190366/failed-to-launch-url-because-the-scheme-does-not-have-a-registered-handler
+        function updateUI_NoHandler(msg) {
+            const eltP = document.getElementById("no-handler-info");
+            eltP.appendChild(mkElt("div", undefined, msg));
+        }
+        updateUI_NoHandler("Just a test");
+        (async () => {
+            await thePromiseDOMready;
+            updateUI_NoHandler("DOM ready");
+            document.body.addEventListener("click", (clickEvent) => {
+                const { target } = clickEvent;
+                if (target.nodeName == "A" && target.href.startsWith("web+follow:")) {
+                    setTimeout(() => updateUI_NoHandler(), 1000);
+                }
+            });
+
+            // ChatGPT
+            // intent://[HOST]/#Intent;action=[ACTION];category=[CATEGORY];package=[PACKAGE_NAME];end
+            const prot = "intent";
+            const host = "";
+            const action = "";
+            const category = "";
+            const packge = "";
+            function newAddA(prot, host, action, category, packge) {
+                uri = `${prot}://${host}/#Intent;action=${action};category=${category};package=${packge};end`;
+                const eltA = mkElt("a", { href: uri }, `${prot},${host},${action},${category},${packge}`);
+                const eltP = mkElt("p", undefined, eltA);
+                document.body.append(eltP);
+            }
+
+
+            const uriPart = "#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.settings/.TetherSettings;end";
+            function addA(prot) {
+                const uri = `${prot}://${uriPart}`;
+                console.log({ prot, uri });
+                const eltA = mkElt("a", { href: uri }, prot);
+                const eltP = mkElt("p", undefined, eltA);
+                document.body.append(eltP);
+            }
+            // const aTeth = document.getElementById("a-intent-tethering");
+            // aTeth.href = uriTetch;
+            addA("android");
+            addA("intent");
+            function addAwhatsapp() {
+                const uriWhatsapp = "intent://scan/#Intent;scheme=whatsapp://send?#text=text=some%20text;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.whatsapp;end";
+                const eltA = mkElt("a", { href: uriWhatsapp }, "whatsapp?");
+                const eltP = mkElt("p", undefined, eltA);
+                document.body.append(eltP);
+            }
+            addAwhatsapp();
+            document.body.appendChild(mkElt("p", undefined, "Ready"));
+        })();
+
+    </script>
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- <script src='https://www.gstatic.com/firebasejs/8.10.1/firebase.js'></script> -->
+    <script type="module">
+        import {
+            getAuth,
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signOut,
+        } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js'
+        // import { firebase } from 'https://www.gstatic.com/firebasejs/8.10.1/firebase.js'
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js'
+
+        // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
+        // import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js'
+
+        // Add Firebase products that you want to use
+        // import { getAuth } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js'
+        // import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js'
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABnDkYRuWelljRnJyuc3ip50JyO9Z5lH4",
+            authDomain: "rem10m1h.firebaseapp.com",
+            projectId: "rem10m1h",
+            storageBucket: "rem10m1h.appspot.com",
+            messagingSenderId: "85320812355",
+            appId: "1:85320812355:web:190a12a6aa4d528ea791f6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+
+        async function signIn() {
+            // Sign in Firebase using popup auth and Google as the identity provider.
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth();
+            const userCred = await signInWithPopup(auth, provider);
+            console.log({ userCred });
+            return userCred;
+        }
+        (async () => {
+            const userCred = await signIn();
+            console.log({ userCred });
+            // https://developers.google.com/oauthplayground/?scope=https://www.googleapis.com/auth/tasks
+            // const url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists";
+            const url = "https://tasks.googleapis.com/tasks/v1/lists/@default/tasks";
+            // location.href = url;
+            // https://stackoverflow.com/questions/69246345/how-can-i-authenticate-to-request-firebase-rest-api-to-fetch-the-list-of-firebas
+            const credToken = GoogleAuthProvider.credentialFromResult(userCred);
+            console.log({ credToken });
+            const bearerIdToken = credToken.idToken;
+            const bearerAccessToken = credToken.accessToken;
+            console.log({ bearerIdToken, bearerAccessToken });
+            const opts = {
+                headers: {
+                    authentication: `Bearer ${bearerIdToken}`,
+                    // authorization: `Bearer ${bearerAccessToken}`,
+                }
+            };
+            try {
+                const f = await fetch(url, opts);
+            } catch (err) {
+                console.log({ err });
+                debugger;
+                alert(err);
+            }
+        })();
+    </script>
+</body>

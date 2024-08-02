@@ -1,0 +1,51 @@
+<head>
+    <script src="/src/js/fc4i-importmaps.js"></script>
+    <script src="/src/js/error.js"></script>
+    <style>
+        body {
+            background: black;
+            padding: 20px;
+        }
+
+        #container {
+            width: 50%;
+            aspect-ratio: 1 / 1;
+            background-color: deepskyblue;
+            position: relative;
+            overflow: hidden;
+            outline: 1px dotted yellow;
+            cursor: grab;
+        }
+
+        #img {
+            width: 160%;
+            position: absolute;
+            outline: 1px dotted red;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="container">
+        <img id="img" draggable="false">
+    </div>
+    <script>
+        (async () => {
+            const eltCont = document.getElementById("container");
+            const src = "http://localhost:5004/img/loci.svg";
+            const modImages = await import("images");
+            const sizesOrig = await modImages.getImgSizes(src);
+            const modPannellum2d = await import("/ext/pannellum/pannellum2d.js");
+            // debugger;
+            const config = {
+                src,
+                zoom: 2,
+                imageId: "img",
+                imgSizes: sizesOrig,
+            }
+            modPannellum2d.viewer(eltCont, config);
+        })();
+    </script>
+
+</body>

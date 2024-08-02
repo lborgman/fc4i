@@ -1,0 +1,802 @@
+#jsmind-ednode jmnode {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+jmnode div.jsmind-custom {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    height: 100%;
+    overflow: hidden;
+}
+
+jmnode div.jsmind-custom div.fc4i-title {
+    xcolor: red;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+jmnode div.jsmind-custom div.fc4i-image {
+    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+
+#div-dialog-mindmaps li span.mdc-list-item__text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%
+}
+
+#div-dialog-mindmaps li span.mdc-list-item__text>div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* #div-dialog-mindmaps li span.mdc-list-item__text>div>span:first-child  */
+#div-dialog-mindmaps li span.mdc-list-item__text>div>a:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div.dialog-mindmaps-image {
+    --thumb-w: 70px;
+    --thumb-h: 70px;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.fab-add-mindmap-1 {
+    position: absolute;
+    top: -40px;
+    right: 10px;
+}
+
+
+
+#theme-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: lightcoral;
+}
+
+#theme-choices jmnodes {
+    position: static;
+}
+
+#theme-choices jmnodes jmnode {
+    position: relative;
+    height: 50px;
+    display: inline-block;
+}
+
+#jsmind-ednode-shape jmnodes {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    NObackground: lightgray;
+}
+
+#jsmind-ednode-shape jmnodes jmnode {
+    display: block;
+}
+
+
+#jsmind-ednode-border.cannot-border .if-can-border {
+    display: none;
+}
+
+#jsmind-ednode-border:not(.cannot-border) .if-cannot-border {
+    display: none;
+}
+
+
+
+
+
+#jsmind-test-div-themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    padding: 15px;
+    background: grey;
+}
+
+#jsmind-test-div-themes>jmnodes {
+    position: static;
+    width: fit-content;
+    height: fit-content;
+}
+
+#jsmind-test-div-themes>jmnodes>jmnode {
+    position: static;
+    display: block;
+    width: fit-content;
+    height: 40px;
+}
+
+
+
+#jsmind-test-custom-clipboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#jsmind-test-custom-paste {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+
+
+.jsmind-test-custom-clip {
+    position: relative;
+    padding: 10px;
+    width: 150px;
+    height: 100px;
+    background: orange;
+    color: black;
+}
+
+.jsmind-test-custom-clip-inner {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    height: 100%;
+    overflow: hidden;
+}
+
+.jsmind-test-custom-clip-inner>span:first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.jsmind-test-custom-clip-inner>span:last-child {
+    white-space: wrap;
+}
+
+
+
+#jsmindtest-screen-mirror-color {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+#jsmindtest-screen-mirror-point {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.9);
+    background-color: blueviolet;
+    z-index: 11;
+}
+
+#jsmindtest-div-mirror {
+    border: 1px solid black;
+    outline: 1px solid white;
+    position: fixed;
+    z-index: 10;
+    background: red;
+    background: wheat;
+    overflow: hidden;
+}
+
+#jsmindtest-point-handle {
+    position: fixed;
+    z-index: 100;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: yellow;
+}
+
+#jsmindtest-point-handle.active {
+    background-color: red;
+    border: solid 4px rgba(255, 255, 255, 0.5);
+}
+
+
+/*** BEGIN SHAPES DEFINITIONS *********************************/
+/* Note that padding % is of the parent! */
+
+#jsmind-ednode jmnodes>jmnode.bg-transparent,
+div.jsmind-inner>jmnodes>jmnode.bg-transparent {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.jsmind-shape-ellipse {
+    border-radius: 50%;
+}
+
+.jsmind-shape-ellipse>* {
+    padding: 15%;
+}
+
+.jsmind-shape-ellipse .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+
+
+
+.jsmind-shape-ellipse-B {
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-B>* {
+    padding-bottom: 15%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.jsmind-shape-ellipse-B .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+
+
+
+.jsmind-shape-ellipse-T {
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-T>* {
+    padding-top: 15%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-T .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+.jsmind-shape-ellipse-L {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.jsmind-shape-ellipse-L>* {
+    padding-top: 15%;
+    padding-left: 15%;
+    padding-bottom: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-T .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+.jsmind-shape-ellipse-R {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-R>* {
+    padding-top: 15%;
+    padding-right: 15%;
+    padding-bottom: 15%;
+}
+
+.jsmind-shape-ellipse-T .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+
+
+
+.jsmind-shape-ellipse-TL {
+    border-top-left-radius: 50%;
+}
+
+.jsmind-shape-ellipse-TL>* {
+    padding-top: 15%;
+    padding-left: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-TL .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+.jsmind-shape-ellipse-TR {
+    border-top-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-TR>* {
+    padding-top: 15%;
+    padding-right: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-TR .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+.jsmind-shape-ellipse-BR {
+    border-bottom-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-BR>* {
+    padding-bottom: 15%;
+    padding-right: 15%;
+}
+
+.jsmind-shape-ellipse-BR .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+
+
+
+.jsmind-shape-ellipse-BL {
+    border-bottom-left-radius: 50%;
+}
+
+.jsmind-shape-ellipse-BL>* {
+    padding-bottom: 15%;
+    padding-left: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-BL .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+.jsmind-shape-ellipse-DTL {
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+.jsmind-shape-ellipse-DTL>* {
+    padding: 15%;
+}
+
+.jsmind-shape-ellipse-DTL .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+
+
+
+.jsmind-shape-ellipse-DTR {
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.jsmind-shape-ellipse-DTR>* {
+    padding: 15%;
+}
+
+/*
+.jsmind-shape-ellipse-DTR .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+
+
+
+.OLDjsmind-shape-skew-10 {
+    transform: skew(10deg, 0deg);
+}
+
+.OLDjsmind-shape-skew-10>*:first-child {
+    transform: skew(-10deg, 0deg);
+    padding: 0 5%;
+}
+
+/*
+.OLDjsmind-shape-skew-10 .jsmind-renderer-img {
+    bottom: 7%;
+    right: 7%;
+}
+*/
+
+
+/**** clip-path ***/
+/* FIX-ME: Only polygon() seems to be useable yet. I do not think path() supports % at the moment. */
+.jsmind-shape-clip-star5 {
+    clip-path: polygon(50% 2.45%, 61.8% 26.84%, 100% 26.84%, 87.85% 63.06%, 96.01% 97.55%, 50% 90.35%, 3.99% 97.55%, 12.15% 63.06%, 0% 26.84%, 38.2% 26.84%);
+}
+
+.jsmind-shape-clip-star5>*:first-child {
+    padding: 12%;
+    padding-bottom: 7%;
+    padding-top: 25%;
+}
+
+.jsmind-shape-clip-star5 .jsmind-renderer-img {
+    bottom: 3%;
+    right: 8%;
+}
+
+
+
+.jsmind-shape-clip-skew-right {
+    clip-path: polygon(15% 0, 100% 0%, 85% 100%, 0% 100%);
+}
+
+.jsmind-shape-clip-skew-right>*:first-child {
+    padding: 0%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.jsmind-shape-clip-skew-right .jsmind-renderer-img {
+    bottom: 0%;
+    right: 8%;
+}
+
+
+
+.jsmind-shape-clip-skew-left {
+    clip-path: polygon(0 0, 85% 0, 100% 100%, 15% 100%);
+}
+
+.jsmind-shape-clip-skew-left>*:first-child {
+    padding: 0%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.jsmind-shape-clip-skew-left .jsmind-renderer-img {
+    bottom: 0%;
+    right: 0%;
+}
+
+
+
+.jsmind-shape-clip-pentagon {
+    clip-path: polygon(50% 2.45%, 100% 38.77%, 80.9% 97.55%, 19.1% 97.55%, 0% 38.77%);
+}
+
+.jsmind-shape-clip-pentagon>*:first-child {
+    padding: 20%;
+    padding-bottom: 7%;
+}
+
+.jsmind-shape-clip-pentagon .jsmind-renderer-img {
+    bottom: 10%;
+    right: 20%;
+}
+
+
+
+.jsmind-shape-clip-hexagon {
+    clip-path: polygon(100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%, 25% 6.7%, 75% 6.7%);
+}
+
+.jsmind-shape-clip-hexagon>*:first-child {
+    padding: 10% 20%;
+}
+
+.jsmind-shape-clip-hexagon .jsmind-renderer-img {
+    bottom: 10%;
+    right: 20%;
+}
+
+
+.jsmind-shape-clip-octagon {
+    clip-path: polygon(70.71% 100%, 100% 70.71%, 100% 29.29%, 70.71% 0%, 29.29% 0%, 0% 29.29%, 0% 70.71%, 29.29% 100%);
+}
+
+.jsmind-shape-clip-octagon>*:first-child {
+    padding: 12%;
+}
+
+.jsmind-shape-clip-octagon .jsmind-renderer-img {
+    bottom: 10%;
+    right: 20%;
+}
+
+
+
+.jsmind-shape-clip-diamond {
+    clip-path: polygon(50% 0%, 90% 50%, 50% 100%, 10% 50%);
+}
+
+.jsmind-shape-clip-diamond>*:first-child {
+    padding: 25%;
+}
+
+.jsmind-shape-clip-diamond .jsmind-renderer-img {
+    bottom: 15%;
+    right: 25%;
+}
+
+
+
+.jsmind-shape-clip-triangel {
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+.jsmind-shape-clip-triangel>*:first-child {
+    padding: 25%;
+    padding-top: 0%;
+}
+
+.jsmind-shape-clip-triangel .jsmind-renderer-img {
+    bottom: 10%;
+    right: 35%;
+}
+
+
+.jsmind-shape-clip-arrow-left {
+    clip-path: polygon(0% 50%, 50% 0%, 50% 25%, 100% 25%, 100% 75%, 50% 75%, 50% 100%);
+}
+
+.jsmind-shape-clip-arrow-left>*:first-child {
+    padding: 22%;
+    padding-left: 25%;
+}
+
+.jsmind-shape-clip-arrow-left .jsmind-renderer-img {
+    bottom: 20%;
+    right: 0%;
+}
+
+
+
+.jsmind-shape-clip-arrow-right {
+    clip-path: polygon(50% 25%, 50% 0%, 100% 50%, 50% 100%, 50% 75%, 0% 75%, 0% 25%);
+}
+
+.jsmind-shape-clip-arrow-right>*:first-child {
+    padding: 22%;
+    padding-right: 25%;
+    padding-left: 0%;
+}
+
+.jsmind-shape-clip-arrow-right .jsmind-renderer-img {
+    bottom: 30%;
+    right: 5%;
+}
+
+
+
+
+.jsmind-shape-clip-point-left {
+    clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
+}
+
+.jsmind-shape-clip-point-left>*:first-child {
+    padding-left: 23%;
+}
+
+.jsmind-shape-clip-point-left .jsmind-renderer-img {
+    bottom: 0%;
+    right: 0%;
+}
+
+
+
+.jsmind-shape-clip-point-right {
+    clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+}
+
+.jsmind-shape-clip-point-right>*:first-child {
+    padding-right: 25%;
+}
+
+.jsmind-shape-clip-point-right .jsmind-renderer-img {
+    bottom: 30%;
+    right: 0%;
+}
+
+
+
+.jsmind-shape-clip-point-up {
+    clip-path: polygon(48% 1%, 99% 49%, 100% 100%, 0 100%, 0% 50%);
+}
+
+.jsmind-shape-clip-point-up>*:first-child {
+    padding-top: 32%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.jsmind-shape-clip-point-up .jsmind-renderer-img {
+    bottom: 0%;
+    right: 0%;
+}
+
+
+
+.jsmind-shape-clip-trapezoid-up {
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+}
+
+.jsmind-shape-clip-trapezoid-up>*:first-child {
+    padding-top: 20%;
+    padding-left: 14%;
+    padding-right: 14%;
+}
+
+.jsmind-shape-clip-trapezoid-up .jsmind-renderer-img {
+    bottom: 0%;
+    right: 0%;
+}
+
+
+.jsmind-shape-clip-trapezoid-down {
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+}
+
+.jsmind-shape-clip-trapezoid-down>*:first-child {
+    padding-bottom: 20%;
+    padding-left: 14%;
+    padding-right: 14%;
+}
+
+.jsmind-shape-clip-trapezoid-down .jsmind-renderer-img {
+    bottom: 0%;
+    right: 10%;
+}
+
+
+
+
+
+
+.jsmind-shape-clip-speechbubble {
+    clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 80%, 95% 85%, 85% 85%, 84.5% 100%, 64% 85%, 5% 85%, 0% 80%, 0% 5%);
+}
+
+.jsmind-shape-clip-speechbubble>*:first-child {
+    padding: 2%;
+    padding-bottom: 15%;
+}
+
+.jsmind-shape-clip-speechbubble .jsmind-renderer-img {
+    bottom: 10%;
+    right: 0%;
+}
+
+
+
+
+
+
+/*** END SHAPES DEFINITIONS ***********************************/
+/*
+https://blog.logrocket.com/best-css-shape-generators-demo/
+https://sharkcoder.com/visual/shapes
+https://css-tricks.com/the-shapes-of-css/
+https://css-tricks.com/css-grid-and-custom-shapes-part-1/
+https://www.freecodecamp.org/news/apply-borders-to-clip-paths-with-css/
+https://bennettfeely.com/clippy/
+https://unused-css.com/tools/clip-path-generator (adjustable nodes!)
+*/
+
+
+#jsmind-ednode .tab-elts>* {
+    margin-top: 20px;
+}
+
+#jsmind-ednode .border-values {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#jsmind-ednode .no-specified-border .specify-border-detail {
+    opacity: 0.4;
+}
+
+
+
+#jsmind-ednode-content .normal-content {
+    display: block;
+}
+
+#jsmind-ednode-content .custom-content {
+    NOdisplay: none;
+}
+
+#jsmind-ednode-content .custom-content>div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#jsmind-ednode-content #ednode-custom-title {
+    line-height: normal;
+}
+
+#jsmind-ednode-content.custom-node .custom-content {
+    NOdisplay: block;
+}
+
+#jsmind-ednode-content.custom-node .normal-content {
+    display: none;
+}
+
+
+
+#jsmind-ednode-border {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+
+
+/******************************/
+/**** Node edit dialog */
+
+#jsmind-ednode-copied-resizer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    background: black;
+    color: white;
+    opacity: 0.5;
+
+}
+
+#jsmind-ednode-copied-resizer:hover {
+    background: red;
+}
+
+jmnode.low-theme-contrast::after {
+    content: "Low contrast";
+    background: red;
+    color: yellow;
+    border: 2px solid yellow;
+    font-size: 10px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}

@@ -1,0 +1,49 @@
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+</head>
+
+<body>
+    <h1>MDC Slider range test</h1>
+    <div id="slider" class="mdc-slider mdc-slider--range mdc-slider--discrete search-slider" data-step="1"><input
+            class="mdc-slider__input" type="range" name="rangeStart" min="0" max="7" value="0"><input
+            class="mdc-slider__input" type="range" name="rangeEnd" min="0" max="7" value="7">
+        <div class="mdc-slider__track">
+            <div class="mdc-slider__track--inactive"></div>
+            <div class="mdc-slider__track--active">
+                <div class="mdc-slider__track--active_fill"></div>
+            </div>
+        </div>
+        <div class="mdc-slider__tick-marks">
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+            <div class="mdc-slider__tick-mark--active"></div>
+        </div>
+        <div class="mdc-slider__thumb" role="slider" tabindex="0" aria-label="Confidence" aria-valuemin="0"
+            aria-valuemax="7">
+            <div class="mdc-slider__thumb-knob"></div>
+            <div class="mdc-slider__value-indicator-container">
+                <div class="mdc-slider__value-indicator"><span class="mdc-slider__value-indicator-text"></span></div>
+            </div>
+        </div>
+        <div class="mdc-slider__thumb" role="slider" tabindex="0" aria-label="Confidence" aria-valuemin="0"
+            aria-valuemax="7">
+            <div class="mdc-slider__thumb-knob"></div>
+            <div class="mdc-slider__value-indicator-container">
+                <div class="mdc-slider__value-indicator"><span class="mdc-slider__value-indicator-text"></span></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+    <script>
+        function addMdcToSlider() {
+            const eltSlider = document.getElementById("slider");
+            const mdcSlider = new mdc.slider.MDCSlider(slider);
+        }
+        addMdcToSlider();
+    </script>
+</body>

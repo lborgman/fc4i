@@ -1,0 +1,36 @@
+{
+    "short_name": "Flashcards 4 Internet",
+    "name": "Flashcards 4 Internet - tools to help you learn from web pages",
+    "share_target": {
+        "action": "/fc4i/share.html",
+        "enctype": "application/x-www-form-urlencoded",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    },
+    "description": "Save web links to this app. Add study notes, flashcards, mindmaps and more.",
+    "icons": [
+        {
+            "src": "/img/fc4i.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "/fc4i/fc4i.html",
+    "scope": "/fc4i",
+    "display": "standalone",
+    "background_color": "olive",
+    "theme_color": "olive",
+    "categories": [
+        "education",
+        "productivity",
+        "utilities"
+    ],
+    "dir": "ltr",
+    "lang": "en",
+    "orientation": "portrait"
+}

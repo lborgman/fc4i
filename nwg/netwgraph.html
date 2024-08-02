@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- https://collegeinfogeek.com/spaced-repetition-memory-technique/ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="View data from fc4i as a network graph">
+    <link rel="manifest" href="manifest-nwg.json">
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>Network Graph View</title>
+    <link rel="icon" type="image/svg+xml" href="/img/nwg.svg">
+
+
+    <!-- for MWC, https://github.com/material-components/material-web -->
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""> -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+    <!-- https://stackoverflow.com/questions/77883862/google-material-icon-shows-wrong-icon/77884229#77884229 -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <!-- Required styles for Material Web -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css"> -->
+    <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css">
+
+    <!--
+    <link rel="stylesheet" type="text/css" href="assets/style-aaa58175.css">
+    -->
+    <link rel="stylesheet" href="/css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
+
+    <style>
+        .tag-selector {
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+            border: 1px solid olive;
+            border: 1px solid #80800061;
+            border-radius: 18px 7px 7px 18px;
+            background-color: yellow;
+            padding: 2px;
+            padding-right: 3px;
+            padding-left: 6px;
+        }
+
+        .tag-selector.highlight {
+            background-color: var(--highlight-tag-color, red);
+            outline: 2px dotted red;
+        }
+
+        .tag-selector.manually-excluded {
+            background-color: gray;
+        }
+
+        .tag-chk {
+            width: fit-content;
+        }
+
+        .tag-chk * {
+            display: inline-block;
+            width: min-content;
+        }
+
+        .chip-tag {
+            background-color: rgba(0, 255, 0, 0.3);
+            background-color: red;
+            border-radius: 10px;
+        }
+
+        .chip-tag-selected {
+            background-color: rgba(0, 255, 0, 1);
+            background-color: blue !important;
+        }
+
+        .chip-default-state {
+            background-color: rgba(0, 255, 0, 1);
+        }
+
+        .chip-tags {
+            display: flex;
+            gap: 5px;
+        }
+
+        #main {
+            height: calc(100 * var(--vh, vh) - 20px - 8px);
+            display: grid;
+            grid-template-rows: min-content min-content 1fr;
+        }
+
+        #menu-right {
+            background-color: white;
+            position: fixed;
+            top: 48px;
+            transition-property: right, grid-template-columns;
+            transition-duration: 0.3s;
+            text-wrap: nowrap;
+        }
+
+        #menu-right.is-open {
+            right: 0;
+        }
+
+
+        #netwg-tags {
+            margin-top: 48px;
+        }
+
+        #netwg-links {
+            margin-top: 0px;
+        }
+
+        /* https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/ */
+        .expanding-wrapper-h {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.7s ease-out;
+        }
+
+        .expanding-wrapper-h.is-open {
+            grid-template-rows: 1fr;
+        }
+
+        .expanding-wrapper-w {
+            display: grid;
+            grid-template-columns: 0fr;
+            transition: grid-template-columns 0.7s ease-out;
+        }
+
+        .expanding-wrapper-w.is-open {
+            grid-template-columns: 1fr;
+        }
+
+        .expanding-inner {
+            overflow: hidden;
+        }
+
+        .when-more {
+            display: none;
+        }
+        .show-more .when-more {
+            display: unset;
+        }
+
+        #the3d-graph-container {
+            width: calc(100vw - 2 * 8px);
+            height: calc(var(--vh) * 100 - 100px);
+        }
+
+        body {
+            overflow: hidden;
+            background-color: goldenrod;
+        }
+
+        #graph-buttons button.is-open {
+            background-color: yellow;
+        }
+    </style>
+
+    <script src="/src/js/fc4i-importmaps.js"></script>
+
+    <script src="/src/js/error.js"></script>
+    <script src="/src/js/umd/idb.js"></script>
+
+    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+
+    <!-- <script src="https://kit.fontawesome.com/0c318d9e1f.js" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="/ext/fontawesome/5.13.0/css/all.css" xmedia="print" xonload="this.media='all'"> -->
+
+    <script src="/ext/mdc/material-components-web.js"></script>
+
+    <script>console.log("here 1, unpkg /three");</script>
+
+
+    <!--
+        https://threejs.org/docs/#manual/en/introduction/Installation
+        https://github.com/vasturiano/three-spritetext/issues/45
+    -->
+    <!-- <script src="https://unpkg.com/three"></script> -->
+    <!-- <script src="https://unpkg.com/three@0.160.1"></script> -->
+    <script src="https://unpkg.com/three@0.157.0"></script> <!-- the version 3d-force-graph uses now -->
+    <script>
+        console.log("here 2, unpkg /three-spritetext", { __THREE__ });
+    </script>
+    <script src="https://unpkg.com/three-spritetext"></script>
+    <script>
+        console.log("here 3, unpkg /3d-force-graph", { __THREE__ });
+    </script>
+    <script src="https://unpkg.com/3d-force-graph" , {__THREE__}></script>
+
+
+    <script>
+        console.log("here 4, unpkg /three/examples...CSS2D...", { __THREE__ });
+    </script>
+    <script type="module">
+        import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js';
+    </script>
+    <script>
+        console.log("here 5, END three", { __THREE__ });
+    </script>
+
+
+
+</head>
+
+<body>
+    <script>
+        // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+        function setVh() {
+            // Try to handle Chrome Dev Tools:
+            const vhWI = window.innerHeight * 0.01;
+            const vhDCW = document.documentElement.clientHeight * 0.01;
+            const vh = Math.min(vhWI, vhDCW);
+            console.log("%csetVh", "background:orange;", vh, vhWI, vhDCW);
+            // Then we set the value in the --vh custom property to the root of the document
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVh();
+        // const debSetVh = debounce(setVh, 500);
+        // window.addEventListener("resize", () => debSetVh());
+    </script>
+    <div style="display: none; height:40px">
+        <span id="show-view-alt" style="color:red; opacity: 0.3;"></span>
+        <span id="fc4i-info">
+            <span id="show-fc4i-num" style="color:red; opacity: 0.3;"></span>
+        </span>
+    </div>
+    <section id="main">
+        <div id="netwg-tags"></div>
+        <div id="netwg-links"></div>
+        <div id="the3d-graph-container"></div>
+    </section>
+    <div id="menu-right"></div>
+    <!-- <script src="/src/js/common.js"></script> -->
+    <script src="/src/js/netwgraph.js" type="module"></script>
+
+    <!-- 
+    <header id="main-header">
+        <span id="menu-container" class="one-child-fills">
+            <div id="menu-backdrop"></div>
+            <span id="menu-toggle" class="one-child-fills" tabindex="0">
+                <button id="menu-close" class="no-button">🗙</button>
+                <button id="menu-open" class="no-button">☰</button>
+            </span>
+        </span>
+        <span id="header-title"></span>
+        <span id="header-search-check"></span>
+    </header>
+    -->
+</body>

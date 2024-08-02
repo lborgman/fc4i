@@ -1,0 +1,1279 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Memory palace, loci, for Internet">
+    <!-- <link rel="manifest" href="manifest-loci.json"> -->
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>Memory Palace 4 Internet</title>
+    <link rel="icon" type="image/svg+xml" href="/img/loci.svg">
+
+
+    <!-- for MWC, https://github.com/material-components/material-web -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Required styles for Material Web -->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css">
+    <!-- <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css"> -->
+
+    <link rel="stylesheet" href="/css/rem10m1h.css">
+    <link rel="stylesheet" href="/css/jsmind-edit.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
+
+
+    <script src="/src/js/fc4i-importmaps.js"></script>
+
+
+    <script src="/src/js/error.js"></script>
+    <script src="/src/js/umd/idb.js"></script>
+    <!-- <script src="./src/js/is-displayed.js"></script> -->
+
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@0.5/style/jsmind.css" /> -->
+    <link rel="stylesheet" href="/ext/jsmind/jsmind.css" />
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script> -->
+    <!-- <script src="/ext/jsmind/jsmind-dbg.js"></script> -->
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.draggable-node.js"></script> -->
+    <!-- <script src="/ext/jsmind/230406-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/ext/jsmind/chrome-src-jsmind.draggable-node.js"></script> -->
+
+    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" /> -->
+    <link rel="stylesheet" href="/ext/pannellum/pannellum.css" />
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script> -->
+    <script type="text/javascript" src="/ext/pannellum/libpannellum.js"></script>
+    <script type="text/javascript" src="/ext/pannellum/pannellum.js"></script>
+    <style>
+        .my-hotspot-div {
+            padding: 10px;
+            width: clamp(100px, 40vw, 200px);
+        }
+
+        .my-hotspot-text {
+            font-size: clamp(1rem, 5vw, 1.2rem);
+            font-weight: bold;
+        }
+
+        .div-paste-image {
+            outline: 1px dotted yellowgreen;
+        }
+
+        #pannellum-container {
+            NOwidth: 300px;
+        }
+
+        #panorama-container {
+            NOdisplay: flex;
+        }
+
+        #panorama {
+            aspect-ratio: 1 / 1;
+            width: unset;
+            height: unset;
+            max-width: 97vw;
+            max-height: 97vh;
+            margin-left: auto;
+            margin-right: auto;
+            outline: 2px dashed red;
+        }
+
+        #palace-title {
+            color: skyblue;
+            display: flex;
+            justify-content: center;
+            line-height: 2rem;
+        }
+
+        body {
+            background: black;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="NOno-test-items">
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+
+    <div id="palace-title">Title here</div>
+    <div id="panorama-container">
+        <div id="panorama" class="panorama"></div>
+    </div>
+
+    <script>
+        import("pwa");
+        // https://pannellum.org/
+        const devMaxWebGlW = 8192; // FIX-ME: This is from Pixel 7
+        let srcImgOrig;
+        let xmpImg;
+        let scaleImg;
+        let blobImg;
+        let srcBlobImg;
+        let srcPanorama;
+
+        function setButtonState(saveButton, canSave) {
+            if (canSave) {
+                saveButton.disabled = false;
+                saveButton.style.opacity = null;
+            } else {
+                saveButton.disabled = true;
+                saveButton.style.opacity = 0.5;
+            }
+        }
+
+        // https://stackoverflow.com/questions/45831911/is-there-any-eventemitter-in-browser-side-that-has-similar-logic-in-nodejs/53917410#53917410
+        class Only1Event extends EventTarget {
+            // For serializing.
+            #eventName; #listening;
+            #promise;
+            constructor() {
+                super();
+                this.#eventName = "only1event";
+                this.#listening = false;
+            }
+            addEventListener(handler) {
+                throw Error("Call .promiseEvent instead");
+            }
+            promiseEvent() {
+                if (this.#listening) throw Error("Already listening");
+                this.#listening = true;
+                this.#promise = new Promise(resolve => {
+                    super.addEventListener(this.#eventName, resolve);
+                });
+                return this.#promise;
+            }
+            dispatchEvent() {
+                throw Error("Call .sendEvent instead");
+            }
+            sendEvent() {
+                if (!this.#listening) throw Error("Not listening");
+                this.#listening = false;
+                super.dispatchEvent(new Event(this.#eventName));
+            }
+
+        }
+
+        let testsOnly1Active;
+
+        const KEY_SHRINK = "KEY_SHRINK";
+        function addShrinkImageResult(rec) {
+            const old = getShrinkImageResult();
+            old.push(rec);
+            localStorage.setItem(KEY_SHRINK, JSON.stringify(old));
+        }
+        function getShrinkImageResult() {
+            const strOld = localStorage.getItem(KEY_SHRINK);
+            const old = strOld ? JSON.parse(strOld) : [];
+            return old;
+        }
+        function clearShrinkImageResult() {
+            localStorage.removeItem(KEY_SHRINK);
+        }
+        /*
+        async function addXmpdata(imgBlob, xmpData)
+            // https://www.npmjs.com/package/png-itxt - doesn't work any more
+            // https://stackoverflow.com/questions/52549273/insert-png-comment-block-itxt-using-javascript
+            // https://github.com/kujirahand/node-png-metadata/blob/master/src/lib/png-metadata.js
+            // https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
+            // https://medium.com/@naveenkumarasinghe/javascript-lost-in-binaries-buffer-blob-uint8array-arraybuffer-ed8d2b4de44a
+        */
+        async function mkScaledImageBlob(srcImg, quality, shrinkArea) {
+            // if (scale) throw Error(`scale is used, ${scale}`);
+            const shrinkLength = shrinkArea ? Math.sqrt(shrinkArea) : 1;
+
+            // MAX_TEXTURE_SIZE
+            const modImages = await import("images");
+            const tofSrcImg = typeof srcImg;
+            if (tofSrcImg != "string") throw Error(`typeof srcImg=="${tofSrcImg}", should be "string")`);
+
+            // if (srcImg.slice(0, 4) == "blob") throw Error("srcImg is blob url");
+            if (srcImg.slice(0, 4) == "blob") console.warn("srcImg is blob url");
+            const imgSizes = await modImages.getImgSizes(srcImg);
+            const wasOK = imgSizes.alreadyOK || false;
+            const szIn = Math.floor(imgSizes.blobSize / 1000);
+            // console.log("orig", { imgSizes });
+
+            const newW = shrinkLength * imgSizes.webglW;     // update canvas size to match image
+            const newH = shrinkLength * imgSizes.webglH;     // update canvas size to match image
+            // https://stackoverflow.com/questions/42471755/convert-image-into-blob-using-javascript
+            // https://codesalad.dev/blog/how-to-resize-an-image-in-10-lines-of-javascript-29
+            const eltCanvas = document.createElement("canvas");
+            // xmp info
+            const div = document.getElementById("xmp-info").parentElement;
+            const divLast = div.lastElementChild;
+            if (divLast.tagName == "CANVAS") divLast.remove();
+            div.appendChild(eltCanvas);
+            const ctx = eltCanvas.getContext("2d");
+            // FIX-ME: seems to use too much memory. Try a shrinked size:
+            // const shrink = 0.2;
+            eltCanvas.width = newW * shrinkLength;     // update canvas size to match image
+            eltCanvas.height = newH * shrinkLength;
+            // return;
+            console.log("mkScaledImageBlob", { srcImg, newW, newH });
+            return new Promise((resolve, reject) => {
+                const img = new Image;
+                img.onload = function () {
+                    // console.log("before drawImage");
+                    const nowDrawBefore = Date.now();
+                    ctx.drawImage(img, 0, 0, eltCanvas.width, eltCanvas.height);       // draw in image
+                    const nowDrawAfter = Date.now();
+                    // console.log("after drawImage, continuing..., funCallback");
+                    // resolve(true); return;
+                    const constCallback = blob => {
+                        console.log("constCallback", blob.size);
+                        resolve(blob);
+                    }
+                    let nowBlobCB;
+                    function funCallback(blob) {
+                        nowBlobCB = Date.now();
+                        const msDraw = nowDrawAfter - nowDrawBefore;
+                        const msBlob = nowBlobAfter - nowBlobBefore;
+                        const msBlobCB = nowBlobCB - nowBlobBefore;
+                        const sBlob = Math.round(msBlobCB / 1000);
+                        const szOut = Math.floor(blob.size / 1000);
+                        console.log("funCallback", szOut.toLocaleString("en-US"),
+                            { quality, shrinkLength, msDraw, msBlob, msBlobCB });
+                        addShrinkImageResult({
+                            szI: szIn, szO: szOut,
+                            qu: quality, sh: shrinkArea,
+                            // msDraw, msBlob,
+                            sBlob,
+                            wasOK
+                        });
+                        testsOnly1Active?.sendEvent();
+                        resolve(blob);
+                    }
+
+                    // console.log("before toBlob", quality);
+                    const nowBlobBefore = Date.now();
+                    eltCanvas.toBlob(funCallback, "image/webp", quality);
+                    const nowBlobAfter = Date.now();
+                    // console.log("after toBlob");
+                };
+                img.onerror = function () {
+                    debugger;
+                    resolve(false);
+                }
+                img.crossOrigin = "";              // if from different origin
+                img.src = srcImg;
+            });
+        }
+        (async () => {
+            const modMdc = await import("util-mdc");
+            const immages = [
+                "https://pannellum.org/images/alma.jpg",
+                new URL("./testimg/PANO1.jpg", location),
+                new URL("./testimg/PHOTOSPHERE1.jpg", location),
+                new URL("./testimg/Botan-SPHERE1.jpg", location),
+            ];
+
+            dialogChooseImage4Panorama();
+            async function dialogChooseSubjectForImage(srcType, srcOrigName, srcRoomImg) {
+                const divPreview = mkElt("div");
+                divPreview.style = `
+                        background-image: url(${srcRoomImg});
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        height: 100%;
+                        ratio: 1 / 2;
+                `;
+
+                const idImg = mkIdImg(srcType, srcOrigName);
+                const arrHotspotGrps = getAllHotspotGrps(idImg);
+                const divExistingGrps = mkElt("div");
+                divExistingGrps.style = `
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    `;
+                const divGrps = mkElt("div", undefined, divExistingGrps);
+                const divBtnDelGrps = mkElt("div");
+                if (arrHotspotGrps.length > 0) {
+                    arrHotspotGrps.forEach(item => {
+                        // const item = JSON.parse(localStorage.getItem(k));
+                        const id = item.id;
+                        if (item.id) {
+                            const rad = mkElt("input", { type: "radio", name: "mem", value: id });
+                            rad.dataset.subject = item.subject;
+                            const lbl = mkElt("label", undefined, [rad, item.subject]);
+                            divExistingGrps.appendChild(lbl);
+                        }
+                    });
+                    const btnDelGrps = modMdc.mkMDCbutton("delete groups");
+                    btnDelGrps.addEventListener("click", evt => {
+                        const arrKeys = getAllHotspotGrpKeys(idImg);
+                        arrKeys.forEach(k => localStorage.removeItem(k));
+                        divExistingGrps.textContent = "All groups have been deleted";
+                    });
+                    divBtnDelGrps.appendChild(btnDelGrps);
+                } else {
+                    divExistingGrps.textContent = "There are no saved subjects for this image.";
+                }
+                const radNew = mkElt("input", { type: "radio", name: "mem", value: "FROM_INPUT" });
+                const inpNew = mkElt("input", { type: "text" });
+                const lblNew = mkElt("label", undefined, [radNew, "New: ", inpNew]);
+                divExistingGrps.appendChild(lblNew);
+                const rad1 = divExistingGrps.querySelector("input[type=radio]");
+                rad1.checked = true;
+
+                const body = mkElt("div", undefined, [
+                    mkElt("h2", undefined, "Choose subject"),
+                    divPreview,
+                    // divExistingGrps,
+                    divGrps,
+                    divBtnDelGrps,
+                ]);
+                const btnCancel = modMdc.mkMDCdialogButton("Cancel", "close");
+                const btnConfirmSubject = modMdc.mkMDCdialogButton("Continue", "continue", true);
+                let subject4image;
+                let idGrp4image;
+                btnConfirmSubject.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+                    const checked = divExistingGrps.querySelector("input[type=radio]:checked");
+                    if (checked == radNew) {
+                        subject4image = inpNew.value.trim();
+                        if (subject4image.length == 0) {
+                            evt.stopPropagation();
+                            evt.stopImmediatePropagation();
+                            evt.preventDefault();
+                            inpNew.focus();
+                            modMdc.mkMDCdialogAlert("Please input a name for the new subject!");
+                            return;
+                        }
+                        // idGrp4image = checked.value;
+                        // const memKeyPrefix = mkHotspotKeyPrefix(idImg);
+                        // objHotspotGrp4panorama.idGrp = new Date().toISOString();
+                        idGrp4image = new Date().toISOString();
+                    } else {
+                        idGrp4image = checked.value;
+                        subject4image = checked.dataset.subject;
+                    }
+                    console.log({ checked, subject4image, inpNew });
+                    // closeDialog();
+                }));
+                const eltActions = modMdc.mkMDCdialogActions([btnConfirmSubject, btnCancel]);
+                const dlg = await modMdc.mkMDCdialog(body, eltActions);
+                function closeDialog() { dlg.mdc.close(); }
+                return await new Promise((resolve, reject) => {
+                    dlg.dom.addEventListener("MDCDialog:closed", errorHandlerAsyncEvent(async evt => {
+                        const action = evt.detail.action;
+                        switch (action) {
+                            case "continue":
+                                const rec = {
+                                    subjectGrp: subject4image, // FIX-ME: subject vs id
+                                    idGrp: idGrp4image,
+                                    idImg
+                                }
+                                resolve(rec);
+                                break;
+                            case "close":
+                                resolve(false);
+                                break;
+                            default:
+                                throw Error(`error in mkMDCdialogConfirm, action is ${action}`)
+                        }
+                    }));
+                });
+            }
+            async function dialogChooseImage4Panorama() {
+                const modImages = await import("images");
+                const debounceUpdateBlobAndPreview = debounce(updateBlobAndPreview, 2000);
+                const wrappedDebounceUpdateBlobAndPreview =
+                    () => {
+                        console.warn("wrapped");
+                        debounceUpdateBlobAndPreview();
+                    }
+
+                const divPasteImage = mkElt("div", { class: "div-paste-image" });
+                const iconAdd = modMdc.mkMDCicon("add");
+                const btnAdd = modMdc.mkMDCfab(iconAdd, "Add your own image", true);
+                function restartButtonStateTimer() { console.log("restartButtonStateTimner") };
+
+                async function dialogAddImage() {
+                    let msPrev = Date.now();
+                    function mkTimestamp(pos) {
+                        const msNow = Date.now();
+                        const msElapsed = msNow - msPrev;
+                        msPrev = msNow;
+                        console.log(`dialogAddImage ${pos}`, msElapsed);
+                    }
+                    mkTimestamp("0");
+                    const modImages = await import("images");
+                    modMdc.mkMDCsnackbar("Fetching clipboard image...", 9 * 1000);
+                    const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
+                    if (clipboardAccessOk == false) {
+                        debugPasteLine(`addPasteButton event 1`);
+                        modImages.alertHowToUnblockPermissions();
+                        return;
+                    }
+                    const resultImageBlobs = await modImages.getImagesFromClipboard();
+                    mkTimestamp("1");
+                    if (!Array.isArray(resultImageBlobs)) {
+                        // Should be an error object
+                        const err = resultImageBlobs;
+                        console.log({ err });
+                        if (!err instanceof Error) {
+                            debugger;
+                            throw Error(`resultImages is not instanceof Error`);
+                        }
+                        switch (err.name) {
+                            case "NotAllowedError":
+                                modMdc.mkMDCdialogAlert("Please allow reading clipboard");
+                                return;
+                            case "DataError":
+                                modImages.alertNoImagesFound();
+                                return;
+                            default:
+                                debugger;
+                                throw Error(`Unknown error name: ${err.name}, ${err.message}`);
+                        }
+                    }
+                    if (resultImageBlobs.length == 0) {
+                        modImages.alertNoImagesFound();
+                        return;
+                    }
+                    const toDiv = divPasteImage;
+
+                    const inpQuality = mkElt("input", { type: "number" });
+                    inpQuality.style.width = "50px";
+                    inpQuality.value = 0.7;
+                    const lblQuality = mkElt("label", undefined, ["Quality: ", inpQuality]);
+
+
+                    const inpShrink = mkElt("input", { type: "number" });
+                    inpShrink.style.width = "50px";
+                    inpShrink.value = 0.5;
+                    const lblShrink = mkElt("label", undefined, ["Shrink area: ", inpShrink]);
+
+                    const divImgInputs = mkElt("div", undefined, [
+                        lblQuality,
+                        lblShrink
+                    ]);
+                    divImgInputs.style = `
+                                display: flex;
+                                flex-direction: row;
+                                gap: 10px;
+                            `;
+                    divImgInputs.addEventListener("input", evt => {
+                        evt.stopPropagation();
+                    });
+                    const inpName = mkElt("input", { type: "text" });
+                    const lblName = mkElt("label", undefined, ["Name: ", inpName]);
+                    const divSavePreview = mkElt("div");
+                    divSavePreview.style = `
+                                width: 100%;
+                                aspect-ratio: 1 / 1;
+                                border: 1px dashed red;
+                                background-color: yellow;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                            `;
+                    const bdy = mkElt("div", undefined, [
+                        mkElt("h2", undefined, "Save image"),
+                        divImgInputs,
+                        lblName,
+                        mkElt("div", undefined, "Preview:"),
+                        divSavePreview,
+                    ]);
+                    let outBlob;
+                    const funHandleResult = () => {
+                        return {
+                            imgBlob: outBlob,
+                        }
+                    }
+                    let saveButtonImg;
+                    const tellMeOkButton = (btn) => {
+                        mkTimestamp("tellMeOkButton");
+                        saveButtonImg = btn;
+                        // closeDialog
+                        setButtonState(saveButtonImg, false);
+                        updateOutBlobAndPreview();
+                    }
+                    // FIX-ME: several
+                    const origBlob = resultImageBlobs[0]
+                    const origObjUrl = URL.createObjectURL(origBlob);
+                    const xmpOrig = await pannellum.parseGPanoXMP(origBlob);
+                    const sizesOrig = await modImages.getImgSizes(origObjUrl);
+                    // debugger;
+                    // const equirectangularOrig = 
+
+                    function setSaveState(state) {
+                        switch (state) {
+                            case "working":
+                                setButtonState(saveButtonImg, false);
+                                divSavePreview.textContent = "";
+                                const eltTellWorking = mkElt("p", undefined, " Working...");
+                                eltTellWorking.style.margin = "20px";
+                                eltTellWorking.style.color = "red";
+                                eltTellWorking.style.fontSize = "1.2rem";
+                                divSavePreview.appendChild(eltTellWorking);
+                                break;
+                            case "ready":
+                                divSavePreview.textContent = "";
+                                const eltTellPreview = mkElt("span", undefined, "Preview");
+                                eltTellPreview.style = `
+                                    font-size: 2rem;
+                                    color: red;
+                                    position: absolute;
+                                    bottom: 10px;
+                                    right: 10px;
+                                    z-index: 10;
+                                `;
+                                divSavePreview.appendChild(eltTellPreview);
+                                setButtonState(saveButtonImg, true);
+                                break;
+                            default:
+                                throw Error(`Unknown state: ${state}`);
+                        }
+                    }
+                    async function updateOutBlobAndPreview() {
+                        setSaveState("working");
+                        outBlob = await mkScaledImageBlob(origObjUrl, inpQuality.value, inpShrink.value);
+                        const outObjUrl = URL.createObjectURL(outBlob);
+                        const config = {
+                            type: "equirectangular",
+                            panorama: outObjUrl,
+                            autoLoad: true,
+                            avoidShowingBackground: true,
+                            xmp: xmpOrig,
+                        };
+                        setSaveState("ready");
+                        if (!xmpOrig && !sizesOrig.equirect) {
+                            // debugger;
+                            const modPannellum2d = await import("/ext/pannellum/pannellum2d.js");
+                            // debugger;
+                            const config = {
+                                src: outObjUrl,
+                                imgSizes: sizesOrig,
+                                zoom: 0.5,
+                                imageId: "img",
+                            }
+                            modPannellum2d.viewer(divSavePreview, config);
+                            return;
+                        }
+                        const viewer = pannellum.viewer(divSavePreview, config);
+                    }
+
+                    const { imgBlob } = await modMdc.mkMDCdialogConfirm(bdy, "Save",
+                        undefined, undefined,
+                        funHandleResult,
+                        tellMeOkButton,
+                    );
+                    URL.revokeObjectURL(origObjUrl);
+                    console.log({ imgBlob });
+                    if (imgBlob) {
+                        const newBlobUrl = URL.createObjectURL(imgBlob);
+                        // const objHotspotsGrp = await dialogChooseSubjectForImage("custom", srcImgOrig, srcPanorama);
+                        let imgName = inpName.value.trim();
+                        if (imgName.length == 0) throw Error("inpName is empty");
+                        imgName = "DUMMY-TEST";
+                        const objHotspotsGrp = await dialogChooseSubjectForImage("custom", imgName, newBlobUrl);
+                        showPanorama(newBlobUrl, xmpOrig, objHotspotsGrp);
+                    }
+                    // debugger;
+
+
+                }
+
+                btnAdd.addEventListener("click", evt => {
+                    console.log("clicked btnAdd");
+                    dialogAddImage();
+                });
+                // const divUploadImage = mkElt("div", undefined, btnAdd);
+                const divBuiltinHeader = mkElt("div", undefined, ["Builtin images:"]);
+                const divYourImagesHeader = mkElt("div", undefined, ["Your own images:", btnAdd]);
+                styleImageList = `
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                `;
+                const divImmages = mkElt("div");
+                divImmages.style = styleImageList;
+                const divYourImages = mkElt("div");
+                divYourImages.style = styleImageList;
+
+
+                const divBlobPreview = mkElt("div");
+                const divOrigPreview = mkElt("div");
+
+                async function updateBlobAndPreview() {
+                    console.warn("updateBlobAndPreview");
+                    // debugger;
+                    // FIX-ME: Make this interruptable
+                    if (srcImgOrig == undefined) return;
+
+                    divOrigPreview.style.backgroundImage = `url(${srcImgOrig})`;
+                    // let scale;
+                    if (radScaleFree.checked) { scale = scaleImg; }
+                    blobImg = await mkScaledImageBlob(srcImgOrig, inpQuality.value, inpShrink.value);
+                    // return;
+                    srcBlobImg = URL.createObjectURL(blobImg);
+                    divBlobPreview.style.backgroundImage = `url(${srcBlobImg})`;
+
+                    // const newBlob = await addXmpdata(blobImg, "not ready");
+                    // srcBlobImg = URL.createObjectURL(newBlob);
+
+                    const sizesOrig = await modImages.getImgSizes(srcImgOrig);
+                    divOrigPreview.textContent = `Orig w:${sizesOrig.width} h:${sizesOrig.height}`;
+
+                    const sizesBlob = await modImages.getImgSizes(srcBlobImg);
+                    divBlobPreview.textContent = `Blob w:${sizesBlob.width} h:${sizesBlob.height} s:${blobImg.size}`;
+
+                    const origBlob = await new Promise(resolve => {
+                        fetch(srcImgOrig)
+                            .then(response => response.blob())
+                            .then(blob => resolve(blob));
+                    });
+                    xmpImg = await pannellum.parseGPanoXMP(origBlob);
+                    divXmpInfo.textContent = JSON.stringify(xmpImg, undefined, 4);
+
+                    if (sizesOrig.width > devMaxWebGlW) {
+                        chkUseBlob.checked = true;
+                        chkUseBlob.disabled = true;
+                    } else {
+                        chkUseBlob.checked = false;
+                        chkUseBlob.disabled = false;
+                    }
+                }
+
+                const MAX_TEXTURE_SIZE = modImages.webgl_MAX_TEXTURE_SIZE;
+                if (isNaN(MAX_TEXTURE_SIZE)) throw Error(`MAX_TEXTURE_SIZE == ${MAX_TEXTURE_SIZE}`);
+                const divMaxWebgl = mkElt("div", undefined, `Max webgl width/height: ${MAX_TEXTURE_SIZE}`);
+
+                const chkUseBlob = mkElt("input", { type: "checkbox" });
+                const lblUseBlob = mkElt("label", undefined, ["Use blob:", chkUseBlob]);
+                // const inpScale = mkElt("input", { type: "number" });
+                // inpScale.style.width = "50px";
+                // scaleImg = 0.2;
+                // inpScale.value = scaleImg;
+                /*
+                inpScale.addEventListener("input", evt => {
+                    // FIX-ME: check value usable
+                    let usableValue = false;
+                    const strVal = inpScale.value.trim();
+                    let val;
+                    if (strVal.length > 0) {
+                        val = parseFloat(strVal);
+                        if (val > 0.02 && val < 2) usableValue = true;
+                    }
+                    if (!usableValue) {
+                        inpScale.style.backgroundColor = "yellow";
+                        scaleImg = undefined;
+                        return;
+                    }
+                    inpScale.style.backgroundColor = "unset";
+                    scaleImg = val;
+                });
+                */
+                const radScaleFree = mkElt("input", { type: "radio", name: "scale", value: "free" });
+                const radScaleWebgl = mkElt("input", { type: "radio", name: "scale", value: "webgl" });
+                // const lblScaleFree = mkElt("label", undefined, [radScaleFree, "Scale: ", inpScale]);
+                const lblScaleWebgl = mkElt("label", undefined, [radScaleWebgl, "Max webgl"]);
+                radScaleWebgl.checked = true;
+
+                const inpQuality = mkElt("input", { type: "number" });
+                inpQuality.style.width = "50px";
+                inpQuality.value = 0.7;
+                const lblQuality = mkElt("label", undefined, ["Quality: ", inpQuality]);
+                // quality =
+
+                const inpShrink = mkElt("input", { type: "number" });
+                inpShrink.style.width = "50px";
+                inpShrink.value = 0.5;
+                const lblShrink = mkElt("label", undefined, ["Shrink area: ", inpShrink]);
+
+                const divResults = mkElt("div");
+
+                async function runTests() {
+                    const arrQuality = [0.4, 0.6, 0.8];
+                    const arrShrinkArea = [0.1, 0.2, 0.5, 1];
+                    const testImmages = [
+                        "https://pannellum.org/images/alma.jpg",                 // 1.5MB
+                        (new URL("./testimg/PANO1.jpg", location)).href,         // 6.2MB
+                        (new URL("./testimg/PHOTOSPHERE1.jpg", location)).href,  // 5.4MB
+                        (new URL("./testimg/Botan-SPHERE1.jpg", location)).href, // 6.9MB
+                    ];
+                    async function run1Test(srcUrl, quality, shrinkArea) {
+                        // shrink
+                        mkScaledImageBlob(srcUrl, quality, shrinkArea);
+                        await testsOnly1Active.promiseEvent();
+                    }
+
+                    modMdc.mkMDCsnackbar("Starting tests...", 5 * 1000);
+                    clearShrinkImageResult();
+                    testsOnly1Active = new Only1Event();
+                    const numTests = arrQuality.length * arrShrinkArea.length * testImmages.length;
+                    const eltCompletedNum = mkElt("span", undefined, "0");
+                    const eltCompleted = mkElt("span", undefined, [eltCompletedNum, `/${numTests}`]);
+                    const eltSecondsNum = mkElt("span", undefined, "0");
+                    const eltSeconds = mkElt("span", undefined, ["(", eltSecondsNum, " seconds)"]);
+                    const divTestRunning = mkElt("div", undefined, [
+                        eltCompleted,
+                        eltSeconds
+                    ]);
+                    divTestRunning.style = `
+                        display: flex;
+                        gap: 15px;
+                    `;
+                    // "show
+                    divResults.textContent = "";
+                    divResults.appendChild(mkElt("h3", undefined, "Running tests..."));
+                    divResults.appendChild(divTestRunning);
+                    let numDone = 0;
+                    // let seconds = 0;
+                    const msStart = Date.now();
+                    const interv = setInterval(() => {
+                        // seconds++;
+                        // eltSecondsNum.textContent = seconds;
+                        const ms = Date.now() - msStart;
+                        eltSecondsNum.textContent = Math.round(ms / 1000);
+                    }, 300);
+                    for (let ii = 0, iilen = testImmages.length; ii < iilen; ii++) {
+                        for (let si = 0, silen = arrShrinkArea.length; si < silen; si++) {
+                            for (let qi = 0, qilen = arrQuality.length; qi < qilen; qi++) {
+                                const srcUrl = testImmages[ii];
+                                const shrinkArea = arrShrinkArea[si];
+                                const quality = arrQuality[qi];
+                                await run1Test(srcUrl, quality, shrinkArea);
+                                numDone++;
+                                eltCompletedNum.textContent = numDone;
+                            }
+                        }
+                    }
+                    clearInterval(interv);
+                    divResults.appendChild(mkElt("p", undefined, "Ready!"));
+                    modMdc.mkMDCsnackbar("... finished tests", 5 * 1000);
+                }
+                const btnRunTests = modMdc.mkMDCbutton("Rerun tests");
+                btnRunTests.addEventListener("click", evt => {
+                    evt.stopPropagation();
+                    setTimeout(runTests, 10);
+                });
+                const btnClearResults = modMdc.mkMDCbutton("Clear");
+                btnClearResults.addEventListener("click", evt => {
+                    evt.stopPropagation();
+                    if (confirm("Delete shrink image results?")) {
+                        clearShrinkImageResult();
+                        alert("Shrink image result data is deleted");
+                    }
+                });
+                const btnShowResults = modMdc.mkMDCbutton("Show");
+                btnShowResults.addEventListener("click", evt => {
+                    evt.stopPropagation();
+                    const objResult = getShrinkImageResult();
+                    const objR0 = objResult[0];
+                    if (!objR0) {
+                        divResults.textContent = "No saved results found.";
+                        return;
+                    }
+                    const arrLabels = Object.keys(objR0);
+                    divResults.textContent = "";
+                    // addShrinkImageResult({ blobSize, quality, shrink, msDraw, msBlob, msBlobCB });
+                    const table = modMdc.mkMDCdataTable("Shrink image results",
+                        // ["blobSize", "quality", "shrink", "msDraw", "msBlob", "msBlobCB"],
+                        arrLabels,
+                        // objResult[0]
+                    );
+                    divResults.appendChild(table.eltContainer);
+                    objResult.sort((a, b) => a.msBlobCB - b.msBlobCB);
+                    objResult.forEach(rec => {
+                        const values = Object.values(rec);
+                        const row = modMdc.mkMDCdataTableRow(values);
+                        modMdc.addMDCrow2Table(row, table);
+                    });
+                })
+                const divBtnResults = mkElt("div", undefined, [
+                    btnShowResults,
+                    btnClearResults,
+                    btnRunTests,
+                ]);
+                divBtnResults.style = `
+                    display: flex;
+                    gap: 10px;
+                `;
+                const detShrinkTests = mkElt("details", undefined, [
+                    mkElt("summary", undefined, "Shrink image test results"),
+                    divBtnResults,
+                    divResults,
+                ])
+                const divBlobInputs = mkElt("div", undefined, [
+                    mkElt("div", undefined, mkElt("b", undefined, "Blob inputs:")),
+                    lblUseBlob,
+                    lblScaleWebgl,
+                    lblShrink,
+                    // lblScaleFree,
+                    lblQuality,
+                    detShrinkTests,
+                ]);
+                divBlobInputs.addEventListener("input", evt => {
+                    console.log("dvBlobInputs, input", evt.target, evt);
+                    wrappedDebounceUpdateBlobAndPreview();
+                });
+                divBlobInputs.classList.add("mdc-card");
+                divBlobInputs.style = `
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    padding: 10px;
+                `;
+                const divXmpInfo = mkElt("pre");
+                divXmpInfo.id = "xmp-info";
+                const detXmpInfo = mkElt("details", undefined, [
+                    mkElt("summary", undefined, "XMP info"),
+                    divXmpInfo,
+                ]);
+                const pBlob = mkElt("p", undefined, [
+                    divBlobInputs,
+                    divMaxWebgl,
+                    divOrigPreview,
+                    divBlobPreview,
+                    detXmpInfo,
+                ])
+                const body = mkElt("div", undefined, [
+                    mkElt("h2", undefined, "Choose image"),
+                    divBuiltinHeader,
+                    divImmages,
+                    divYourImagesHeader,
+                    divPasteImage,
+                    // divUploadImage,
+                    divYourImages,
+                    pBlob,
+                ]);
+                const previewStyle = `
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        aspect-ratio: 4 / 1;
+                        outline: 1px dotted red;
+                        color: red;
+                        font-size: 20px;
+                        text-shadow: 1px 0 black, -1px 0 black, 0 1px black, 0 -1px black, 0 0 2px black;
+                `;
+                divOrigPreview.style = previewStyle;
+                divBlobPreview.style = previewStyle;
+
+                immages.forEach(src => {
+                    // Fit image easier, but you don't get "copy image":
+                    const eltBgImg = mkElt("div");
+                    eltBgImg.style = `
+                        background-image: url(${src});
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 100px;
+                        height: 50px;
+                        outline: 1px dotted red;
+                    `;
+                    // To get "copy image":
+                    const eltImg = mkElt("img");
+                    eltImg.src = src;
+                    eltImg.style = `
+                        width: 100px;
+                        height: 50px;
+                        outline: 1px dotted blue;
+                    `;
+                    // const eltViewImg = eltBgImg;
+                    const eltViewImg = eltImg;
+                    const eltRadio = mkElt("input", { type: "radio", name: "img", value: src });
+                    const eltLbl = mkElt("label", undefined, [eltRadio, eltViewImg]);
+                    divImmages.appendChild(eltLbl);
+                    eltRadio.addEventListener("change", evt => {
+                        srcImgOrig = eltRadio.value;
+                        console.log("eltRadio, event change");
+                        // FIX-ME: try setTimeout to get immediate feedback on eltRadio
+                        setTimeout(() => wrappedDebounceUpdateBlobAndPreview(), 10);
+                    });
+
+                });
+                const firstImageRadio = divImmages.querySelector("input[name=img]");
+                firstImageRadio.checked = true;
+                const btnConfirmImage = modMdc.mkMDCdialogButton("Continue", "Choose image");
+                const eltActions = modMdc.mkMDCdialogActions([btnConfirmImage]);
+                btnConfirmImage.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation();
+                    evt.preventDefault();
+                    const checked = divImmages.querySelector("input[type=radio]:checked");
+                    console.log({ checked });
+                    if (!checked) {
+                        modMdc.mkMDCdialogAlert("Please choose an image");
+                        return;
+                    }
+                    srcImgOrig = checked.value;
+                    srcPanorama = srcImgOrig;
+                    console.log({ srcImgOrig, srcPanorama });
+                    if (chkUseBlob.checked) {
+                        srcPanorama = srcBlobImg;
+                    }
+                    const objHotspotsGrp = await dialogChooseSubjectForImage("app", srcImgOrig, srcPanorama);
+                    if (!objHotspotsGrp) return;
+                    closeDialog();
+                    showPanorama(srcPanorama, xmpImg, objHotspotsGrp);
+                }));
+
+                const dlg = await modMdc.mkMDCdialog(body, eltActions);
+                function closeDialog() { dlg.mdc.close(); }
+            }
+
+            async function showPanorama(srcPanorama, xmp, objHotspotGrp4panorama) {
+                const eltTitle = document.getElementById("palace-title");
+                eltTitle.textContent = objHotspotGrp4panorama.subjGrp;
+                if (!xmp) {
+                    debugger;
+                    const modPannellum2d = import("/ext/pannellum/pannellum2d.js");
+                    debugger;
+                    return;
+                }
+
+                const modImages = await import("images");
+                const sizesImg = await modImages.getImgSizes(srcPanorama);
+                if (sizesImg.naturalWidth > devMaxWebGlW) {
+                    debugger;
+                }
+                const hotspotGrpKey = mkHotspotGrpKey(objHotspotGrp4panorama.idImg, objHotspotGrp4panorama.idGrp);
+                const cont = document.getElementById("panorama");
+                cont.dataset.hotspotGrpKey = hotspotGrpKey;
+                cont.style.outline = "1px dotted red";
+
+                config =
+                {
+                    type: "equirectangular",
+                    panorama: srcPanorama,
+                    autoLoad: true,
+                    compass: true,
+                    avoidShowingBackground: true,
+                    xmp,
+                    createTooltipFunc: MYcreateTooltipFunc,
+                    hotspotGrpKey,
+                };
+
+                const strOldRec = localStorage.getItem(hotspotGrpKey);
+                let recHotspotGrp = strOldRec ? JSON.parse(strOldRec) : undefined;
+                if (recHotspotGrp) {
+                    const arrHotspots = recHotspotGrp.hotspots;
+                    if (arrHotspots.length > 0) { config.hotSpots = arrHotspots; }
+                }
+
+                const viewer = pannellum.viewer(cont, config);
+                let mousedownData;
+                viewer.on("mousedown", (evt) => {
+                    const coords = viewer.mouseEventToCoords(evt);
+                    const pitch = coords[0], yaw = coords[1];
+                    const cx = evt.clientX;
+                    const cy = evt.clientY;
+                    console.log("mousedown", { pitch, yaw, cx, cy, evt });
+                    mousedownData = { pitch, yaw, cx, cy };
+                });
+                viewer.on("mouseup", (evt) => {
+                    const coords = viewer.mouseEventToCoords(evt);
+                    const pitch = coords[0], yaw = coords[1];
+                    const cx = evt.clientX;
+                    const cy = evt.clientY;
+                    console.log("mouseup", { pitch, yaw, cx, cy });
+                    if (mousedownData.cx == cx && mousedownData.cy == cy) {
+                        const hs = {
+                            pitch, yaw,
+                            type: "info",
+                            text: "infoText",
+                        };
+                        addHotSpotToPanorama(hs);
+                    }
+                });
+
+                function addHotSpotToPanorama(data) {
+                    // data.createTooltipFunc = MYcreateTooltipFunc;
+                    data.id = Date.now();
+                    viewer.addHotSpot(data);
+                    const recHotspot = {
+                        pitch: data.pitch,
+                        yaw: data.yaw,
+                        type: data.type,
+                        text: data.text,
+                        id: data.id,
+                    }
+                    const oldGrp = !!objHotspotGrp4panorama.idGrp;
+                    // dataset
+                    if (!oldGrp) {
+                        // debugger;
+                        throw Error("hotspot .idGrp is undefined");
+                        // objHotspotGrp4panorama.idGrp = new Date().toISOString();
+                    }
+                    const hotspotGrpKey = mkHotspotGrpKey(objHotspotGrp4panorama.idImg, objHotspotGrp4panorama.idGrp);
+                    const strOldRec = oldGrp ? localStorage.getItem(hotspotGrpKey) : undefined;
+                    const oldRec = strOldRec ? JSON.parse(strOldRec) : undefined;
+                    console.log({ data, objHotspotGrp4panorama, hotspotGrpKey, strOldRec, oldRec, recHotspot });
+                    const rec = oldRec ||
+                    {
+                        subject: objHotspotGrp4panorama.subjectGrp,
+                        id: objHotspotGrp4panorama.idGrp,
+                        hotspots: []
+                    }
+                    rec.hotspots.push(recHotspot);
+                    localStorage.setItem(hotspotGrpKey, JSON.stringify(rec));
+
+                    const divHs = data.div;
+                    addHilightHotspot(divHs);
+                    setTimeout(errorHandlerAsyncEvent(async () => {
+                        const divValues = divHs.lastElementChild.lastElementChild;
+                        await editHotspot(divValues, recHotspot, hotspotGrpKey);
+                        setTimeout(() => { removeHilightHotspot(divHs); }, 2000);
+                    }), 1000);
+                }
+
+
+            }
+        })();
+
+        function mkIdImg(srcType, srcOrigNm) {
+            try {
+                const u = new URL(srcOrigNm);
+                const pn = u.pathname;
+                const lIdx = pn.lastIndexOf("/");
+                const fn = pn.slice(lIdx + 1);
+                return `${srcType}-${fn}`;
+            } catch (err) {
+                console.log({ err });
+                return `${srcType}-${srcOrigNm}`;
+            }
+        }
+        function mkHotspotKeyPrefix(idImg) { return `mem-${idImg}-`; }
+        function mkHotspotGrpKey(idImg, idGrp) {
+            if (idGrp == undefined) debugger;
+            return `mem-${idImg}-${idGrp}`;
+        }
+
+        function getAllHotspotGrpKeys(idImg) {
+            const memKeyPrefix = mkHotspotKeyPrefix(idImg);
+            const allKeys = Object.keys(localStorage);
+            const arrMemKeys = allKeys.filter(k => k.startsWith(memKeyPrefix));
+            return arrMemKeys;
+        }
+
+        function getAllHotspotGrps(idImg) {
+            const arrKeys = getAllHotspotGrpKeys(idImg);
+            return arrKeys.map(k => {
+                const str = localStorage.getItem(k);
+                const json = JSON.parse(str);
+                return json;
+            });
+
+        }
+
+        function addHilightHotspot(divHs) {
+            divHs.style.backgroundColor = "red";
+            divHs.style.outline = "2px solid yellow";
+        }
+        function removeHilightHotspot(divHs) {
+            divHs.style.backgroundColor = null;
+            divHs.style.outline = null;
+        }
+
+        async function editHotspot(divValues, hs) {
+            const tn = divValues.tagName;
+            if (tn != "DIV") throw Error(`Expeced DIV, got ${tn}`);
+            if (!divValues.parentElement) throw Error("divValues.parentElement is null");
+            const modMdc = await import("util-mdc");
+            const divPanorama = document.getElementById("panorama");
+            const hotspotGrpKey = divPanorama.dataset.hotspotGrpKey
+            const json = JSON.parse(localStorage.getItem(hotspotGrpKey));
+            const hotspots = json.hotspots;
+            const hotspot = (hotspots.filter(h => h.id == hs.id))[0];
+            const taDesc = modMdc.mkMDCtextFieldTextarea(undefined, 3, 30);
+            taDesc.fontSize = "clamp(1rem, 5vw, 1.2rem)";
+            const tafDesc = modMdc.mkMDCtextareaField("Description", taDesc, hotspot.text);
+
+            const inpURL = modMdc.mkMDCtextFieldInput(undefined, "url");
+            inpURL.classList.add("remember-url");
+            const reportInpURLvalidity = () => inpURL.reportValidity();
+            const debounceReportInpURLvalidity = debounce(reportInpURLvalidity, 700);
+            inpURL.addEventListener("input", evt => {
+                const valid = inpURL.checkValidity();
+                if (!valid) {
+                    evt.stopImmediatePropagation();
+                    setButtonState(saveButtonHotspot, false);
+                    debounceReportInpURLvalidity();
+                }
+            });
+            const strUrl = hs.url ? hs.url : "";
+            const tfURL = modMdc.mkMDCtextField("Link", inpURL, strUrl);
+
+            const divInputs = mkElt("div", undefined, [
+                tafDesc,
+                tfURL,
+            ]);
+            divInputs.style = `
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            `;
+
+            const debounceInputHandling = debounce(checkCanSave, 500);
+            divInputs.addEventListener("input", evt => {
+                evt.stopPropagation();
+                debounceInputHandling();
+            });
+
+            let saveButtonHotspot;
+            let savedValues;
+            function checkCanSave() {
+                const strCurrent = JSON.stringify(getCurrentValues());
+                const strSaved = JSON.stringify(savedValues);
+                const canSave = (strCurrent != strSaved)
+                    && (inpURL.value.trim() == "" || inpURL.checkValidity());
+                console.log("checkCanSave", canSave);
+                if (!canSave) {
+                    setButtonState(saveButtonHotspot, false);
+                } else {
+                    setButtonState(saveButtonHotspot, true);
+                }
+            }
+
+            const title = hs.id ? "Edit hotspot" : "Create hotspot";
+            const body = mkElt("div", undefined, [
+                mkElt("h2", undefined, title),
+                divInputs
+            ]);
+
+            function getCurrentValues() {
+                const val = {};
+                val.desc = taDesc.value;
+                val.url = inpURL.value;
+                return val;
+            }
+
+
+            const handleResult = () => {
+                const isUpdate =
+                    (taDesc.value.trim() != hotspot.text)
+                    ||
+                    (inpURL.value.trim() != hotspot.url);
+                if (isUpdate) {
+                    hotspot.text = taDesc.value.trim();
+                    hotspot.url = inpURL.value.trim();
+                    return "update";
+                }
+            };
+
+            function tellMeOkButton(btn) {
+                // debugger;
+                saveButtonHotspot = btn;
+                setButtonState(saveButtonHotspot, false);
+                savedValues = getCurrentValues();
+            }
+            const ans = await modMdc.mkMDCdialogConfirm(
+                body, "save", undefined, undefined, handleResult, tellMeOkButton);
+            if (ans == "update") {
+                const saveJson = JSON.parse(localStorage.getItem(hotspotGrpKey));
+                const oldHotspots = saveJson.hotspots;
+                const saveHotspots = oldHotspots.filter(h => h.id != hs.id);
+                saveHotspots.push(hotspot);
+                saveJson.hotspots = saveHotspots;
+                localStorage.setItem(hotspotGrpKey, JSON.stringify(saveJson));
+                const divParent = divValues.parentElement;
+                divValues.remove();
+                const newDivValues = mkDivHotspotValues(hotspot);
+                divParent.appendChild(newDivValues);
+            }
+        }
+
+        function mkDivHotspotValues(hs) {
+            const innerDesc = hs.url ? mkElt("a", { href: hs.url }) : mkElt("span");
+            if (hs.text.length == 0) {
+                innerDesc.textContent = "(No description)";
+                innerDesc.style.color = "rgba(255, 0, 0, 0.5)";
+                innerDesc.style.fontStyle = "italic";
+            } else {
+                innerDesc.textContent = hs.text;
+            }
+            const divDesc = mkElt("div", undefined, innerDesc);
+            divDesc.classList.add("my-hotspot-text");
+            // divDesc.style.fontSize = "1.2rem";
+            // divDesc.style.fontWeight = "bold";
+            return divDesc;
+        }
+
+        async function MYcreateTooltipFunc(div, hs, hotspotGrpKey) {
+            div.dataset.hotspotId = hs.id;
+            // div.dataset.hotspotGrpKey = config.hotspotGrpKey;
+            // origCreateTooltipFunc();
+            const modMdc = await import("util-mdc");
+
+            const btnClose = modMdc.mkMDCiconButton("close", "Close");
+            btnClose.classList.add("icon-button-30");
+            btnClose.style.background = "rgba(255, 0, 0, 0.2)";
+            btnClose.style.position = "absolute";
+            btnClose.style.top = "-7px";
+            btnClose.style.left = "-7px";
+
+            const divValues = mkDivHotspotValues(hs);
+
+            const btnEdit = modMdc.mkMDCiconButton("edit", "Edit");
+            btnEdit.classList.add("icon-button-30");
+            btnEdit.style.background = "rgba(255, 0, 0, 0.2)";
+            btnEdit.style.position = "absolute";
+            btnEdit.style.top = "-7px";
+            btnEdit.style.left = "50px";
+            btnEdit.addEventListener("click", evt => {
+                // editHotspot(divValues, hs, hotspotGrpKey);
+                const divValues = myDiv.lastElementChild;
+                editHotspot(divValues, hs, hotspotGrpKey);
+            });
+
+            const myDiv = mkElt("div", undefined, [
+                btnClose,
+                btnEdit,
+                // mkElt("div", undefined, "my test5 div"),
+                divValues,
+            ]);
+            myDiv.style.paddingTop = "37px";
+            myDiv.classList.add("my-hotspot-div");
+            myDiv.classList.add("mdc-card");
+            myDiv.classList.add("display-none");
+
+            btnClose.addEventListener("click", evt => {
+                evt.stopPropagation();
+                addHilightHotspot(div);
+                setTimeout(() => {
+                    myDiv.classList.add("display-none");
+                }, 400);
+                setTimeout(() => removeHilightHotspot(div), 1200);
+            });
+
+
+            div.appendChild(myDiv);
+            div.addEventListener("click", evt => {
+                addHilightHotspot(div);
+                setTimeout(() => myDiv.classList.remove("display-none"), 700);
+            });
+            function origCreateTooltipFunc() {
+                const span = mkElt("span", undefined, "HS: " + hs.text);
+                // if (hs.text || hs.video || hs.image) {
+                div.classList.add('pnlm-tooltip');
+                div.appendChild(span);
+                span.style.width = span.scrollWidth - 20 + 'px';
+                span.style.marginLeft = -(span.scrollWidth - div.offsetWidth) / 2 + 'px';
+                span.style.marginTop = -span.scrollHeight - 12 + 'px';
+                // }
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

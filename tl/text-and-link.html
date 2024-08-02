@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- https://collegeinfogeek.com/spaced-repetition-memory-technique/ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2023, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Get shared title, text and link">
+    <link rel="manifest" href="/tl/manifest-tl.json">
+    <meta name="theme-color" content="#c0ca33">
+
+    <title>Text+link</title>
+    <link rel="icon" type="image/svg+xml" href="/img/tl.svg">
+
+
+    <!-- for MWC, https://github.com/material-components/material-web -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Required styles for Material Web -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+    <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css">
+
+    <!--
+    <link rel="stylesheet" type="text/css" href="assets/style-aaa58175.css">
+    -->
+    <link rel="stylesheet" href="/css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
+
+
+    <script src="/src/js/fc4i-importmaps.js"></script>
+
+    <script src="/src/js/error.js"></script>
+    <!-- <script src="/src/js/umd/idb.js"></script> -->
+
+    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+    <!-- <script src="https://kit.fontawesome.com/0c318d9e1f.js" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="/ext/fontawesome/5.13.0/css/all.css" xmedia="print" xonload="this.media='all'"> -->
+
+    <!-- FIX-ME -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script> -->
+    <!-- <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" /> -->
+    <style>
+        #info-header {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        #info-fc4i {
+            font-style: italic;
+        }
+
+        #div-output {
+            display: grid;
+            grid-template-columns: 1fr fit-content(50px);
+            gap: 20px;
+            padding: 10px;
+        }
+
+        #text-content {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="main-section"></section>
+
+    <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
+    <script src="/ext/mdc/material-components-web.js"></script>
+    <!-- <script type="module" src="pwa"></script> -->
+    <script>import("pwa");</script>
+
+    <!-- <script src="/src/js/common.js"></script> -->
+    <!-- <script src="./src/js/is-displayed.js"></script> -->
+    <!-- <script src="/src/js/share.js"></script> -->
+    <header id="main-header">
+        <!-- 
+        <span id="menu-container" class="one-child-fills">
+            <div id="menu-backdrop"></div>
+            <span id="menu-toggle" class="one-child-fills" tabindex="0">
+                <button id="menu-close" class="no-button">🗙</button>
+                <button id="menu-open" class="no-button">☰</button>
+            </span>
+        </span>
+        -->
+        <span></span>
+        <span id="header-title"></span>
+        <span id="header-search-check"></span>
+    </header>
+    <p id="info-header">
+        <img src="/img/tl.svg" height="100" />
+    </p>
+    <div id="info" class="display-none">
+        <p>
+            This web page can be a share target for apps and web pages.
+            It must be "installed as a
+            <a href="https://en.wikipedia.org/wiki/Progressive_web_app">PWA</a>
+            " in your web browser.
+            (There is only support for this on Android mobiles yet.)
+        </p>
+        <p>
+            The link in the output is cleaned from
+            <a href="https://en.wikipedia.org/wiki/Click_identifier">click identifiers</a>.
+        </p>
+        <p id="info-fc4i">
+            Note: This web page is a part of
+            <a href="/fc4i/fc4i.html">Flashcards 4 Internet</a>.
+        </p>
+    </div>
+    <div id="output"> </div>
+
+    <script>
+        const eltTitle = document.getElementById("header-title");
+        eltTitle.textContent = "Text+Link";
+
+        (async () => {
+            const modMdc = await import("util-mdc");
+            const modShPar = await import("sharing-params");
+
+            const eltInfoHeader = document.getElementById("info-header");
+            const eltInfo = document.getElementById("info");
+            const btnInfo = modMdc.mkMDCiconButton("info");
+            btnInfo.style.color = "blue";
+            btnInfo.addEventListener("click", evt => {
+                // showInfo();
+                // setTimeout(() => btnInfo.remove(), 500);
+                toggleInfo();
+            })
+            eltInfoHeader.appendChild(btnInfo);
+
+            const sharedParams = modShPar.getOurSharedParams();
+            console.log({ sharedParams });
+            const divOut = document.getElementById("output")
+            function toggleInfo() {
+                eltInfo.classList.toggle("display-none");
+            }
+            function showInfo() {
+                // divOut.textContent = "";
+                const p1 = mkElt("p", undefined,
+                    `This web page can be a share target for apps and web pages.`);
+                eltInfo.appendChild(p1);
+
+                const linkPWa = "https://en.wikipedia.org/wiki/Progressive_web_app";
+                const aPwa = mkElt("a", { href: linkPWa }, "Progressive web app");
+                const p2 = mkElt("p", undefined, [
+                    `For this to work it must be "installed as a PWA".`,
+                    "(", aPwa, ")"
+                ]);
+                eltInfo.appendChild(p2);
+            }
+            if (!sharedParams) {
+                btnInfo.remove();
+                // showInfo();
+                toggleInfo();
+            }
+            if (sharedParams) {
+                const divText = mkElt("div", { id: "text-content" });
+                if (sharedParams.title) {
+                    const div = mkElt("div", undefined, sharedParams.title + "\n");
+                    div.style.fontWeight = "bold";
+                    divText.appendChild(div);
+                }
+                if (sharedParams.text) {
+                    const div = mkElt("div", undefined, sharedParams.text + "\n");
+                    divText.appendChild(div);
+                }
+                if (sharedParams.url) {
+                    let url = new URL(sharedParams.url);
+
+                    // https://en.wikipedia.org/wiki/Click_identifier
+                    url = modShPar.removeUrlParam(url, "dclid");
+                    url = modShPar.removeUrlParam(url, "fbclid");
+                    url = modShPar.removeUrlParam(url, "gclid");
+                    url = modShPar.removeUrlParam(url, "gclsrc");
+                    url = modShPar.removeUrlParam(url, "wbraid");
+                    url = modShPar.removeUrlParam(url, "msclkid");
+                    url = modShPar.removeUrlParam(url, "twclid");
+                    url = modShPar.removeUrlParam(url, "yclid");
+
+                    const href = url.href;
+                    const eltA = mkElt("a", { href }, href)
+                    const div = mkElt("div", undefined, eltA);
+                    divText.appendChild(div);
+                }
+                const btnCopy = modMdc.mkMDCbutton("Copy", "raised");
+                btnCopy.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+                    const text = divText.textContent;
+                    await navigator.clipboard.writeText(text);
+                    // Do we need to inform user?
+                    const ua = navigator.userAgent.toLowerCase();
+                    const isAndroid = ua.indexOf("android") > -1;
+                    if (isAndroid) return;
+                    modMdc.mkMDCsnackbar("copied to clipboard");
+                }));
+                const divTextOut = mkElt("div", { id: "div-output", class: "mdc-card" }, [divText, btnCopy]);
+                divOut.appendChild(divTextOut);
+            }
+        })();
+    </script>
+
+</body>
+
+</html>
