@@ -1,7 +1,5 @@
 console.log("here is fc4i-importmaps");
 
-// const mySrc = document.currentScript.src;
-
 const relImports = {
     // https://github.com/vasturiano/3d-force-graph
     // Not a module?
@@ -35,12 +33,11 @@ const relImports = {
     "pwa": "./src/js/mod/pwa.js",
     "sharing-params": "./src/js/mod/sharing-params.js",
     "util-mdc": "./src/js/mod/util-mdc.js",
+
+    // Tests:
+    "errorJs": "src/js/error.js",
+    "fc4iCommon": "./src/js/common.js",
 };
-// debugger;
 insertHereImportmap(relImports);
-// const im = document.createElement('script');
-// im.type = 'importmap';
-// im.textContent = JSON.stringify(importMap);
-// document.currentScript.after(im);
 
 console.log("END fc4i-importmaps");

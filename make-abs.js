@@ -32,7 +32,7 @@ function insertHereImportmap(objRelMap) {
             )
     }
     const jsonAbsMap = JSON.stringify(objAbsMap, null, 2);
-    if (logAbs) console.log(jsonAbsMap);
+    console.log(jsonAbsMap);
     const eltMap = insertHereElement("script");
     eltMap.type = "importmap";
     eltMap.textContent = jsonAbsMap;

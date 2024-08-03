@@ -41,7 +41,11 @@ function blockUntilEvent(target, event, msTimeout) {
 }
 
 const thePromiseDOMready = new Promise(function (resolve) {
+    const rs = document.readyState;
+    if (!["loading", "interactive", "complete"].includes(rs)) throw Error(`Unknown readystate: ${rs}`);
+    // if (document.readyState === "complete") return resolve();
     if (document.readyState === "complete") return resolve();
+    if (document.readyState === "interactive") return resolve();
     document.addEventListener("DOMContentLoaded", resolve);
 });
 async function promiseDOMready() { return thePromiseDOMready; }
