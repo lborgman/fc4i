@@ -12,6 +12,11 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#c0ca33">
 
+    <script>
+        const INDEX_HTML_VER = "0.1.1";
+        console.log(`This is index.html ${INDEX_HTML_VER}`);
+    </script>
+
     <title>Flashcards 4 Internet</title>
     <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
 
@@ -33,10 +38,6 @@
     <link rel="stylesheet" href="css/rem10m1h.css">
     <link id="jsmind-my-colors" rel="stylesheet" href="css/var-colors.css">
 
-    <script>
-        const INDEX_HTML_VER = "0.1.0";
-        console.log(`This is index.html ${INDEX_HTML_VER}`);
-    </script>
     <script src="./make-abs.js"></script>
     <script src="./fc4i-importmaps.js"></script>
     <!-- <script type="module"> await import("pwa"); </script> -->
@@ -61,7 +62,7 @@
 
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
     <!-- <script src="/ext/mdc/material-components-web.js"></script> -->
-    <script>insertHereScript("/ext/mdc/material-components-web.js")</script>
+    <script>insertHereScript("./ext/mdc/material-components-web.js")</script>
 
     <!-- <script src="./src/js/common.js"></script> -->
     <!-- <script>insertHereScript("./src/js/common.js")</script> -->
