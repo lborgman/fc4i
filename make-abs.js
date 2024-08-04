@@ -1,5 +1,5 @@
 // @ts-check
-const MAKE_ABS_VER = "0.1.0";
+const MAKE_ABS_VER = "0.1.1";
 
 console.log(`here is make-abs.js ${MAKE_ABS_VER}`);
 
@@ -14,6 +14,10 @@ console.log(`here is make-abs.js ${MAKE_ABS_VER}`);
 let logAbs = false;
 
 function makeAbsLink(relLink) {
+    if (relLink.startsWith("/")) {
+        debugger;
+        throw Error(`relLink starts with "/", ${relLink}`);
+    }
     const urlLink = new URL(relLink, location.href);
     const absLink = urlLink.href;
     if (logAbs) console.log("makeAbsScriptLink:", absLink);
