@@ -2,23 +2,24 @@
 <html lang="en">
 <!-- https://collegeinfogeek.com/spaced-repetition-memory-technique/ -->
 
+<!-- This page © Copyright 2023, Lennart Borgman -->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- This page © Copyright 2023, Lennart Borgman -->
     <meta name="author" content="Lennart Borgman">
     <meta name="description" content="Tools to help you learn from web pages">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#c0ca33">
+    <title>Flashcards 4 Internet</title>
+    <link rel="icon" type="image/svg+xml" href="./img/rem10m1h.svg">
 
     <script>
-        const INDEX_HTML_VER = "0.1.1";
+        const INDEX_HTML_VER = "0.1.2";
         console.log(`This is index.html ${INDEX_HTML_VER}`);
     </script>
 
-    <title>Flashcards 4 Internet</title>
-    <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
 
 
     <!-- for MWC, https://github.com/material-components/material-web -->
@@ -28,9 +29,14 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <script src="./init-error.js"></script>
+    <script src="./make-abs.js"></script>
+    <script src="./fc4i-importmaps.js"></script>
+    <script> import("pwa"); </script>
+
     <!-- Required styles for Material Web -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
-    <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css">
+    <link rel="stylesheet" href="./ext/mdc/14.0.0/material-components-web.css">
 
     <!--
     <link rel="stylesheet" type="text/css" href="assets/style-aaa58175.css">
@@ -38,10 +44,6 @@
     <link rel="stylesheet" href="css/rem10m1h.css">
     <link id="jsmind-my-colors" rel="stylesheet" href="css/var-colors.css">
 
-    <script src="./make-abs.js"></script>
-    <script src="./fc4i-importmaps.js"></script>
-    <!-- <script type="module"> await import("pwa"); </script> -->
-    <script> import("pwa"); </script>
 
     <!-- 
     <script src="src/js/error.js"></script>
@@ -49,8 +51,8 @@
     -->
     <!-- <script src="errorJs"></script> -->
     <script>
-        insertHereScript("src/js/error.js");
-        insertHereScript("src/js/umd/idb.js");
+        MakeAbs.insertHereScript("src/js/error.js");
+        MakeAbs.insertHereScript("src/js/umd/idb.js");
     </script>
 
     <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
@@ -62,12 +64,24 @@
 
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
     <!-- <script src="/ext/mdc/material-components-web.js"></script> -->
-    <script>insertHereScript("./ext/mdc/material-components-web.js")</script>
+    <script>
+        console.log("BEFORE MAKEABS MDC");
+        const promMDC = MakeAbs.insertHereScript("./ext/mdc/material-components-web.js", "MATERIAL-COMPONENTS-WEB.JS");
+    </script>
 
     <!-- <script src="./src/js/common.js"></script> -->
     <!-- <script>insertHereScript("./src/js/common.js")</script> -->
     <!-- <script type="module" src="fc4iCommon"></script> -->
-    <script>import("fc4iCommon");</script>
+    <script>
+        console.log({ promMDC });
+        (async () => {
+            await promMDC;
+            console.log("AFTER await promMDC");
+            import("fc4iCommon");
+        })();
+    </script>
+    <!-- <script type="module" src="/src/fc4iCommon" /> -->
+    <!-- <script type="module" src="fc4iCommon" onerror="((err) => console.log({err}))();"/> -->
 
     <header id="main-header">
         <span id="menu-container" class="one-child-fills">

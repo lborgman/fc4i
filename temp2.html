@@ -1,0 +1,38 @@
+<body>
+
+    <script>
+        const displayError = (evt) => {
+            setTimeout(() => {
+                const {type, message, reason, filename, lineno} = evt;
+                const msg = `${type}: ${message||reason}, ${filename||""}:${lineno||""} `;
+                console.log("in displayError timeout", msg, evt);
+                const dlg = document.createElement("dialog");
+                dlg.style = `
+                    background: red;
+                    `;
+                dlg.textContent = msg;
+                const btn = document.createElement("button");
+                btn.textContent = "Close";
+                btn.addEventListener("click", evt => dlg.close());
+                dlg.appendChild(btn);
+                document.body.appendChild(dlg);
+                dlg.showModal();
+            }, 100);
+        }
+        window.addEventListener("error", evt => { displayError(evt); });
+        window.addEventListener("unhandledrejection", evt => { displayError(evt); });
+
+        const elt = document.createElement("script");
+        const src = "./bad2.js";
+        elt.src = src;
+        elt.addEventListener("error", async evt => {
+            console.log("elt.addEventListener error", evt);
+            const rsp = await fetch(src, { method: "HEAD" });
+            const msg = `HEAD response ${src}, ${rsp.ok}, ${rsp.status}`;
+            console.log(msg, rsp);
+            if (!rsp.ok) { throw msg; }
+        });
+        elt.addEventListener("load", evt => { console.log("elt load", evt); });
+        document.body.appendChild(elt);
+    </script>
+</body>

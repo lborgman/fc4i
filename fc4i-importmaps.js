@@ -38,6 +38,15 @@ const relImports = {
     "errorJs": "src/js/error.js",
     "fc4iCommon": "./src/js/common.js",
 };
-insertHereImportmap(relImports);
+console.log({MakeAbs});
+console.log(typeof MakeAbs);
+console.log(MakeAbs.MAKE_ABS_VER);
+const makeAbsMajor = +MakeAbs.MAKE_ABS_VER.match(/^\d+/)[0];
+if (![1].includes(makeAbsMajor)) {
+    const maj = makeAbsMajor ;
+    ver = MakeAbs.MAKE_ABS_VER;
+    throw Error(`Unsupported MakeAbs version, ${ver}, (${maj})`);
+}
+MakeAbs.insertHereImportmap(relImports);
 
 console.log("END fc4i-importmaps");
