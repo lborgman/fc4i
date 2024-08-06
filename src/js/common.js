@@ -72,19 +72,6 @@ async function updateDivSearchTheTags() {
 const divDebug = mkElt("section", { id: "debug-section" });
 
 
-checkPWA();
-async function checkPWA() {
-    // const modPWA = await import("pwa");
-    // modPWA.checkPWA();
-    console.log("not at all checkPWA");
-}
-
-const setupServiceWorker = async () => {
-    console.log("not setupServiceWorker");
-    const modPWA = await import("pwa");
-    // modPWA.setupServiceWorker();
-}
-
 
 
 async function getNotificationPermissions() {
@@ -159,12 +146,6 @@ async function checkNotificationPermissions() {
     return false;
 }
 
-
-async function setupForInstall() {
-    // const modPWA = await import("pwa");
-    // modPWA.setupForInstall();
-    console.log("not setupForInstall");
-}
 
 function addDebugRow(inner) {
     const pRow = mkElt("p", undefined, inner);
@@ -2058,10 +2039,10 @@ const mainCommon = async () => {
     getMenu();
     // addDebugSWinfo();
     // if (!(await checkNotificationPermissions())) return;
-    setupForInstall();
+    // setupForInstall();
     // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/error_event
     // let sw = await setupServiceWorker();
-    setupServiceWorker();
+    // setupServiceWorker();
     // https://developer.chrome.com/articles/web-share-target/, GET
     checkUrlParams();
     function checkUrlParams() {

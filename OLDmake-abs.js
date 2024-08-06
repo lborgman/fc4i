@@ -1,9 +1,9 @@
 // @ts-check
+const MAKE_ABS_VER = "1.0.2";
+console.log(`here is make-abs.js ${MAKE_ABS_VER}`);
 {
 
-    const MAKE_ABS_VER = "1.0.0";
 
-    console.log(`here is make-abs.js ${MAKE_ABS_VER}`);
 
     /*
         Helper functions for developing locally and serving from GitHub.
@@ -14,6 +14,7 @@
     */
 
     let logAbs = false;
+    let ourMap = {}
 
     /**
      * 
@@ -39,15 +40,22 @@
         return import(absSrc);
     }
 
+    const getOurMap = () => { return ourMap };
+
     /**
      * 
      * @param {object} objRelMap 
      */
     const insertHereImportmap = (objRelMap) => {
+        if (JSON.stringify(ourMap) != "{}") {
+            console.error("ourMap is already set", { ourMap });
+            throw Error("ourMap is already set");
+        }
+        ourMap = { ...objRelMap };
         const objAbsMap = {
             imports:
                 Object.fromEntries(
-                    Object.entries(objRelMap).map(entry => [entry[0], makeAbsLink(entry[1])])
+                    Object.entries(ourMap).map(entry => [entry[0], makeAbsLink(entry[1])])
                 )
         }
         const jsonAbsMap = JSON.stringify(objAbsMap, null, 2);
@@ -135,6 +143,7 @@
 
     const ourObj = {
         MAKE_ABS_VER,
+        getOurMap,
         makeAbsLink,
         importModule,
         insertHereImportmap,
