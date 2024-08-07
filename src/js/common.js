@@ -1,7 +1,8 @@
 "use strict";
-const COMMON_VER = "0.1.0";
+const COMMON_VER = "0.1.1";
 console.log(`here is common.js ${COMMON_VER}`);
-if (!import.meta.url) { console.error("common.js is not module"); debugger; }
+// if (!import.meta.url) { console.error("common.js is not module"); debugger; }
+if (document.currentScript) { console.error("common.js is not loaded as module"); debugger; }
 
 let theExpanderWay = "setTimeout"; // ok
 // theExpanderWay = "await"; // ok

@@ -1,6 +1,7 @@
-const VER = "0.1.0";
+const VER = "0.1.1";
 console.log(`here is anchors-with-base.js ${VER}`);
-if (!import.meta.url) throw Error("Should be imported as a module");
+// if (!import.meta.url) throw Error("Should be imported as a module");
+if (document.currentScript) throw Error("Should be imported as a module");
 
 document.body.addEventListener("click", evt => {
     const eltA = evt.target.closest("a");
