@@ -11,6 +11,25 @@
     <meta name="description" content="Tools to help you learn from web pages">
     <meta name="theme-color" content="#c0ca33">
 
+    <!-- 
+        <base> tag can be relative.
+        And importmaps uses <base>
+        FIX-ME: This probably means I can ditch make-abs.js
+
+        New way:
+        <base href="relative..."> Where fc4-importmaps.js is!
+        <script src="./init-error.js"></script>
+        <script src="./fc4i-importmaps.js"></script>
+        <script> import("pwa"); </script>
+    -->
+    <base href=".">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+    <script src="./fc4i-importmaps.js"></script>
+    <script> import("pwa"); </script>
+
+
+
     <title>About Flashcards 4 Internet & helpers</title>
     <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
 
@@ -423,17 +442,7 @@
                 [...hiCopy.querySelectorAll("a")]
                     .forEach(a => { a.classList.remove("mdc-card"); });
                 div.appendChild(hiCopy);
-            })
-        setTimeout(() => {
-            console.log("here I am again");
-            (async () => {
-                const modPWA = await import("pwa");
-                setTimeout(async () => {
-                    const version = await modPWA.getSWversion();
-                    console.log({ version });
-                }, 1000);
-            })();
-        }, 1000);
+            });
     </script>
 
     <script>
