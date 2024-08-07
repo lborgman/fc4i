@@ -24,25 +24,18 @@
         <base> tag can be relative.
         And importmaps uses <base>
         FIX-ME: This probably means I can ditch make-abs.js
+
+        New way:
+        <base href="relative..."> Where fc4-importmaps.js is!
+        <script src="./init-error.js"></script>
+        <script src="./fc4i-importmaps.js"></script>
+        <script> import("pwa"); </script>
     -->
     <base href=".">
     <script>console.log("baseURI", document.baseURI);</script>
     <script src="./init-error.js"></script>
     <script src="./fc4i-importmaps.js"></script>
     <script> import("pwa"); </script>
-    <!-- 
-    <script type="importmap">
-        {
-            "imports": {
-                "db-fc4i": "./src/js/db-fc4i.js",
-                "fc4iCommon": "./src/js/common.js",
-                "util-mdc": "./src/js/mod/util-mdc.js",
-
-                "vue": "./vue.runtime.esm.js"
-            }
-        }
-    </script>
-    -->
 
 
     <!-- for MWC, https://github.com/material-components/material-web -->
@@ -52,10 +45,6 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- 
-    <script src="./make-abs.js"></script>
-    <script src="./fc4i-importmaps.js"></script>
-    -->
 
     <!-- Required styles for Material Web -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
@@ -71,8 +60,6 @@
     <script src="src/js/error.js"></script>
     <script src="src/js/umd/idb.js"></script>
 
-    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
-
 </head>
 
 <body>
@@ -80,23 +67,10 @@
 
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
     <script src="./ext/mdc/material-components-web.js"></script>
-    <!-- 
-    <script>
-        console.log("BEFORE MAKEABS MDC");
-        const promMDC = MakeAbs.insertHereScript("./ext/mdc/material-components-web.js", "MATERIAL-COMPONENTS-WEB.JS");
-    </script>
-    -->
 
-    <!-- <script src="./src/js/common.js"></script> -->
-    <!-- <script>insertHereScript("./src/js/common.js")</script> -->
-    <!-- <script type="module" src="fc4iCommon"></script> -->
     <script>
-        // (async () => {
         import("fc4iCommon");
-        // })();
     </script>
-    <!-- <script type="module" src="/src/fc4iCommon" /> -->
-    <!-- <script type="module" src="fc4iCommon" onerror="((err) => console.log({err}))();"/> -->
 
     <header id="main-header">
         <span id="menu-container" class="one-child-fills">

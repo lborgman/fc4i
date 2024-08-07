@@ -1950,7 +1950,7 @@ const getQueryParams = (query) => {
     return params;
 };
 
-async function setFirstAutoRemindersOnHtml() {
+async function OLDsetFirstAutoRemindersOnHtml() {
     await promiseDOMready();
     // const dbFc4i = await getDbFc4i();
     const dbFc4i = await import("db-fc4i");
@@ -2024,7 +2024,7 @@ const visibleAppTitle = "Flashcards 4 Internet";
 
 const mainCommon = async () => {
     // setupFCM();
-    setFirstAutoRemindersOnHtml();
+    // setFirstAutoRemindersOnHtml();
 
     await promiseDOMready();
     const divHeaderTitle = document.getElementById("header-title");
