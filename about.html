@@ -460,9 +460,10 @@
     </script>
 
 </body>
-<script>
+<script type="module">
     document.body.addEventListener("click", evt => {
         const eltA = evt.target.closest("a");
+        if (!eltA) return;
         if (eltA.tagName != "A") return;
         // const href = eltA.href; // This is changed by <base>
         const href = eltA.getAttribute("href").trim();

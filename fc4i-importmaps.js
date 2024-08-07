@@ -35,7 +35,7 @@ console.log("here is fc4i-importmaps");
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
-        "errorJs": "src/js/error.js",
+        "errorJs": "./src/js/error.js",
         "fc4iCommon": "./src/js/common.js",
     };
     const elt = document.createElement("script");
