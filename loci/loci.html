@@ -266,7 +266,7 @@
                     // console.log("after toBlob");
                 };
                 img.onerror = function () {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     resolve(false);
                 }
                 img.crossOrigin = "";              // if from different origin
@@ -427,7 +427,7 @@
                         const err = resultImageBlobs;
                         console.log({ err });
                         if (!err instanceof Error) {
-                            debugger;
+                            debugger; // eslint-disable-line no-debugger
                             throw Error(`resultImages is not instanceof Error`);
                         }
                         switch (err.name) {
@@ -438,7 +438,7 @@
                                 modImages.alertNoImagesFound();
                                 return;
                             default:
-                                debugger;
+                                debugger; // eslint-disable-line no-debugger
                                 throw Error(`Unknown error name: ${err.name}, ${err.message}`);
                         }
                     }
@@ -508,7 +508,6 @@
                     const origObjUrl = URL.createObjectURL(origBlob);
                     const xmpOrig = await pannellum.parseGPanoXMP(origBlob);
                     const sizesOrig = await modImages.getImgSizes(origObjUrl);
-                    // debugger;
                     // const equirectangularOrig = 
 
                     function setSaveState(state) {
@@ -553,9 +552,7 @@
                         };
                         setSaveState("ready");
                         if (!xmpOrig && !sizesOrig.equirect) {
-                            // debugger;
                             const modPannellum2d = await import("/ext/pannellum/pannellum2d.js");
-                            // debugger;
                             const config = {
                                 src: outObjUrl,
                                 imgSizes: sizesOrig,
@@ -584,7 +581,6 @@
                         const objHotspotsGrp = await dialogChooseSubjectForImage("custom", imgName, newBlobUrl);
                         showPanorama(newBlobUrl, xmpOrig, objHotspotsGrp);
                     }
-                    // debugger;
 
 
                 }
@@ -612,7 +608,6 @@
 
                 async function updateBlobAndPreview() {
                     console.warn("updateBlobAndPreview");
-                    // debugger;
                     // FIX-ME: Make this interruptable
                     if (srcImgOrig == undefined) return;
 
@@ -933,16 +928,16 @@
                 const eltTitle = document.getElementById("palace-title");
                 eltTitle.textContent = objHotspotGrp4panorama.subjGrp;
                 if (!xmp) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     const modPannellum2d = import("/ext/pannellum/pannellum2d.js");
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     return;
                 }
 
                 const modImages = await import("images");
                 const sizesImg = await modImages.getImgSizes(srcPanorama);
                 if (sizesImg.naturalWidth > devMaxWebGlW) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                 }
                 const hotspotGrpKey = mkHotspotGrpKey(objHotspotGrp4panorama.idImg, objHotspotGrp4panorama.idGrp);
                 const cont = document.getElementById("panorama");
@@ -1008,7 +1003,6 @@
                     const oldGrp = !!objHotspotGrp4panorama.idGrp;
                     // dataset
                     if (!oldGrp) {
-                        // debugger;
                         throw Error("hotspot .idGrp is undefined");
                         // objHotspotGrp4panorama.idGrp = new Date().toISOString();
                     }
@@ -1052,7 +1046,9 @@
         }
         function mkHotspotKeyPrefix(idImg) { return `mem-${idImg}-`; }
         function mkHotspotGrpKey(idImg, idGrp) {
-            if (idGrp == undefined) debugger;
+            if (idGrp == undefined) {
+                debugger; // eslint-disable-line no-debugger
+            }
             return `mem-${idImg}-${idGrp}`;
         }
 
@@ -1169,7 +1165,6 @@
             };
 
             function tellMeOkButton(btn) {
-                // debugger;
                 saveButtonHotspot = btn;
                 setButtonState(saveButtonHotspot, false);
                 savedValues = getCurrentValues();

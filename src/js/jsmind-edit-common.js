@@ -389,7 +389,6 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
                 const recLink = renderer.getRecLink(key, provider);
                 const eltA3 = mkElt("a", { href: recLink }, iconBtn);
                 eltA3.classList.add("jsmind-renderer-img");
-                // debugger;
                 eltJmnode.appendChild(eltA3);
             }
         }
@@ -803,7 +802,7 @@ export async function pageSetup() {
         if (strParNames == '["mindmap"]') return true;
         // if (strParNames == '["maxConf","requiredTags","searchFor"]') return true;
         if (strParNames == '["mindmap","nodehits","provider"]') return true;
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         alert("invalid params: " + strParNames);
         return false;
     }
@@ -1009,7 +1008,6 @@ export async function pageSetup() {
                     // const eltTxt = eltJmnode.lastElementChild;
                     const eltTxt = eltJmnode.querySelector(".jmnode-text");
                     if (!eltTxt.classList.contains("jmnode-text")) throw Error("Not .jmnode-text");
-                    // debugger;
                     const isPlainNode = eltTxt.childElementCount == 0;
                     // modCustRend.addJmnodeBgAndText(eltJmnode);
                     // const isCustomNode = topic.search(" data-jsmind-custom=") > 0;
@@ -1139,7 +1137,7 @@ export async function pageSetup() {
                 console.log({ go });
                 if (!go) return;
                 // showKeyInFc4i(objCustom.key);
-                debugger;
+                debugger; // eslint-disable-line no-debugger
                 const render = await modCustRend.getOurCustomRenderer();
                 // if (!render instanceof CustomRenderer4jsMind) throw Error(`Not a custom renderer`);
                 render.showCustomRec(objCustom.key, objCustom.provider);
@@ -1622,7 +1620,7 @@ export async function pageSetup() {
             alert("Already provider link, not handled yet");
             return;
         }
-        if (eltJmnode.childElementCount == 3) { debugger; }
+        if (eltJmnode.childElementCount == 3) { debugger;}
         */
 
         const provider = objCustomCopied.provider;

@@ -38,10 +38,10 @@ export async function signIn(provider, redirect) {
     // https://firebase.google.com/docs/web/alt-setup
 
     const f = await import('https://www.gstatic.com/firebasejs/8.10.1/firebase.js');
-    debugger;
+    debugger; // eslint-disable-line no-debugger
     // import { getAuth } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js'
     const modFirebase = await import('https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js');
-    debugger;
+    debugger; // eslint-disable-line no-debugger
 
     // https://firebase.google.com/docs/auth/web/firebaseui
     // Initialize the FirebaseUI Widget using Firebase.

@@ -19,7 +19,7 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
+var extendStatics = function (d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
         function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
@@ -34,7 +34,7 @@ function __extends(d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
-var __assign = function() {
+var __assign = function () {
     __assign = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -56,8 +56,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 function __generator(thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -690,9 +690,9 @@ var _lineBreakAtIndex = function (codePoints, classTypes, indicies, index, forbi
     }
     // LB25 Do not break between the following pairs of classes relevant to numbers:
     if (
-    // (PR | PO) × ( OP | HY )? NU
-    ([PR, PO].indexOf(current) !== -1 &&
-        (next === NU || ([OP, HY].indexOf(next) !== -1 && classTypes[afterIndex + 1] === NU))) ||
+        // (PR | PO) × ( OP | HY )? NU
+        ([PR, PO].indexOf(current) !== -1 &&
+            (next === NU || ([OP, HY].indexOf(next) !== -1 && classTypes[afterIndex + 1] === NU))) ||
         // ( OP | HY ) × NU
         ([OP, HY].indexOf(current) !== -1 && next === NU) ||
         // NU ×	(NU | SY | IS)
@@ -822,7 +822,7 @@ var LineBreaker = function (str, options) {
             var lineBreak = BREAK_NOT_ALLOWED$1;
             while (nextIndex < length &&
                 (lineBreak = _lineBreakAtIndex(codePoints, classTypes, indicies, ++nextIndex, forbiddenBreakpoints)) ===
-                    BREAK_NOT_ALLOWED$1) { }
+                BREAK_NOT_ALLOWED$1) { }
             if (lineBreak !== BREAK_NOT_ALLOWED$1 || nextIndex === length) {
                 var value = new Break(codePoints, lineBreak, lastEnd, nextIndex);
                 lastEnd = nextIndex;
@@ -2531,11 +2531,11 @@ var backgroundRepeat = {
     parse: function (_context, tokens) {
         return parseFunctionArgs(tokens)
             .map(function (values) {
-            return values
-                .filter(isIdentToken)
-                .map(function (token) { return token.value; })
-                .join(' ');
-        })
+                return values
+                    .filter(isIdentToken)
+                    .map(function (token) { return token.value; })
+                    .join(' ');
+            })
             .map(parseBackgroundRepeat);
     }
 };
@@ -2574,68 +2574,76 @@ var isBackgroundSizeInfoToken = function (value) {
     return isIdentToken(value) || isLengthPercentage(value);
 };
 
-var borderColorForSide = function (side) { return ({
-    name: "border-" + side + "-color",
-    initialValue: 'transparent',
-    prefix: false,
-    type: 3 /* TYPE_VALUE */,
-    format: 'color'
-}); };
+var borderColorForSide = function (side) {
+    return ({
+        name: "border-" + side + "-color",
+        initialValue: 'transparent',
+        prefix: false,
+        type: 3 /* TYPE_VALUE */,
+        format: 'color'
+    });
+};
 var borderTopColor = borderColorForSide('top');
 var borderRightColor = borderColorForSide('right');
 var borderBottomColor = borderColorForSide('bottom');
 var borderLeftColor = borderColorForSide('left');
 
-var borderRadiusForSide = function (side) { return ({
-    name: "border-radius-" + side,
-    initialValue: '0 0',
-    prefix: false,
-    type: 1 /* LIST */,
-    parse: function (_context, tokens) {
-        return parseLengthPercentageTuple(tokens.filter(isLengthPercentage));
-    }
-}); };
+var borderRadiusForSide = function (side) {
+    return ({
+        name: "border-radius-" + side,
+        initialValue: '0 0',
+        prefix: false,
+        type: 1 /* LIST */,
+        parse: function (_context, tokens) {
+            return parseLengthPercentageTuple(tokens.filter(isLengthPercentage));
+        }
+    });
+};
 var borderTopLeftRadius = borderRadiusForSide('top-left');
 var borderTopRightRadius = borderRadiusForSide('top-right');
 var borderBottomRightRadius = borderRadiusForSide('bottom-right');
 var borderBottomLeftRadius = borderRadiusForSide('bottom-left');
 
-var borderStyleForSide = function (side) { return ({
-    name: "border-" + side + "-style",
-    initialValue: 'solid',
-    prefix: false,
-    type: 2 /* IDENT_VALUE */,
-    parse: function (_context, style) {
-        switch (style) {
-            case 'none':
-                return 0 /* NONE */;
-            case 'dashed':
-                return 2 /* DASHED */;
-            case 'dotted':
-                return 3 /* DOTTED */;
-            case 'double':
-                return 4 /* DOUBLE */;
+var borderStyleForSide = function (side) {
+    return ({
+        name: "border-" + side + "-style",
+        initialValue: 'solid',
+        prefix: false,
+        type: 2 /* IDENT_VALUE */,
+        parse: function (_context, style) {
+            switch (style) {
+                case 'none':
+                    return 0 /* NONE */;
+                case 'dashed':
+                    return 2 /* DASHED */;
+                case 'dotted':
+                    return 3 /* DOTTED */;
+                case 'double':
+                    return 4 /* DOUBLE */;
+            }
+            return 1 /* SOLID */;
         }
-        return 1 /* SOLID */;
-    }
-}); };
+    });
+};
 var borderTopStyle = borderStyleForSide('top');
 var borderRightStyle = borderStyleForSide('right');
 var borderBottomStyle = borderStyleForSide('bottom');
 var borderLeftStyle = borderStyleForSide('left');
 
-var borderWidthForSide = function (side) { return ({
-    name: "border-" + side + "-width",
-    initialValue: '0',
-    type: 0 /* VALUE */,
-    prefix: false,
-    parse: function (_context, token) {
-        if (isDimensionToken(token)) {
-            return token.number;
+var borderWidthForSide = function (side) {
+    return ({
+        name: "border-" + side + "-width",
+        initialValue: '0',
+        type: 0 /* VALUE */,
+        prefix: false,
+        parse: function (_context, token) {
+            if (isDimensionToken(token)) {
+                return token.number;
+            }
+            return 0;
         }
-        return 0;
-    }
-}); };
+    });
+};
 var borderTopWidth = borderWidthForSide('top');
 var borderRightWidth = borderWidthForSide('right');
 var borderBottomWidth = borderWidthForSide('bottom');
@@ -2971,12 +2979,14 @@ var listStyleType = {
     }
 };
 
-var marginForSide = function (side) { return ({
-    name: "margin-" + side,
-    initialValue: '0',
-    prefix: false,
-    type: 4 /* TOKEN_VALUE */
-}); };
+var marginForSide = function (side) {
+    return ({
+        name: "margin-" + side,
+        initialValue: '0',
+        prefix: false,
+        type: 4 /* TOKEN_VALUE */
+    });
+};
 var marginTop = marginForSide('top');
 var marginRight = marginForSide('right');
 var marginBottom = marginForSide('bottom');
@@ -3022,13 +3032,15 @@ var overflowWrap = {
     }
 };
 
-var paddingForSide = function (side) { return ({
-    name: "padding-" + side,
-    initialValue: '0',
-    prefix: false,
-    type: 3 /* TYPE_VALUE */,
-    format: 'length-percentage'
-}); };
+var paddingForSide = function (side) {
+    return ({
+        name: "padding-" + side,
+        initialValue: '0',
+        prefix: false,
+        type: 3 /* TYPE_VALUE */,
+        format: 'length-percentage'
+    });
+};
 var paddingTop = paddingForSide('top');
 var paddingRight = paddingForSide('right');
 var paddingBottom = paddingForSide('bottom');
@@ -3288,18 +3300,18 @@ var textDecorationLine = {
         return tokens
             .filter(isIdentToken)
             .map(function (token) {
-            switch (token.value) {
-                case 'underline':
-                    return 1 /* UNDERLINE */;
-                case 'overline':
-                    return 2 /* OVERLINE */;
-                case 'line-through':
-                    return 3 /* LINE_THROUGH */;
-                case 'none':
-                    return 4 /* BLINK */;
-            }
-            return 0 /* NONE */;
-        })
+                switch (token.value) {
+                    case 'underline':
+                        return 1 /* UNDERLINE */;
+                    case 'overline':
+                        return 2 /* OVERLINE */;
+                    case 'line-through':
+                        return 3 /* LINE_THROUGH */;
+                    case 'none':
+                        return 4 /* BLINK */;
+                }
+                return 0 /* NONE */;
+            })
             .filter(function (line) { return line !== 0 /* NONE */; });
     }
 };
@@ -3785,7 +3797,7 @@ var ElementContainer = /** @class */ (function () {
         this.elements = [];
         this.flags = 0;
         if (isDebugging(element, 3 /* PARSE */)) {
-            debugger;
+            debugger; // eslint-disable-line no-debugger
         }
         this.styles = new CSSParsedDeclaration(context, window.getComputedStyle(element, null));
         if (isHTMLElementNode(element)) {
@@ -4278,23 +4290,23 @@ var testForeignObject = function (document) {
     ctx.fillRect(0, 0, size, size);
     return loadSerializedSVG$1(svg)
         .then(function (img) {
-        ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, size, size).data;
-        ctx.fillStyle = 'red';
-        ctx.fillRect(0, 0, size, size);
-        var node = document.createElement('div');
-        node.style.backgroundImage = "url(" + greenImageSrc + ")";
-        node.style.height = size + "px";
-        // Firefox 55 does not render inline <img /> tags
-        return isGreenPixel(data)
-            ? loadSerializedSVG$1(createForeignObjectSVG(size, size, 0, 0, node))
-            : Promise.reject(false);
-    })
+            ctx.drawImage(img, 0, 0);
+            var data = ctx.getImageData(0, 0, size, size).data;
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, size, size);
+            var node = document.createElement('div');
+            node.style.backgroundImage = "url(" + greenImageSrc + ")";
+            node.style.height = size + "px";
+            // Firefox 55 does not render inline <img /> tags
+            return isGreenPixel(data)
+                ? loadSerializedSVG$1(createForeignObjectSVG(size, size, 0, 0, node))
+                : Promise.reject(false);
+        })
         .then(function (img) {
-        ctx.drawImage(img, 0, 0);
-        // Edge does not render background-images
-        return isGreenPixel(ctx.getImageData(0, 0, size, size).data);
-    })
+            ctx.drawImage(img, 0, 0);
+            // Edge does not render background-images
+            return isGreenPixel(ctx.getImageData(0, 0, size, size).data);
+        })
         .catch(function () { return false; });
 };
 var createForeignObjectSVG = function (width, height, x, y, node) {
@@ -4626,19 +4638,19 @@ var InputElementContainer = /** @class */ (function (_super) {
             _this.styles.backgroundColor = 0xdededeff;
             _this.styles.borderTopColor =
                 _this.styles.borderRightColor =
-                    _this.styles.borderBottomColor =
-                        _this.styles.borderLeftColor =
-                            0xa5a5a5ff;
+                _this.styles.borderBottomColor =
+                _this.styles.borderLeftColor =
+                0xa5a5a5ff;
             _this.styles.borderTopWidth =
                 _this.styles.borderRightWidth =
-                    _this.styles.borderBottomWidth =
-                        _this.styles.borderLeftWidth =
-                            1;
+                _this.styles.borderBottomWidth =
+                _this.styles.borderLeftWidth =
+                1;
             _this.styles.borderTopStyle =
                 _this.styles.borderRightStyle =
-                    _this.styles.borderBottomStyle =
-                        _this.styles.borderLeftStyle =
-                            1 /* SOLID */;
+                _this.styles.borderBottomStyle =
+                _this.styles.borderLeftStyle =
+                1 /* SOLID */;
             _this.styles.backgroundClip = [0 /* BORDER_BOX */];
             _this.styles.backgroundOrigin = [0 /* BORDER_BOX */];
             _this.bounds = reformatInputBounds(_this.bounds);
@@ -4647,16 +4659,16 @@ var InputElementContainer = /** @class */ (function (_super) {
             case CHECKBOX:
                 _this.styles.borderTopRightRadius =
                     _this.styles.borderTopLeftRadius =
-                        _this.styles.borderBottomRightRadius =
-                            _this.styles.borderBottomLeftRadius =
-                                CHECKBOX_BORDER_RADIUS;
+                    _this.styles.borderBottomRightRadius =
+                    _this.styles.borderBottomLeftRadius =
+                    CHECKBOX_BORDER_RADIUS;
                 break;
             case RADIO:
                 _this.styles.borderTopRightRadius =
                     _this.styles.borderTopLeftRadius =
-                        _this.styles.borderBottomRightRadius =
-                            _this.styles.borderBottomLeftRadius =
-                                RADIO_BORDER_RADIUS;
+                    _this.styles.borderBottomRightRadius =
+                    _this.styles.borderBottomLeftRadius =
+                    RADIO_BORDER_RADIUS;
                 break;
         }
         return _this;
@@ -5219,46 +5231,48 @@ var DocumentCloner = /** @class */ (function () {
         /* Chrome doesn't detect relative background-images assigned in inline <style> sheets when fetched through getComputedStyle
          if window url is about:blank, we can assign the url to current by writing onto the document
          */
-        var iframeLoad = iframeLoader(iframe).then(function () { return __awaiter(_this, void 0, void 0, function () {
-            var onclone, referenceElement;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.scrolledElements.forEach(restoreNodeScroll);
-                        if (cloneWindow) {
-                            cloneWindow.scrollTo(windowSize.left, windowSize.top);
-                            if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent) &&
-                                (cloneWindow.scrollY !== windowSize.top || cloneWindow.scrollX !== windowSize.left)) {
-                                this.context.logger.warn('Unable to restore scroll position for cloned document');
-                                this.context.windowBounds = this.context.windowBounds.add(cloneWindow.scrollX - windowSize.left, cloneWindow.scrollY - windowSize.top, 0, 0);
+        var iframeLoad = iframeLoader(iframe).then(function () {
+            return __awaiter(_this, void 0, void 0, function () {
+                var onclone, referenceElement;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            this.scrolledElements.forEach(restoreNodeScroll);
+                            if (cloneWindow) {
+                                cloneWindow.scrollTo(windowSize.left, windowSize.top);
+                                if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent) &&
+                                    (cloneWindow.scrollY !== windowSize.top || cloneWindow.scrollX !== windowSize.left)) {
+                                    this.context.logger.warn('Unable to restore scroll position for cloned document');
+                                    this.context.windowBounds = this.context.windowBounds.add(cloneWindow.scrollX - windowSize.left, cloneWindow.scrollY - windowSize.top, 0, 0);
+                                }
                             }
-                        }
-                        onclone = this.options.onclone;
-                        referenceElement = this.clonedReferenceElement;
-                        if (typeof referenceElement === 'undefined') {
-                            return [2 /*return*/, Promise.reject("Error finding the " + this.referenceElement.nodeName + " in the cloned document")];
-                        }
-                        if (!(documentClone.fonts && documentClone.fonts.ready)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, documentClone.fonts.ready];
-                    case 1:
-                        _a.sent();
-                        _a.label = 2;
-                    case 2:
-                        if (!/(AppleWebKit)/g.test(navigator.userAgent)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, imagesReady(documentClone)];
-                    case 3:
-                        _a.sent();
-                        _a.label = 4;
-                    case 4:
-                        if (typeof onclone === 'function') {
-                            return [2 /*return*/, Promise.resolve()
+                            onclone = this.options.onclone;
+                            referenceElement = this.clonedReferenceElement;
+                            if (typeof referenceElement === 'undefined') {
+                                return [2 /*return*/, Promise.reject("Error finding the " + this.referenceElement.nodeName + " in the cloned document")];
+                            }
+                            if (!(documentClone.fonts && documentClone.fonts.ready)) return [3 /*break*/, 2];
+                            return [4 /*yield*/, documentClone.fonts.ready];
+                        case 1:
+                            _a.sent();
+                            _a.label = 2;
+                        case 2:
+                            if (!/(AppleWebKit)/g.test(navigator.userAgent)) return [3 /*break*/, 4];
+                            return [4 /*yield*/, imagesReady(documentClone)];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            if (typeof onclone === 'function') {
+                                return [2 /*return*/, Promise.resolve()
                                     .then(function () { return onclone(documentClone, referenceElement); })
                                     .then(function () { return iframe; })];
-                        }
-                        return [2 /*return*/, iframe];
-                }
+                            }
+                            return [2 /*return*/, iframe];
+                    }
+                });
             });
-        }); });
+        });
         documentClone.open();
         documentClone.write(serializeDoctype(document.doctype) + "<html></html>");
         // Chrome scrolls the parent document for some reason after the write to the cloned window???
@@ -5269,7 +5283,7 @@ var DocumentCloner = /** @class */ (function () {
     };
     DocumentCloner.prototype.createElementClone = function (node) {
         if (isDebugging(node, 2 /* CLONE */)) {
-            debugger;
+            debugger; // eslint-disable-line no-debugger
         }
         if (isCanvasElement(node)) {
             return this.createCanvasClone(node);
@@ -5516,7 +5530,7 @@ var DocumentCloner = /** @class */ (function () {
                         anonymousReplacedElement.appendChild(document.createTextNode(text));
                     }
                 }
-                else ;
+                else;
             }
             else if (token.type === 20 /* IDENT_TOKEN */) {
                 switch (token.value) {
@@ -5750,22 +5764,22 @@ var Cache = /** @class */ (function () {
                     case 2:
                         this.context.logger.debug("Added image " + key.substring(0, 256));
                         return [4 /*yield*/, new Promise(function (resolve, reject) {
-                                var img = new Image();
-                                img.onload = function () { return resolve(img); };
-                                img.onerror = reject;
-                                //ios safari 10.3 taints canvas with data urls unless crossOrigin is set to anonymous
-                                if (isInlineBase64Image(src) || useCORS) {
-                                    img.crossOrigin = 'anonymous';
-                                }
-                                img.src = src;
-                                if (img.complete === true) {
-                                    // Inline XML images may fail to parse, throwing an Error later on
-                                    setTimeout(function () { return resolve(img); }, 500);
-                                }
-                                if (_this._options.imageTimeout > 0) {
-                                    setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading image"); }, _this._options.imageTimeout);
-                                }
-                            })];
+                            var img = new Image();
+                            img.onload = function () { return resolve(img); };
+                            img.onerror = reject;
+                            //ios safari 10.3 taints canvas with data urls unless crossOrigin is set to anonymous
+                            if (isInlineBase64Image(src) || useCORS) {
+                                img.crossOrigin = 'anonymous';
+                            }
+                            img.src = src;
+                            if (img.complete === true) {
+                                // Inline XML images may fail to parse, throwing an Error later on
+                                setTimeout(function () { return resolve(img); }, 500);
+                            }
+                            if (_this._options.imageTimeout > 0) {
+                                setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading image"); }, _this._options.imageTimeout);
+                            }
+                        })];
                     case 3: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -6679,7 +6693,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         if (contains(paint.container.flags, 16 /* DEBUG_RENDER */)) {
-                            debugger;
+                            debugger; // eslint-disable-line no-debugger
                         }
                         if (!paint.container.styles.isVisible()) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.renderNodeBackgroundAndBorders(paint)];
@@ -6745,12 +6759,12 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                         .slice(0)
                                         .reverse()
                                         .forEach(function (textShadow) {
-                                        _this.ctx.shadowColor = asString(textShadow.color);
-                                        _this.ctx.shadowOffsetX = textShadow.offsetX.number * _this.options.scale;
-                                        _this.ctx.shadowOffsetY = textShadow.offsetY.number * _this.options.scale;
-                                        _this.ctx.shadowBlur = textShadow.blur.number;
-                                        _this.renderTextWithLetterSpacing(text, styles.letterSpacing, baseline);
-                                    });
+                                            _this.ctx.shadowColor = asString(textShadow.color);
+                                            _this.ctx.shadowOffsetX = textShadow.offsetX.number * _this.options.scale;
+                                            _this.ctx.shadowOffsetY = textShadow.offsetY.number * _this.options.scale;
+                                            _this.ctx.shadowBlur = textShadow.blur.number;
+                                            _this.renderTextWithLetterSpacing(text, styles.letterSpacing, baseline);
+                                        });
                                     _this.ctx.shadowColor = '';
                                     _this.ctx.shadowOffsetX = 0;
                                     _this.ctx.shadowOffsetY = 0;
@@ -6983,7 +6997,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                 switch (_p.label) {
                     case 0:
                         if (contains(stack.element.container.flags, 16 /* DEBUG_RENDER */)) {
-                            debugger;
+                            debugger; // eslint-disable-line no-debugger
                         }
                         // https://www.w3.org/TR/css-position-3/#painting-order
                         // 1. the background and borders of the element forming the stacking context.
@@ -7004,9 +7018,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
                     case 4:
                         _i++;
                         return [3 /*break*/, 2];
-                    case 5: 
-                    // 3. For all its in-flow, non-positioned, block-level descendants in tree order:
-                    return [4 /*yield*/, this.renderNodeContent(stack.element)];
+                    case 5:
+                        // 3. For all its in-flow, non-positioned, block-level descendants in tree order:
+                        return [4 /*yield*/, this.renderNodeContent(stack.element)];
                     case 6:
                         // 3. For all its in-flow, non-positioned, block-level descendants in tree order:
                         _p.sent();
@@ -7324,28 +7338,28 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             .slice(0)
                             .reverse()
                             .forEach(function (shadow) {
-                            _this.ctx.save();
-                            var borderBoxArea = calculateBorderBoxPath(paint.curves);
-                            var maskOffset = shadow.inset ? 0 : MASK_OFFSET;
-                            var shadowPaintingArea = transformPath(borderBoxArea, -maskOffset + (shadow.inset ? 1 : -1) * shadow.spread.number, (shadow.inset ? 1 : -1) * shadow.spread.number, shadow.spread.number * (shadow.inset ? -2 : 2), shadow.spread.number * (shadow.inset ? -2 : 2));
-                            if (shadow.inset) {
-                                _this.path(borderBoxArea);
-                                _this.ctx.clip();
-                                _this.mask(shadowPaintingArea);
-                            }
-                            else {
-                                _this.mask(borderBoxArea);
-                                _this.ctx.clip();
-                                _this.path(shadowPaintingArea);
-                            }
-                            _this.ctx.shadowOffsetX = shadow.offsetX.number + maskOffset;
-                            _this.ctx.shadowOffsetY = shadow.offsetY.number;
-                            _this.ctx.shadowColor = asString(shadow.color);
-                            _this.ctx.shadowBlur = shadow.blur.number;
-                            _this.ctx.fillStyle = shadow.inset ? asString(shadow.color) : 'rgba(0,0,0,1)';
-                            _this.ctx.fill();
-                            _this.ctx.restore();
-                        });
+                                _this.ctx.save();
+                                var borderBoxArea = calculateBorderBoxPath(paint.curves);
+                                var maskOffset = shadow.inset ? 0 : MASK_OFFSET;
+                                var shadowPaintingArea = transformPath(borderBoxArea, -maskOffset + (shadow.inset ? 1 : -1) * shadow.spread.number, (shadow.inset ? 1 : -1) * shadow.spread.number, shadow.spread.number * (shadow.inset ? -2 : 2), shadow.spread.number * (shadow.inset ? -2 : 2));
+                                if (shadow.inset) {
+                                    _this.path(borderBoxArea);
+                                    _this.ctx.clip();
+                                    _this.mask(shadowPaintingArea);
+                                }
+                                else {
+                                    _this.mask(borderBoxArea);
+                                    _this.ctx.clip();
+                                    _this.path(shadowPaintingArea);
+                                }
+                                _this.ctx.shadowOffsetX = shadow.offsetX.number + maskOffset;
+                                _this.ctx.shadowOffsetY = shadow.offsetY.number;
+                                _this.ctx.shadowColor = asString(shadow.color);
+                                _this.ctx.shadowBlur = shadow.blur.number;
+                                _this.ctx.fillStyle = shadow.inset ? asString(shadow.color) : 'rgba(0,0,0,1)';
+                                _this.ctx.fill();
+                                _this.ctx.restore();
+                            });
                         _a.label = 2;
                     case 2:
                         side = 0;
@@ -7702,99 +7716,101 @@ var html2canvas = function (element, options) {
 if (typeof window !== 'undefined') {
     CacheStorage.setContext(window);
 }
-var renderElement = function (element, opts) { return __awaiter(void 0, void 0, void 0, function () {
-    var ownerDocument, defaultView, resourceOptions, contextOptions, windowOptions, windowBounds, context, foreignObjectRendering, cloneOptions, documentCloner, clonedElement, container, _a, width, height, left, top, backgroundColor, renderOptions, canvas, renderer, root, renderer;
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
-    return __generator(this, function (_u) {
-        switch (_u.label) {
-            case 0:
-                if (!element || typeof element !== 'object') {
-                    return [2 /*return*/, Promise.reject('Invalid element provided as first argument')];
-                }
-                ownerDocument = element.ownerDocument;
-                if (!ownerDocument) {
-                    throw new Error("Element is not attached to a Document");
-                }
-                defaultView = ownerDocument.defaultView;
-                if (!defaultView) {
-                    throw new Error("Document is not attached to a Window");
-                }
-                resourceOptions = {
-                    allowTaint: (_b = opts.allowTaint) !== null && _b !== void 0 ? _b : false,
-                    imageTimeout: (_c = opts.imageTimeout) !== null && _c !== void 0 ? _c : 15000,
-                    proxy: opts.proxy,
-                    useCORS: (_d = opts.useCORS) !== null && _d !== void 0 ? _d : false
-                };
-                contextOptions = __assign({ logging: (_e = opts.logging) !== null && _e !== void 0 ? _e : true, cache: opts.cache }, resourceOptions);
-                windowOptions = {
-                    windowWidth: (_f = opts.windowWidth) !== null && _f !== void 0 ? _f : defaultView.innerWidth,
-                    windowHeight: (_g = opts.windowHeight) !== null && _g !== void 0 ? _g : defaultView.innerHeight,
-                    scrollX: (_h = opts.scrollX) !== null && _h !== void 0 ? _h : defaultView.pageXOffset,
-                    scrollY: (_j = opts.scrollY) !== null && _j !== void 0 ? _j : defaultView.pageYOffset
-                };
-                windowBounds = new Bounds(windowOptions.scrollX, windowOptions.scrollY, windowOptions.windowWidth, windowOptions.windowHeight);
-                context = new Context(contextOptions, windowBounds);
-                foreignObjectRendering = (_k = opts.foreignObjectRendering) !== null && _k !== void 0 ? _k : false;
-                cloneOptions = {
-                    allowTaint: (_l = opts.allowTaint) !== null && _l !== void 0 ? _l : false,
-                    onclone: opts.onclone,
-                    ignoreElements: opts.ignoreElements,
-                    inlineImages: foreignObjectRendering,
-                    copyStyles: foreignObjectRendering
-                };
-                context.logger.debug("Starting document clone with size " + windowBounds.width + "x" + windowBounds.height + " scrolled to " + -windowBounds.left + "," + -windowBounds.top);
-                documentCloner = new DocumentCloner(context, element, cloneOptions);
-                clonedElement = documentCloner.clonedReferenceElement;
-                if (!clonedElement) {
-                    return [2 /*return*/, Promise.reject("Unable to find element in cloned iframe")];
-                }
-                return [4 /*yield*/, documentCloner.toIFrame(ownerDocument, windowBounds)];
-            case 1:
-                container = _u.sent();
-                _a = isBodyElement(clonedElement) || isHTMLElement(clonedElement)
-                    ? parseDocumentSize(clonedElement.ownerDocument)
-                    : parseBounds(context, clonedElement), width = _a.width, height = _a.height, left = _a.left, top = _a.top;
-                backgroundColor = parseBackgroundColor(context, clonedElement, opts.backgroundColor);
-                renderOptions = {
-                    canvas: opts.canvas,
-                    backgroundColor: backgroundColor,
-                    scale: (_o = (_m = opts.scale) !== null && _m !== void 0 ? _m : defaultView.devicePixelRatio) !== null && _o !== void 0 ? _o : 1,
-                    x: ((_p = opts.x) !== null && _p !== void 0 ? _p : 0) + left,
-                    y: ((_q = opts.y) !== null && _q !== void 0 ? _q : 0) + top,
-                    width: (_r = opts.width) !== null && _r !== void 0 ? _r : Math.ceil(width),
-                    height: (_s = opts.height) !== null && _s !== void 0 ? _s : Math.ceil(height)
-                };
-                if (!foreignObjectRendering) return [3 /*break*/, 3];
-                context.logger.debug("Document cloned, using foreign object rendering");
-                renderer = new ForeignObjectRenderer(context, renderOptions);
-                return [4 /*yield*/, renderer.render(clonedElement)];
-            case 2:
-                canvas = _u.sent();
-                return [3 /*break*/, 5];
-            case 3:
-                context.logger.debug("Document cloned, element located at " + left + "," + top + " with size " + width + "x" + height + " using computed rendering");
-                context.logger.debug("Starting DOM parsing");
-                root = parseTree(context, clonedElement);
-                if (backgroundColor === root.styles.backgroundColor) {
-                    root.styles.backgroundColor = COLORS.TRANSPARENT;
-                }
-                context.logger.debug("Starting renderer for element at " + renderOptions.x + "," + renderOptions.y + " with size " + renderOptions.width + "x" + renderOptions.height);
-                renderer = new CanvasRenderer(context, renderOptions);
-                return [4 /*yield*/, renderer.render(root)];
-            case 4:
-                canvas = _u.sent();
-                _u.label = 5;
-            case 5:
-                if ((_t = opts.removeContainer) !== null && _t !== void 0 ? _t : true) {
-                    if (!DocumentCloner.destroy(container)) {
-                        context.logger.error("Cannot detach cloned iframe as it is not in the DOM anymore");
+var renderElement = function (element, opts) {
+    return __awaiter(void 0, void 0, void 0, function () {
+        var ownerDocument, defaultView, resourceOptions, contextOptions, windowOptions, windowBounds, context, foreignObjectRendering, cloneOptions, documentCloner, clonedElement, container, _a, width, height, left, top, backgroundColor, renderOptions, canvas, renderer, root, renderer;
+        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+        return __generator(this, function (_u) {
+            switch (_u.label) {
+                case 0:
+                    if (!element || typeof element !== 'object') {
+                        return [2 /*return*/, Promise.reject('Invalid element provided as first argument')];
                     }
-                }
-                context.logger.debug("Finished rendering");
-                return [2 /*return*/, canvas];
-        }
+                    ownerDocument = element.ownerDocument;
+                    if (!ownerDocument) {
+                        throw new Error("Element is not attached to a Document");
+                    }
+                    defaultView = ownerDocument.defaultView;
+                    if (!defaultView) {
+                        throw new Error("Document is not attached to a Window");
+                    }
+                    resourceOptions = {
+                        allowTaint: (_b = opts.allowTaint) !== null && _b !== void 0 ? _b : false,
+                        imageTimeout: (_c = opts.imageTimeout) !== null && _c !== void 0 ? _c : 15000,
+                        proxy: opts.proxy,
+                        useCORS: (_d = opts.useCORS) !== null && _d !== void 0 ? _d : false
+                    };
+                    contextOptions = __assign({ logging: (_e = opts.logging) !== null && _e !== void 0 ? _e : true, cache: opts.cache }, resourceOptions);
+                    windowOptions = {
+                        windowWidth: (_f = opts.windowWidth) !== null && _f !== void 0 ? _f : defaultView.innerWidth,
+                        windowHeight: (_g = opts.windowHeight) !== null && _g !== void 0 ? _g : defaultView.innerHeight,
+                        scrollX: (_h = opts.scrollX) !== null && _h !== void 0 ? _h : defaultView.pageXOffset,
+                        scrollY: (_j = opts.scrollY) !== null && _j !== void 0 ? _j : defaultView.pageYOffset
+                    };
+                    windowBounds = new Bounds(windowOptions.scrollX, windowOptions.scrollY, windowOptions.windowWidth, windowOptions.windowHeight);
+                    context = new Context(contextOptions, windowBounds);
+                    foreignObjectRendering = (_k = opts.foreignObjectRendering) !== null && _k !== void 0 ? _k : false;
+                    cloneOptions = {
+                        allowTaint: (_l = opts.allowTaint) !== null && _l !== void 0 ? _l : false,
+                        onclone: opts.onclone,
+                        ignoreElements: opts.ignoreElements,
+                        inlineImages: foreignObjectRendering,
+                        copyStyles: foreignObjectRendering
+                    };
+                    context.logger.debug("Starting document clone with size " + windowBounds.width + "x" + windowBounds.height + " scrolled to " + -windowBounds.left + "," + -windowBounds.top);
+                    documentCloner = new DocumentCloner(context, element, cloneOptions);
+                    clonedElement = documentCloner.clonedReferenceElement;
+                    if (!clonedElement) {
+                        return [2 /*return*/, Promise.reject("Unable to find element in cloned iframe")];
+                    }
+                    return [4 /*yield*/, documentCloner.toIFrame(ownerDocument, windowBounds)];
+                case 1:
+                    container = _u.sent();
+                    _a = isBodyElement(clonedElement) || isHTMLElement(clonedElement)
+                        ? parseDocumentSize(clonedElement.ownerDocument)
+                        : parseBounds(context, clonedElement), width = _a.width, height = _a.height, left = _a.left, top = _a.top;
+                    backgroundColor = parseBackgroundColor(context, clonedElement, opts.backgroundColor);
+                    renderOptions = {
+                        canvas: opts.canvas,
+                        backgroundColor: backgroundColor,
+                        scale: (_o = (_m = opts.scale) !== null && _m !== void 0 ? _m : defaultView.devicePixelRatio) !== null && _o !== void 0 ? _o : 1,
+                        x: ((_p = opts.x) !== null && _p !== void 0 ? _p : 0) + left,
+                        y: ((_q = opts.y) !== null && _q !== void 0 ? _q : 0) + top,
+                        width: (_r = opts.width) !== null && _r !== void 0 ? _r : Math.ceil(width),
+                        height: (_s = opts.height) !== null && _s !== void 0 ? _s : Math.ceil(height)
+                    };
+                    if (!foreignObjectRendering) return [3 /*break*/, 3];
+                    context.logger.debug("Document cloned, using foreign object rendering");
+                    renderer = new ForeignObjectRenderer(context, renderOptions);
+                    return [4 /*yield*/, renderer.render(clonedElement)];
+                case 2:
+                    canvas = _u.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    context.logger.debug("Document cloned, element located at " + left + "," + top + " with size " + width + "x" + height + " using computed rendering");
+                    context.logger.debug("Starting DOM parsing");
+                    root = parseTree(context, clonedElement);
+                    if (backgroundColor === root.styles.backgroundColor) {
+                        root.styles.backgroundColor = COLORS.TRANSPARENT;
+                    }
+                    context.logger.debug("Starting renderer for element at " + renderOptions.x + "," + renderOptions.y + " with size " + renderOptions.width + "x" + renderOptions.height);
+                    renderer = new CanvasRenderer(context, renderOptions);
+                    return [4 /*yield*/, renderer.render(root)];
+                case 4:
+                    canvas = _u.sent();
+                    _u.label = 5;
+                case 5:
+                    if ((_t = opts.removeContainer) !== null && _t !== void 0 ? _t : true) {
+                        if (!DocumentCloner.destroy(container)) {
+                            context.logger.error("Cannot detach cloned iframe as it is not in the DOM anymore");
+                        }
+                    }
+                    context.logger.debug("Finished rendering");
+                    return [2 /*return*/, canvas];
+            }
+        });
     });
-}); };
+};
 var parseBackgroundColor = function (context, element, backgroundColorOverride) {
     var ownerDocument = element.ownerDocument;
     // http://www.w3.org/TR/css3-background/#special-backgrounds

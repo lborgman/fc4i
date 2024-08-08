@@ -29,7 +29,7 @@ window.rotateMe = () => {
     // console.log({ az, vector });
     // const useCameraPosition = confirm("Use cameraPosition")) {
     let useCameraPosition = true;
-    debugger;
+    debugger; // eslint-disable-line no-debugger
     if (useCameraPosition) {
         const rotz = (new THREE.Matrix4).makeRotationZ(az);
         // const rotz = (new THREE.Matrix4).makeRotationZ(0.33 * Math.PI);
@@ -312,7 +312,7 @@ async function mkViewDialog(strEditedView) {
     const objCamera = graph?.camera();
     const oldMatrix = objCamera?.matrix.clone();
     console.log({ gData, strGDataUsed, oldMatrix, creationTime });
-    if (!strGDataUsed) debugger;
+    if (!strGDataUsed) debugger; // eslint-disable-line no-debugger
     const newImagesMode = eltImages == "" ? imagesMode : chkImages.checked;
     title = inpTitle.value;
     desc = taDesc.value;
@@ -604,7 +604,6 @@ async function getFc4iRecs() {
         });
         mindmapGlobals = mindmapRootData.mindmapGlobals;
         console.log({ mindmapRootData, mindmapGlobals });
-        // debugger;
         const arrCustNodes = mindmap.data.filter(node => node.shapeEtc?.nodeCustom);
         const arrCustKeys = arrCustNodes.map(node => node.shapeEtc.nodeCustom);
         const setCustKeys = new Set(arrCustKeys);
@@ -1041,9 +1040,9 @@ function computeNodesAndLinks() {
         // console.log({ nLn, linkKey, link, ids, lns });
         [...link.setTags].forEach(t => {
             // const lns0 = lns[0];
-            // if (lns0.r.tags.indexOf(t) == -1) debugger;
+            // if (lns0.r.tags.indexOf(t) == -1) debugger;x
             // const lns1 = lns[1];
-            // if (lns1.r.tags.indexOf(t) == -1) debugger;
+            // if (lns1.r.tags.indexOf(t) == -1) debugger;x
             if (t == MINDMAP_TAG) return;
             lns.forEach(n => {
                 if (n.r.tags.indexOf(t) == -1) {
@@ -1103,7 +1102,7 @@ function computeNodesAndLinks() {
     });
     // console.log({ links, setLinked, usedLinks });
     if (usedLinks.length == 0) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         const allUsed = settingNumNodes.getCachedValue() >= numFc4i;
         const divNotice = allUsed ?
             mkElt("p", undefined, `No tag links found between the ${numFc4i} available nodes.`)
@@ -1758,7 +1757,7 @@ async function addDialogGraphButtons() {
         // document.body.appendChild(divMenuWrapper);
         divMenuContainer.addEventListener("NOclick", evt => {
             if (!divMenuContainer.classList.contains("is-open")) {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
             closeRightMenu();
         });
@@ -1932,7 +1931,6 @@ async function dialogLinks() {
 */
 async function setupGraphDisplayer(opt) {
     const funGraph = ForceGraph3D(opt);
-    // debugger;
     await promiseDOMready();
     const elt3dGraph = document.getElementById('the3d-graph-container');
     setGraphSize();

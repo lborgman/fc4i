@@ -106,7 +106,7 @@ export function mkMdcTabsButton(txtLbl, icon) {
 export function mkMdcTabBarSimple(tabsRecs, contentElts, moreOnActivate) {
     const arrCont = [...contentElts.children];
     if (isNaN(tabsRecs.length) || (tabsRecs.length !== arrCont.length)) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         throw Error(`tabsRecs.length==${tabsRecs.length}, contentElts.children.length==${arrCont.length}}`);
     }
     arrCont.forEach(elt => elt.style.display = "none");
@@ -1187,7 +1187,6 @@ export async function listGcs(root, container, filterWords, funItem, funFolder) 
                     forFilter.push(title);
                 }
                 if (!filterItem(forFilter)) {
-                    // debugger;
                     return;
                 }
                 const url = await itemRef.getDownloadURL();
@@ -1197,7 +1196,6 @@ export async function listGcs(root, container, filterWords, funItem, funFolder) 
             promItems.push(promItem);
         });
         // console.log("promItems", promItems);
-        // debugger;
         await Promise.all(promItems);
     } catch (error) {
         // Uh-oh, an error occurred!
@@ -2223,7 +2221,6 @@ export function addMDCrow2Table(row, table) {
 }
 
 let useSvgIcon = false;
-// debugger;
 // https://developers.google.com/fonts/docs/material_icons
 export function mkMDCicon(iconMaterialName) {
     if (useSvgIcon) {

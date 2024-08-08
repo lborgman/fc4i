@@ -7,9 +7,10 @@
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jsMind = factory());
-})(this, (function () { 'use strict';
+        typeof define === 'function' && define.amd ? define(factory) :
+            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jsMind = factory());
+})(this, (function () {
+    'use strict';
 
     const __version__ = '0.7.5';
     const __author__ = 'hizzgdev@163.com';
@@ -42,25 +43,25 @@
     };
     const EventType = { show: 1, resize: 2, edit: 3, select: 4 };
     const LogLevel = { debug: 1, info: 2, warn: 3, error: 4, disable: 9 };
-    var _noop = function () {};
+    var _noop = function () { };
     let logger =
         typeof console === 'undefined'
             ? {
-                  level: _noop,
-                  log: _noop,
-                  debug: _noop,
-                  info: _noop,
-                  warn: _noop,
-                  error: _noop,
-              }
+                level: _noop,
+                log: _noop,
+                debug: _noop,
+                info: _noop,
+                warn: _noop,
+                error: _noop,
+            }
             : {
-                  level: setup_logger_level,
-                  log: console.log,
-                  debug: console.debug,
-                  info: console.info,
-                  warn: console.warn,
-                  error: console.error,
-              };
+                level: setup_logger_level,
+                log: console.log,
+                debug: console.debug,
+                info: console.info,
+                warn: console.warn,
+                error: console.error,
+            };
     function setup_logger_level(log_level) {
         if (log_level > LogLevel.debug) {
             logger.debug = _noop;
@@ -1831,21 +1832,21 @@
             path.setAttribute(
                 'd',
                 'M ' +
-                    x1 +
-                    ' ' +
-                    y1 +
-                    ' C ' +
-                    (x1 + ((x2 - x1) * 2) / 3) +
-                    ' ' +
-                    y1 +
-                    ', ' +
-                    x1 +
-                    ' ' +
-                    y2 +
-                    ', ' +
-                    x2 +
-                    ' ' +
-                    y2
+                x1 +
+                ' ' +
+                y1 +
+                ' C ' +
+                (x1 + ((x2 - x1) * 2) / 3) +
+                ' ' +
+                y1 +
+                ', ' +
+                x1 +
+                ' ' +
+                y2 +
+                ', ' +
+                x2 +
+                ' ' +
+                y2
             );
         }
         _line_to(path, x1, y1, x2, y2) {
@@ -2059,7 +2060,7 @@
                     return;
                 }
                 console.error("node.data.width, but not .height");
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
             setViewDataSizesFromJmnode(view_data);
             function setViewDataSizesFromJmnode(node_view_data) {
@@ -2142,7 +2143,7 @@
                         d.classList.add("right-side");
                         break;
                     default:
-                        debugger;
+                        debugger; // eslint-disable-line no-debugger
                 }
             }
             if (!!node.topic) {
@@ -2194,7 +2195,7 @@
                     break;
                 default:
                     if (!node.isroot) {
-                        debugger;
+                        debugger; // eslint-disable-line no-debugger
                     }
             }
             const dTxt = element.querySelector(".jmnode-text");
@@ -2439,7 +2440,7 @@
                             node_element.classList.add("right-side");
                             break;
                         default:
-                            debugger;
+                            debugger; // eslint-disable-line no-debugger
                     }
                 }
             }

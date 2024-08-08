@@ -178,7 +178,7 @@ export function mkEltLinkMindmapA(topic, mkey, mhits, provider) {
 export async function pasteCustomClipDialog() {
     const modMdc = await import("util-mdc");
     const arrClip = fetchJsmindCopied4Mindmap();
-    if (!arrClip) debugger;
+    if (!arrClip) debugger; // eslint-disable-line no-debugger
 
     let result;
     const info = mkElt("p", undefined, "Link selected node to one of these custom entries:");
@@ -293,7 +293,7 @@ export async function dialogAdded2CustomClipboard(objAdded) {
 }
 async function dialogCustomPaste2Mindmap() {
     const arrCopied4Mindmap = fetchJsmindCopied4Mindmap();
-    if (!arrCopied4Mindmap) debugger;
+    if (!arrCopied4Mindmap) debugger; // eslint-disable-line no-debugger
     const objCopied4Mindmap = arrCopied4Mindmap[0];
     let info;
     if (objCopied4Mindmap) {
@@ -333,7 +333,6 @@ export function addJsmindCopied4Mindmap(key, provider) {
         const str = JSON.stringify(obj);
         return str != strJson;
     });
-    // debugger;
     arrClips.unshift(objAdded);
     const strArr = JSON.stringify(arrClips);
     setJsmindCopied4Mindmap(strArr);

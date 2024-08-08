@@ -364,7 +364,7 @@ export async function setupNewDragging() {
 
         /*
         let eltAbove, eltBelow;
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         if (!eltTarget) {
             // FIX-ME: between
             if (!eltTParent) return;
@@ -416,7 +416,7 @@ export async function setupNewDragging() {
         /*
         function clearMarking() {
             console.warn("clearMarking");
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             markAsDragged(eltDragged, false);
             markAsDroppedAt(eltDragged, false);
             if (eltTarget) markAsTarget(eltTarget, false);
@@ -831,7 +831,7 @@ function whenDragPauses() {
     // if (!entryAbove && !entryBelow) return;
     if (entryAbove || entryBelow) {
         if (nodeParent) {
-            debugger;
+            debugger; // eslint-disable-line no-debugger
         }
         nodeAbove = entryAbove?.eltNode;
         nodeBelow = entryBelow?.eltNode;
@@ -864,7 +864,6 @@ function whenDragPauses() {
                 const node_sibling = ourJm.get_node(id_sibling);
                 const ourParent = getDOMeltFromNode(our_parent);
                 console.log(our_parent, ourParent);
-                // debugger;
                 let children = our_parent.children.filter(child => node_sibling.direction == child.direction);
                 if (id_below) children = children.reverse();
                 console.log({ children });
@@ -875,7 +874,6 @@ function whenDragPauses() {
                     if (getNext) { new_sibling = child; break; }
                     if (child.id == id_sibling) getNext = true;
                 }
-                // debugger;
                 let newSibling;
                 if (new_sibling) {
                     newSibling = getDOMeltFromNode(new_sibling);

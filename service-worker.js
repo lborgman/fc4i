@@ -3,9 +3,9 @@
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 workbox.routing.registerRoute(
-  /\.(?:js|css|webp|png|svg|html)$/,
-  new workbox.strategies.StaleWhileRevalidate()
-  // new workbox.strategies.NetworkFirst()
+    /\.(?:js|css|webp|png|svg|html)$/,
+    new workbox.strategies.StaleWhileRevalidate()
+    // new workbox.strategies.NetworkFirst()
 );
 // https://web.dev/workbox-share-targets/
 workbox.routing.registerRoute(
@@ -15,7 +15,7 @@ workbox.routing.registerRoute(
 );
 
 async function shareTargetHandler(evt) {
-    console.warn({evt});
+    console.warn({ evt });
 }
 
 importScripts("src/js/umd/idb.js");
@@ -67,7 +67,7 @@ async function displayRememberNotification(objRem) {
     const body = objRem.desc;
     const url = objRem.url;
     const displayed = displayNotification(title, body, url);
-    console.log({displayed});
+    console.log({ displayed });
 }
 self.addEventListener('notificationclick', (evt) => {
     console.log("notificationclick", { evt });
@@ -91,7 +91,7 @@ self.addEventListener('notificationclick', (evt) => {
 setTimeout(() => {
     // console.log("service-worker test");
     // displayNotification("from sw");
-    // debugger;
+    // debugger; // eslint-disable-line no-debugger
 }, 6000);
 
 /*

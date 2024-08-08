@@ -1,7 +1,6 @@
 // @ts-check
 const COMMON_VER = "0.1.3";
 console.log(`here is common.js ${COMMON_VER}`);
-// if (!import.meta.url) { console.error("common.js is not module"); debugger; }
 if (document.currentScript) { console.error("common.js is not loaded as module"); debugger; }
 
 /**
@@ -116,7 +115,7 @@ async function getNotificationPermissions() {
             }
             break;
         default:
-            debugger;
+            debugger; // eslint-disable-line no-debugger
     }
 }
 async function checkNotificationPermissions() {
@@ -374,7 +373,6 @@ let divActive;
 async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTags, cantRefresh) {
     // const dbFc4i = await getDbFc4i();
     const dbFc4i = await importFc4i("db-fc4i");
-    // debugger;
     // const x = await dbFc4i.getNextShortTimer();
     const modMdc = await importFc4i("util-mdc");
     if (![false, true, undefined].includes(cantRefresh)) {
@@ -612,13 +610,9 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
 
 function getHomeSearchValues() {
     const inpSearch2 = document.getElementById("search-input");
-    // if (inpSearch !== inpSearch2) debugger;
     const divSearchSlider2 = document.getElementById("div-search-slider");
-    // if (divSearchSlider !== divSearchSlider2) debugger;
     const sliSearchConfidence2 = divSearchSlider2.firstElementChild;
-    // if (sliSearchConfidence !== sliSearchConfidence2) debugger;
     const divTagsRequired2 = document.getElementById("div-required-tags");
-    // if (divTagsRequired !== divTagsRequired2) debugger;
     return getHomeSearchValuesFromElts(inpSearch2, sliSearchConfidence2, divTagsRequired2);
 }
 function getHomeSearchValuesFromElts(inpSearch, sliSearchConfidence, divTagsRequired) {
@@ -1078,7 +1072,6 @@ async function setupFCM() {
     // const token = await modMessaging.getToken(messaging, { vapidKey: publicWebPushKey });
     FCMtoken = await modMessaging.getToken(messaging, { vapidKey: publicWebPushKey });
     console.log({ FCMtoken });
-    // debugger;
 }
 let testShortSwitch = true;
 async function testShort() {
@@ -1129,7 +1122,7 @@ function setLastSearch(objLastSearch) {
     const str = JSON.stringify(Object.keys(objLastSearch).sort());
     if (str != '["maxConf","minConf","requiredTags","searchFor"]') {
         console.error("bad param", objLastSearch);
-        debugger;
+        debugger; // eslint-disable-line no-debugger
     }
     // console.log({ str });
     // divSearchBanner.lastSearch = { searchFor, minConf, maxConf, requiredTags }
@@ -1203,11 +1196,9 @@ async function mkMenu() {
     const aNetwGraph = mkElt("a", { href: "/nwg/netwgraph.html" }, "Test network graph (not ready)");
     aNetwGraph.addEventListener("click", evt => {
         aNetwGraph.href = mkNetwGraphURL();
-        // debugger;
     });
     aNetwGraph.addEventListener("contextmenu", evt => {
         aNetwGraph.href = mkNetwGraphURL();
-        // debugger;
     });
     const liTestNetwGraph = modMdc.mkMDCmenuItem(aNetwGraph);
     liTestNetwGraph.classList.add("test4all-item");
@@ -1215,11 +1206,9 @@ async function mkMenu() {
     const aLoci = mkElt("a", { href: "/loci/loci.html" }, "Test loci (not ready)");
     aLoci.addEventListener("click", evt => {
         // aLoci.href = mkNetwGraphURL();
-        // debugger;
     });
     aLoci.addEventListener("contextmenu", evt => {
         // aLoci.href = mkNetwGraphURL();
-        // debugger;
     });
     const liTestLoci = modMdc.mkMDCmenuItem(aLoci);
     liTestLoci.classList.add("test4all-item");
@@ -2506,7 +2495,7 @@ async function dialog10min1hour(eltPrevFocused) {
                 });
                 console.log({ doneIt });
                 if (!doneIt) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     throw Error(`Did not find timer to mark done??`)
                 }
                 // modDbFc4i.setDbKey(key, rec);
@@ -2514,7 +2503,7 @@ async function dialog10min1hour(eltPrevFocused) {
             aSource.addEventListener("click", evt => {
                 setReminderDone();
                 console.log("clicked", aSource);
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             });
             aSource.addEventListener("contextmenu", evt => {
                 setReminderDone();
@@ -2565,7 +2554,7 @@ async function dialog10min1hour(eltPrevFocused) {
             const tim1 = r1.expiredTimers;
             const tim2 = r2.expiredTimers;
             if (!(rec1 && rec2 && tim1 && tim2)) {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
 
             const funs = {
@@ -2574,7 +2563,7 @@ async function dialog10min1hour(eltPrevFocused) {
                 "age": compareAge,
             }
             if (JSON.stringify(Object.keys(funs).sort()) != JSON.stringify(orderCompareReminders.toSorted())) {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
             // console.log("5", {orderCompareReminders});
             for (let i = 0, len = orderCompareReminders.length; i < len; i++) {

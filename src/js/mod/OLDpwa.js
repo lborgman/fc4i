@@ -123,7 +123,6 @@ async function setupServiceWorker() {
             // Depending on your web app, you may want to auto-save or
             // persist transient state before triggering the reload.
             console.warn("event controlling, doing reload");
-            // debugger;
             window.location.reload();
         });
 
@@ -269,7 +268,6 @@ async function setupForInstall() {
     // const btnInstall = mkElt("button", undefined, "Install");
     const btnInstall = modMdc.mkMDCbutton("Install", "raised");
     btnInstall.addEventListener("click", async (evt) => {
-        // debugger;
         // divInstallPromotion.style.display = "none";
         deferredPrompt.prompt();
         // Wait for the user to respond to the prompt

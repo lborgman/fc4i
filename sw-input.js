@@ -18,7 +18,7 @@ function errorHandlerAsyncEvent(asyncFun) {
     return function (evt) {
         asyncFun(evt).catch(err => {
             console.log("handler", err);
-            // debugger;
+            // debugger; // eslint-disable-line no-debugger
             throw err;
         })
     }

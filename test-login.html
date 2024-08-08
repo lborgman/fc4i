@@ -130,7 +130,7 @@
                 const f = await fetch(url, opts);
             } catch (err) {
                 console.log({ err });
-                debugger;
+                debugger; // eslint-disable-line no-debugger
                 alert(err);
             }
         })();

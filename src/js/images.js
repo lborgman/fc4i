@@ -46,7 +46,7 @@ export async function getImgSizes(strUrlImg) {
         // image.onerror = async () => { console.log("ERROR"); }
         image.addEventListener("error", evt => {
             console.log("ERROR", { evt, strUrlImg });
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             resolve(false);
         });
         image.src = strUrlImg;
@@ -164,7 +164,7 @@ export async function isClipboardPermissionStateOk() {
             // alertHowToUnblockPermissions();
             return false;
         default:
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             throw Error(`Unknown permission state: ${permissionStatus.state}`);
     }
 }
@@ -305,7 +305,7 @@ export async function mkImageCard(blob, extraClass, debugInfo) {
 
 export async function mkImageCardFromBigImage(blobIn, maxBlobOutSize) {
     if (isNaN(maxBlobOutSize)) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         throw Error("maxBlobOutSize is not a number");
     }
     debugPasteLine(`addPasteButton 8, mkImageCardFromBigImage`);

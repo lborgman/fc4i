@@ -106,7 +106,9 @@ export function checkTimersOrder(timers) {
         const prevTimer = timers[i - 1];
         const msDelay = timer.msDelay;
         const prevMsDelay = prevTimer.msDelay;
-        if (Math.abs(prevMsDelay) > Math.abs(msDelay)) debugger;
+        if (Math.abs(prevMsDelay) > Math.abs(msDelay)) {
+            debugger; // eslint-disable-line no-debugger
+        }
     }
 }
 
@@ -169,7 +171,7 @@ export async function getToNotifyNow(matchValues) {
             const msDelay = timer.msDelay;
             // expired = expired || msWhen < msNow;
             // if (msDelay > 0)
-            const FIVE_MINUTES = 5 * 60 * 1000; 
+            const FIVE_MINUTES = 5 * 60 * 1000;
             if (msDelay > FIVE_MINUTES) {
                 if (msWhen < msNow) {
                     expired = true;
@@ -288,7 +290,6 @@ export async function getUnusedTags() {
 // async function getShortTimers() { return getDbKey(KEY_SHORT_TIMERS); }
 /*
 async function anyShortTimers() {
-    // debugger;
     const count = await countShortTimers();
     console.log({ count });
     return count > 0;
@@ -297,7 +298,6 @@ async function anyShortTimers() {
     // return shorts !== undefined;
 }
 async function addShortTimer(key, atTime, afterMinutes, lbl) {
-    if (!afterMinutes) debugger;
     const oldShortsRec = await getShortTimers();
     const newShortsRec = oldShortsRec || {};
     // Take care of old record format:
@@ -323,7 +323,6 @@ async function deleteShortTimer(key) {
     console.warn({ shortsRec });
     if (!shortsRec) return;
     const shorts = shortsRec.shorts;
-    // if (!shorts[key]) debugger;
     delete shorts[key];
     const isEmpty = Object.keys(shorts).length == 0;
     console.log({ isEmpty, shorts });

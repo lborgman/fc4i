@@ -157,7 +157,7 @@ export class CustomRenderer4jsMind {
     // fixLeftRightChildren(eltJmnode) { fixLeftRightChildren(eltJmnode); }
     async OLDupdateEltNodeLink(eltJmnode) {
         // Moved to applyShapeEtc
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         return;
         const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
         const node = this.THEjmDisplayed.get_node(node_id);
@@ -175,7 +175,7 @@ export class CustomRenderer4jsMind {
         }
     }
     async updateJmnodeFromCustom(eltJmnode, jmOwner) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         return;
         async function fixRenderImg(eltDiv) {
             return;
@@ -210,7 +210,7 @@ export class CustomRenderer4jsMind {
         const tn = eltJmnode.tagName;
         if (tn !== "JMNODE") throw Error(`Not a <jmnode>: ${tn}`)
         if (eltJmnode.childElementCount != 3) {
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             return;
         }
 
@@ -250,13 +250,12 @@ export class CustomRenderer4jsMind {
         }
         */
     }
-    // async updatePlainLink(node, eltJmnode) { debugger; }
+    // async updatePlainLink(node, eltJmnode) { debugger;}
 
     async editMindmapDialog(eltJmnode) {
         const modJsEditCommon = await import("jsmind-edit-common");
         const modIsDisplayed = await import("is-displayed");
         // theme
-        // debugger;
         const rend = await getOurCustomRenderer();
         // const jmD = rend.getJm();
         // const root_node = jmD.get_root();
@@ -372,7 +371,6 @@ export class CustomRenderer4jsMind {
         const inpUseBgMm = modMdc.mkMDCcheckboxInput();
         const chkUseBgMm = await modMdc.mkMDCcheckboxElt(inpUseBgMm, "Set background color");
         console.log({ oldGlobals });
-        // debugger;
         /*
         fixMdcChkLabelVerticalPos(inpUseBgMm);
         function fixMdcChkLabelVerticalPos(inpCheckbox) {
@@ -427,11 +425,9 @@ export class CustomRenderer4jsMind {
             const opacity = arrRgba[3] / 255;
             const funChange = () => {
                 console.log("change op");
-                // debugger;
             }
             const funInput = () => {
                 console.log("input op");
-                // debugger;
                 funDebounceSomethingToSaveMm();
             }
             // sliBgOpacity = await modIsDisplayed.mkSliderInContainer(divBgOpacity, 0, 1, opacity, step, title, funChange);
@@ -460,11 +456,10 @@ export class CustomRenderer4jsMind {
         const defaultLineC = jmOpt.view.line_color;
         const inpChkChangeLines = modMdc.mkMDCcheckboxInput();
         inpChkChangeLines.addEventListener("input", evt => {
-            // console.log("chk line input"); debugger;
             disableCardLine(!inpChkChangeLines.checked);
         });
         inpChkChangeLines.addEventListener("change", evt => {
-            // console.log("chk line change"); debugger;
+            // console.log("chk line change"); debugger; // eslint-disable-line no-debugger
         });
         const lblChkLines = await modMdc.mkMDCcheckboxElt(inpChkChangeLines, "Change color and width");
         // lblChkLines.classList.add("mdc-chkbox-label-helper");
@@ -568,7 +563,6 @@ export class CustomRenderer4jsMind {
                     throw Error(`Activation code missing for tab, idx=${idx} `);
             }
         }
-        // debugger;
         const eltTabs = modMdc.mkMdcTabBarSimple(tabRecs, contentElts, onActivateMore);
 
         const body = mkElt("div", undefined, [
@@ -651,7 +645,6 @@ export class CustomRenderer4jsMind {
             }
             // const inpBgEnabled = oldGlobals?.backgroundCss != undefined;
             if (inpUseBgMm.checked) {
-                // debugger;
                 console.log({ inpBgMmColor }, inpBgMmColor.value);
                 console.log({ modColorConverter });
                 const arr = modColorConverter.toRgbaArr(inpBgMmColor.value);
@@ -841,7 +834,8 @@ export class CustomRenderer4jsMind {
         }
 
         function setBorderCopied() {
-            debugger; // should not happen any more... soon
+            // FIX-ME: should not happen any more... soon
+            debugger; // eslint-disable-line no-debugger
             return;
             const w = currentShapeEtc.border.width;
             if (w === 0) {
@@ -929,7 +923,6 @@ export class CustomRenderer4jsMind {
         let backgroundTabIsSetup = false;
         function setupBackgroundTab() {
             if (backgroundTabIsSetup) return;
-            // debugger;
             console.log(divBgChoices);
             backgroundTabIsSetup = true;
             const initBgCssText = initialShapeEtc.background?.CSS;
@@ -964,7 +957,6 @@ export class CustomRenderer4jsMind {
                 case "bg-choice-none":
                     break;
                 case "bg-choice-pattern":
-                    // debugger;
                     // FIX-ME: There is some problem with the taImgPattern state.
                     // https://stackoverflow.com/questions/46795955/how-to-know-scroll-to-element-is-done-in-javascript
                     const funFocusTa = () => {
@@ -981,7 +973,6 @@ export class CustomRenderer4jsMind {
                     break;
                 case "bg-choice-link":
                     console.log({ detLink, divLink, tfImageUrl });
-                    // debugger;
                     const funFocusLink = () => {
                         setTimeout(() => tfImageUrl.focus(), 500);
                     }
@@ -992,7 +983,7 @@ export class CustomRenderer4jsMind {
                     detLink.open = true;
                     break;
                 case "bg-choice-clipboard":
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     break;
                 default:
                     throw Error(`Unknown bg choice: ${bgChoice}`);
@@ -1059,7 +1050,6 @@ export class CustomRenderer4jsMind {
         divShapeBg.style.marginBottom = "10px";
         divShapes.appendChild(divShapeBg);
         inpChkShapeBg.addEventListener("input", evt => {
-            // debugger;
             console.log("inpChkShapgeBg input", inpChkShapeBg.checked);
             currentShapeEtc.shapeBoxBg = inpChkShapeBg.checked;
         })
@@ -1555,7 +1545,6 @@ export class CustomRenderer4jsMind {
                     // return {};
                     return "";
                 case "bg-choice-color":
-                    // debugger;
                     // return { "background-color": inpBgColor.value };
                     return `background-color: ${inpBgColor.value}`;
                 case "bg-choice-link":
@@ -1573,7 +1562,6 @@ export class CustomRenderer4jsMind {
 
         // getBgCssValueFromElts();
         // debounceTempApplyBgToCopied();
-        // debugger;
         const divCurrentBg = mkElt("div", undefined);
 
         const divBackground = mkElt("div", { style: styleColors }, [
@@ -1703,7 +1691,7 @@ export class CustomRenderer4jsMind {
                 const err = resultImageBlobs;
                 console.log({ err });
                 if (!err instanceof Error) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     throw Error(`resultImages is not instanceof Error`);
                 }
                 switch (err.name) {
@@ -1715,7 +1703,7 @@ export class CustomRenderer4jsMind {
                         modImages.alertNoImagesFound();
                         break;
                     default:
-                        debugger;
+                        debugger; // eslint-disable-line no-debugger
                         throw Error(`Unknown error name: ${err.name}, ${err.message}`);
                 }
             }
@@ -2176,7 +2164,7 @@ export class CustomRenderer4jsMind {
                 thumb.style.left = bcrCd.right - bcrT.width / 2 - bcrJmnodes.left + "px";
                 thumb.style.top = bcrCd.bottom - bcrT.height / 2 - bcrJmnodes.top + "px";
             } else {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
             thumb.style.visibility = "visible";
             newBcrC = eltCopied.getBoundingClientRect();
@@ -2229,7 +2217,7 @@ export class CustomRenderer4jsMind {
             const nowClientY = evt.clientY;
             const padd = paddingDivEdnodeCopied;
             if (thumb.style.position == "fixed") {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
                 thumb.style.left = nowClientX - thumbShiftX + 'px';
                 thumb.style.top = nowClientY - thumbShiftY + 'px';
             } else if (thumb.style.position == "absolute") {
@@ -2240,7 +2228,7 @@ export class CustomRenderer4jsMind {
                 thumb.style.left = nowClientX - thumbShiftX - bcrJmnodes.left + padd + 'px';
                 thumb.style.top = nowClientY - thumbShiftY - bcrJmnodes.top + padd + 'px';
             } else {
-                debugger;
+                debugger; // eslint-disable-line no-debugger
             }
             // const diffLeft = nowX - thumbStartX;
             // const diffTop = nowY - thumbStartY;
@@ -2440,7 +2428,7 @@ console.log({ cr4j });
 
 export function addJmnodeBgAndText(eltJmnode) {
     console.warn("Add bg and text called");
-    debugger;
+    debugger; // eslint-disable-line no-debugger
     return;
     const eltTxt = mkElt("div", { class: "jmnode-text" });
     eltTxt.classList.add("multiline-ellipsis");

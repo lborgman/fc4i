@@ -329,7 +329,9 @@ function alertError(msg, e) {
 
     const isRejection = e instanceof PromiseRejectionEvent;
     if (isRejection) {
-        if (!e.reason) debugger;
+        if (!e.reason) {
+            debugger; // eslint-disable-line no-debugger
+        }
     }
     const errObj = isRejection ? e.reason : e;
     if (errObj.thisIsNetworkTrouble) {
@@ -726,13 +728,13 @@ function removeTokensFromObject(obj) {
                 removeTokensFromObject(val);
             }
         } catch (err) {
-            debugger;
+            debugger; // eslint-disable-line no-debugger
         }
     }
 }
 
 async function throwFetchError(url, response, result) {
-    debugger;
+    debugger; // eslint-disable-line no-debugger
 
     let errResp = "";
     if (!response) {
@@ -793,7 +795,7 @@ async function throwFetchError(url, response, result) {
 
 class FetchError extends Error {
     constructor(message, errResp, thisIsNetworkTrouble) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         super(message); // (1)
         this.name = "FetchError"; // (2)
         this.easyCapEd = "throwFetchError";
@@ -868,14 +870,17 @@ async function fetchSimpleJson(ifName, paramsObj) {
     // return fetchParamsJson(baseUrl, ifName, paramsObj);
     // FIXME: await here to catch network errors.
     const result = await fetchParamsJson(baseUrl, ifName, paramsObj);
-    if (result === undefined) debugger;
+    if (result === undefined) {
+        debugger; // eslint-disable-line no-debugger
+    }
     return result;
     /*
 } catch (err) {
     console.error({ err });
     console.log("typeof err", typeof err);
     if (err.code === "auth/network-request-failed") {
-        debugger; // FIXME: should not happen
+        // FIXME: should not happen
+        debugger; // eslint-disable-line no-debugger
         // FIXME: how to handle it???
         console.error(`%c Seeing network error`, "color:red; font-size:1.5rem;", err);
         const errObj = Error(`${err.message} (${err.code})`);
@@ -939,7 +944,7 @@ async function fetchParamsJson(baseUrl, paramsName, params, nothrow) {
         /*
         const msg = "Trying to fetch data, but got nothing";
         console.error(msg, result);
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         const objErr = Error(msg);
         throw objErr;
         return;
@@ -999,7 +1004,7 @@ async function fetchJson(url, options, nothrow) {
         // FIXME: Is this the best way for Gateway timeout, 504?
         // if (response.status === 504) return result;
         await throwFetchError(url, response, result);
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         return;
     }
     result.phase = "text";
@@ -1109,7 +1114,6 @@ async function popupDialog(title, body, severity) {
                             modPwa.updateNow();
                         });
                         // if (modPwa.hasUpdate())
-                        // debugger;
                         if (modPwa.isShowingUpdatePrompt()) {
                             console.log("?????? isShowingUpdatePrompt");
                             window.onbeforeunload = null;
@@ -1122,12 +1126,11 @@ async function popupDialog(title, body, severity) {
                             });
                         }
                     } catch (err) {
-                        debugger;
+                        debugger; // eslint-disable-line no-debugger
                     }
                 })();
             }
             styleDia += "background:yellow; border:2px solid red;";
-            // debugger;
             break;
         case "warning":
             styleDia += "background:yellow; border:2px solid green;";
@@ -1183,7 +1186,6 @@ function errorHandlerAsyncEvent(asyncFun) {
     return function (evt) {
         asyncFun(evt).catch(err => {
             console.log("handler", err);
-            // debugger;
             throw err;
         })
     }
@@ -1218,7 +1220,6 @@ startDropShield();
 
 function loadScriptError(oError) {
     console.log({ oError });
-    // debugger;
     const msg = `
     The script ${oError.target.src} could not be loaded currently.
     Please try again later.

@@ -389,7 +389,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
                 const err = resultImageBlobs;
                 console.log({ err });
                 if (!err instanceof Error) {
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                     throw Error(`resultImages is not instanceof Error`);
                 }
                 switch (err.name) {
@@ -400,7 +400,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
                         modImages.alertNoImagesFound();
                         break;
                     default:
-                        debugger;
+                        debugger; // eslint-disable-line no-debugger
                         throw Error(`Unknown error name: ${err.name}, ${err.message}`);
                 }
             }
@@ -929,7 +929,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             const keyRec = btnAdd2mmClipB.closest(".container-remember").dataset.key;
             const dbFc4i = await import("db-fc4i");
             const rec = await dbFc4i.getDbKey(keyRec);
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             const rootTopic = rec.title;
             const jsMindMap = modMMhelpers.getNewMindmap(rootTopic);
             const d0 = jsMindMap.data[0];
@@ -1490,7 +1490,7 @@ class ScreenRemember {
                     // File an issue?
                     // const txtLength = tr.querySelector("td.remember-timer-length").innerText;
                     const txtLength = tr.querySelector("td.remember-timer-length").textContent;
-                    if (txtLength == 0) debugger;
+                    if (txtLength == 0) debugger; // eslint-disable-line no-debugger
                     // const txtWhen = tr.querySelector("td.remember-timer-when").innerText;
                     // console.log({ msDelay, msWhen, txtLength, txtWhen });
                     // timers[ms] = { ms, txtLength, txtWhen, }

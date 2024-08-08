@@ -158,7 +158,9 @@
                             }
                             if (isChild) return;
                         }
-                        if (isChild) debugger;
+                        if (isChild) {
+                            debugger; // eslint-disable-line no-debugger
+                        }
                         minDist2 = dist2;
                         // if (eltClosest) markAsTarget(eltClosest, false);
                         nApClosest = nAp;
@@ -1229,7 +1231,7 @@ class ScrollAtDragBorder {
 /*
 let instScrollAtDragBorder;
 setTimeout(() => {
-    // debugger;
+    // debugger; // eslint-disable-line no-debugger
     const eltJmnodes = document.querySelector("jmnodes");
     instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 40);
     // eltJmnodes.addEventListener("mousemove", evt => { sdb.checkPoint(evt.clientX, evt.clientY); })
@@ -1333,7 +1335,7 @@ function whenDragPauses() {
             const node_sibling = ourJm.get_node(id_sibling);
             const ourParent = getDOMeltFromNode(our_parent);
             console.log(our_parent, ourParent);
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             let children = our_parent.children.filter(child => node_sibling.direction == child.direction);
             if (id_below) children = children.reverse();
             console.log({ children });
@@ -1344,7 +1346,7 @@ function whenDragPauses() {
                 if (getNext) { new_sibling = child; break; }
                 if (child.id == id_sibling) getNext = true;
             }
-            debugger;
+            debugger; // eslint-disable-line no-debugger
             let newSibling;
             if (new_sibling) {
                 newSibling = getDOMeltFromNode(new_sibling);
