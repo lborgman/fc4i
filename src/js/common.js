@@ -1403,6 +1403,8 @@ async function mkMenu() {
 
         // Request persistent storage for site
         // FIX-ME: Do not do it here. Maybe add a menu entry?
+
+        // eslint-disable-next-line
         if (false && !isPersisted) {
             const isPersisted = await navigator.storage.persist();
             console.log(`Persisted storage was granted now: ${isPersisted}`);
@@ -1745,7 +1747,7 @@ async function mkMenu() {
             if (numItems != 1) throw Error(`There should be exactly 1 item here`);
             const itemName = document.querySelector(".has-title").textContent;
             pExport = mkElt("p", undefined, `Export item "${itemName}".`);
-            numItems = 1;
+            // numItems = 1;
         } else {
             if (numItems != 0) throw Error(`There should be no items here`);
             pExport = mkElt("p", undefined, "There are no items to export on this page");
@@ -2067,7 +2069,7 @@ const mainCommon = async () => {
         let title = searchParams['title'];
         let text = searchParams['text'];
         let url = searchParams['url'];
-        const noUrl = !!!url;
+        const noUrl = !url;
         const textIsUrl = text?.startsWith("https://")
             // https://www.westonlambert.com/glassandstone ??? What is going on at that server?
             || text?.startsWith("http://");
@@ -2239,7 +2241,7 @@ document.addEventListener("click", errorHandlerAsyncEvent(async evt => {
                     setTimeout(() => { e.classList.add("expanded"); }, 1);
                     break;
                 case "await":
-                    await new Promise(resolve => { setTimeout(() => { resolve(); }, 1); });
+                    await new Promise(resolve => { setTimeout(() => { resolve(true); }, 1); });
                     e.classList.add("expanded");
                     break;
                 default:

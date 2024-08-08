@@ -1269,6 +1269,7 @@
                 return json;
             },
             _build_lines: function (lines, nodes, level) {
+                // eslint-disable-next-line
                 let prefix = new Array(level + 1).join(' ');
                 for (let node of nodes) {
                     lines.push(prefix + node.topic);
@@ -2061,7 +2062,7 @@
                 }, 2000);
             }
         }
-        init_nodes() {
+        OLDinit_nodes() {
             this.jm.mind.nodes;
             $.d.createDocumentFragment();
         }
@@ -2299,7 +2300,7 @@
             ) {
                 return false;
             }
-            let zoom_center = !!e
+            let zoom_center = e
                 ? { x: e.x - e_panel_rect.x, y: e.y - e_panel_rect.y }
                 : { x: e_panel_rect.width / 2, y: e_panel_rect.height / 2 };
             let panel_scroll_x =
