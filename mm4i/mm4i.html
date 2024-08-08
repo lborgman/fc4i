@@ -7,6 +7,15 @@
     <!-- This page © Copyright 2023, Lennart Borgman -->
     <meta name="author" content="Lennart Borgman">
     <meta name="description" content="Mindmaps web page that you can manipulate on your phone">
+
+    <base href=".">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+    <script type="module" src="./pwa.js"></script>
+    <script type="module" src="./anchors-with-base.js" ></script>
+    <script src="./fc4i-importmaps.js"></script>
+
+
     <link rel="manifest" href="manifest-mm4i.json">
     <meta name="theme-color" content="#c0ca33">
 
@@ -74,7 +83,7 @@
     <script src="/ext/mdc/material-components-web.js"></script>
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
 
-    <script>import("pwa");</script>
+    <!-- <script>import("pwa");</script> -->
 
     <div id="jsmind_container" class="jsmind_container"></div>
 

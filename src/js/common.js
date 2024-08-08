@@ -1,8 +1,17 @@
-"use strict";
-const COMMON_VER = "0.1.1";
+// @ts-check
+const COMMON_VER = "0.1.3";
 console.log(`here is common.js ${COMMON_VER}`);
 // if (!import.meta.url) { console.error("common.js is not module"); debugger; }
 if (document.currentScript) { console.error("common.js is not loaded as module"); debugger; }
+
+/**
+ * 
+ * @param {string} modId 
+ * @returns {Promise}
+ */
+const importFc4i = (modId) => {
+    return window["importFc4i"](modId);
+}
 
 let theExpanderWay = "setTimeout"; // ok
 // theExpanderWay = "await"; // ok
@@ -19,16 +28,17 @@ const themePrimary = ["mdc-theme--primary-bg", "mdc-theme--on-primary"];
 
 async function checkUnusedTags() {
     if (!document.getElementById("page-home")) return;
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
 
     // Non-existant tags?
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     const allTags = await dbFc4i.getDbTagsArr();
     const divReqTags = document.getElementById("div-search-the-tags");
+    if (!divReqTags) return;
     const visibleTags = [...divReqTags.querySelectorAll(".tag-in-our-tags")]
     visibleTags.forEach(elt => {
-        const tag = elt.textContent.slice(1);
+        const tag = elt.textContent?.slice(1);
         console.log({ tag });
         if (!allTags.includes(tag)) {
             console.log("Non-existant", tag);
@@ -48,7 +58,7 @@ async function updateDivSearchTheTags() {
         })
         .map(lbl => lbl.textContent.substr(1));
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     const arrAllTags = await dbFc4i.getDbTagsArr();
     const arrUnusedTags = await dbFc4i.getUnusedTags();
     divSelectTags.textContent = "";
@@ -110,7 +120,7 @@ async function getNotificationPermissions() {
     }
 }
 async function checkNotificationPermissions() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const grantedNotification = await getNotificationPermissions();
 
     // console.log({ grantedNotification });
@@ -160,7 +170,7 @@ function addDebugLocation(loc) {
 
 let mainMenu;
 async function getMenu() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     if (mainMenu) return mainMenu;
     const menu = await mkMenu();
     if (!mainMenu) {
@@ -230,7 +240,7 @@ function clearMainSection(newPageId) {
 async function justShowKey(key) {
     const secMain = clearMainSection("page-show-key");
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     // const db = await dbFc4i.getDb();
     // const keyRec = await db.get(idbStoreName, key);
     const keyRec = await dbFc4i.getDbKey(key);
@@ -241,7 +251,7 @@ async function justShowKey(key) {
                 " (This is the item linked in the mindmap.)"
             ])
         ]);
-        const modFc4iItems = await import("fc4i-items");
+        const modFc4iItems = await importFc4i("fc4i-items");
         const eltRem = await modFc4iItems.mkEltInputRemember(keyRec, eltH);
         secMain.appendChild(eltRem);
     } else {
@@ -253,7 +263,7 @@ async function justShowKey(key) {
 async function showKeyToRemember(key, timerInfo) {
     const secMain = clearMainSection("page-show-key");
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     const keyRec = await dbFc4i.getDbKey(key);
     console.log({ keyRec });
     const style = [
@@ -294,7 +304,7 @@ async function showKeyToRemember(key, timerInfo) {
             ]),
         ]),
     ]);
-    const modFc4iItems = await import("fc4i-items");
+    const modFc4iItems = await importFc4i("fc4i-items");
     const eltRem = await modFc4iItems.mkEltInputRemember(keyRec, eltH);
     secMain.appendChild(eltRem);
 }
@@ -308,7 +318,7 @@ function mkImageThumb(blob) {
 }
 
 async function appendRem(rem, toDiv) {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const card = modMdc.mkMDCcard();
     card.classList.add("subject-card");
 
@@ -349,7 +359,7 @@ async function appendRem(rem, toDiv) {
     det.addEventListener("toggle", async evt => {
         if (det.open) {
             if (det.childElementCount == 1) {
-                const modFc4iItems = await import("fc4i-items");
+                const modFc4iItems = await importFc4i("fc4i-items");
                 const eltRem = await modFc4iItems.mkEltInputRemember(rem);
                 det.appendChild(eltRem);
             }
@@ -363,10 +373,10 @@ const detsOutput = {}
 let divActive;
 async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTags, cantRefresh) {
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     // debugger;
     // const x = await dbFc4i.getNextShortTimer();
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     if (![false, true, undefined].includes(cantRefresh)) {
         console.error(`cantRefresh: ${cantRefresh}`);
         throw Error(`cantRefresh: ${cantRefresh}`);
@@ -429,7 +439,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
         // const last = divSearchBanner.lastSearch;
         const last = getLastSearch();
         // const dbFc4i = await getDbFc4i();
-        const dbFc4i = await import("db-fc4i");
+        const dbFc4i = await importFc4i("db-fc4i");
         const allMatchingItems = await dbFc4i.getDbMatching(last.searchFor, last.minConf, last.maxConf, last.requiredTags);
         const allMatchingKeys = allMatchingItems.map(rec => rec.key);
         const strKeys = allMatchingKeys.join(";");
@@ -437,7 +447,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
         // if (divSearchBanner.oldKeys != strKeys)
         if (window.oldKeys != strKeys) {
             // refresh"
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
             const btnRefresh = document.getElementById("cant-refresh");
             if (btnRefresh) return;
             const newBtnRefresh = modMdc.mkMDCbutton("Refresh", "raised");
@@ -488,7 +498,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
 
     const msNow = new Date().getTime();
     let nNew = 0;
-    const modFc4iItems = await import("fc4i-items");
+    const modFc4iItems = await importFc4i("fc4i-items");
     modFc4iItems.keyAndTimesOrder.forEach(label => {
         const rec = modFc4iItems.keyAndTimes[label];
         rec.items.length = 0;
@@ -630,7 +640,7 @@ function getHomeSearchValuesFromElts(inpSearch, sliSearchConfidence, divTagsRequ
 }
 
 async function goHome() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const secMain = clearMainSection("page-home");
 
     // for (let key in detsOutput) delete detsOutput[key];
@@ -684,7 +694,7 @@ async function goHome() {
     });
 
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     const numItems = await dbFc4i.countAllReminders();
     await updateDivSearchTheTags();
     // await checkUnusedTags();
@@ -831,16 +841,16 @@ function showDebug() {
 }
 
 async function showIntro() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const secMain = clearMainSection("page-about");
     secMain.appendChild(
         mkElt("h1", undefined, [
-            `About ${visibleAppTitle} (`,
+            `Intro to ${visibleAppTitle} (`,
             mkElt("span", { id: "PWA-version" }),
             ")"
         ])
     );
-    setTimeout(async () => { const modPWA = await import("pwa"); modPWA.tellMeVersionAgain(); }, 0);
+    setTimeout(async () => { const modPWA = await importFc4i("pwa"); modPWA.tellMeVersionAgain(); }, 0);
     const pAbout = mkElt("p", undefined,
         `
     Are you like me trying to learn from a lot of different things you find on the internet?
@@ -1014,8 +1024,8 @@ async function showIntro() {
 }
 
 async function showAddedNew(sharedParams) {
-    const dbFc4i = await import("db-fc4i");
-    const modFc4iItems = await import("fc4i-items");
+    const dbFc4i = await importFc4i("db-fc4i");
+    const modFc4iItems = await importFc4i("fc4i-items");
     const secMain = clearMainSection("page-added-new");
     const oldRec = sharedParams?.url ? await dbFc4i.getViaUrl(sharedParams.url) : undefined;
     // console.log({ oldRec });
@@ -1032,7 +1042,7 @@ async function showAddedNew(sharedParams) {
     }
     secMain.appendChild(eltInpRem);
 }
-async function testLogin() {
+async function NOTUSEDNOWtestLogin() {
     const modSignIn = await import("/src/js/mod/sign-in.js");
     console.log({ modSignIn });
     const i = await modSignIn.signIn();
@@ -1149,7 +1159,7 @@ function mkNetwGraphURL() {
 }
 
 async function mkMenu() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
 
     const liHome = modMdc.mkMDCmenuItem("Home");
     liHome.addEventListener("click", evt => { goHome(); });
@@ -1216,7 +1226,7 @@ async function mkMenu() {
 
 
     async function fixSizes() {
-        import("/src/js/mod/fixBigImg.js").then(m => { const modX = m; modX.fix(); });
+        import("../src/js/mod/fixBigImg.js").then(m => { const modX = m; modX.fix(); });
     }
     const liFixSizes = modMdc.mkMDCmenuItem("Test fix image blob sizes");
     liFixSizes.addEventListener("click", evt => { fixSizes(); })
@@ -1253,7 +1263,7 @@ async function mkMenu() {
     liTestTimer.classList.add("test-item");
 
     async function testTimer() {
-        const modMdc = await import("util-mdc");
+        const modMdc = await importFc4i("util-mdc");
         const inpInt = mkElt("input", { type: "text" });
         inpInt.value = 10;
         const keySubmitted = "TEST_TIMER-submitted"
@@ -1302,7 +1312,6 @@ async function mkMenu() {
         console.log({ answer });
         if (!answer) return;
         const seconds = inpInt.value;
-        const modPWA = await import("pwa");
         const wb = await modPWA.getWorkbox();
         wb.messageSW({ type: "TEST_TIMER", seconds, });
         const time = toOurTime(new Date());
@@ -1443,8 +1452,8 @@ async function mkMenu() {
 
 
     async function importItems(callBackProgress) {
-        const modDbFc4i = await import("db-fc4i");
-        const modClipboardImages = await import("images");
+        const modDbFc4i = await importFc4i("db-fc4i");
+        const modClipboardImages = await importFc4i("images");
         const importedItemsKeys = [];
         const notImportedItemsKeys = [];
         const importedMindmapsKeys = [];
@@ -1521,7 +1530,7 @@ async function mkMenu() {
             await importRecords(arrRecords);
         }
         async function importMindmaps(arrMindmaps) {
-            const dbMindmaps = await import("db-mindmaps");
+            const dbMindmaps = await importFc4i("db-mindmaps");
             console.log({ arrMindmaps });
             const arrProm = [];
             // arrMindmaps.forEach(async mm =>
@@ -1595,7 +1604,7 @@ async function mkMenu() {
 
         async function showImportResult() {
             // goHome
-            const dbMindmaps = await import("db-mindmaps");
+            const dbMindmaps = await importFc4i("db-mindmaps");
             // FIX-ME det-sum
             const divImportedItems = mkElt("div", { class: "div-all-imported" });
             const detImportedItems = mkElt("details", undefined, [
@@ -1694,7 +1703,7 @@ async function mkMenu() {
     }
 
     async function dialogExportImport() {
-        const dbMindmaps = await import("db-mindmaps");
+        const dbMindmaps = await importFc4i("db-mindmaps");
         const arrAllMindmaps = await dbMindmaps.DBgetAllMindmaps();
         const toExportMindmaps = [...arrAllMindmaps];
 
@@ -1704,7 +1713,7 @@ async function mkMenu() {
         const arrItemKeys2 = [...eltsKey].map(elt => elt.dataset.keyRecord);
         const setItemKeys = new Set(arrItemKeys2);
         const arrItemKeys = [...setItemKeys];
-        const dbFc4i = await import("db-fc4i");
+        const dbFc4i = await importFc4i("db-fc4i");
         let pExport;
         const fnPrefix = "fc4i";
         const numItems = arrItemKeys.length;
@@ -1852,7 +1861,7 @@ async function mkMenu() {
         ]);
         const dlg = await modMdc.mkMDCdialogAlert(body, "Close");
         async function getJson4download(funBackKey) {
-            const modDbFc4i = await import("db-fc4i");
+            const modDbFc4i = await importFc4i("db-fc4i");
             for (let i = 0, len = arrItemKeys.length; i < len; i++) {
                 // const t = arrKeys[i];
                 // const k = t.dataset.keyRecord;
@@ -1862,7 +1871,7 @@ async function mkMenu() {
                 // console.log({ obj });
                 const images = obj.images;
                 if (images && images.length > 0) {
-                    const modClipboardImages = await import("images");
+                    const modClipboardImages = await importFc4i("images");
                     // console.log({ images });
                     for (let j = 0, leni = images.length; j < leni; j++) {
                         const blob = images[j];
@@ -1954,7 +1963,7 @@ const getQueryParams = (query) => {
 async function OLDsetFirstAutoRemindersOnHtml() {
     await promiseDOMready();
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     const recReminders = await dbFc4i.getSavedDialogValue();
     // console.log({ recReminders });
     if (recReminders) setAutoRemindersOnHtml(recReminders.autoReminders);
@@ -1968,7 +1977,7 @@ async function setAutoRemindersOnHtml(on) {
 }
 
 async function deleteEntry(key, card) {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     card.style.outline = "4px dotted yellowgreen";
     const dlg = modMdc.mkMDCdialogConfirm("Delete this subject?", "Yes", "No");
     const answer = await dlg;
@@ -1978,7 +1987,7 @@ async function deleteEntry(key, card) {
 
     // const key = rem.key;
     // const dbFc4i = await getDbFc4i();
-    const dbFc4i = await import("db-fc4i");
+    const dbFc4i = await importFc4i("db-fc4i");
     // const db = await dbFc4i.getDb();
     // const res = await db.delete(idbStoreName, key);
     // const res = await dbFc4i.deleteKey(key);
@@ -2077,12 +2086,12 @@ const mainCommon = async () => {
                 (async () => {
                     // const arrAll = [...await getAllReminders()];
                     // const dbFc4i = await getDbFc4i();
-                    const dbFc4i = await import("db-fc4i");
+                    const dbFc4i = await importFc4i("db-fc4i");
                     const numItems = await dbFc4i.countAllReminders();
                     if (numItems > 0) {
                         goHome();
                     } else {
-                        showIntro();
+                        showIntro(numItems);
                     }
                 })();
                 break;
@@ -2248,8 +2257,8 @@ document.addEventListener("click", errorHandlerAsyncEvent(async evt => {
 // Clipboard images
 async function getClipboardImages() {
     console.log("getClipboardImages");
-    const modMdc = await import("util-mdc");
-    const modClipboardImages = await import("images");
+    const modMdc = await importFc4i("util-mdc");
+    const modClipboardImages = await importFc4i("images");
 
     if (!await modClipboardImages.isClipboardPermissionStateOk()) {
         return;
@@ -2311,7 +2320,7 @@ async function getClipboardImages() {
 }
 
 async function mkFabNetwG() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const iconHub = modMdc.mkMDCicon("hub");
 
     const aIconHub = mkElt("a", { href: "/nwg/netwgraph.html" }, iconHub);
@@ -2336,8 +2345,8 @@ async function mkFabNetwG() {
 }
 
 async function dialog10min1hour(eltPrevFocused) {
-    const modMdc = await import("util-mdc");
-    const modLocalSettings = await import("local-settings");
+    const modMdc = await importFc4i("util-mdc");
+    const modLocalSettings = await importFc4i("local-settings");
     let dlg;
 
     const divOutputNew = mkElt("div");
@@ -2461,7 +2470,7 @@ async function dialog10min1hour(eltPrevFocused) {
     }
 
     async function getAndShowReminders() {
-        const modDbFc4i = await import("db-fc4i");
+        const modDbFc4i = await importFc4i("db-fc4i");
         const arrNot = await modDbFc4i.getToNotifyNow(getLastSearch());
         console.log({ arrNot });
         const arrSrt = arrNot.toSorted(compareReminders);
@@ -2628,7 +2637,7 @@ async function dialog10min1hour(eltPrevFocused) {
     dlg = await modMdc.mkMDCdialogAlert(body, "Close");
 }
 async function askForReminders(onlyMatched) {
-    const modPWA = await import("pwa");
+    const modPWA = await importFc4i("pwa");
     const wb = await modPWA.getWorkbox();
     const matchValues = onlyMatched ? getHomeSearchValues() : undefined;
     wb.messageSW({ type: "CHECK_NOTIFY", msDelay: 2000, matchValues });

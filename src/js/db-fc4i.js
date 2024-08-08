@@ -2,7 +2,7 @@ console.log("here is module db-fc4i.js");
 if (document.currentScript) throw Error("import .currentScript"); // is module
 if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
-const modIdbCmn = await import("idb-common");
+const modIdbCmn = await importFc4i("idb-common");
 async function getDb() { return modIdbCmn.getDb(); }
 
 const idbStoreFc4i = "toRepeat";

@@ -1,13 +1,21 @@
 // @ts-check
-const INIT_ERROR_VER = "0.1.2";
+const INIT_ERROR_VER = "0.1.3";
 console.log(`here is init-error.js ${INIT_ERROR_VER}`);
 
 {
     /**
      * 
-     * @param {ErrorEvent} evt 
+     * @param {Event} evt 
      */
     const doDisplay = (evt) => {
+        if (evt instanceof ErrorEvent) {
+            console.log("ErrorEvent", evt);
+        } else if (evt instanceof PromiseRejectionEvent) {
+            console.log("PromisRejectionEvent", evt);
+        } else {
+            console.log("Unknown event class", evt);
+        }
+        // @ts-ignore
         const { type, message, reason, filename, lineno } = evt;
         const msg = `${type}: ${message || reason}, ${filename || ""}:${lineno || ""} `;
         console.log("in displayError timeout", msg, evt);

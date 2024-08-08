@@ -16,17 +16,22 @@
         And importmaps uses <base>
         FIX-ME: This probably means I can ditch make-abs.js
 
+
         New way:
         <base href="relative..."> Where fc4-importmaps.js is!
         <script src="./init-error.js"></script>
+        <script type="module" src="./pwa.js"></script>
+        <script type="module" src="./anchors-with-base.js" ></script>
         <script src="./fc4i-importmaps.js"></script>
-        <script> import("pwa"); </script>
+
+        And replace import("...") with importFc4i("...")
     -->
     <base href=".">
     <script>console.log("baseURI", document.baseURI);</script>
     <script src="./init-error.js"></script>
+    <script type="module" src="./pwa.js"></script>
+    <script type="module" src="./anchors-with-base.js" ></script>
     <script src="./fc4i-importmaps.js"></script>
-    <script> import("pwa"); </script>
 
 
 
@@ -71,9 +76,8 @@
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
     <script src="./ext/mdc/material-components-web.js"></script>
 
-    <script>
-        import("fc4iCommon");
-    </script>
+    <!-- <script type="module" src="fc4iCommon"></script> -->
+    <script type="module" src="./src/js/common.js"></script>
 
     <header id="main-header">
         <span id="menu-container" class="one-child-fills">

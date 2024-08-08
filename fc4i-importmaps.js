@@ -1,4 +1,6 @@
-console.log("here is fc4i-importmaps");
+const FC4I_IMPORTMAPS_VER = "0.1.1";
+console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
+// https://github.com/WICG/import-maps/issues/92
 {
     const relImports = {
         // https://github.com/vasturiano/3d-force-graph
@@ -35,8 +37,7 @@ console.log("here is fc4i-importmaps");
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
-        "errorJs": "./src/js/error.js",
-        "fc4iCommon": "./src/js/common.js",
+        // "errorJs": "./src/js/error.js",
     };
     const elt = document.createElement("script");
     elt.type = "importmap";
@@ -44,7 +45,16 @@ console.log("here is fc4i-importmaps");
         imports: relImports
     }
     elt.textContent = JSON.stringify(objMap, null, 2);
-    document.currentScript.insertAdjacentElement("afterend", elt);
+    // document.currentScript.insertAdjacentElement("afterend", elt);
+
+    const importFc4i = async (modId) => {
+        const relUrl = relImports[modId];
+        if (relUrl == undefined) {
+            throw Error(`modId "${modId}" is not known by importFc4i`);
+        }
+        return import(relUrl);
+    }
+    window.importFc4i = importFc4i;
 }
 
 console.log("END fc4i-importmaps");

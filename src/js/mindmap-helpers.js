@@ -3,7 +3,7 @@
 
 console.log("here is module mindmap-helpers.js");
 if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
+// if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 const URL_MINDMAPS_PAGE = "/mm4i/mm4i.html";
 
