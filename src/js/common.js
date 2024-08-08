@@ -1,7 +1,7 @@
 // @ts-check
 const COMMON_VER = "0.1.3";
 console.log(`here is common.js ${COMMON_VER}`);
-if (document.currentScript) { console.error("common.js is not loaded as module"); debugger; }
+if (document.currentScript) { throw "common.js is not loaded as module"; }
 
 /**
  * 
@@ -178,15 +178,15 @@ async function getMenu() {
         const eltContainer = document.getElementById("menu-container");
         const useExpander = false;
         if (!useExpander) {
-            eltContainer.appendChild(mainMenu);
+            eltContainer?.appendChild(mainMenu);
         } else {
             mainMenu.classList.add("expander-content");
             const divExpander = mkElt("div", { id: "main-menu-expander", class: "expander" }, mainMenu);
-            eltContainer.appendChild(divExpander);
+            eltContainer?.appendChild(divExpander);
         }
 
         const eltToggle = document.getElementById("menu-toggle");
-        eltToggle.addEventListener("click", evt => {
+        eltToggle?.addEventListener("click", evt => {
             // eltContainer.classList.toggle("open");
             toggleMenu();
         });
@@ -203,7 +203,7 @@ async function getMenu() {
         btnReminders.title = "Reminders";
 
         const eltSearchCheck = document.getElementById("header-search-check");
-        eltSearchCheck.appendChild(btnReminders);
+        eltSearchCheck?.appendChild(btnReminders);
         btnReminders.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             // console.warn("clicked search check");
             await dialog10min1hour(eltFocusedBefore);
@@ -214,7 +214,7 @@ async function getMenu() {
         }));
 
         const eltBackdrop = document.getElementById("menu-backdrop");
-        eltBackdrop.addEventListener("click", evt => {
+        eltBackdrop?.addEventListener("click", evt => {
             // eltContainer.classList.toggle("open");
             toggleMenu();
         });
@@ -224,15 +224,15 @@ async function getMenu() {
 let eltActiveBeforeMenu;
 function toggleMenu() {
     const eltContainer = document.getElementById("menu-container");
-    if (!eltContainer.classList.contains("open")) eltActiveBeforeMenu = document.activeElement;
-    eltContainer.classList.toggle("open");
-    const eltExpander = eltContainer.querySelector(".expander");
+    if (!eltContainer?.classList.contains("open")) eltActiveBeforeMenu = document.activeElement;
+    eltContainer?.classList.toggle("open");
+    const eltExpander = eltContainer?.querySelector(".expander");
     eltExpander?.classList.toggle("expanded");
 }
 
 function clearMainSection(newPageId) {
     const secMain = document.getElementById("main-section");
-    while (secMain.firstElementChild) { secMain.firstElementChild.remove(); }
+    while (secMain?.firstElementChild) { secMain.firstElementChild.remove(); }
     document.body.id = newPageId;
     return secMain;
 }
@@ -252,11 +252,11 @@ async function justShowKey(key) {
         ]);
         const modFc4iItems = await importFc4i("fc4i-items");
         const eltRem = await modFc4iItems.mkEltInputRemember(keyRec, eltH);
-        secMain.appendChild(eltRem);
+        secMain?.appendChild(eltRem);
     } else {
-        secMain.appendChild(mkElt("h2", undefined, "Not found"));
+        secMain?.appendChild(mkElt("h2", undefined, "Not found"));
         const pNotFound = mkElt("p", undefined, `Could not find item with key=${key}`);
-        secMain.appendChild(mkElt("p", undefined, pNotFound));
+        secMain?.appendChild(mkElt("p", undefined, pNotFound));
     }
 }
 async function showKeyToRemember(key, timerInfo) {
@@ -305,7 +305,7 @@ async function showKeyToRemember(key, timerInfo) {
     ]);
     const modFc4iItems = await importFc4i("fc4i-items");
     const eltRem = await modFc4iItems.mkEltInputRemember(keyRec, eltH);
-    secMain.appendChild(eltRem);
+    secMain?.appendChild(eltRem);
 }
 function mkImageThumb(blob) {
     const eltImg = mkElt("span", { class: "image-bg-cover image-thumb-size" });
@@ -386,7 +386,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
     if (!divActive.isConnected) {
         // divActive.textContent = "";
         const divHome = document.getElementById("div-home");
-        divHome.appendChild(divActive);
+        divHome?.appendChild(divActive);
     }
 
     const arrActive = []
@@ -409,7 +409,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
 
     setTimeout(() => {
         const eltHome = document.getElementById("h-your-items");
-        eltHome.classList.remove("is-searching")
+        eltHome?.classList.remove("is-searching")
     }, 100);
 
     setLastSearch({ searchFor, minConf, maxConf, requiredTags });
@@ -427,8 +427,8 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
         newBtnRefresh.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             displayMatchingReminders(searchFor, minConf, maxConf, requiredTags);
         }));
-        divSearchBanner.appendChild(mkElt("span", undefined, " Outdated! "));
-        divSearchBanner.appendChild(newBtnRefresh);
+        divSearchBanner?.appendChild(mkElt("span", undefined, " Outdated! "));
+        divSearchBanner?.appendChild(newBtnRefresh);
         return;
     }
 
@@ -475,10 +475,10 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
     const numTotal = await dbFc4i.countAllReminders();
     // eltSearchBanner.appendChild(mkElt("i", undefined, `Search result (${numHits} of ${numTotal}):`));
     const eltNumHits = document.getElementById("h-your-num-hits");
-    eltNumHits.textContent = `${numHits} `;
+    if (eltNumHits) eltNumHits.textContent = `${numHits} `;
     const spanNumTotal = mkElt("span", undefined, `${numTotal}`);
     spanNumTotal.style.opacity = 0.3;
-    eltNumHits.appendChild(spanNumTotal);
+    eltNumHits?.appendChild(spanNumTotal);
 
     // const btnNetwG = modMdc.mkMDCiconButton("hub");
     // eltSearchBanner.appendChild(btnNetwG);
@@ -611,7 +611,7 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
 function getHomeSearchValues() {
     const inpSearch2 = document.getElementById("search-input");
     const divSearchSlider2 = document.getElementById("div-search-slider");
-    const sliSearchConfidence2 = divSearchSlider2.firstElementChild;
+    const sliSearchConfidence2 = divSearchSlider2?.firstElementChild;
     const divTagsRequired2 = document.getElementById("div-required-tags");
     return getHomeSearchValuesFromElts(inpSearch2, sliSearchConfidence2, divTagsRequired2);
 }
@@ -741,8 +741,7 @@ async function goHome() {
     }
     function restartSearch() {
         const eltHome = document.getElementById("h-your-items");
-        eltHome.classList.add("is-searching")
-        // eltHits.textContent = "...";
+        eltHome?.classList.add("is-searching")
         restartSearchTimer();
     }
     const restartSearchTimer = (() => {
@@ -818,12 +817,12 @@ async function goHome() {
         // divActive,
         // divOld
     ]);
-    secMain.appendChild(divHome);
+    secMain?.appendChild(divHome);
     await displayMatchingReminders();
 }
 function showDebug() {
     const secMain = clearMainSection("page-debug");
-    secMain.appendChild(divDebug);
+    secMain?.appendChild(divDebug);
     function checkFontSizes() {
         const pDebug = divDebug.firstElementChild;
         const pDebugFontSize = window.getComputedStyle(pDebug).fontSize;
@@ -837,7 +836,7 @@ function showDebug() {
 async function showIntro() {
     const modMdc = await importFc4i("util-mdc");
     const secMain = clearMainSection("page-about");
-    secMain.appendChild(
+    secMain?.appendChild(
         mkElt("h1", undefined, [
             `Intro to ${visibleAppTitle} (`,
             mkElt("span", { id: "PWA-version" }),
@@ -922,7 +921,7 @@ async function showIntro() {
         pFacebook,
         pTips,
     ]);
-    secMain.appendChild(divContent);
+    secMain?.appendChild(divContent);
 
     // https://www.inc.com/jeff-haden/need-to-learn-faster-neuroscience-says-these-7-memory-retention-skill-acquisition-strategies-work-best.html
     // https://www.hendrix.edu/uploadedFiles/Academics/Faculty_Resources/2016_FFC/Learn%20then%20sleep.pdf
@@ -964,7 +963,7 @@ async function showIntro() {
         mkElt("li", undefined, divLifeHackReminders),
         mkElt("li", undefined, divSleepBetween),
     ]);
-    secMain.appendChild(ulTips);
+    secMain?.appendChild(ulTips);
 
     // The dark side
     const pPWA = mkElt("p", undefined, [
@@ -1013,7 +1012,7 @@ async function showIntro() {
         mkElt("h3", { style: "color:red" }, "Reminders - do they work?"),
         divReminders,
     ]);
-    secMain.appendChild(divDarkSide);
+    secMain?.appendChild(divDarkSide);
 
 }
 
@@ -1034,7 +1033,7 @@ async function showAddedNew(sharedParams) {
     } else {
         eltInpRem = await modFc4iItems.mkEltInputRemember(undefined, mkElt("i", undefined, "Enter the new url to remember"));
     }
-    secMain.appendChild(eltInpRem);
+    secMain?.appendChild(eltInpRem);
 }
 async function NOTUSEDNOWtestLogin() {
     const modSignIn = await import("/src/js/mod/sign-in.js");
@@ -1042,6 +1041,7 @@ async function NOTUSEDNOWtestLogin() {
     const i = await modSignIn.signIn();
 }
 
+/*
 async function setupFCM() {
     // This is the setup from the documentation:
     // https://firebase.google.com/docs/cloud-messaging/js/client
@@ -1073,6 +1073,7 @@ async function setupFCM() {
     FCMtoken = await modMessaging.getToken(messaging, { vapidKey: publicWebPushKey });
     console.log({ FCMtoken });
 }
+*/
 let testShortSwitch = true;
 async function testShort() {
     testShortSwitch = true;
@@ -1177,9 +1178,9 @@ async function mkMenu() {
     liTestShort.addEventListener("click", evt => { testShort(); })
     liTestShort.classList.add("test-item");
 
-    const liTestLogin = modMdc.mkMDCmenuItem("Test login");
-    liTestLogin.addEventListener("click", evt => { testLogin(); })
-    liTestLogin.classList.add("test-item");
+    // const liTestLogin = modMdc.mkMDCmenuItem("Test login");
+    // liTestLogin.addEventListener("click", evt => { testLogin(); })
+    // liTestLogin.classList.add("test-item");
 
     const liTest4tasks = modMdc.mkMDCmenuItem("Test 4 tasks");
     liTest4tasks.addEventListener("click", evt => { test4tasks(); })
@@ -1247,10 +1248,11 @@ async function mkMenu() {
     liGetReminders.addEventListener("click", evt => { OLDdisplayRemindersDialog(); });
     liGetReminders.classList.add("test-item");
 
-    const liTestTimer = modMdc.mkMDCmenuItem("Test timer");
-    liTestTimer.addEventListener("click", evt => { testTimer(); })
-    liTestTimer.classList.add("test-item");
+    // const liTestTimer = modMdc.mkMDCmenuItem("Test timer");
+    // liTestTimer.addEventListener("click", evt => { testTimer(); })
+    // liTestTimer.classList.add("test-item");
 
+    /*
     async function testTimer() {
         const modMdc = await importFc4i("util-mdc");
         const inpInt = mkElt("input", { type: "text" });
@@ -1308,6 +1310,7 @@ async function mkMenu() {
         const jsonSubmitted = JSON.stringify(valSubmitted)
         localStorage.setItem(keySubmitted, jsonSubmitted);
     }
+    */
 
     const liStorage = modMdc.mkMDCmenuItem("Check storage");
     liStorage.addEventListener("click", errorHandlerAsyncEvent(async evt => { await checkStorage(); }));
@@ -1335,6 +1338,9 @@ async function mkMenu() {
             let aboutQuota = "";
             if (navigator.storage.estimate) {
                 const quota = await navigator.storage.estimate();
+                if (quota == undefined) throw "quota is undefined";
+                if (quota.usage == undefined) throw "quota.usage is undefined";
+                if (quota.quota == undefined) throw "quota.quota is undefined";
                 const percentageUsed = (quota.usage / quota.quota) * 100;
                 aboutQuota = `(You are currently using ${percentageUsed.toFixed(2)}%
                     of the available space for this site.)`;
@@ -1410,6 +1416,8 @@ async function mkMenu() {
             const quota = await navigator.storage.estimate();
             // quota.usage -> Number of bytes used.
             // quota.quota -> Maximum number of bytes available.
+            if (quota.usage == undefined) throw Error("quota.usage == undefined")
+            if (quota.quota == undefined) throw Error("quota.quota == undefined")
             const percentageUsed = (quota.usage / quota.quota) * 100;
             console.log(`You've used ${percentageUsed}% of the available storage.`);
             body.appendChild(mkElt("p", undefined,
@@ -1686,7 +1694,7 @@ async function mkMenu() {
                 detImported,
                 detNotImported
             ]);
-            secMain.appendChild(divHome);
+            secMain?.appendChild(divHome);
 
         }
     }
@@ -2027,10 +2035,10 @@ const mainCommon = async () => {
 
     await promiseDOMready();
     const divHeaderTitle = document.getElementById("header-title");
-    divHeaderTitle.textContent = visibleAppTitle;
+    if (divHeaderTitle) divHeaderTitle.textContent = visibleAppTitle;
     const divMainHeader = document.getElementById("main-header");
-    divMainHeader.classList.add("mdc-theme--primary-bg");
-    divMainHeader.classList.add("mdc-theme--on-primary");
+    divMainHeader?.classList.add("mdc-theme--primary-bg");
+    divMainHeader?.classList.add("mdc-theme--on-primary");
 
 
     // addEventListener('DOMContentLoaded', (event) => {
