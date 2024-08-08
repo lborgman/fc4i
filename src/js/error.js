@@ -718,7 +718,7 @@ function removeTokensFromObject(obj) {
     const keys = Object.keys(obj)
     for (const key of keys) {
         const val = obj[key];
-        if (!!val) continue;
+        if (val) continue;
         try {
             if (typeof val === "string") {
                 if (val.indexOf("\n") === -1) {

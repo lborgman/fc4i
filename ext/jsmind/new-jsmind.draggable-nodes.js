@@ -76,7 +76,7 @@ function dist2BcrPoint(bcr1, x2, y2) {
 function getArrNodesAndPos(eltJmnodes, eltDragged) {
     const arrNodesAndPos = [...eltJmnodes.querySelectorAll("jmnode")]
         .filter(n => {
-            if (!!n.style.zIndex) return false; // Filter shadow node
+            if (n.style.zIndex) return false; // Filter shadow node
             if (eltDragged === n) return false;
             return true;
         })
@@ -93,7 +93,7 @@ function getArrNodesAndPos(eltJmnodes, eltDragged) {
 class DrawSvgLine {
     // https://stackoverflow.com/a/62475281/324691
     constructor(clientX, clientY, lineAttributes, onContainer, onTopOfChilds) {
-        if (!!lineAttributes) {
+        if (lineAttributes) {
             if ("object" !== typeof lineAttributes) throw Error("typeof lineAttributes is not object");
             if (Array.isArray(lineAttributes)) throw Error("lineAttributes is array");
         }
@@ -188,7 +188,7 @@ function getNodeIdFromDOMelt(elt) {
     const tn = elt.tagName;
     if (tn !== "JMNODE") throw Error(`Not jmnode: <${tn}>`);
     const id = elt.getAttribute("nodeid");
-    if (!!!id) throw Error("Could not find jmnode id");
+    if (!id) throw Error("Could not find jmnode id");
     return id;
 }
 

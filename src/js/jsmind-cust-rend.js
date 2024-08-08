@@ -5,7 +5,7 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 // FIX-ME: Why is this called in share.html?
-if (typeof jsMind != "undefined" && !!!jsMind.mm4iSupported) {
+if (typeof jsMind != "undefined" && !jsMind.mm4iSupported) {
     // throw Error("This version of jsMind does not support mm4i");
     console.error("This version of jsMind does not support mm4i");
 }
@@ -99,7 +99,7 @@ export class CustomRenderer4jsMind {
     }
 
     addProvider(objProv) {
-        if (!objProv instanceof providerDetails) { throw Error("Not object of class providerDetails"); }
+        if (!(objProv instanceof providerDetails)) { throw Error("Not object of class providerDetails"); }
         this.#providers[objProv.name] = objProv;
         console.log("Providers:", this.#providers);
     }
@@ -577,7 +577,7 @@ export class CustomRenderer4jsMind {
         const eltActions = modMdc.mkMDCdialogActions([btnTestMm, btnSaveMm, btnCancel]);
         const dlg = await modMdc.mkMDCdialog(body, eltActions);
         const somethingHasChangedLines = () => {
-            if (!!!initialLineValues) return false;
+            if (!initialLineValues) return false;
             const currentLineValues = getLineValues();
             return JSON.stringify(initialLineValues) != JSON.stringify(currentLineValues);
         }
@@ -1690,7 +1690,7 @@ export class CustomRenderer4jsMind {
                 // Should be an error object
                 const err = resultImageBlobs;
                 console.log({ err });
-                if (!err instanceof Error) {
+                if (!(err instanceof Error)) {
                     debugger; // eslint-disable-line no-debugger
                     throw Error(`resultImages is not instanceof Error`);
                 }

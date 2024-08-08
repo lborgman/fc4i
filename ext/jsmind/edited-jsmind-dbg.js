@@ -120,7 +120,7 @@
                 );
             };
             this.on = function (t, e, h) {
-                if (!!t.addEventListener) {
+                if (t.addEventListener) {
                     t.addEventListener(e, h, false);
                 } else {
                     t.attachEvent('on' + e, h);
@@ -688,7 +688,7 @@
                     node.index = 0;
                     this._update_index(node.parent);
                 } else {
-                    var node_before = !!before_id ? this.get_node(before_id) : null;
+                    var node_before = before_id ? this.get_node(before_id) : null;
                     if (
                         node_before != null &&
                         node_before.parent != null &&
@@ -860,7 +860,7 @@
                     d,
                     node_json.expanded
                 );
-                if (!!node_json['children']) {
+                if (node_json['children']) {
                     var children = node_json.children;
                     for (var i = 0; i < children.length; i++) {
                         df._extract_subnode(mind, node, children[i]);
@@ -933,7 +933,7 @@
                 var nodes = node_array.slice(0);
                 nodes.reverse();
                 var root_node = df._extract_root(mind, nodes);
-                if (!!root_node) {
+                if (root_node) {
                     df._extract_subnode(mind, root_node, nodes);
                 } else {
                     logger.error('root node can not be found');
@@ -965,7 +965,7 @@
                         data = df._extract_data(node_json);
                         var d = null;
                         var node_direction = node_json.direction;
-                        if (!!node_direction) {
+                        if (node_direction) {
                             d = node_direction == 'left' ? Direction.left : Direction.right;
                         }
                         var node = mind.add_node(
@@ -1018,7 +1018,7 @@
                     topic: node.topic,
                     expanded: node.expanded,
                 };
-                if (!!node.parent) {
+                if (node.parent) {
                     o.parentid = node.parent.id;
                 }
                 if (node.isroot) {
@@ -1101,7 +1101,7 @@
                         break;
                     }
                 }
-                if (!!node) {
+                if (node) {
                     var ns = node.childNodes;
                     node = null;
                     for (var i = 0; i < ns.length; i++) {
@@ -1134,11 +1134,11 @@
                 delete node_data.expanded;
                 var node_position = xml_node.getAttribute('POSITION');
                 var node_direction = null;
-                if (!!node_position) {
+                if (node_position) {
                     node_direction = node_position == 'left' ? Direction.left : Direction.right;
                 }
                 var node = null;
-                if (!!parent_node) {
+                if (parent_node) {
                     node = mind.add_node(
                         parent_node,
                         node_id,
@@ -1179,7 +1179,7 @@
                 }
                 xml_lines.push('<node');
                 xml_lines.push('ID="' + node.id + '"');
-                if (!!pos) {
+                if (pos) {
                     xml_lines.push('POSITION="' + pos + '"');
                 }
                 xml_lines.push('TEXT="' + node.topic + '">');
@@ -1272,7 +1272,7 @@
                 let prefix = new Array(level + 1).join(' ');
                 for (let node of nodes) {
                     lines.push(prefix + node.topic);
-                    if (!!node.children) {
+                    if (node.children) {
                         format.text._build_lines(lines, node.children, level + 1);
                     }
                 }
@@ -1294,7 +1294,7 @@
             var df = null;
             var mind = null;
             if (typeof mind_data === 'object') {
-                if (!!mind_data.format) {
+                if (mind_data.format) {
                     df = mind_data.format;
                 } else {
                     df = 'node_tree';
@@ -1711,7 +1711,7 @@
         }
         part_layout(node) {
             var root = this.jm.mind.root;
-            if (!!root) {
+            if (root) {
                 var root_layout_data = root._data.layout;
                 if (node.isroot) {
                     root_layout_data.outer_height_right = this._layout_offset_subnodes_height(
@@ -1951,7 +1951,7 @@
             this.container.appendChild(this.e_panel);
         }
         add_event(obj, event_name, event_handle, capture_by_panel) {
-            let target = !!capture_by_panel ? this.e_panel : this.e_nodes;
+            let target = capture_by_panel ? this.e_panel : this.e_nodes;
             $.on(target, event_name, function (e) {
                 var evt = e || event;
                 event_handle.call(obj, evt);
@@ -1995,7 +1995,7 @@
         }
         reset_theme() {
             var theme_name = this.jm.options.theme;
-            if (!!theme_name) {
+            if (theme_name) {
                 this.e_nodes.className = 'theme-' + theme_name;
             } else {
                 this.e_nodes.className = '';
@@ -2119,7 +2119,7 @@
                         debugger; // eslint-disable-line no-debugger
                 }
             }
-            if (!!node.topic) {
+            if (node.topic) {
                 if (this.opts.support_html) {
                     $.h(dTxt, node.topic);
                 } else {
@@ -2171,7 +2171,7 @@
                         debugger; // eslint-disable-line no-debugger
                     }
             }
-            if (!!node.topic) {
+            if (node.topic) {
                 const dTxt = element.querySelector(".jmnode-text");
                 console.log({ dTxt });
                 if (!dTxt.classList.contains("jmnode-text")) throw Error("Not div.jmnode-text");
@@ -2194,12 +2194,12 @@
             }
         }
         select_node(node) {
-            if (!!this.selected_node) {
+            if (this.selected_node) {
                 var element = this.selected_node._data.view.element;
                 element.className = element.className.replace(/\s*selected\b/i, '');
                 this.restore_selected_node_custom_style(this.selected_node);
             }
-            if (!!node) {
+            if (node) {
                 this.selected_node = node;
                 node._data.view.element.className += ' selected';
                 this.clear_selected_node_custom_style(node);
@@ -2319,7 +2319,7 @@
             logger.debug('view.show');
             this.expand_size();
             this._show();
-            if (!!keep_center) {
+            if (keep_center) {
                 this.center_node(this.jm.mind.root);
             }
         }
@@ -2503,7 +2503,7 @@
             var _offset = this.get_view_offset();
             for (var nodeid in nodes) {
                 node = nodes[nodeid];
-                if (!!node.isroot) {
+                if (node.isroot) {
                     continue;
                 }
                 if (!this.layout.is_visible(node)) {
@@ -2641,10 +2641,10 @@
         }
         handle_addchild(_jm, e) {
             var selected_node = _jm.get_selected_node();
-            if (!!selected_node) {
+            if (selected_node) {
                 var node_id = this._newid();
                 var node = _jm.add_node(selected_node, node_id, 'New Node');
-                if (!!node) {
+                if (node) {
                     _jm.select_node(node_id);
                     _jm.begin_edit(node_id);
                 }
@@ -2655,7 +2655,7 @@
             if (!!selected_node && !selected_node.isroot) {
                 var node_id = this._newid();
                 var node = _jm.insert_node_after(selected_node, node_id, 'New Node');
-                if (!!node) {
+                if (node) {
                     _jm.select_node(node_id);
                     _jm.begin_edit(node_id);
                 }
@@ -2663,7 +2663,7 @@
         }
         handle_editnode(_jm, e) {
             var selected_node = _jm.get_selected_node();
-            if (!!selected_node) {
+            if (selected_node) {
                 _jm.begin_edit(selected_node);
             }
         }
@@ -2677,7 +2677,7 @@
         handle_toggle(_jm, e) {
             var evt = e || event;
             var selected_node = _jm.get_selected_node();
-            if (!!selected_node) {
+            if (selected_node) {
                 _jm.toggle_node(selected_node.id);
                 evt.stopPropagation();
                 evt.preventDefault();
@@ -2686,7 +2686,7 @@
         handle_up(_jm, e) {
             var evt = e || event;
             var selected_node = _jm.get_selected_node();
-            if (!!selected_node) {
+            if (selected_node) {
                 var up_node = _jm.find_node_before(selected_node);
                 if (!up_node) {
                     var np = _jm.find_node_before(selected_node.parent);
@@ -2694,7 +2694,7 @@
                         up_node = np.children[np.children.length - 1];
                     }
                 }
-                if (!!up_node) {
+                if (up_node) {
                     _jm.select_node(up_node);
                 }
                 evt.stopPropagation();
@@ -2704,7 +2704,7 @@
         handle_down(_jm, e) {
             var evt = e || event;
             var selected_node = _jm.get_selected_node();
-            if (!!selected_node) {
+            if (selected_node) {
                 var down_node = _jm.find_node_after(selected_node);
                 if (!down_node) {
                     var np = _jm.find_node_after(selected_node.parent);
@@ -2712,7 +2712,7 @@
                         down_node = np.children[0];
                     }
                 }
-                if (!!down_node) {
+                if (down_node) {
                     _jm.select_node(down_node);
                 }
                 evt.stopPropagation();
@@ -2729,7 +2729,7 @@
             var evt = e || event;
             var selected_node = _jm.get_selected_node();
             var node = null;
-            if (!!selected_node) {
+            if (selected_node) {
                 if (selected_node.isroot) {
                     var c = selected_node.children;
                     var children = [];
@@ -2748,7 +2748,7 @@
                 } else {
                     node = selected_node.parent;
                 }
-                if (!!node) {
+                if (node) {
                     _jm.select_node(node);
                 }
                 evt.stopPropagation();
@@ -2811,7 +2811,7 @@
             this.init();
         }
         init() {
-            if (!!this.initialized) {
+            if (this.initialized) {
                 return;
             }
             this.initialized = true;
@@ -2875,7 +2875,7 @@
         }
         set_theme(theme) {
             var theme_old = this.options.theme;
-            this.options.theme = !!theme ? theme : null;
+            this.options.theme = theme ? theme : null;
             if (theme_old != this.options.theme) {
                 this.view.reset_theme();
                 this.view.reset_custom_style();
@@ -2893,7 +2893,7 @@
             }
             var element = e.target || event.srcElement;
             var node_id = this.view.get_binded_nodeid(element);
-            if (!!node_id) {
+            if (node_id) {
                 if (this.view.is_node(element)) {
                     this.select_node(node_id);
                 }
@@ -2909,7 +2909,7 @@
             var is_expander = this.view.is_expander(element);
             if (is_expander) {
                 var node_id = this.view.get_binded_nodeid(element);
-                if (!!node_id) {
+                if (node_id) {
                     this.toggle_node(node_id);
                 }
             }
@@ -2923,7 +2923,7 @@
                 var is_node = this.view.is_node(element);
                 if (is_node) {
                     var node_id = this.view.get_binded_nodeid(element);
-                    if (!!node_id) {
+                    if (node_id) {
                         this.begin_edit(node_id);
                     }
                 }
@@ -3081,7 +3081,7 @@
                     dir = this.layout.calculate_next_child_direction(the_parent_node);
                 }
                 var node = this.mind.add_node(the_parent_node, node_id, topic, data, dir);
-                if (!!node) {
+                if (node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
@@ -3107,7 +3107,7 @@
                     dir = this.layout.calculate_next_child_direction(the_node_before.parent);
                 }
                 var node = this.mind.insert_node_before(the_node_before, node_id, topic, data, dir);
-                if (!!node) {
+                if (node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
@@ -3131,7 +3131,7 @@
                     dir = this.layout.calculate_next_child_direction(the_node_after.parent);
                 }
                 var node = this.mind.insert_node_after(the_node_after, node_id, topic, data, dir);
-                if (!!node) {
+                if (node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
@@ -3189,7 +3189,7 @@
                     return;
                 }
                 var node = this.get_node(node_id);
-                if (!!node) {
+                if (node) {
                     if (node.topic === topic) {
                         logger.info('nothing changed');
                         this.view.update_node(node);
@@ -3214,7 +3214,7 @@
             if (this.get_editable()) {
                 var node = this.get_node(node_id);
                 var updated_node = this.mind.move_node(node, before_id, parent_id, direction);
-                if (!!updated_node) {
+                if (updated_node) {
                     this.view.update_node(updated_node);
                     this.layout.layout();
                     this.view.show(false);
@@ -3247,14 +3247,14 @@
             this.invoke_event_handle(EventType.select, { evt: 'select_node', data: [], node: node.id });
         }
         get_selected_node() {
-            if (!!this.mind) {
+            if (this.mind) {
                 return this.mind.selected;
             } else {
                 return null;
             }
         }
         select_clear() {
-            if (!!this.mind) {
+            if (this.mind) {
                 this.mind.selected = null;
                 this.view.select_clear();
             }
@@ -3344,11 +3344,11 @@
         set_node_color(node_id, bg_color, fg_color) {
             if (this.get_editable()) {
                 var node = this.mind.get_node(node_id);
-                if (!!node) {
-                    if (!!bg_color) {
+                if (node) {
+                    if (bg_color) {
                         node.data['background-color'] = bg_color;
                     }
-                    if (!!fg_color) {
+                    if (fg_color) {
                         node.data['foreground-color'] = fg_color;
                     }
                     this.view.reset_node_custom_style(node);
@@ -3361,14 +3361,14 @@
         set_node_font_style(node_id, size, weight, style) {
             if (this.get_editable()) {
                 var node = this.mind.get_node(node_id);
-                if (!!node) {
-                    if (!!size) {
+                if (node) {
+                    if (size) {
                         node.data['font-size'] = size;
                     }
-                    if (!!weight) {
+                    if (weight) {
                         node.data['font-weight'] = weight;
                     }
-                    if (!!style) {
+                    if (style) {
                         node.data['font-style'] = style;
                     }
                     this.view.reset_node_custom_style(node);
@@ -3384,17 +3384,17 @@
         set_node_background_image(node_id, image, width, height, rotation) {
             if (this.get_editable()) {
                 var node = this.mind.get_node(node_id);
-                if (!!node) {
-                    if (!!image) {
+                if (node) {
+                    if (image) {
                         node.data['background-image'] = image;
                     }
-                    if (!!width) {
+                    if (width) {
                         node.data['width'] = width;
                     }
-                    if (!!height) {
+                    if (height) {
                         node.data['height'] = height;
                     }
-                    if (!!rotation) {
+                    if (rotation) {
                         node.data['background-rotation'] = rotation;
                     }
                     this.view.reset_node_custom_style(node);
@@ -3410,7 +3410,7 @@
         set_node_background_rotation(node_id, rotation) {
             if (this.get_editable()) {
                 var node = this.mind.get_node(node_id);
-                if (!!node) {
+                if (node) {
                     if (!node.data['background-image']) {
                         logger.error(
                             'fail, only can change rotation angle of node with background image'

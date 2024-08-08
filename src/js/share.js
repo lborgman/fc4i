@@ -388,7 +388,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
                 // Should be an error object
                 const err = resultImageBlobs;
                 console.log({ err });
-                if (!err instanceof Error) {
+                if (!(err instanceof Error)) {
                     debugger; // eslint-disable-line no-debugger
                     throw Error(`resultImages is not instanceof Error`);
                 }
@@ -853,7 +853,8 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             modMdc.mkMDCdialogAlert(body, "Close");
         })
         function checkForUrl() {
-            const reHttps = /(?:^|\s)(https:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()\[\]@:%_\+.~#?&\/=]*))(?:$|\s)/g;
+            // const reHttps = /(?:^|\s)(https:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()\[\]@:%_\+.~#?&\/=]*))(?:$|\s)/g;
+            const reHttps = /(?:^|\s)(https:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()\[\]@:%_\+.~#?&\/=]*))(?:$|\s)/g;
             const m = [...taDesc.value.matchAll(reHttps)];
             // btnUrl.disabled = m.length == 0;
             ourUrls.length = 0;

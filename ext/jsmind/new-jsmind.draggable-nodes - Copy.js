@@ -58,7 +58,7 @@
             const id = getNodeIdFromDOMelt(elt);
             const node = this.jm.get_node(id);
             // const node = jm.get_node(id);
-            if (!!!node) throw Error(`Could not get node "${id}"`);
+            if (!node) throw Error(`Could not get node "${id}"`);
             return node;
         }
         #getScrollDiffXY() {
@@ -176,7 +176,7 @@
                                 const idxChild = dragInfo.objNodeId2idx[childId];
                                 const nApChild = dragInfo.arrNodesAndPos[idxChild];
                                 // console.log({childId, idx, nAp});
-                                if (!!!nApChild) return;
+                                if (!nApChild) return;
                                 nApChild.dist = dist2BcrPoint(nApChild.bcr, sx, sy);
                                 nApChild.direction = child.direction;
                                 nApChild.parent = child.parent;
@@ -284,7 +284,7 @@
         }
         lookup_close_node() {
             var node_data = this._lookup_close_node();
-            if (!!node_data) {
+            if (node_data) {
                 this._magnet_shadow(node_data);
                 this.target_node = node_data.node;
                 this.target_direct = node_data.direction;
@@ -347,7 +347,7 @@
                 e.preventDefault();
                 if (eltDragged.tagName === "JMNODE") return;
                 const eltJm = eltDragged.closest("jmnode");
-                if (!!!eltJm) throw Error("Could not find enclosing jmnode for eltJm");
+                if (!eltJm) throw Error("Could not find enclosing jmnode for eltJm");
                 const idJm = getNodeIdFromDOMelt(eltJm);
                 this.jm.end_edit(idJm);
                 return;
@@ -394,7 +394,7 @@
                 this.jm.disable_view_draggable();
             }
             var nodeid = jview.get_binded_nodeid(eltDragged);
-            if (!!nodeid) {
+            if (nodeid) {
                 var node = this.jm.get_node(nodeid);
                 if (!node.isroot) {
                     if (this.hlookup_delay != 0) {
@@ -464,7 +464,7 @@
                 const node_dragged = this.jm.get_node(idDragged);
 
                 const eltClosest = dragInfo.eltClosest;
-                if (!!!eltClosest) return;
+                if (!eltClosest) return;
                 console.log({ dragInfo });
                 console.log(dragInfo.closest2);
                 const idClosest = getNodeIdFromDOMelt(eltClosest);
@@ -545,7 +545,7 @@
                         }
                     }
                 }
-                if (!!node_before) {
+                if (node_before) {
                     beforeid = node_before.id;
                 }
                 this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
@@ -646,7 +646,7 @@ function dist2BcrPoint(bcr1, x2, y2) {
 function getArrNodesAndPos(eltJmnodes, eltDragged) {
     const arrNodesAndPos = [...eltJmnodes.querySelectorAll("jmnode")]
         .filter(n => {
-            if (!!n.style.zIndex) return false; // Filter shadow node
+            if (n.style.zIndex) return false; // Filter shadow node
             if (eltDragged === n) return false;
             return true;
         })
@@ -663,7 +663,7 @@ function getArrNodesAndPos(eltJmnodes, eltDragged) {
 class DrawSvgLine {
     // https://stackoverflow.com/a/62475281/324691
     constructor(clientX, clientY, lineAttributes, onContainer, onTopOfChilds) {
-        if (!!lineAttributes) {
+        if (lineAttributes) {
             if ("object" !== typeof lineAttributes) throw Error("typeof lineAttributes is not object");
             if (Array.isArray(lineAttributes)) throw Error("lineAttributes is array");
         }
@@ -758,7 +758,7 @@ function getNodeIdFromDOMelt(elt) {
     const tn = elt.tagName;
     if (tn !== "JMNODE") throw Error(`Not jmnode: <${tn}>`);
     const id = elt.getAttribute("nodeid");
-    if (!!!id) throw Error("Could not find jmnode id");
+    if (!id) throw Error("Could not find jmnode id");
     return id;
 }
 

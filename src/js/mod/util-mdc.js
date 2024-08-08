@@ -451,7 +451,8 @@ export function setMdcInputValid(input, valid) {
     if (tfObj) {
         tfObj.valid = valid;
     } else {
-        debugger; // FIXME: reminder, should every input be mdc???
+        // FIXME: reminder, should every input be mdc???
+        debugger; // eslint-disable-line no-debugger
     }
     input.dataset.ourValid = valid;
 }
@@ -1070,7 +1071,7 @@ export function validateDownloadFilename(filename) {
     if (/^\./.test(filename)) return `Filename must not begin with "."`;
     if (/\.$/.test(filename)) return `Filename must not end with "."`;
     // Unix
-    if (/^-/.test(filename)) return `Filename must not begin with "-"`;
+    if (filename.startsWith("-")) return `Filename must not begin with "-"`;
     const reControl = /[\x00-\x1f\x80-\x9f]/g;
     if (reControl.test(filename)) {
         return `Control chars not allowed in filename`;

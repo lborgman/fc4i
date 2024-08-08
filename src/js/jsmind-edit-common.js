@@ -416,7 +416,7 @@ export function basicInit4jsmind() {
         const tn = elt.tagName;
         if (tn !== "JMNODE") throw Error(`Not jmnode: <${tn}>`);
         const id = elt.getAttribute("nodeid");
-        if (!!!id) throw Error("Could not find jmnode id");
+        if (!id) throw Error("Could not find jmnode id");
         return id;
     }
 
