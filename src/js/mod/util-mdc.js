@@ -3,6 +3,9 @@
 
 // FIXME: useful? https://codepen.io/oneezy/pen/qwRVaq
 
+// const modErrorJs = await importFc4i("errorJs");
+// const mkElt = modErrorJs.mkElt;
+
 let materialIconsClass = "material-icons";
 export function getMaterialIconClass() { return materialIconsClass; }
 export function setMaterialIconClass(className) {

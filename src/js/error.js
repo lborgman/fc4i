@@ -171,41 +171,6 @@ function wait4mutations(elt, ms, observeWhat, msMaxWait) {
     });
 }
 
-/**
- * 
- * @param {string} type 
- * @param {Object} attrib 
- * @param {any} inner 
- * @returns {HTMLElement}
- */
-export function mkElt(type, attrib, inner) {
-    const elt = document.createElement(type);
-
-    /**
-     * 
-     * @param {HTMLElement | string} inr 
-     */
-    function addInner(inr) {
-        if (inr instanceof Element) {
-            elt.appendChild(inr);
-        } else {
-            const txt = document.createTextNode(inr.toString());
-            elt.appendChild(txt);
-        }
-    }
-    if (inner) {
-        if (inner.length && typeof inner != "string") {
-            for (var i = 0; i < inner.length; i++)
-                if (inner[i])
-                    addInner(inner[i]);
-        } else
-            addInner(inner);
-    }
-    for (var x in attrib) {
-        elt.setAttribute(x, attrib[x]);
-    }
-    return elt;
-}
 function mkButton(attrib, inner) {
     const btn = mkElt("button", attrib, inner);
     btn.classList.add("popup-button");
@@ -609,7 +574,7 @@ function alertForError(e) {
     console.warn("alertForError", e);
     alertError("error", e);
 }
-window.addEventListener('error', alertForError);
+window.addEventListener('NOerror', alertForError);
 
 function goSilently(url) {
     window.removeEventListener('error', alertForError);
@@ -630,7 +595,7 @@ window.addEventListener("error", (e) => {
 })
 */
 
-window.addEventListener('unhandledrejection', function (e) {
+window.addEventListener('NOunhandledrejection', function (e) {
     console.warn("2 entering event listener for unhandledrejection");
     alertError("unhandledrejection", e);
 });

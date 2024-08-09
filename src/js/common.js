@@ -14,7 +14,7 @@ const importFc4i = (modId) => {
 }
 
 const modErrorJs = await importFc4i("errorJs");
-const mkElt = modErrorJs.mkElt;
+// const mkElt = modErrorJs.mkElt;
 const errorHandlerAsyncEvent = modErrorJs.errorHandlerAsyncEvent;
 const promiseDOMready = modErrorJs.promiseDOMready;
 
