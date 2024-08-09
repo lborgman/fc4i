@@ -13,7 +13,7 @@ const URL_MINDMAPS_PAGE = "/mm4i/mm4i.html";
 // async function getJsmindEditCommon() { return await import("jsmind-edit-common"); }
 
 // getJsmindCust();
-import("jsmind-cust-rend");
+importFc4i("jsmind-cust-rend");
 
 
 
@@ -25,7 +25,7 @@ async function DBsaveNowThisMindmap(jmDisplayed) {
     const keyName = objDataMind.meta.name;
     if (!keyName) throw Error("Current mindmap has no meta.key");
     // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
     await dbMindmaps.DBsetMindmap(keyName, objDataMind);
 }
 
@@ -45,21 +45,21 @@ export async function createAndShowNewMindmap(linkMindmapsPage) {
     const keyName = jsMindMap.meta.name;
     console.log({ jsMindMap, keyName });
     // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
     await dbMindmaps.DBsetMindmap(keyName, jsMindMap);
     showMindmap(keyName);
 }
 
 export async function getMindmap(key) {
     // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
     return dbMindmaps.DBgetMindmap(key);
 }
 
 async function dialogCreateMindMap() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
 
     const title = mkElt("h2", undefined, "Create new mindmap");
     // const nextKey = getNextMindmapKey();
@@ -122,9 +122,9 @@ async function dialogCreateMindMap() {
 
 export async function getMindmapsHits(customKey) {
     // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
     const provider = "fc4i"; // FIX-ME:
-    const modCustRend = await import("jsmind-cust-rend");
+    const modCustRend = await importFc4i("jsmind-cust-rend");
     const searchedTopic = (await modCustRend.getOurCustomRenderer()).customData2jsmindTopic(customKey, provider);
     const promArrMindmaps = (await dbMindmaps.DBgetAllMindmaps())
         .map(m => {
@@ -176,7 +176,7 @@ export function mkEltLinkMindmapA(topic, mkey, mhits, provider) {
 
 
 export async function pasteCustomClipDialog() {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const arrClip = fetchJsmindCopied4Mindmap();
     if (!arrClip) debugger; // eslint-disable-line no-debugger
 
@@ -213,8 +213,8 @@ export async function pasteCustomClipDialog() {
 }
 
 async function mkDivOneCustomClip(objCustomClip) {
-    const modMdc = await import("util-mdc");
-    const modCustRend = await import("jsmind-cust-rend");
+    const modMdc = await importFc4i("util-mdc");
+    const modCustRend = await importFc4i("jsmind-cust-rend");
     // const keyRec = await get1Reminder(objCustomClip.key); // FIX-ME: provider
     const key = objCustomClip.key;
     const provider = objCustomClip.provider;
@@ -246,8 +246,8 @@ async function mkDivOneCustomClip(objCustomClip) {
 }
 
 async function dialogShowCustomClipboard() {
-    const modMdc = await import("util-mdc");
-    const modCustRend = await import("jsmind-cust-rend");
+    const modMdc = await importFc4i("util-mdc");
+    const modCustRend = await importFc4i("jsmind-cust-rend");
     const arrClip = fetchJsmindCopied4Mindmap();
     console.log({ arrCopied4Mindmap: arrClip });
     const body = mkElt("div", { id: "jsmind-test-custom-clipboard" });
@@ -264,7 +264,7 @@ async function dialogShowCustomClipboard() {
 }
 
 export async function dialogAdded2CustomClipboard(objAdded) {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const divObjAdded = await mkDivOneCustomClip(objAdded);
     divObjAdded.style.width = "100%";
     divObjAdded.style.height = "unset";

@@ -3,7 +3,7 @@
 
 // FIXME: useful? https://codepen.io/oneezy/pen/qwRVaq
 
-// const modErrorJs = await importFc4i("errorJs");
+// const modErrorJs = await importFc4i("toolsJs");
 // const mkElt = modErrorJs.mkElt;
 
 let materialIconsClass = "material-icons";

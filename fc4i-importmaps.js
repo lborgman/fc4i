@@ -37,7 +37,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
-        "errorJs": "./src/js/error.js",
+        "toolsJs": "./src/js/tools.js",
     };
     const elt = document.createElement("script");
     elt.type = "importmap";

@@ -11,9 +11,9 @@ if (typeof jsMind != "undefined" && !jsMind.mm4iSupported) {
 }
 
 // FIX-ME: clean up
-const modMMhelpers = await import("mindmap-helpers");
-const modMdc = await import("util-mdc");
-const modColorConverter = await import("color-converter");
+const modMMhelpers = await importFc4i("mindmap-helpers");
+const modMdc = await importFc4i("util-mdc");
+const modColorConverter = await importFc4i("color-converter");
 
 // This creates a loop:
 // const modJsEditCommon = await import("jsmind-edit-common");
@@ -253,8 +253,8 @@ export class CustomRenderer4jsMind {
     // async updatePlainLink(node, eltJmnode) { debugger;}
 
     async editMindmapDialog(eltJmnode) {
-        const modJsEditCommon = await import("jsmind-edit-common");
-        const modIsDisplayed = await import("is-displayed");
+        const modJsEditCommon = await importFc4i("jsmind-edit-common");
+        const modIsDisplayed = await importFc4i("is-displayed");
         // theme
         const rend = await getOurCustomRenderer();
         // const jmD = rend.getJm();
@@ -320,7 +320,7 @@ export class CustomRenderer4jsMind {
         let allThemesContrastsChecked = false;
         async function checkThemesContrast(divThemeChoices) {
             if (allThemesContrastsChecked) return;
-            const modContrast = await import("acc-colors");
+            const modContrast = await importFc4i("acc-colors");
             setTimeout(() => {
                 try {
                     const markWithOutline = false;
@@ -417,7 +417,7 @@ export class CustomRenderer4jsMind {
         async function initBgMmTab() {
             if (bgTabInitialized) return;
             bgTabInitialized = true;
-            const modColorConverter = await import("color-converter");
+            const modColorConverter = await importFc4i("color-converter");
             const s = getComputedStyle(eltJmnodes.closest(".jsmind-inner"));
             const hex = modColorConverter.toHex6(s.backgroundColor);
             inpBgMmColor.value = hex;
@@ -431,7 +431,7 @@ export class CustomRenderer4jsMind {
                 funDebounceSomethingToSaveMm();
             }
             // sliBgOpacity = await modIsDisplayed.mkSliderInContainer(divBgOpacity, 0, 1, opacity, step, title, funChange);
-            const modIsDisplayed = await import("is-displayed");
+            const modIsDisplayed = await importFc4i("is-displayed");
             const iOpacity = Math.floor(100 * (opacity + 0.001));
             sliBgMmOpacity = await modIsDisplayed.mkSliderInContainer(
                 divBgOpSlider,
@@ -692,8 +692,8 @@ export class CustomRenderer4jsMind {
         });
     }
     async editNodeDialog(eltJmnode) {
-        const modJsEditCommon = await import("jsmind-edit-common");
-        const modIsDisplayed = await import("is-displayed");
+        const modJsEditCommon = await importFc4i("jsmind-edit-common");
+        const modIsDisplayed = await importFc4i("is-displayed");
 
         function somethingToSave() {
             return JSON.stringify(initialShapeEtc) != JSON.stringify(currentShapeEtc);
@@ -1149,7 +1149,7 @@ export class CustomRenderer4jsMind {
         });
         const pContrast = mkElt("p");
         async function checkColorContrast() {
-            const modContrast = await import("acc-colors");
+            const modContrast = await importFc4i("acc-colors");
             const contrast = modContrast.colorContrast(inpFgColor.value, inpBgColor.value);
             console.warn("checkColorContrast", contrast);
             if (contrast > 4.5) {
@@ -1666,7 +1666,7 @@ export class CustomRenderer4jsMind {
             const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
         }
         async function addBgFromClipboard(blob) {
-            const modImages = await import("images");
+            const modImages = await importFc4i("images");
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
                 modImages.alertHowToUnblockPermissions();

@@ -1,6 +1,6 @@
 // @ts-check
 const ERROR_VER = "0.0.1";
-console.log(`here is error.js ${ERROR_VER}`);
+console.log(`here is tools.js ${ERROR_VER}`);
 if (document.currentScript) { throw "error.js is not loaded as module"; }
 
 // https://firebase.google.com/docs/reference/js/firebase.auth.Error

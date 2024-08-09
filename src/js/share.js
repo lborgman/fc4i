@@ -138,7 +138,7 @@ function seconds2ymdhms(sec) {
     return { yy, mo, dd, hh, mi, ss }
 }
 async function OLDaskForReminders(onlyMatched) {
-    const modPWA = await import("pwa");
+    const modPWA = await importFc4i("pwa");
     const wb = await modPWA.getWorkbox();
     const matchValues = onlyMatched ? getHomeSearchValues() : undefined;
     wb.messageSW({ type: "CHECK_NOTIFY", msDelay: 2000, matchValues });
@@ -146,7 +146,7 @@ async function OLDaskForReminders(onlyMatched) {
 async function askForNotifySpecific(key, msDelay, afterMinutes, lbl, isShort) {
     // const msDelay = 10 * 1000;
     // const idEntry = "dummy";
-    const modPWA = await import("pwa");
+    const modPWA = await importFc4i("pwa");
     const wb = await modPWA.getWorkbox();
     wb.messageSW({ type: "NOTIFY_SPECIFIC", msDelay, key, afterMinutes, lbl, isShort });
 }
@@ -186,10 +186,10 @@ function checkRecordFields(record) {
 
 
 export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
-    const modMdc = await import("util-mdc");
-    const modIsDisplayed = await import("is-displayed");
-    const modClipboardImages = await import("images");
-    const modMMhelpers = await import("mindmap-helpers");
+    const modMdc = await importFc4i("util-mdc");
+    const modIsDisplayed = await importFc4i("is-displayed");
+    const modClipboardImages = await importFc4i("images");
+    const modMMhelpers = await importFc4i("mindmap-helpers");
     const divPasteImage = mkElt("div", { class: "div-paste-image" });
 
     if (record) checkRecordFields(record);
@@ -360,7 +360,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
         // btn.classList.add("mdc-theme-secondary");
         btn.classList.add("btn-add-image");
         btn.addEventListener("click", errorHandlerAsyncEvent(async evt => {
-            const modImages = await import("images");
+            const modImages = await importFc4i("images");
             debugPasteLine(`addPasteButton event 0`);
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
@@ -508,7 +508,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
                 const divAllTags = mkElt("div", { class: "tags-list" });
 
                 // const dbFc4i = await getDbFc4i();
-                const dbFc4i = await import("db-fc4i");
+                const dbFc4i = await importFc4i("db-fc4i");
                 let arrAllTags = await dbFc4i.getDbTagsArr();
                 const arrUnusedTags = await dbFc4i.getUnusedTags();
 
@@ -541,7 +541,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
 
                                     // const tags = await getDbTagsArr();
                                     // const dbFc4i = await getDbFc4i();
-                                    const dbFc4i = await import("db-fc4i");
+                                    const dbFc4i = await importFc4i("db-fc4i");
                                     const tags = await dbFc4i.getDbTagsArr();
 
                                     console.log({ tags });
@@ -599,7 +599,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
 
                 async function refreshArrAllTags() {
                     // const dbFc4i = await getDbFc4i();
-                    const dbFc4i = await import("db-fc4i");
+                    const dbFc4i = await importFc4i("db-fc4i");
                     const arrAllTags = await dbFc4i.getDbTagsArr();
                     return arrAllTags;
                 }
@@ -688,7 +688,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
         return detTags;
     }
     async function mkEltFlashcards() {
-        const modFlashcards = await import("flashcards");
+        const modFlashcards = await importFc4i("flashcards");
         // const icoQA = modMdc.mkMDCicon("question_answer");
         const icoQA = modMdc.mkMDCicon("quiz");
         icoQA.classList.add("mdc-theme--primary");
@@ -916,7 +916,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
         btnAdd2mmClipB.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             const key = btnAdd2mmClipB.closest(".container-remember").dataset.key;
             console.log("clicked add", key);
-            const modEditFc4iMM = await import("jsmind-edit-spec-fc4i");
+            const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
             modEditFc4iMM.addProviderFc4i();
             const objAdded = modMMhelpers.addJsmindCopied4Mindmap(key, "fc4i");
             modMMhelpers.dialogAdded2CustomClipboard(objAdded);
@@ -928,7 +928,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             const ans = await modMdc.mkMDCdialogConfirm("Create new mindmap with this item as root?");
             if (ans != true) return;
             const keyRec = btnAdd2mmClipB.closest(".container-remember").dataset.key;
-            const dbFc4i = await import("db-fc4i");
+            const dbFc4i = await importFc4i("db-fc4i");
             const rec = await dbFc4i.getDbKey(keyRec);
             debugger; // eslint-disable-line no-debugger
             const rootTopic = rec.title;
@@ -937,7 +937,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             d0.shapeEtc = {};
             d0.shapeEtc.nodeCustom = { key: keyRec, provider: "fc4i" };
             const keyMM = jsMindMap.meta.name;
-            const dbMindmaps = await import("db-mindmaps");
+            const dbMindmaps = await importFc4i("db-mindmaps");
             await dbMindmaps.DBsetMindmap(keyMM, jsMindMap);
             modMMhelpers.showMindmap(keyMM);
         }));
@@ -1001,7 +1001,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
     async function add2CustomClipboard(btnAdd) {
         const key = btnAdd.closest(".container-remember").dataset.key;
         console.log("clicked add", key);
-        const modEditFc4iMM = await import("jsmind-edit-spec-fc4i");
+        const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
         modEditFc4iMM.addProviderFc4i();
         const objAdded = modMMhelpers.addJsmindCopied4Mindmap(key, "fc4i");
         modMMhelpers.dialogAdded2CustomClipboard(objAdded);
@@ -1020,8 +1020,8 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             const key = btnFind.closest(".container-remember").dataset.key;
             console.log("clicked find", key);
             // searchMindmaps(key);
-            const modJsEditCommon = await import("jsmind-edit-common");
-            const modEditFc4iMM = await import("jsmind-edit-spec-fc4i");
+            const modJsEditCommon = await importFc4i("jsmind-edit-common");
+            const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
             modEditFc4iMM.addProviderFc4i();
             modJsEditCommon.dialogFindInMindMaps(key, "fc4i");
         }));
@@ -1133,7 +1133,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
         // const db = await getDb();
         // We now use val.key as db key
         // const res = await db.put(idbStoreName, val);
-        const dbFc4i = await import("db-fc4i");
+        const dbFc4i = await importFc4i("db-fc4i");
         const res = await dbFc4i.setDbKey(key, val);
         console.warn("saveNow", { res });
         myRemember.setSaveButtonState(false);
