@@ -701,7 +701,6 @@ export class CustomRenderer4jsMind {
 
         // updateCopiesSizes()
         const onAnyCtrlChange = debounce(applyToCopied);
-        // const onAnyCtrlChange = throttleTO(applyToCopied);
         function applyToCopied() {
             const changed = somethingToSave();
             console.warn("applyToCopied", changed);
@@ -2327,12 +2326,10 @@ export class CustomRenderer4jsMind {
             if (!btn) return;
             btn.disabled = !somethingToSave();
         }
-        // const throttleStateBtnSave = throttleTO(setStateBtnSave, 300);
         const debounceStateBtnSave = debounce(setStateBtnSave, 300);
         function requestSetStateBtnSave() { debounceStateBtnSave(); }
         requestSetStateBtnSave();
 
-        // const throttleUpdateCopiesSizes = throttleTO(updateCopiesSizes, 300);
         const debounceUpdateCopiesSizes = debounce(updateCopiesSizes, 300);
         function requestUpdateCopiesSizes() { debounceUpdateCopiesSizes(); }
 

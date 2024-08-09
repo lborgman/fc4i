@@ -8,6 +8,10 @@ const modCustRend = await importFc4i("jsmind-cust-rend");
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
 
+const modTools = await importFc4i("toolsJs");
+const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
+
+
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
 async function getDraggableNodes() {

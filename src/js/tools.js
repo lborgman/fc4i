@@ -1250,7 +1250,7 @@ function waitSeconds(sec) {
     My change to throttleTO() seems to convert it to a debounce()-version.
     But why the different callback function handling???
 */
-function throttleTO(fn, msDelay) {
+export function throttleTO(fn, msDelay) {
     let timeoutId;
     return function (...args) {
         if (timeoutId) {
