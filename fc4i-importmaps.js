@@ -1,4 +1,4 @@
-const FC4I_IMPORTMAPS_VER = "0.1.1";
+const FC4I_IMPORTMAPS_VER = "0.1.2";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
@@ -37,7 +37,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
-        // "errorJs": "./src/js/error.js",
+        "errorJs": "./src/js/error.js",
     };
     const elt = document.createElement("script");
     elt.type = "importmap";

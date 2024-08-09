@@ -2,6 +2,7 @@
 const COMMON_VER = "0.1.3";
 console.log(`here is common.js ${COMMON_VER}`);
 if (document.currentScript) { throw "common.js is not loaded as module"; }
+export { }  // make module
 
 /**
  * 
@@ -11,6 +12,11 @@ if (document.currentScript) { throw "common.js is not loaded as module"; }
 const importFc4i = (modId) => {
     return window["importFc4i"](modId);
 }
+
+const modErrorJs = await importFc4i("errorJs");
+const mkElt = modErrorJs.mkElt;
+const errorHandlerAsyncEvent = modErrorJs.errorHandlerAsyncEvent;
+const promiseDOMready = modErrorJs.promiseDOMready;
 
 let theExpanderWay = "setTimeout"; // ok
 // theExpanderWay = "await"; // ok
@@ -157,11 +163,19 @@ async function checkNotificationPermissions() {
 }
 
 
+/**
+ * 
+ * @param {string | HTMLElement} inner 
+ */
 function addDebugRow(inner) {
     const pRow = mkElt("p", undefined, inner);
     // const divDebug = document.getElementById("debug-section");
     divDebug.appendChild(pRow);
 }
+/**
+ * 
+ * @param {string} loc 
+ */
 function addDebugLocation(loc) {
     const inner = mkElt("a", { href: loc }, loc);
     addDebugRow(inner);
@@ -230,12 +244,22 @@ function toggleMenu() {
     eltExpander?.classList.toggle("expanded");
 }
 
+/**
+ * 
+ * @param {string} newPageId 
+ * @returns 
+ */
 function clearMainSection(newPageId) {
     const secMain = document.getElementById("main-section");
     while (secMain?.firstElementChild) { secMain.firstElementChild.remove(); }
     document.body.id = newPageId;
     return secMain;
 }
+
+/**
+ * 
+ * @param {string} key 
+ */
 async function justShowKey(key) {
     const secMain = clearMainSection("page-show-key");
     // const dbFc4i = await getDbFc4i();
@@ -259,24 +283,24 @@ async function justShowKey(key) {
         secMain?.appendChild(mkElt("p", undefined, pNotFound));
     }
 }
+
+/**
+ * 
+ * @param {string} key 
+ * @param {string=} timerInfo 
+ */
 async function showKeyToRemember(key, timerInfo) {
     const secMain = clearMainSection("page-show-key");
     // const dbFc4i = await getDbFc4i();
     const dbFc4i = await importFc4i("db-fc4i");
     const keyRec = await dbFc4i.getDbKey(key);
     console.log({ keyRec });
-    const style = [
-        "font-size: 1rem",
-        "color: wheat",
-        "background-color: purple"
-    ].join("; ");
+    // const style = [ "font-size: 1rem", "color: wheat", "background-color: purple" ].join("; ");
     const eltH = mkElt("div", undefined, [
         mkElt("div", {
-            // style, class: "mdc-card"
             class: "notification-header mdc-card"
         }, [
             mkElt("p", undefined, [
-
                 "Please try now to rememeber this. ",
                 "(Created more than ", `(${timerInfo})`, " ago.)",
             ]),
@@ -307,6 +331,12 @@ async function showKeyToRemember(key, timerInfo) {
     const eltRem = await modFc4iItems.mkEltInputRemember(keyRec, eltH);
     secMain?.appendChild(eltRem);
 }
+
+/**
+ * 
+ * @param {Blob} blob 
+ * @returns {HTMLSpanElement}
+ */
 function mkImageThumb(blob) {
     const eltImg = mkElt("span", { class: "image-bg-cover image-thumb-size" });
     const urlBlob = URL.createObjectURL(blob);
@@ -316,6 +346,11 @@ function mkImageThumb(blob) {
     return eltImg;
 }
 
+/**
+ * 
+ * @param {HTMLElement} rem 
+ * @param {HTMLDivElement} toDiv 
+ */
 async function appendRem(rem, toDiv) {
     const modMdc = await importFc4i("util-mdc");
     const card = modMdc.mkMDCcard();
@@ -560,6 +595,11 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
         // if (det) det.style.outline = "4px dotted red";
     });
 
+    /**
+     * @param {any[]} arrThatOlder
+     * @param {string} listTitle
+     * @param {any} cut
+     */
     function insertOlder(arrThatOlder, listTitle, cut) {
         let detThatOlder = detsOutput[listTitle];
         if (cut) {
@@ -1117,6 +1157,7 @@ const idLastSearch = "h-your-items";
 function getLastSearch() {
     const eltLastSearch = document.getElementById(idLastSearch);
     if (!eltLastSearch) return;
+    // @ts-expect-error
     return eltLastSearch.lastSearch;
 }
 function setLastSearch(objLastSearch) {
@@ -1129,6 +1170,8 @@ function setLastSearch(objLastSearch) {
     // divSearchBanner.lastSearch = { searchFor, minConf, maxConf, requiredTags }
     // setLastSearch( { searchFor, minConf, maxConf, requiredTags });
     const eltLastSearch = document.getElementById(idLastSearch);
+    if (!eltLastSearch) throw Error(`Could not find element "${idLastSearch}"`);
+    // @ts-ignore
     eltLastSearch.lastSearch = objLastSearch;
 }
 function mkNetwGraphURL() {
@@ -1244,9 +1287,9 @@ async function mkMenu() {
     // liTestJsMindarrayTree.classList.add("test-item");
 
 
-    const liGetReminders = modMdc.mkMDCmenuItem("Get reminders");
-    liGetReminders.addEventListener("click", evt => { OLDdisplayRemindersDialog(); });
-    liGetReminders.classList.add("test-item");
+    // const liGetReminders = modMdc.mkMDCmenuItem("Get reminders");
+    // liGetReminders.addEventListener("click", evt => { OLDdisplayRemindersDialog(); });
+    // liGetReminders.classList.add("test-item");
 
     // const liTestTimer = modMdc.mkMDCmenuItem("Test timer");
     // liTestTimer.addEventListener("click", evt => { testTimer(); })
@@ -2395,11 +2438,9 @@ async function dialog10min1hour(eltPrevFocused) {
 
     orderCompareReminders.push(...JSON.parse(settingOrderCompareReminders.value));
 
-    // resetOrderCompareReminders();
     function resetOrderCompareReminders() {
         settingOrderCompareReminders.reset();
         orderCompareReminders.length = 0;
-        // orderCompareReminders.push(...defaultOrderCompareReminders);
         orderCompareReminders.push(...JSON.parse(settingOrderCompareReminders.value));
     }
 
@@ -2575,7 +2616,6 @@ async function dialog10min1hour(eltPrevFocused) {
             if (JSON.stringify(Object.keys(funs).sort()) != JSON.stringify(orderCompareReminders.toSorted())) {
                 debugger; // eslint-disable-line no-debugger
             }
-            // console.log("5", {orderCompareReminders});
             for (let i = 0, len = orderCompareReminders.length; i < len; i++) {
                 const funName = orderCompareReminders[i];
                 const res = funs[funName];
@@ -2599,7 +2639,7 @@ async function dialog10min1hour(eltPrevFocused) {
                 if (msD1 > msD2) return 1;
                 return 0;
             }
-            function compareAge() {
+            function compareAge(t1, t2) {
                 const msW1 = t1.msWhen;
                 const msW2 = t2.msWhen;
                 if (msW1 < msW2) return -1;
@@ -2643,7 +2683,7 @@ async function askForReminders(onlyMatched) {
 }
 
 function getLink2KeyInFc4i(keyFc4i) {
-    const objUrl = new URL("/", location);
+    const objUrl = new URL("/", location.href);
     objUrl.searchParams.set("showkey", keyFc4i)
     return objUrl.href;
 }

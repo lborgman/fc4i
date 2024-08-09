@@ -1,10 +1,11 @@
-"use strict";
+// @ts-check
+const ERROR_VER = "0.0.1";
+console.log(`here is error.js ${ERROR_VER}`);
+if (document.currentScript) { throw "error.js is not loaded as module"; }
 
 // https://firebase.google.com/docs/reference/js/firebase.auth.Error
 
-// var theEasyCapEdVersion = "0.68.106";
-// var theSWcacheVersion = "> " + theEasyCapEdVersion;
-var theSWcacheVersion = "Fix this! (not known yet)";
+let theSWcacheVersion = "Fix this! (not known yet)";
 
 // https://dev.to/somedood/promises-and-events-some-pitfalls-and-workarounds-elp
 /** When awaited, this function blocks until the `event` fires once. */
@@ -48,7 +49,7 @@ const thePromiseDOMready = new Promise(function (resolve) {
     if (document.readyState === "interactive") return resolve();
     document.addEventListener("DOMContentLoaded", resolve);
 });
-async function promiseDOMready() { return thePromiseDOMready; }
+export async function promiseDOMready() { return thePromiseDOMready; }
 
 // FIXME: This pattern is a potential source of errors because 
 // obj.val === undefined is maybe not expected.
@@ -170,9 +171,20 @@ function wait4mutations(elt, ms, observeWhat, msMaxWait) {
     });
 }
 
-function mkElt(type, attrib, inner) {
-    var elt = document.createElement(type);
+/**
+ * 
+ * @param {string} type 
+ * @param {Object} attrib 
+ * @param {any} inner 
+ * @returns {HTMLElement}
+ */
+export function mkElt(type, attrib, inner) {
+    const elt = document.createElement(type);
 
+    /**
+     * 
+     * @param {HTMLElement | string} inr 
+     */
     function addInner(inr) {
         if (inr instanceof Element) {
             elt.appendChild(inr);
@@ -322,6 +334,7 @@ function isAndroidWebView() {
 }
 
 // let thisIsNetworkTrouble;
+window["alertError"] = alertError;
 function alertError(msg, e) {
     console.log("alertError", msg, e);
     console.log("e.thisIsNetWorkTrouble", e.thisIsNetworkTrouble);
@@ -1181,7 +1194,7 @@ async function popupDialog(title, body, severity) {
 // https://stackoverflow.com/questions/61080783/handling-errors-in-async-event-handlers-in-javascript-in-the-web-browser
 // Error handling with Async/Await in JS - ITNEXT
 // https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a
-function errorHandlerAsyncEvent(asyncFun) {
+export function errorHandlerAsyncEvent(asyncFun) {
     // console.warn("typeof asyncFun", typeof asyncFun);
     return function (evt) {
         asyncFun(evt).catch(err => {

@@ -1,5 +1,5 @@
 // @ts-check
-const INIT_ERROR_VER = "0.1.3";
+const INIT_ERROR_VER = "0.1.5";
 console.log(`here is init-error.js ${INIT_ERROR_VER}`);
 
 {
@@ -17,6 +17,10 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         }
         // @ts-ignore
         const { type, message, reason, filename, lineno } = evt;
+        if (window["alertError"]) {
+            window["alertError"](type, evt);
+            return;
+        }
         const msg = `${type}: ${message || reason}, ${filename || ""}:${lineno || ""} `;
         console.log("in displayError timeout", msg, evt);
         const dlg = document.createElement("dialog");
@@ -47,6 +51,7 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
     }
     window.addEventListener("error", evt => { displayError(evt); });
     window.addEventListener("unhandledrejection", evt => { displayError(evt); });
+    if (!document.currentScript) throw Error("init-error.js must not be loaded as a module");
 }
 
 // throw "Test error";
