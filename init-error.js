@@ -33,6 +33,19 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         // const msg = `${type}: ${message || reason}, ${filename || ""}:${lineno || ""} `;
         const msg = `${message || reason}`;
 
+        const divHints = document.createElement("div");
+        // Uncaught SyntaxError: Unexpected token 'export'
+        if (/SyntaxError/.test(msg)) {
+            const p = document.createElement("p");
+            p.textContent = "The file did not parse.";
+            divHints.appendChild(p);
+            if (/export/.test(msg)) {
+                const p = document.createElement("p");
+                p.textContent = "The file should probably be loaded as a module.";
+                divHints.appendChild(p);
+            }
+        }
+
         const dlg = document.createElement("dialog");
         const h2 = document.createElement("h2");
         dlg.appendChild(h2);
@@ -55,6 +68,9 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
             txtPre += `${filename || "No filename"}:${lineno || "No line number"} `;
         }
         pre.textContent = txtPre;
+
+        dlg.appendChild(divHints);
+
         const btn = document.createElement("button");
         const pBtn = document.createElement("p");
         pBtn.appendChild(btn);
@@ -75,6 +91,12 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         document.body.appendChild(dlg);
         dlg.showModal();
     };
+
+    /**
+     * 
+     * @param {ErrorEvent} evtError 
+     * @returns 
+     */
     const displayError = (evtError) => {
         if (document.readyState != "loading") { doDisplay(evtError); return; }
         document.addEventListener("DOMContentLoaded", () => { doDisplay(evtError); });
