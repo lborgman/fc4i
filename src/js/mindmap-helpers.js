@@ -3,16 +3,10 @@
 
 console.log("here is module mindmap-helpers.js");
 if (document.currentScript) throw Error("import .currentScript"); // is module
-// if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 const URL_MINDMAPS_PAGE = "/mm4i/mm4i.html";
 
-// async function getDbMindmaps() { return await import("db-mindmaps") }
-// async function getDbFc4i() { return await import("db-fc4i"); }
-// async function getJsmindCust() { return await import("jsmind-cust-rend"); }
-// async function getJsmindEditCommon() { return await import("jsmind-edit-common"); }
 
-// getJsmindCust();
 importFc4i("jsmind-cust-rend");
 
 

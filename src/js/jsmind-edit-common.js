@@ -4,21 +4,19 @@ console.log("here is module jsmind-edit-common.js", import.meta);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
-const modCustRend = await import("jsmind-cust-rend");
-const modMMhelpers = await import("mindmap-helpers");
-const modMdc = await import("util-mdc");
-// const modJsmind = await import("jsmind");
+const modCustRend = await importFc4i("jsmind-cust-rend");
+const modMMhelpers = await importFc4i("mindmap-helpers");
+const modMdc = await importFc4i("util-mdc");
 
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
 async function getDraggableNodes() {
-    return await import("new-jsmind.draggable-nodes");
+    return await importFc4i("new-jsmind.draggable-nodes");
 }
 
 let theCustomRenderer;
 async function setCustomRenderer() {
     if (theCustomRenderer) return;
-    // const modCustRend = await import("jsmind-cust-rend");
     theCustomRenderer = await modCustRend.getOurCustomRenderer();
 }
 
@@ -622,7 +620,7 @@ export async function pageSetup() {
             return url.href;
         }
         async function mkFabNetwG() {
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
             const iconHub = modMdc.mkMDCicon("hub");
 
             const aIconHub = mkElt("a", { href: "/nwg/netwgraph.html" }, iconHub);
@@ -1692,11 +1690,6 @@ export async function fixJmnodeProblem(eltJmnode) {
     const eltRendererImg = eltJmnode.lastElementChild;
     const eltTopic = eltJmnode.firstElementChild;
 
-    // const modCustRend = await import("jsmind-cust-rend");
-    // const { eltTxt, eltBg } = modCustom.NOaddJmnodeBgAndText(eltJmnode);
-    // const { eltTxt, eltBg } = getCustomRenderer().NOaddJmnodeBgAndText(eltJmnode);
-    // const { eltTxt, eltBg } = modCustRend.getOurCustomRenderer().NOaddJmnodeBgAndText(eltJmnode);
-    // const { eltTxt, eltBg } = theCustomRenderer().NOaddJmnodeBgAndText(eltJmnode);
     const { eltTxt, eltBg } = modCustRend.addJmnodeBgAndText(eltJmnode);
 
     if (isPlainNode) {
@@ -1957,8 +1950,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
     const funMkEltLinkMindmap =
         // (topic, mKey, mHits, provider) => modMMhelpers.mkEltLinkMindmapA(linkMindmapsPage, topic, mKey, mHits, provider);
         (topic, mKey, mHits, provider) => modMMhelpers.mkEltLinkMindmapA(topic, mKey, mHits, provider);
-    // const dbMindmaps = await getDbMindmaps();
-    const dbMindmaps = await import("db-mindmaps");
+    const dbMindmaps = await importFc4i("db-mindmaps");
 
     const showNew = !arrMindmapsHits;
 
@@ -2004,7 +1996,6 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
                 topic = (async () => {
                     const key = objCustom.key;
                     const provider = objCustom.provider;
-                    // const modCustRend = await import("jsmind-cust-rend");
                     const keyRec = await (await modCustRend.getOurCustomRenderer()).getCustomRec(key, provider);
                     return keyRec.title;
                 })();
@@ -2029,8 +2020,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
                 eltLi.style.opacity = 0;
                 eltLi.style.height = 0;
                 eltLi.style.scale = 0;
-                // const dbMindmaps = await getDbMindmaps();
-                const dbMindmaps = await import("db-mindmaps");
+                const dbMindmaps = await importFc4i("db-mindmaps");
                 dbMindmaps.DBremoveMindmap(m.key);
                 setTimeout(() => eltLi.remove(), 1000);
             }
@@ -2079,8 +2069,6 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
 }
 
 export async function dialogFindInMindMaps(key, provider) {
-    // const modCustRend = await import("jsmind-cust-rend");
-    // const renderer = await modCustRend.getOurCustomRenderer();
     const arrMindmapsHits = await modMMhelpers.getMindmapsHits(key);
     console.log({ arrMindmapsHits });
     if (arrMindmapsHits.length == 0) {

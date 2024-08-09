@@ -1,7 +1,7 @@
 console.log("fixBidImg.js here again!!!!!!!");
-const modImg = await import("images");
-const dbFc4i = await import("db-fc4i");
-const modMdc = await import("util-mdc");
+const modImg = await importFc4i("images");
+const dbFc4i = await importFc4i("db-fc4i");
+const modMdc = await importFc4i("util-mdc");
 
 const allRecs = await dbFc4i.getDbMatching();
 

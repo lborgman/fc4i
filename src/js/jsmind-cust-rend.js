@@ -16,7 +16,7 @@ const modMdc = await importFc4i("util-mdc");
 const modColorConverter = await importFc4i("color-converter");
 
 // This creates a loop:
-// const modJsEditCommon = await import("jsmind-edit-common");
+// const modJsEditCommon = await import( "jsmind-edit-common");
 
 
 
@@ -2500,7 +2500,6 @@ export async function getOurCustomRenderer() {
 }
 async function createOurCustomRenderer() {
     console.warn("createOurCustomRenderer");
-    // const modCustom = await import("jsmind-cust-rend");
     theCustomRenderer = new CustomRenderer4jsMind();
     return theCustomRenderer;
 }
@@ -2511,8 +2510,6 @@ export function setOurCustomRendererJmOptions(jmOptions) {
     theCustomRenderer.setJmOptions(jmOptions);
 }
 export async function ourCustomRendererAddProvider(providerRec) {
-    // const modCustom = await import("jsmind-cust-rend");
-    // const prov = new modCustom.providerDetails(providerRec)
     const prov = new providerDetails(providerRec)
     const custRend = await getOurCustomRenderer();
     custRend.addProvider(prov);

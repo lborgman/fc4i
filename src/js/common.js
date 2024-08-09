@@ -1076,7 +1076,7 @@ async function showAddedNew(sharedParams) {
     secMain?.appendChild(eltInpRem);
 }
 async function NOTUSEDNOWtestLogin() {
-    const modSignIn = await import("/src/js/mod/sign-in.js");
+    const modSignIn = await importFc4i("sign-in.js");
     console.log({ modSignIn });
     const i = await modSignIn.signIn();
 }
@@ -1259,7 +1259,7 @@ async function mkMenu() {
 
 
     async function fixSizes() {
-        import("../src/js/mod/fixBigImg.js").then(m => { const modX = m; modX.fix(); });
+        importFc4i("fixBigImg.js").then(m => { const modX = m; modX.fix(); });
     }
     const liFixSizes = modMdc.mkMDCmenuItem("Test fix image blob sizes");
     liFixSizes.addEventListener("click", evt => { fixSizes(); })

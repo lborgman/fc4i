@@ -8,12 +8,15 @@
     <meta name="author" content="Lennart Borgman">
     <meta name="description" content="Mindmaps web page that you can manipulate on your phone">
 
-    <base href=".">
+
+    <!-- See index.html -->
+    <base href="..">
     <script>console.log("baseURI", document.baseURI);</script>
     <script src="./init-error.js"></script>
     <script type="module" src="./pwa.js"></script>
-    <script type="module" src="./anchors-with-base.js" ></script>
+    <script type="module" src="./anchors-with-base.js"></script>
     <script src="./fc4i-importmaps.js"></script>
+    <script type="module" src="./src/js/tools.js"></script>
 
 
     <link rel="manifest" href="manifest-mm4i.json">
@@ -42,7 +45,6 @@
     <script src="/src/js/fc4i-importmaps.js"></script>
 
 
-    <script src="/src/js/tools.js"></script>
     <script src="/src/js/umd/idb.js"></script>
     <!-- <script src="./src/js/is-displayed.js"></script> -->
 
@@ -83,7 +85,6 @@
     <script src="/ext/mdc/material-components-web.js"></script>
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
 
-    <!-- <script>import("pwa");</script> -->
 
     <div id="jsmind_container" class="jsmind_container"></div>
 
@@ -92,10 +93,9 @@
 
     <script>
         (async () => {
-            const modEditFc4iMM = await import("jsmind-edit-spec-fc4i");
-            const modJsEditCommon = await import("jsmind-edit-common");
+            const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
+            const modJsEditCommon = await importFc4i("jsmind-edit-common");
             modJsEditCommon.basicInit4jsmind();
-            // modJsEditCommon.setMindmapDialog(modEditFc4iMM.ourDialogMindmaps);
             modJsEditCommon.pageSetup();
             modJsEditCommon.addToPageMenu("About", "/about.html#mm4i");
         })();

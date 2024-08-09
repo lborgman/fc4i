@@ -1,4 +1,4 @@
-const modMdc = await import("/src/js/mod/util-mdc.js");
+const modMdc = await importFc4i("/src/js/mod/util-mdc.js");
 
 const controller = new AbortController();
 const { signal } = controller;

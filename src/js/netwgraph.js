@@ -1,12 +1,10 @@
-import("pwa");
-
 // https://stackoverflow.com/questions/50360821/how-do-i-influence-link-distance-in-3d-force-graph
 // https://stackoverflow.com/questions/60072100/3d-force-graph-and-three-js-add-geometric-glow-atmospheric-material-simple
 // https://stackoverflow.com/questions/75798624/d3-force-graph-zoom-to-node
 // https://github.com/jackyzha0/quartz
 
 const debounceTriggerLinks = debounce(async () => {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     modMdc.mkMDCsnackbar("Updating links...");
     triggerUpdateLinksView();
 }, 1.5 * 1000);
@@ -94,13 +92,12 @@ const keySavedViews = "netwgviews-saved";
 
 const buildFrom = {};
 
-const modMdc = await import("util-mdc");
-// export function setMaterialIconClass(className) {
+const modMdc = await importFc4i("util-mdc");
 modMdc.setMaterialIconClass("material-symbols-outlined");
 
 console.warn("import d3");
-const modD3 = await import("d3");
-const dbFc4i = await import("db-fc4i");
+const modD3 = await importFc4i("d3");
+const dbFc4i = await importFc4i("db-fc4i");
 
 
 
@@ -112,7 +109,7 @@ const divLinkSettingsstyle = `
 `;
 
 
-const modLocalSettings = await import("local-settings");
+const modLocalSettings = await importFc4i("local-settings");
 
 class settingNetwG extends modLocalSettings.LocalSetting {
     constructor(key, defaultValue) {
@@ -595,7 +592,7 @@ async function getFc4iRecs() {
 
     const parMindmap = sp.get("mindmap");
     if (parMindmap) {
-        const modMMhelpers = await import("mindmap-helpers");
+        const modMMhelpers = await importFc4i("mindmap-helpers");
         mindmap = await modMMhelpers.getMindmap(parMindmap);
         let mindmapRootData;
         mindmap.data.forEach(d => {

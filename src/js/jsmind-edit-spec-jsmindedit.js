@@ -2,11 +2,9 @@ console.log("Here is module jsmind-edit-spec-jsmindedit.js");
 if (document.currentScript) throw Error("import .currentScript"); // is module
 if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
-// const modDb = await import("db-fc4i");
-// const modDb = await import("db-mindmaps");
-const modDb = await import("db-mindmaps");
+const modDb = await importFc4i("db-mindmaps");
 
-const modJsEditCommon = await import("jsmind-edit-common");
+const modJsEditCommon = await importFc4i("jsmind-edit-common");
 
 modDb.setDBprefix("jsmindedit-");
 

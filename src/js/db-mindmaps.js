@@ -8,7 +8,7 @@ if (!import.meta.url) throw Error("!import.meta.url"); // is module
 const useLocalStorage = false;
 const idbStoreMm = "mindmaps";
 let strPrefix = "jsmindmap-";
-const modIdbCmn = await import("idb-common");
+const modIdbCmn = await importFc4i("idb-common");
 
 export function setDBprefix(prefix) {
     strPrefix = prefix;

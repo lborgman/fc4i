@@ -72,12 +72,6 @@ let importWebJsonIf = async function () {
     // console.log("webJsonIf in fun", webJsonIf)
 };
 importWebJsonIf();
-/*
-import("./msj/webjsonif.mjs").then(module => {
-    webJsonIf = module.webJsonIf;
-    console.log("webJsonIf", webJsonIf)
-});
-*/
 
 
 // https://stackoverflow.com/questions/41802259/javascript-deep-check-objects-have-same-keys
@@ -1083,7 +1077,7 @@ async function popupDialog(title, body, severity) {
             {
                 (async () => {
                     try {
-                        const modPwa = await import("pwa");
+                        const modPwa = await importFc4i("pwa");
                         const btnUpdate = mkElt("button", undefined, "Update now");
                         const styleUpdate = "background:black; color:white; padding:10px; display: none;";
                         const divUpdate = mkElt("div", { style: styleUpdate }, ["Update available ", btnUpdate]);

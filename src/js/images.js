@@ -180,7 +180,7 @@ export async function alertHowToUnblockPermissions() {
             aUnblock
         ])
     ]);
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     modMdc.mkMDCdialogAlert(body);
 }
 
@@ -270,12 +270,12 @@ export async function alertNoImagesFound() {
             ]),
         ]),
     ]);
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     modMdc.mkMDCdialogAlert(bodyAlert);
 }
 
 export async function mkImageCard(blob, extraClass, debugInfo) {
-    const modMdc = await import("util-mdc");
+    const modMdc = await importFc4i("util-mdc");
     const eltImg = mkElt("span", { class: "image-bg-contain image-bg-size mdc-card" });
     // const toFun = typeof funCheckSave;
     // if (toFun != "function") throw Error(`funCheckSave is not funtion (${toFun})`);

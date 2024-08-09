@@ -70,7 +70,7 @@ export async function mkSliderInContainer(eltCont, min, max, now, step, label, o
     let sli = eltCont.querySelector("div.mdc-slider");
     if (!sli) {
         try {
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
             sli = await modMdc.mkMDCslider(min, max, now, step, label, onChange, onInput, disable);
             sli.classList.add("mdc-my-slider-colors-fix");
             await AddBeforeWhenContainerIsDisplayed(eltCont, sli);

@@ -11,6 +11,18 @@
     <!-- <link rel="manifest" href="manifest.json"> -->
     <meta name="theme-color" content="#c0ca33">
 
+
+    <!-- See index.html -->
+    <base href=".">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+    <script type="module" src="./pwa.js"></script>
+    <script type="module" src="./anchors-with-base.js"></script>
+    <script src="./fc4i-importmaps.js"></script>
+    <script type="module" src="./src/js/tools.js"></script>
+
+
+
     <title>Mindmaps (Jsmind + editing)</title>
     <link rel="icon" type="image/svg+xml" href="/img/rem10m1h.svg">
 
@@ -103,8 +115,8 @@
     <script>
         console.log("jsmind-edit.html");
         (async () => {
-            const modJsmindEdit = await import("/src/js/jsmind-edit-spec-jsmindedit.js");
-            const modJsEditCommon = await import("/src/js/jsmind-edit-common.js");
+            const modJsmindEdit = await importFc4i("jsmind-edit-spec-jsmindedit.js");
+            const modJsEditCommon = await importFc4i("jsmind-edit-common.js");
             modJsEditCommon.basicInit4jsmind();
             modJsEditCommon.setMindmapDialog(modJsmindEdit.ourDialogMindmaps);
             modJsEditCommon.pageSetup();

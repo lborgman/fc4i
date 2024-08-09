@@ -571,7 +571,7 @@ export function mkMDCcheckboxInput(id) {
     return inp;
 }
 export async function mkMDCcheckboxElt(inpCheckbox, label) {
-    const modMySvg = await import("my-svg");
+    const modMySvg = await importFc4i("my-svg");
     const svg = modMySvg.mkEltSvg("svg", {
         class: "mdc-checkbox__checkmark",
         viewBox: "0 0 24 24",
@@ -2379,7 +2379,7 @@ export function mkMDCsnackbar(msg, msTimeout, buttons) {
 */
 // FIXME: on, disabled
 export async function mkMDCswitch(on, disabled) {
-    const modMySvg = await import("my-svg");
+    const modMySvg = await importFc4i("my-svg");
     // <button id="basic-switch" class="mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
     // const eltSwitch = mkElt("button", { id: "basic-switch", class: "mdc-switch mdc-switch--unselected", type: "button", role: "switch", "aria-checked": "false" }, [
     const eltSwitch = mkElt("button", { id: "basic-switch", class: "mdc-switch", type: "button", role: "switch" }, [
