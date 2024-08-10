@@ -1,4 +1,4 @@
-const version = "1.6.1";
+const version = "1.6.2";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -156,7 +156,7 @@ let theEltVersion;
 const theFunVersionDefault = (ver) => {
     const eltVer = document.getElementById("PWA-version");
     if (!eltVer) {
-        logStrongConsole("could not find element #PWA-version");
+        logConsole("could not find element #PWA-version");
         return;
     }
     eltVer.textContent = ver;
@@ -280,7 +280,8 @@ async function loadNotCached() {
     } else {
         modNotCached.setPWAfuns(myFuns);
     }
-    logStrongConsole("loadNotCached", { modNotCached });
+    // logConsole("loadNotCached", { modNotCached });
+    addScreenDebugRow("loadNotCached");
 }
 
 export function tellMeVersionAgain() {

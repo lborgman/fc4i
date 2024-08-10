@@ -1,6 +1,6 @@
 // See pwa.js for documentation
 
-const version = "1.1.4";
+const version = "1.1.5";
 export function getVersion() { return version; }
 
 const doSwReset = false;
@@ -131,7 +131,8 @@ async function addDebugSWinfo() {
     const u = new URL(loc);
     u.pathname = "manifest.json";
     addDebugLocation(u.href);
-    logStrongConsole(`navigator.userAgentData.platform: ${navigator.userAgentData?.platform}`);
+    // logStrongConsole(`navigator.userAgentData.platform: ${navigator.userAgentData?.platform}`);
+    addScreenDebugRow(`navigator.userAgentData.platform: ${navigator.userAgentData?.platform}`);
 }
 
 async function checkPWA() {
