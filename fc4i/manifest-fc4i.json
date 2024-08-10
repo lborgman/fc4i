@@ -14,7 +14,7 @@
     "description": "Save web links to this app. Add study notes, flashcards, mindmaps and more.",
     "icons": [
         {
-            "src": "./img/fc4i.svg",
+            "src": "../img/fc4i.svg",
             "type": "image/svg+xml",
             "sizes": "any",
             "purpose": "any"
