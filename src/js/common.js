@@ -936,7 +936,9 @@ async function showIntro() {
         "color: white",
         "padding: 1rem"
     ];
-    const urlImgFb = "/img/f_logo_RGB-White_58.png";
+    // const urlImgFb = "/img/f_logo_RGB-White_58.png";
+    const url = new URL( "./img/f_logo_RGB-White_58.png", location.href);
+    const urlImgFb = url.href;
     const arrImgFbStyle = [
         "width: 30px",
         "float: left",
