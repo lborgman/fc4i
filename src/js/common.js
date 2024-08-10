@@ -1,5 +1,5 @@
 // @ts-check
-const COMMON_VER = "0.1.3";
+const COMMON_VER = "0.1.4";
 console.log(`here is common.js ${COMMON_VER}`);
 if (document.currentScript) { throw "common.js is not loaded as module"; }
 export { }  // make module
@@ -882,7 +882,13 @@ async function showIntro() {
             ")"
         ])
     );
-    setTimeout(async () => { const modPWA = await importFc4i("pwa"); modPWA.tellMeVersionAgain(); }, 0);
+    // setTimeout(async () => { const modPWA = await importFc4i("pwa"); modPWA.tellMeVersionAgain(); }, 0);
+    setTimeout(async () => {
+        // const modPWA = await import("./pwa.js");
+        const uPwa = new URL("./pwa.js", location.href);
+        const modPWA = await import(uPwa.href);
+        modPWA.tellMeVersionAgain();
+    }, 0);
     const pAbout = mkElt("p", undefined,
         `
     Are you like me trying to learn from a lot of different things you find on the internet?

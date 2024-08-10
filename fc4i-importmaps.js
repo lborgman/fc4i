@@ -1,4 +1,4 @@
-const FC4I_IMPORTMAPS_VER = "0.1.2";
+const FC4I_IMPORTMAPS_VER = "0.1.3";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
@@ -32,7 +32,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "mindmap-helpers": "./src/js/mindmap-helpers.js",
         "my-svg": "./src/js/mod/my-svg.js",
         "new-jsmind.draggable-nodes": "./ext/jsmind/new-jsmind.draggable-nodes.js",
-        "pwa": "./src/js/mod/pwa.js",
+        // "pwa": "./src/js/mod/pwa.js",
         "sharing-params": "./src/js/mod/sharing-params.js",
         "util-mdc": "./src/js/mod/util-mdc.js",
 
