@@ -167,8 +167,6 @@ export class CustomRenderer4jsMind {
             const oldBtn = eltJmnode.querySelector("a.jsmind-plain-link");
             oldBtn?.remove();
             const iconBtn = modMdc.mkMDCiconButton("link", "Visit web page");
-            // iconBtn.title = "Visit web page";
-            // iconBtn.classList.add("icon-button-40");
             iconBtn.classList.add("icon-button-30");
             const eltA3 = mkElt("a", { href: nodeLink, class: "jsmind-plain-link" }, iconBtn);
             eltJmnode.appendChild(eltA3);
@@ -181,8 +179,6 @@ export class CustomRenderer4jsMind {
             return;
             const eltParent = eltDiv.parentElement;
             eltDiv.remove();
-            // const btnURL = modMdc.mkMDCiconButton("link");
-            // const btnURL = modMdc.mkMDCbutton("");
             const btnURL = modMdc.mkMDCiconButton("");
             btnURL.title = "Go to this item in Fc4i (1)";
             btnURL.classList.add("icon-button-40");
@@ -615,10 +611,8 @@ export class CustomRenderer4jsMind {
                 "cursor: pointer",
                 "box-shadow: red 8px 8px 8px"
             ].join(";");
-            // const btnClose = modMdc.mkMDCiconButton("close");
             const eltPreviewInfo = mkElt("div", { style, class: "mdc-card" }, [
                 "Preview",
-                // btnClose
                 mkElt("div", { style: "font-size:0.8rem;" }, "Click to end preview")
             ]);
             eltPreviewInfo.title = "Click to end preview";
@@ -1322,7 +1316,7 @@ export class CustomRenderer4jsMind {
         inpImageUrl.addEventListener("input", async evt => {
             debounceCheckImageUrl();
         });
-        const btnNote = modMdc.mkMDCiconButton("info");
+        const btnNote = modMdc.mkMDCiconButton("info", "Test info");
         btnNote.style.verticalAlign = "top";
         btnNote.style.marginTop = "-10px";
         btnNote.addEventListener("click", errorHandlerAsyncEvent(async evt => {
@@ -1878,53 +1872,12 @@ export class CustomRenderer4jsMind {
                     divImage.textContent = "";
                     divImage.appendChild(divBgImage);
                 }
-
-
-                /*
-                const btnURL = modMdc.mkMDCiconButton("");
-                btnURL.title = "Go to this item in Fc4i (2)";
-                btnURL.classList.add("icon-button-40");
-                const bgImg = theCustomRenderer.getLinkRendererImage(provider);
-                btnURL.style.backgroundImage = `url(${bgImg})`;
-
-                const linkProvider = await r.getRecLink(key, provider);
-                const aURL = mkElt("a", { href: linkProvider }, btnURL);
-                aURL.classList.add("jsmind-renderer-img");
-                aURL.style.position = "unset";
-                // aURL.dataset.jsmindCustom = strCustom;
-
-
-                const divLinkProvInner = mkElt("div", undefined, [
-                    // btnCustomLink,
-                    aURL,
-                    providerName
-                ]);
-                const imgSize = 40; // 48
-                divLinkProvInner.style.display = "grid";
-                divLinkProvInner.style.gridTemplateColumns = `${imgSize}px 1fr`;
-                divLinkProvInner.style.gap = "10px";
-                // divShow.appendChild(divLinkProvInner);
-                const divLinkProv = document.getElementById("ednode-cust-link");
-                divLinkProv.textContent = "";
-                divLinkProv.appendChild(divLinkProvInner);
-
-                const stCL = eltCustomLink.style;
-                stCL.backgroundImage = `url(${r.getLinkRendererImage(objCopiedCustom.provider)})`;
-                stCL.backgroundSize = "cover";
-                stCL.width = imgSize;
-                stCL.height = imgSize;
-                stCL.border = "1px solid black";
-                stCL.borderRadius = "4px";
-                */
             } else {
-                // divShow.appendChild(mkElt("p", undefined, "No custom item selected."));
                 setTimeout(() => {
                     const divTitle = document.getElementById("ednode-cust-title");
                     divTitle.textContent = "(No custom item selected.)";
                     const divImage = document.getElementById("ednode-cust-image");
                     divImage.textContent = "";
-                    // const divLink = document.getElementById("ednode-cust-link");
-                    // divLink.textContent = "";
                 }, 1000);
             }
         }

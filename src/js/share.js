@@ -1008,13 +1008,10 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
     }
 
     function mkDivCustomCopy4Mindmaps() {
-        // const btnAdd = modMdc.mkMDCbutton("Copy to", "raised");
         const btnAdd = modMdc.mkMDCiconButton("content_copy", "Copy to");
-        // const aURLorig = modMdc.mkMDCiconButton("link", "Go to this item source page (aURLorig)");
         btnAdd.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             add2CustomClipboard(btnAdd);
         }));
-        // const btnFind = modMdc.mkMDCbutton("Find in", "raised");
         const btnFind = modMdc.mkMDCiconButton("search", "Find in mindmaps");
         btnFind.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             const key = btnFind.closest(".container-remember").dataset.key;
@@ -1174,12 +1171,10 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
         const tfURL = modMdc.mkMDCtextField("Link", inpURL, strUrl);
 
         const aURLorig = modMdc.mkMDCiconButton("link", "Go to this item source page (aURLorig)");
-        // aURLorig.title = "Go to this item source page (aURLorig)";
         aURLorig.classList.add("icon-button-40");
         aURLorig.classList.add(...themePrimary);
 
         const btnURL2 = modMdc.mkMDCiconButton("link", "Go to this item source page (btnURL2)");
-        // btnURL2.title = "Go to this item source page (btnURL2)";
         btnURL2.classList.add("icon-button-40");
         btnURL2.classList.add(...themePrimary);
         const aURL2 = mkElt("a", { href: "#" }, btnURL2);
@@ -1204,7 +1199,6 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
 
 
         const btnViewURL = modMdc.mkMDCiconButton("visibility_off", "View/hide source link");
-        // btnViewURL.title = "View/hide source link";
         btnViewURL.classList.add("icon-button-40");
         btnViewURL.addEventListener("click", evt => {
             const isDisplayed = !divURLlocked.classList.contains("display-none");
@@ -1232,7 +1226,6 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             }
         }
         const btnEditURL = modMdc.mkMDCiconButton("edit", "Edit source link");
-        // btnEditURL.title = "Edit source link";
         btnEditURL.classList.add("icon-button-40");
         btnEditURL.addEventListener("click", evt => {
             console.log("clicked btnEditURL");

@@ -735,7 +735,7 @@ export async function pageSetup() {
             }
         });
 
-        const btnCloseProvHits = modMdc.mkMDCiconButton("close");
+        const btnCloseProvHits = modMdc.mkMDCiconButton("clear", "Clear search hits");
         btnCloseProvHits.classList.add("icon-button-sized");
         btnCloseProvHits.addEventListener("click", evt => {
             const divInputs = document.getElementById("jsmind-search-inputs");
@@ -2010,7 +2010,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
     const arrPromLiMenu = arrToShow.map(async m => {
         // https://stackoverflow.com/questions/43033988/es6-decide-if-object-or-promise
         const topic = await Promise.resolve(m.topic);
-        const btnDelete = await modMdc.mkMDCiconButton("delete_forever");
+        const btnDelete = await modMdc.mkMDCiconButton("delete_forever", "Delete mindmap");
         btnDelete.addEventListener("click", errorHandlerAsyncEvent(async evt => {
             evt.stopPropagation();
             const eltQdelete = mkElt("span", undefined, ["Delete ", mkElt("b", undefined, topic)]);

@@ -123,13 +123,9 @@
 
             const eltInfoHeader = document.getElementById("info-header");
             const eltInfo = document.getElementById("info");
-            const btnInfo = modMdc.mkMDCiconButton("info");
+            const btnInfo = modMdc.mkMDCiconButton("info", "Show/hide info");
             btnInfo.style.color = "blue";
-            btnInfo.addEventListener("click", evt => {
-                // showInfo();
-                // setTimeout(() => btnInfo.remove(), 500);
-                toggleInfo();
-            })
+            btnInfo.addEventListener("click", evt => { toggleInfo(); });
             eltInfoHeader.appendChild(btnInfo);
 
             const sharedParams = modShPar.getOurSharedParams();

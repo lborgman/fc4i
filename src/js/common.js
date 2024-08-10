@@ -212,8 +212,7 @@ async function getMenu() {
 
         let eltFocusedBefore;
         // const btnReminders = modMdc.mkMDCbutton(spanIcons);
-        const btnReminders = modMdc.mkMDCiconButton(iconChecklist);
-        btnReminders.title = "Reminders";
+        const btnReminders = modMdc.mkMDCiconButton(iconChecklist, "Reminders");
 
         const eltSearchCheck = document.getElementById("header-search-check");
         eltSearchCheck?.appendChild(btnReminders);
@@ -514,9 +513,6 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
     spanNumTotal.style.opacity = 0.3;
     eltNumHits?.appendChild(spanNumTotal);
 
-    // const btnNetwG = modMdc.mkMDCiconButton("hub");
-    // eltSearchBanner.appendChild(btnNetwG);
-
     const fabNetwG = await mkFabNetwG(mkNetwGraphURL);
     fabNetwG.style.marginLeft = "30px";
 
@@ -700,7 +696,6 @@ async function goHome() {
 
 
 
-    // const btnSearch = modMdc.mkMDCiconButton("search", "search your items");
     const svgSearch = modMdc.mkMDCsvgIcon("search");
     const btnSearch = modMdc.mkMDCiconButton(svgSearch, "Search your items");
     btnSearch.classList.add("mdc-theme--secondary-bg");

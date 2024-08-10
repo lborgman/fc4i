@@ -394,7 +394,6 @@ async function showSavedViews(strSaved, fingerPrint) {
         const btnLoad = modMdc.mkMDCbutton("Load", "raised");
         const btnEdit = modMdc.mkMDCiconButton("edit", "Edit");
         const btnDelete = modMdc.mkMDCiconButton("delete_forever", "Delete");
-        // const btnBottom = modMdc.mkMDCiconButton("bottom_panel_open", "More");
         const btnMore = modMdc.mkMDCiconButton("expand_circle_down", "More");
         const btnLess = modMdc.mkMDCiconButton("expand_circle_up", "Less");
         const title = entrySaved.title;
@@ -730,7 +729,6 @@ function mkEltTagSelector(tag) {
     const eltChips = mkElt("span");
     eltChips.classList.add("chip-tags");
     function mkChip(iconName, ariaLabel) {
-        // const btn = modMdc.mkMDCiconButton(iconName, ariaLabel, chipFontSize);
         const btn = modMdc.mkMDCiconButton(iconName, ariaLabel);
         btn.classList.add("icon-button-30");
         btn.addEventListener("click", errorHandlerAsyncEvent(async evt => {
@@ -1582,7 +1580,6 @@ async function addDialogGraphButtons() {
         });
     }
     buildDivLinks();
-    // const btnLinks = modMdc.mkMDCiconButton("line_start"); // FIX-ME: does not show???
     const btnLinks = modMdc.mkMDCiconButton("settings", "Links appearance");
     btnLinks.id = "netwg-btn-links";
     btnLinks.addEventListener("click", evt => {
@@ -1604,17 +1601,6 @@ async function addDialogGraphButtons() {
         triggerUpdateLinksView();
     });
 
-    /*
-    const btnHilightNode = modMdc.mkMDCiconButton("highlight", "Highlight node (on click)");
-    btnHilightNode.addEventListener("click", evt => {
-        hilightOnNodeClick = !hilightOnNodeClick;
-        if (hilightOnNodeClick) {
-            btnHilightNode.style.color = "red";
-        } else {
-            btnHilightNode.style.color = "unset";
-        }
-    });
-    */
 
 
     const btnFitAll = modMdc.mkMDCiconButton("crop_free", "Zoom to fit all nodes");
@@ -2086,8 +2072,6 @@ function showNodeInfo(node) {
         transition-duration: ${secondsBottom}s;
     `;
 
-    // const btnMore = modMdc.mkMDCbutton("Tags...", "raised");
-    // const btnMore = modMdc.mkMDCiconButton("#", "raised");
     const iconTag = modMdc.mkMDCicon("tag");
     const btnMore = modMdc.mkMDCfab(iconTag, "Show tags", true);
     btnMore.addEventListener("click", evt => {

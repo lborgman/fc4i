@@ -228,8 +228,7 @@ async function mkDivOneCustomClip(objCustomClip) {
         const divBlob = mkElt("div", { class: "dialog-mindmaps-image" }, eltBlob);
         divClipInner.appendChild(divBlob);
     }
-    // const btnRemove = modMdc.mkMDCiconButton("delete_forever");
-    const btnRemove = modMdc.mkMDCiconButton("close");
+    const btnRemove = modMdc.mkMDCiconButton("close", "Remove from custom clips");
     btnRemove.classList.add("upper-left-remove-button");
     btnRemove.addEventListener("click", evt => {
         evt.stopPropagation();

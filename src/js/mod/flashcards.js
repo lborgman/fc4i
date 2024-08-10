@@ -38,9 +38,9 @@ class Flashcard {
 
 // https://3dtransforms.desandro.com/card-flip
 export async function mkEltFlashcard() {
-    const btnEdit = modMdc.mkMDCiconButton("edit");
+    const btnEdit = modMdc.mkMDCiconButton("edit", "Edit");
     btnEdit.classList.add("edit-flashcard");
-    const btnDelete = modMdc.mkMDCiconButton("delete_forever");
+    const btnDelete = modMdc.mkMDCiconButton("delete_forever", "Delete");
     btnDelete.classList.add("delete-flashcard");
     btnDelete.addEventListener("click", errorHandlerAsyncEvent(async evt => {
         evt.preventDefault();
