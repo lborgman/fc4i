@@ -1,4 +1,4 @@
-const FC4I_IMPORTMAPS_VER = "0.2.1";
+const FC4I_IMPORTMAPS_VER = "0.2.2";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
@@ -87,4 +87,4 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
     window.makeAbsLink = makeAbsLink;
 }
 
-console.log("END fc4i-importmaps");
+// console.log("END fc4i-importmaps");

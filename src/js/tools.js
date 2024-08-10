@@ -1,6 +1,6 @@
 // @ts-check
-const ERROR_VER = "0.0.3";
-console.log(`here is tools.js ${ERROR_VER}`);
+const TOOLS_VER = "0.0.4";
+console.log(`here is tools.js ${TOOLS_VER}`);
 if (document.currentScript) { throw "error.js is not loaded as module"; }
 
 // https://firebase.google.com/docs/reference/js/firebase.auth.Error
@@ -251,7 +251,7 @@ function mkButton(attrib, inner) {
 
 
 
-console.log("?????????? adding error event listener!"); // Just because things behave a bit strange sometimes.
+// console.log("?????????? adding error event listener!"); // Just because things behave a bit strange sometimes.
 
 // Put external URL:s here since we need them for error reporting.
 // const theGitHubIssuesURL = "https://github.com/lborgman/easy-cap-ed/issues";

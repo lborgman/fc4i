@@ -1,6 +1,6 @@
 // See pwa.js for documentation
 
-const version = "1.1.5";
+const version = "1.1.6";
 export function getVersion() { return version; }
 
 const doSwReset = false;
@@ -10,17 +10,16 @@ const logStyle = "background:yellowgreen; color:black; padding:2px; border-radiu
 const logStrongStyle = logStyle + " font-size:18px;";
 const styleInstallEvents = logStrongStyle + "color:red;";
 function logConsole(...msg) {
-    console.log(`%cpwa-nc.js`, logStyle, ...msg);
+    // console.log(`%cpwa-nc.js`, logStyle, ...msg);
 }
 function logStrongConsole(...msg) {
     console.log(`%cpwa-nc.js`, logStrongStyle, ...msg);
     addScreenDebugRow(...msg);
 }
-function warnConsole(...msg) { console.warn(`%cpwa-nc.js`, logStyle, ...msg); }
 function logInstallEvent(...msg) { console.log("%cpwa-nc", styleInstallEvents, ...msg); }
 
 
-logStrongConsole(`here is module pwa-not-cached.js, ${version}, ${import.meta.url}`);
+logStrongConsole(`here is pwa-not-cached.js, ${version}`);
 
 
 

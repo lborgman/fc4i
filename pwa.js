@@ -1,4 +1,4 @@
-const version = "1.6.3";
+const version = "1.6.4";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -208,7 +208,7 @@ if (await PWAonline()) {
 
 
 async function loadNotCached() {
-    console.log("loadNotCached");
+    logConsole("loadNotCached");
     if (modNotCached) return;
     const isOnLine = true;
     if (isOnLine) {
