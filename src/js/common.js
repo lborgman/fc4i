@@ -898,7 +898,8 @@ async function showIntro() {
         "height: 1.2rem",
         // "vertical-align: text-bottom",
         "vertical-align: middle",
-        "background-image: url(/img/192.png)",
+        // "background-image: url(/img/192.png)",
+        "background-image: url(/img/fc4i.svg)",
     ]
     const style = imgStyle.join("; ");
     const iconThisApp = mkElt("span", { style, class: "image-bg-cover" });

@@ -1,5 +1,5 @@
 //========== Specific ====================================================
-const SW_VERSION = "0.4.940";
+const SW_VERSION = "0.4.941";
 
 // https://www.npmjs.com/package/workbox-sw
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js');
@@ -388,7 +388,8 @@ function displayNotification(title, body, url) {
     const action = "display-url";
     const data = { url, action }
     const tag = "Flashcard 4 Internet";
-    const icon = "/img/192.png";
+    // const icon = "/img/192.png";
+    const icon = "/img/fc4i.svg";
     const options = {
         body, data, tag, icon
         // silent: true,
