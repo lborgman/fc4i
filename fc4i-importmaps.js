@@ -49,7 +49,17 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
     elt.textContent = JSON.stringify(objMap, null, 2);
     // document.currentScript.insertAdjacentElement("afterend", elt);
 
+    /**
+     * 
+     * @param {string} modId 
+     * @returns 
+     */
     const importFc4i = async (modId) => {
+        if (modId.startsWith("/")) throw Error(`modId should not start with / "${modId}`);
+        if (modId.startsWith(".")) {
+            const u = new URL(modId, location.href);
+            return await import(u.href);
+        }
         const relUrl = relImports[modId];
         if (relUrl == undefined) {
             throw Error(`modId "${modId}" is not known by importFc4i`);

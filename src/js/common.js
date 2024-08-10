@@ -884,10 +884,11 @@ async function showIntro() {
     );
     // setTimeout(async () => { const modPWA = await importFc4i("pwa"); modPWA.tellMeVersionAgain(); }, 0);
     setTimeout(async () => {
-        // const modPWA = await import("./pwa.js");
         const uPwa = new URL("./pwa.js", location.href);
-        const modPWA = await import(uPwa.href);
+        // const modPWA = await import(uPwa.href);
+        const modPWA = await importFc4i("./pwa.js");
         modPWA.tellMeVersionAgain();
+        // const m = await import("./pwa.js");
     }, 0);
     const pAbout = mkElt("p", undefined,
         `
@@ -937,7 +938,7 @@ async function showIntro() {
         "padding: 1rem"
     ];
     // const urlImgFb = "/img/f_logo_RGB-White_58.png";
-    const url = new URL( "./img/f_logo_RGB-White_58.png", location.href);
+    const url = new URL("./img/f_logo_RGB-White_58.png", location.href);
     const urlImgFb = url.href;
     const arrImgFbStyle = [
         "width: 30px",
