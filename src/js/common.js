@@ -892,16 +892,15 @@ async function showIntro() {
     `);
     const iconShare = modMdc.mkMDCicon("share");
     iconShare.style.fontSize = "1rem";
-    // iconShare.style.verticalAlign = "text-bottom";
     iconShare.style.verticalAlign = "middle";
+    const urlFc4iSvg = makeAbsLink("./img/fc4i.svg");
+    console.log({ urlFc4iSvg });
     const imgStyle = [
         "display: inline-block",
         "width: 1.2rem",
         "height: 1.2rem",
-        // "vertical-align: text-bottom",
         "vertical-align: middle",
-        // "background-image: url(/img/192.png)",
-        "background-image: url(./img/fc4i.svg)",
+        `background-image: url(${urlFc4iSvg})`,
     ]
     const style = imgStyle.join("; ");
     const iconThisApp = mkElt("span", { style, class: "image-bg-cover" });
@@ -932,9 +931,8 @@ async function showIntro() {
         "color: white",
         "padding: 1rem"
     ];
-    // const urlImgFb = "/img/f_logo_RGB-White_58.png";
-    const url = new URL("./img/f_logo_RGB-White_58.png", location.href);
-    const urlImgFb = url.href;
+    const url = makeAbsLink("./img/f_logo_RGB-White_58.png");
+    const urlImgFb = url;
     const arrImgFbStyle = [
         "width: 30px",
         "float: left",
@@ -1044,7 +1042,10 @@ async function showIntro() {
             Just click that to check for reminders.`,
         ]),
         mkElt("p", undefined,
-            mkElt("img", { src: "/img/btn-check-reminders.png", width: "50%" })),
+            mkElt("img", {
+                src: makeAbsLink("./img/btn-check-reminders.png"),
+                width: "50%"
+            })),
     ]);
     const divDarkSide = mkElt("div", { id: "div-dark-side", class: "mdc-card" }, [
         mkElt("h2", undefined, "The dark side - Technology"),
