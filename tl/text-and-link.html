@@ -9,11 +9,26 @@
     <!-- This page © Copyright 2023, Lennart Borgman -->
     <meta name="author" content="Lennart Borgman">
     <meta name="description" content="Get shared title, text and link">
-    <link rel="manifest" href="/tl/manifest-tl.json">
     <meta name="theme-color" content="#c0ca33">
 
+
+
+    <!-- See index.html -->
+    <base href="..">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+    <script type="module" src="./pwa.js"></script>
+    <script type="module" src="./anchors-with-base.js"></script>
+    <script src="./fc4i-importmaps.js"></script>
+    <script type="module" src="./src/js/tools.js"></script>
+
+
+
+
+
     <title>Text+link</title>
-    <link rel="icon" type="image/svg+xml" href="/img/tl.svg">
+    <link rel="icon" type="image/svg+xml" href="./img/tl.svg">
+    <link rel="manifest" href="./tl/manifest-tl.json">
 
 
     <!-- for MWC, https://github.com/material-components/material-web -->
@@ -25,18 +40,16 @@
 
     <!-- Required styles for Material Web -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
-    <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css">
+    <link rel="stylesheet" href="./ext/mdc/14.0.0/material-components-web.css">
 
     <!--
     <link rel="stylesheet" type="text/css" href="assets/style-aaa58175.css">
     -->
-    <link rel="stylesheet" href="/css/rem10m1h.css">
-    <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
+    <link rel="stylesheet" href="./css/rem10m1h.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="./css/var-colors.css">
 
 
-    <script src="/src/js/fc4i-importmaps.js"></script>
 
-    <script src="/src/js/tools.js"></script>
     <!-- <script src="/src/js/umd/idb.js"></script> -->
 
     <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
@@ -73,9 +86,8 @@
     <section id="main-section"></section>
 
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
-    <script src="/ext/mdc/material-components-web.js"></script>
+    <script src="./ext/mdc/material-components-web.js"></script>
     <!-- <script type="module" src="pwa"></script> -->
-    <script>import("pwa");</script>
 
     <!-- <script src="/src/js/common.js"></script> -->
     <!-- <script src="./src/js/is-displayed.js"></script> -->
@@ -95,7 +107,7 @@
         <span id="header-search-check"></span>
     </header>
     <p id="info-header">
-        <img src="/img/tl.svg" height="100" />
+        <img src="./img/tl.svg" height="100" />
     </p>
     <div id="info" class="display-none">
         <p>
@@ -111,7 +123,7 @@
         </p>
         <p id="info-fc4i">
             Note: This web page is a part of
-            <a href="/fc4i/fc4i.html">Flashcards 4 Internet</a>.
+            <a href="./fc4i/fc4i.html">Flashcards 4 Internet</a>.
         </p>
     </div>
     <div id="output"> </div>
@@ -121,8 +133,8 @@
         eltTitle.textContent = "Text+Link";
 
         (async () => {
-            const modMdc = await import("util-mdc");
-            const modShPar = await import("sharing-params");
+            const modMdc = await importFc4i("util-mdc");
+            const modShPar = await importFc4i("sharing-params");
 
             const eltInfoHeader = document.getElementById("info-header");
             const eltInfo = document.getElementById("info");
