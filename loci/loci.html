@@ -10,8 +10,22 @@
     <!-- <link rel="manifest" href="manifest-loci.json"> -->
     <meta name="theme-color" content="#c0ca33">
 
+
+
+    <!-- See index.html -->
+    <base href="..">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+    <script type="module" src="./pwa.js"></script>
+    <script type="module" src="./anchors-with-base.js"></script>
+    <script src="./fc4i-importmaps.js"></script>
+    <script type="module" src="./src/js/tools.js"></script>
+
+
+
     <title>Memory Palace 4 Internet</title>
-    <link rel="icon" type="image/svg+xml" href="/img/loci.svg">
+    <link rel="icon" type="image/svg+xml" href="./img/loci.svg">
+
 
 
     <!-- for MWC, https://github.com/material-components/material-web -->
@@ -25,21 +39,18 @@
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.css">
     <!-- <link rel="stylesheet" href="/ext/mdc/14.0.0/material-components-web.css"> -->
 
-    <link rel="stylesheet" href="/css/rem10m1h.css">
-    <link rel="stylesheet" href="/css/jsmind-edit.css">
-    <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
+    <link rel="stylesheet" href="./css/rem10m1h.css">
+    <link rel="stylesheet" href="./css/jsmind-edit.css">
+    <link id="jsmind-my-colors" rel="stylesheet" href="./css/var-colors.css">
 
 
-    <script src="/src/js/fc4i-importmaps.js"></script>
 
-
-    <script src="/src/js/tools.js"></script>
-    <script src="/src/js/umd/idb.js"></script>
+    <script src="./src/js/umd/idb.js"></script>
     <!-- <script src="./src/js/is-displayed.js"></script> -->
 
 
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@0.5/style/jsmind.css" /> -->
-    <link rel="stylesheet" href="/ext/jsmind/jsmind.css" />
+    <link rel="stylesheet" href="./ext/jsmind/jsmind.css" />
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script> -->
@@ -53,10 +64,10 @@
     <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
 
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" /> -->
-    <link rel="stylesheet" href="/ext/pannellum/pannellum.css" />
+    <link rel="stylesheet" href="./ext/pannellum/pannellum.css" />
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script> -->
-    <script type="text/javascript" src="/ext/pannellum/libpannellum.js"></script>
-    <script type="text/javascript" src="/ext/pannellum/pannellum.js"></script>
+    <script type="text/javascript" src="./ext/pannellum/libpannellum.js"></script>
+    <script type="text/javascript" src="./ext/pannellum/pannellum.js"></script>
     <style>
         .my-hotspot-div {
             padding: 10px;
@@ -112,7 +123,6 @@
     </div>
 
     <script>
-        import("pwa");
         // https://pannellum.org/
         const devMaxWebGlW = 8192; // FIX-ME: This is from Pixel 7
         let srcImgOrig;
@@ -193,7 +203,7 @@
             const shrinkLength = shrinkArea ? Math.sqrt(shrinkArea) : 1;
 
             // MAX_TEXTURE_SIZE
-            const modImages = await import("images");
+            const modImages = await importFc4i("images");
             const tofSrcImg = typeof srcImg;
             if (tofSrcImg != "string") throw Error(`typeof srcImg=="${tofSrcImg}", should be "string")`);
 
@@ -270,7 +280,10 @@
             });
         }
         (async () => {
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
+            const modTools = await importFc4i("toolsJs");
+            const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
+
             const immages = [
                 "https://pannellum.org/images/alma.jpg",
                 new URL("./testimg/PANO1.jpg", location),
@@ -386,8 +399,8 @@
                 });
             }
             async function dialogChooseImage4Panorama() {
-                const modImages = await import("images");
-                const debounceUpdateBlobAndPreview = debounce(updateBlobAndPreview, 2000);
+                const modImages = await importFc4i("images");
+                const debounceUpdateBlobAndPreview = modTools.debounce(updateBlobAndPreview, 2000);
                 const wrappedDebounceUpdateBlobAndPreview =
                     () => {
                         console.warn("wrapped");
@@ -408,7 +421,7 @@
                         console.log(`dialogAddImage ${pos}`, msElapsed);
                     }
                     mkTimestamp("0");
-                    const modImages = await import("images");
+                    const modImages = await importFc4i("images");
                     modMdc.mkMDCsnackbar("Fetching clipboard image...", 9 * 1000);
                     const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
                     if (clipboardAccessOk == false) {
@@ -548,7 +561,8 @@
                         };
                         setSaveState("ready");
                         if (!xmpOrig && !sizesOrig.equirect) {
-                            const modPannellum2d = await import("/ext/pannellum/pannellum2d.js");
+                            // const modPannellum2d = await import("/ext/pannellum/pannellum2d.js");
+                            const modPannellum2d = await importFc4i("pannellum2d");
                             const config = {
                                 src: outObjUrl,
                                 imgSizes: sizesOrig,
@@ -925,12 +939,13 @@
                 eltTitle.textContent = objHotspotGrp4panorama.subjGrp;
                 if (!xmp) {
                     debugger; // eslint-disable-line no-debugger
-                    const modPannellum2d = import("/ext/pannellum/pannellum2d.js");
+                    // const modPannellum2d = import("/ext/pannellum/pannellum2d.js");
+                    const modPannellum2d = importFc4i("pannellum2d");
                     debugger; // eslint-disable-line no-debugger
                     return;
                 }
 
-                const modImages = await import("images");
+                const modImages = await importFc4i("images");
                 const sizesImg = await modImages.getImgSizes(srcPanorama);
                 if (sizesImg.naturalWidth > devMaxWebGlW) {
                     debugger; // eslint-disable-line no-debugger
@@ -1078,7 +1093,7 @@
             const tn = divValues.tagName;
             if (tn != "DIV") throw Error(`Expeced DIV, got ${tn}`);
             if (!divValues.parentElement) throw Error("divValues.parentElement is null");
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
             const divPanorama = document.getElementById("panorama");
             const hotspotGrpKey = divPanorama.dataset.hotspotGrpKey
             const json = JSON.parse(localStorage.getItem(hotspotGrpKey));
@@ -1201,7 +1216,7 @@
             div.dataset.hotspotId = hs.id;
             // div.dataset.hotspotGrpKey = config.hotspotGrpKey;
             // origCreateTooltipFunc();
-            const modMdc = await import("util-mdc");
+            const modMdc = await importFc4i("util-mdc");
 
             const btnClose = modMdc.mkMDCiconButton("close", "Close");
             btnClose.classList.add("icon-button-30");

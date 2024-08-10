@@ -38,6 +38,8 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 
         // Tests:
         "toolsJs": "./src/js/tools.js",
+
+        "pannellum2d": "./ext/pannellum/pannellum2d.js",
     };
     const elt = document.createElement("script");
     elt.type = "importmap";
