@@ -1,6 +1,6 @@
-console.log("here is module sharing-params.js");
-if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
+const version = "0.1.1";
+console.log(`here is module sharing-params.js ${version}`);
+if (document.currentScript) throw Error("Should be imported, is module"); // is module
 
 // https://developer.chrome.com/articles/web-share-target/
 // https://web.dev/web-share/

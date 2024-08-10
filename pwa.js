@@ -1,4 +1,4 @@
-const version = "1.6.4";
+const version = "1.6.5";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -79,14 +79,12 @@ const version = "1.6.4";
         https://github.com/lborgman/hour
 */
 
-window["pwa.js loaded"] = true;
-
 const logStyle = "background:yellowgreen; color:black; padding:2px; border-radius:2px;";
 const logStrongStyle = logStyle + " font-size:18px;";
 function logConsole(...msg) { console.log(`%cpwa.js`, logStyle, ...msg); }
 function logStrongConsole(...msg) { console.log(`%cpwa.js`, logStrongStyle, ...msg); }
 
-logStrongConsole("Here is pwa.js, ver 3", import.meta.url);
+logStrongConsole(`Here is module pwa.js, ${version}`, import.meta.url);
 
 
 const idDebugSection = "pwa-debug-output";
