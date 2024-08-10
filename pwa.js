@@ -1,4 +1,4 @@
-const version = "1.6.2";
+const version = "1.6.3";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -213,8 +213,7 @@ async function loadNotCached() {
     const isOnLine = true;
     if (isOnLine) {
         urlPWA.pathname = urlPWA.pathname.replace("pwa.js", "pwa-not-cached.js");
-        const ncVal = new Date().toISOString().slice(0, -5);
-        urlPWA.searchParams.set("nocache", ncVal);
+        urlPWA.searchParams.set("PWAnocacheRand", getRandomString());
         let hrefNotCached = urlPWA.href;
 
         // Browsers return TypeError when module is not found. Strange, but...
@@ -620,6 +619,7 @@ async function promptForUpdate(waitingVersion) {
 }
 
 
+function getRandomString() { return Math.random().toString(36).substring(2, 15) }
 
 // https://dev.to/maxmonteil/is-your-app-online-here-s-how-to-reliably-know-in-just-10-lines-of-js-guide-3in7
 // Saving this, looks useful...
@@ -630,17 +630,16 @@ export async function PWAonline() {
     const url = new URL(window.location.origin)
 
     // random value to prevent cached responses
-    function getRandomString() { return Math.random().toString(36).substring(2, 15) }
-    url.searchParams.set('PWArand', getRandomString())
+    url.searchParams.set('PWAonlineRand', getRandomString())
     let urlHref = url.href;
-    console.trace("PWAonline: try to fetch", urlHref);
+    // console.trace("PWAonline: try to fetch", urlHref);
 
     try {
         const response = await fetch(urlHref, { method: 'HEAD' },)
-        console.log(`PWAonline, (any response is actually ok here) response.ok: ${response.ok}`)
+        console.log(`PWAonline is online, (any response is actually ok here) response.ok: ${response.ok}`)
         return true;
     } catch {
-        console.log("PWAonline: didn't get response");
+        console.log("PWAonline not online: didn't get response");
         return false
     }
 }
