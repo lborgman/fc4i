@@ -14,7 +14,7 @@
     "description": "Save links by sharing to this app. Add study notes, flashcards and reminders.",
     "icons": [
         {
-            "src": "/img/fc4i.svg",
+            "src": "./img/fc4i.svg",
             "type": "image/svg+xml",
             "sizes": "any",
             "purpose": "any"
