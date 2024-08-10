@@ -1,0 +1,26 @@
+{
+    "short_name": "Network Graph View 4 Internet",
+    "name": "Network Graph View 4 Internet",
+    "description": "Network graph that can link to fc4i items and web pages",
+    "icons": [
+        {
+            "src": "/img/nwg.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "/nwg/netwgraph.html",
+    "scope": "/nwg",
+    "display": "standalone",
+    "background_color": "olive",
+    "theme_color": "olive",
+    "categories": [
+        "education",
+        "productivity",
+        "utilities"
+    ],
+    "dir": "ltr",
+    "lang": "en",
+    "orientation": "portrait"
+}

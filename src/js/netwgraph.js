@@ -3,8 +3,12 @@
 // https://stackoverflow.com/questions/75798624/d3-force-graph-zoom-to-node
 // https://github.com/jackyzha0/quartz
 
-const debounceTriggerLinks = debounce(async () => {
-    const modMdc = await importFc4i("util-mdc");
+const modMdc = await importFc4i("util-mdc");
+const modTools = await importFc4i("toolsJs");
+const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
+
+
+const debounceTriggerLinks = modTools.debounce(() => {
     modMdc.mkMDCsnackbar("Updating links...");
     triggerUpdateLinksView();
 }, 1.5 * 1000);
@@ -92,7 +96,6 @@ const keySavedViews = "netwgviews-saved";
 
 const buildFrom = {};
 
-const modMdc = await importFc4i("util-mdc");
 modMdc.setMaterialIconClass("material-symbols-outlined");
 
 console.warn("import d3");
@@ -173,7 +176,7 @@ eltHighlightTag.style = `
     background-color: ${highlightTagColor};
     transition: right 0.7s;
 `;
-thePromiseDOMready.then(() => { document.body.appendChild(eltHighlightTag); });
+modTools.promiseDOMready().then(() => { document.body.appendChild(eltHighlightTag); });
 eltHighlightTag.addEventListener("click", evt => setHighlightTag());
 function hideHighlightTag() {
     const bcr = eltHighlightTag.getBoundingClientRect();
@@ -1698,7 +1701,7 @@ async function addDialogGraphButtons() {
         display: none;
     `;
     (async () => {
-        await promiseDOMready();
+        await modTools.promiseDOMready();
         hideOrShowBtnRight();
     })();
 
@@ -1928,7 +1931,7 @@ async function dialogLinks() {
 */
 async function setupGraphDisplayer(opt) {
     const funGraph = ForceGraph3D(opt);
-    await promiseDOMready();
+    await modTools.promiseDOMready();
     const elt3dGraph = document.getElementById('the3d-graph-container');
     setGraphSize();
     function adjustAfterResize() {

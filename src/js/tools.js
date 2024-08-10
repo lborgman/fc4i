@@ -1,5 +1,5 @@
 // @ts-check
-const ERROR_VER = "0.0.1";
+const ERROR_VER = "0.0.2";
 console.log(`here is tools.js ${ERROR_VER}`);
 if (document.currentScript) { throw "error.js is not loaded as module"; }
 
@@ -1278,7 +1278,7 @@ function throttleRA(fn) {
 }
 
 // From https://garden.bradwoods.io/notes/javascript/performance/debounce-throttle
-function debounce(callback, waitMS = 200) {
+export function debounce(callback, waitMS = 200) {
     let timeoutId;
 
     return function (...args) {
