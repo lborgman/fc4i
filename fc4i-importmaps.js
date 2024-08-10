@@ -1,4 +1,4 @@
-const FC4I_IMPORTMAPS_VER = "0.2.2";
+const FC4I_IMPORTMAPS_VER = "0.2.3";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
@@ -81,7 +81,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
      */
     const makeAbsLink = (relLink) => {
         if (relLink.startsWith("/")) throw Error(`relLink should not start with "/" "${relLink}`);
-        const u = new URL(relLink, location.href);
+        const u = new URL(relLink, document.baseURI);
         return u.href;
     }
     window.makeAbsLink = makeAbsLink;
