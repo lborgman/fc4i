@@ -37,10 +37,8 @@ let ourUrlSW;
 const urlModule = new URL(import.meta.url);
 const params = [...urlModule.searchParams.keys()];
 const parNc = "PWAnocacheRand"
-if (params.length != 1 || params[0] != parNc) { throw Error(`Should be only 1 parameter, "${parNc}"`); }
+if (params.length != 1 || params[0] != parNc) { console.error(`Should be only 1 parameter, "${parNc}"`); }
 
-if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 
 
