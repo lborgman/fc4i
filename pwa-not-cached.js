@@ -10,7 +10,7 @@ const logStyle = "background:yellowgreen; color:black; padding:2px; border-radiu
 const logStrongStyle = logStyle + " font-size:18px;";
 const styleInstallEvents = logStrongStyle + "color:red;";
 function logConsole(...msg) {
-    // console.log(`%cpwa-nc.js`, logStyle, ...msg);
+    console.log(`%cpwa-nc.js`, logStyle, ...msg);
 }
 function logStrongConsole(...msg) {
     console.log(`%cpwa-nc.js`, logStrongStyle, ...msg);

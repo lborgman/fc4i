@@ -1,4 +1,4 @@
-const FC4I_IMPORTMAPS_VER = "0.1.3";
+const FC4I_IMPORTMAPS_VER = "0.2.1";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
@@ -41,32 +41,50 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 
         "pannellum2d": "./ext/pannellum/pannellum2d.js",
     };
-    const elt = document.createElement("script");
-    elt.type = "importmap";
-    const objMap = {
-        imports: relImports
-    }
-    elt.textContent = JSON.stringify(objMap, null, 2);
-    // document.currentScript.insertAdjacentElement("afterend", elt);
+    /*
+        It looks like you can't reliable use importmap this way:
+
+        const elt = document.createElement("script");
+        elt.type = "importmap";
+        const objMap = {
+            imports: relImports
+        }
+        elt.textContent = JSON.stringify(objMap, null, 2);
+        document.currentScript.insertAdjacentElement("afterend", elt);
+    */
 
     /**
      * 
-     * @param {string} modId 
+     * @param {string} idOrLink 
      * @returns 
      */
-    const importFc4i = async (modId) => {
-        if (modId.startsWith("/")) throw Error(`modId should not start with / "${modId}`);
-        if (modId.startsWith(".")) {
-            const u = new URL(modId, location.href);
-            return await import(u.href);
+    const importFc4i = async (idOrLink) => {
+        if (idOrLink.startsWith("/")) throw Error(`idOrLink should not start with "/" "${idOrLink}`);
+        if (idOrLink.startsWith(".")) {
+            // FIX-ME: why is this necessary when using <base ...>?
+            // const u = new URL(idOrLink, location.href);
+            // return await import(u.href);
+            return await import(makeAbsLink(idOrLink));
         }
-        const relUrl = relImports[modId];
+        const relUrl = relImports[idOrLink];
         if (relUrl == undefined) {
-            throw Error(`modId "${modId}" is not known by importFc4i`);
+            throw Error(`modId "${idOrLink}" is not known by importFc4i`);
         }
         return import(relUrl);
     }
     window.importFc4i = importFc4i;
+
+    /**
+     * 
+     * @param {string} relLink 
+     * @returns {string}
+     */
+    const makeAbsLink = (relLink) => {
+        if (relLink.startsWith("/")) throw Error(`relLink should not start with "/" "${relLink}`);
+        const u = new URL(relLink, location.href);
+        return u.href;
+    }
+    window.makeAbsLink = makeAbsLink;
 }
 
 console.log("END fc4i-importmaps");
