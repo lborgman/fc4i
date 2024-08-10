@@ -1,5 +1,5 @@
 // @ts-check
-const ERROR_VER = "0.0.2";
+const ERROR_VER = "0.0.3";
 console.log(`here is tools.js ${ERROR_VER}`);
 if (document.currentScript) { throw "error.js is not loaded as module"; }
 

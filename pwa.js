@@ -1,4 +1,4 @@
-const version = "1.6.0";
+const version = "1.6.1";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -630,7 +630,7 @@ export async function PWAonline() {
 
     // random value to prevent cached responses
     function getRandomString() { return Math.random().toString(36).substring(2, 15) }
-    url.searchParams.set('rand', getRandomString())
+    url.searchParams.set('PWArand', getRandomString())
     let urlHref = url.href;
     console.trace("PWAonline: try to fetch", urlHref);
 
