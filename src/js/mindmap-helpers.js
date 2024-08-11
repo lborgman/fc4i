@@ -10,7 +10,6 @@ const URL_MINDMAPS_PAGE = "/mm4i/mm4i.html";
 importFc4i("jsmind-cust-rend");
 
 const modTools = await importFc4i("toolsJs");
-const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
 const throttleSaveMindmap = modTools.throttleTO(DBsaveNowThisMindmap, 300);
 
 

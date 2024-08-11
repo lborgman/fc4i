@@ -5,7 +5,6 @@
 
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
-const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
 
 
 const debounceTriggerLinks = modTools.debounce(() => {

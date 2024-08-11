@@ -14,7 +14,6 @@ const importFc4i = (modId) => {
 }
 
 const modTools = await importFc4i("toolsJs");
-const errorHandlerAsyncEvent = modTools.errorHandlerAsyncEvent;
 const promiseDOMready = modTools.promiseDOMready;
 
 let theExpanderWay = "setTimeout"; // ok

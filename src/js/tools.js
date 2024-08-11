@@ -921,19 +921,6 @@ async function popupDialog(title, body, severity) {
 // const a = 1 / b; console.log("a", a)
 
 
-// https://stackoverflow.com/questions/61080783/handling-errors-in-async-event-handlers-in-javascript-in-the-web-browser
-// Error handling with Async/Await in JS - ITNEXT
-// https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a
-export function errorHandlerAsyncEvent(asyncFun) {
-    // console.warn("typeof asyncFun", typeof asyncFun);
-    return function (evt) {
-        asyncFun(evt).catch(err => {
-            console.log("handler", err);
-            throw err;
-        })
-    }
-}
-// console.error("errorHandlerAsyncEvent defined")
 
 
 ////////////////////////////////////////////
