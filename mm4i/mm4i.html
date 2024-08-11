@@ -39,6 +39,39 @@
 
     <link rel="stylesheet" href="/css/rem10m1h.css">
     <link rel="stylesheet" href="/css/jsmind-edit.css">
+    <style>
+        :root {
+            background-color: darkolivegreen;
+        }
+
+        #PWA-version {
+            position: fixed;
+            top: 0px;
+            z-index: 5;
+            left: 80px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 8px;
+            background-color: olive;
+        }
+
+        #jsmind-search-inputs {
+            top: 0;
+            height: 40px;
+            margin-top: unset;
+            background-color: blueviolet;
+            display: none;
+            align-items: center;
+            width: fit-content;
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+        .display-jsmind-search #jsmind-search-inputs {
+            display: flex;
+        }
+    </style>
     <link id="jsmind-my-colors" rel="stylesheet" href="/css/var-colors.css">
 
 
@@ -65,6 +98,8 @@
 </head>
 
 <body class="NOno-test-items">
+    <div id="PWA-version"></div>
+    <!-- 
     <script>
         setTimeout(() => {
             const style =
@@ -81,6 +116,7 @@
             document.body.appendChild(myVer);
         }, 1000);
     </script>
+    -->
 
     <script src="/ext/mdc/material-components-web.js"></script>
     <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->

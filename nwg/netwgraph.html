@@ -159,6 +159,7 @@
         .when-more {
             display: none;
         }
+
         .show-more .when-more {
             display: unset;
         }
@@ -175,6 +176,19 @@
 
         #graph-buttons button.is-open {
             background-color: yellow;
+        }
+
+        #PWA-version {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            height: 40px;
+            padding-left: 8px;
+            padding-right: 8px;
+            color: black;
         }
     </style>
 
@@ -221,6 +235,7 @@
 </head>
 
 <body>
+    <span id="PWA-version"></span>
     <script>
         // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
         // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
