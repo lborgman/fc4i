@@ -1,4 +1,11 @@
-"use strict";
+// "use strict";
+const CUST_REND_VER = "0.0.2";
+console.log(`here is module jsmind-cust-rend.js ${CUST_REND_VER}`);
+if (document.currentScript) throw Error("This is a module");
+
+const modTools = await importFc4i("toolsJs");
+const debounce = modTools.debounce;
+const wait4mutations = modTools.wait4mutations;
 
 console.log("here is module jsmind-cust-rend.js");
 if (document.currentScript) throw Error("import .currentScript"); // is module
@@ -173,7 +180,7 @@ export class CustomRenderer4jsMind {
         }
     }
     async updateJmnodeFromCustom(eltJmnode, jmOwner) {
-        debugger; // eslint-disable-line no-debugger
+        // debugger; // eslint-disable-line no-debugger
         return;
         async function fixRenderImg(eltDiv) {
             return;

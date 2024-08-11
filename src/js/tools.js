@@ -113,7 +113,7 @@ function getLocalISOtime(dateTime) {
 // javascript - Performance of MutationObserver to detect nodes in entire DOM - Stack Overflow
 // https://stackoverflow.com/questions/31659567/performance-of-mutationobserver-to-detect-nodes-in-entire-dom/39332340
 // FIX-ME: Is not this just a version of debounce?
-function wait4mutations(elt, ms, observeWhat, msMaxWait) {
+export function wait4mutations(elt, ms, observeWhat, msMaxWait) {
     observeWhat = observeWhat || { attributes: true, characterData: true, childList: true, subtree: true, };
     return new Promise(resolve => {
         let tmr;
