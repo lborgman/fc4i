@@ -1,7 +1,9 @@
-const FC4I_IMPORTMAPS_VER = "0.2.3";
+const FC4I_IMPORTMAPS_VER = "0.2.5";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
+    // https://www.npmjs.com/package/three?activeTab=versions, Current Tags
+    const threeVersion = "0.167.1";
     const relImports = {
         // https://github.com/vasturiano/3d-force-graph
         // Not a module?
@@ -9,6 +11,13 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         // "three": "https://unpkg.com/three",
         "three": "https://unpkg.com/three/build/three.module.js",
         "three-spritetext": "https://unpkg.com/three-spritetext",
+
+        // https://threejs.org/docs/index.html#manual/en/introduction/Installation
+        // "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js",
+        // "three/addons/": "https://cdn.jsdelivr.net/npm/three@<version>/examples/jsm/"
+        "three": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/build/three.module.js`,
+        "three/addons/": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/examples/jsm/`,
+
         "mod3d-force-graph": "https://unpkg.com/3d-force-graph",
 
         "acc-colors": "./src/acc-colors.js",
@@ -59,15 +68,20 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
      * @returns 
      */
     const importFc4i = async (idOrLink) => {
-        if (idOrLink.startsWith("/")) throw Error(`idOrLink should not start with "/" "${idOrLink}`);
+        if (idOrLink.startsWith("https://")) {
+            return await import(idOrLink);
+        }
+        if (idOrLink.startsWith("/")) {
+            console.error(`idOrLink should not start with "/" "${idOrLink}"`);
+            throw Error(`idOrLink should not start with "/" "${idOrLink}"`);
+        }
         if (idOrLink.startsWith(".")) {
-            // FIX-ME: why is this necessary when using <base ...>?
-            // const u = new URL(idOrLink, location.href);
-            // return await import(u.href);
+            // FIX-ME: why is this necessary when using <base ...>? file issue?
             return await import(makeAbsLink(idOrLink));
         }
         const relUrl = relImports[idOrLink];
         if (relUrl == undefined) {
+            console.error(`modId "${idOrLink}" is not known by importFc4i`);
             throw Error(`modId "${idOrLink}" is not known by importFc4i`);
         }
         return import(relUrl);

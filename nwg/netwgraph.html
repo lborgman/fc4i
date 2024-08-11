@@ -22,7 +22,18 @@
     <script src="./fc4i-importmaps.js"></script>
     <script type="module" src="./src/js/tools.js"></script>
 
-
+    <!-- 
+        https://threejs.org/docs/index.html#manual/en/introduction/Installation
+        https://www.npmjs.com/package/three?activeTab=versions
+    -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
+            }
+        }
+    </script>
 
     <title>Network Graph View</title>
     <link rel="icon" type="image/svg+xml" href="./img/nwg.svg">
@@ -209,12 +220,15 @@
     -->
     <!-- <script src="https://unpkg.com/three"></script> -->
     <!-- <script src="https://unpkg.com/three@0.160.1"></script> -->
-    <script src="https://unpkg.com/three@0.157.0"></script> <!-- the version 3d-force-graph uses now -->
-    <script>
+    <!-- <script src="https://unpkg.com/three@0.157.0"></script> the version 3d-force-graph uses now -->
+    <!-- https://www.npmjs.com/package/three?activeTab=versions -->
+    <script type="module" src="three"></script>
+    <script type="module">
         console.log("NETWGRAPH here 2, unpkg /three-spritetext", { __THREE__ });
     </script>
-    <script src="https://unpkg.com/three-spritetext"></script>
-    <script>
+    <!-- <script src="https://unpkg.com/three-spritetext"></script> -->
+    <script type="module" src="three/addons/"></script>
+    <script type="module">
         console.log("NETWGRAPH here 3, unpkg /3d-force-graph", { __THREE__ });
     </script>
     <script src="https://unpkg.com/3d-force-graph" , {__THREE__}></script>
