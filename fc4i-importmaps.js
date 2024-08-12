@@ -15,10 +15,10 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         // https://threejs.org/docs/index.html#manual/en/introduction/Installation
         // "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js",
         // "three/addons/": "https://cdn.jsdelivr.net/npm/three@<version>/examples/jsm/"
-        "three": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/build/three.module.js`,
-        "three/addons/": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/examples/jsm/`,
 
-        "mod3d-force-graph": "https://unpkg.com/3d-force-graph",
+        // "three": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/build/three.module.js`,
+        // "three/addons/": `https://cdn.jsdelivr.net/npm/three@${threeVersion}/examples/jsm/`,
+        // "mod3d-force-graph": "https://unpkg.com/3d-force-graph",
 
         "acc-colors": "./src/acc-colors.js",
         "color-converter": "./src/js/mod/color-converter.js",

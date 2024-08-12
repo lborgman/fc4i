@@ -11,6 +11,26 @@
     <meta name="description" content="View data from fc4i as a network graph">
     <link rel="manifest" href="./nwg/manifest-nwg.json">
     <meta name="theme-color" content="#c0ca33">
+    <!-- 
+https://github.com/vasturiano/three-spritetext/blob/a05142e8b72bc687b6fabd197578f27c9023a814/example/basic/index.html#L14-L17
+https://github.com/vasturiano/three-spritetext/blob/master/example/basic/index.html
+
+                "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+
+        "three": "//unpkg.com/three/build/three.module.js",
+        "three/addons/": "//unpkg.com/three/examples/jsm/",
+        "three-spritetext": "//unpkg.com/three-spritetext/dist/three-spritetext.mjs"
+    -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three/examples/jsm/",
+                "three-spritetext": "https://unpkg.com/three-spritetext/dist/three-spritetext.mjs"
+            }
+        }
+    </script>
+    <!-- <script type="module" src="three"></script> -->
 
 
     <!-- See index.html -->
@@ -24,16 +44,10 @@
 
     <!-- 
         https://threejs.org/docs/index.html#manual/en/introduction/Installation
+        https://threejs.org/docs/#manual/en/introduction/Installation
         https://www.npmjs.com/package/three?activeTab=versions
+        https://github.com/vasturiano/three-spritetext/issues/45
     -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
-            }
-        }
-    </script>
 
     <title>Network Graph View</title>
     <link rel="icon" type="image/svg+xml" href="./img/nwg.svg">
@@ -206,45 +220,24 @@
     <script src="./src/js/umd/idb.js"></script>
 
 
-    <!-- <script src="https://kit.fontawesome.com/0c318d9e1f.js" crossorigin="anonymous"></script> -->
-    <!-- <link rel="stylesheet" href="/ext/fontawesome/5.13.0/css/all.css" xmedia="print" xonload="this.media='all'"> -->
 
     <script src="./ext/mdc/material-components-web.js"></script>
 
-    <script>console.log("NETWGRAPH here 1, unpkg /three");</script>
-
-
     <!--
-        https://threejs.org/docs/#manual/en/introduction/Installation
-        https://github.com/vasturiano/three-spritetext/issues/45
     -->
     <!-- <script src="https://unpkg.com/three"></script> -->
     <!-- <script src="https://unpkg.com/three@0.160.1"></script> -->
     <!-- <script src="https://unpkg.com/three@0.157.0"></script> the version 3d-force-graph uses now -->
     <!-- https://www.npmjs.com/package/three?activeTab=versions -->
-    <script type="module" src="three"></script>
-    <script type="module">
-        console.log("NETWGRAPH here 2, unpkg /three-spritetext", { __THREE__ });
-    </script>
     <!-- <script src="https://unpkg.com/three-spritetext"></script> -->
-    <script type="module" src="three/addons/"></script>
+    <!-- <script type="module" src="three/addons/"></script> -->
+    <!-- <script src="https://unpkg.com/3d-force-graph" , {__THREE__}></script> -->
+
     <script type="module">
-        console.log("NETWGRAPH here 3, unpkg /3d-force-graph", { __THREE__ });
+        console.log(">>>>> importing ...")
+        // import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js';
+        // import { CSS2DRenderer, CSS2DObject } from 'three/addons/';
     </script>
-    <script src="https://unpkg.com/3d-force-graph" , {__THREE__}></script>
-
-
-    <script>
-        console.log("NETWGRAPH here 4, unpkg /three/examples...CSS2D...", { __THREE__ });
-    </script>
-    <script type="module">
-        import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js';
-    </script>
-    <script>
-        console.log("NETWGRAPH here 5, END three", { __THREE__ });
-    </script>
-
-
 
 </head>
 

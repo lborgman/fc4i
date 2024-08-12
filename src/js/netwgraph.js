@@ -3,6 +3,10 @@
 // https://stackoverflow.com/questions/75798624/d3-force-graph-zoom-to-node
 // https://github.com/jackyzha0/quartz
 
+const VER = "0.0.1";
+console.log(`here is module netwgraph.js ${VER}`);
+if (document.currentScript) throw Error("netwgraph.js must be loaded as a module");
+
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
 
