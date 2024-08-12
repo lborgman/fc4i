@@ -559,7 +559,6 @@ async function displayMatchingReminders(searchFor, minConf, maxConf, requiredTag
         if (active) {
             const rKey = r.key;
             const olderDay = modFc4iItems.isMoreThanADayAgo(rKey);
-            // console.log({ olderDay, rKey });
             if (!olderDay) { arrActive.push(r); return; }
             const olderWeek = modFc4iItems.isMoreThanAWeekAgo(rKey);
             if (!olderWeek) { arrActiveDay.push(r); return; }

@@ -15,7 +15,7 @@
     <script>console.log("baseURI", document.baseURI);</script>
     <script src="./init-error.js"></script>
     <script type="module" src="./pwa.js"></script>
-    <script type="module" src="./anchors-with-base.js" ></script>
+    <script type="module" src="./anchors-with-base.js"></script>
     <script src="./fc4i-importmaps.js"></script>
     <script type="module" src="./src/js/tools.js"></script>
 
@@ -77,7 +77,10 @@
                 <button id="menu-open" class="no-button">☰</button>
             </span>
         </span>
-        <span id="header-title"></span>
+        <span>
+            <span id="header-title"></span>
+            (<span id="PWA-version"></span>)
+        </span>
         <span id="header-search-check"></span>
     </header>
 

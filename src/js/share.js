@@ -59,13 +59,23 @@ function getMonthBorder() {
     return d.toISOString();
 }
 function get3MonthBorder() {
-    // const d = new Date(new Date().getTime() - 3 * monthMs);
     const d = new Date(- 3 * monthMs);
     return d.toISOString();
 }
+function get6MonthBorder() {
+    const d = new Date(- 6 * monthMs);
+    return d.toISOString();
+}
 function getYearBorder() {
-    // const d = new Date(new Date().getTime() - yearMs);
     const d = new Date(- yearMs);
+    return d.toISOString();
+}
+function get2YearsBorder() {
+    const d = new Date(- 2 * yearMs);
+    return d.toISOString();
+}
+function get3YearsBorder() {
+    const d = new Date(- 3 * yearMs);
     return d.toISOString();
 }
 function getNoBorder() {
@@ -88,10 +98,13 @@ addKeyTime("Yesterday", getYesterdayBorder());
 addKeyTime("Last Week", getWeekBorder());
 addKeyTime("Last Month", getMonthBorder());
 addKeyTime("Last 3 Months", get3MonthBorder());
+addKeyTime("Last 6 Months", get6MonthBorder());
 addKeyTime("Last Year", getYearBorder());
+addKeyTime("Last 2 Years", get2YearsBorder());
+addKeyTime("Last 3 Years", get3YearsBorder());
 addKeyTime("Older", getNoBorder());
-// console.log({ keyAndTimesOrder });
-// console.log({ keyAndTimes });
+console.log({ keyAndTimesOrder });
+console.log({ keyAndTimes });
 
 /*
 function dateMidnight() {

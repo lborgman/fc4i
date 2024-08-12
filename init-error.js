@@ -111,7 +111,7 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
  * 
  * @param {string} type 
  * @param {Object} attrib 
- * @param {any} inner 
+ * @param {any=} inner 
  * @returns {HTMLElement}
  */
 function mkElt(type, attrib, inner) {
