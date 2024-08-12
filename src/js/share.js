@@ -42,7 +42,7 @@ function getTodayBorder() {
     return d.toISOString();
 }
 function getYesterdayBorder() {
-    const d = new Date(new Date().getTime() - dayMs);
+    const d = new Date(Date.now() - dayMs);
     // 6 in the morning, local time. setHours is local time aware!
     d.setHours(6);
     d.setMinutes(0);
@@ -50,36 +50,36 @@ function getYesterdayBorder() {
     return d.toISOString();
 }
 function getWeekBorder() {
-    const d = new Date(new Date().getTime() - weekMs);
+    const d = new Date(Date.now() - weekMs);
     return d.toISOString();
 }
 function getMonthBorder() {
     // const d = new Date(new Date().getTime() - monthMs);
-    const d = new Date(- monthMs);
+    const d = new Date(Date.now() - monthMs);
     return d.toISOString();
 }
 function get3MonthBorder() {
-    const d = new Date(- 3 * monthMs);
+    const d = new Date(Date.now() - 3 * monthMs);
     return d.toISOString();
 }
 function get6MonthBorder() {
-    const d = new Date(- 6 * monthMs);
+    const d = new Date(Date.now() - 6 * monthMs);
     return d.toISOString();
 }
 function getYearBorder() {
-    const d = new Date(- yearMs);
+    const d = new Date(Date.now() - yearMs);
     return d.toISOString();
 }
 function get2YearsBorder() {
-    const d = new Date(- 2 * yearMs);
+    const d = new Date(Date.now() - 2 * yearMs);
     return d.toISOString();
 }
 function get3YearsBorder() {
-    const d = new Date(- 3 * yearMs);
+    const d = new Date(Date.now() - 3 * yearMs);
     return d.toISOString();
 }
 function getNoBorder() {
-    const d = new Date(- 1000 * yearMs);
+    const d = new Date(Date.now() - 1000 * yearMs);
     return d.toISOString();
 }
 
