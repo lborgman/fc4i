@@ -1,4 +1,4 @@
-const version = "1.6.5";
+const version = "1.6.6";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -710,9 +710,11 @@ function finishAndShowDlgErr(dlgErr, moreInConsole) {
     showDialogModal(dlgErr);
 }
 
+/*
 // Add a global error handler
 window.addEventListener("error", evt => {
     // console.error("unhandled error:", evt.error, evt);
     const dlgErr = startDlgErr("Unhandled error", evt.error);
     finishAndShowDlgErr(dlgErr, true);
 });
+*/

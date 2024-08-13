@@ -3,7 +3,7 @@
 // https://stackoverflow.com/questions/75798624/d3-force-graph-zoom-to-node
 // https://github.com/jackyzha0/quartz
 
-const VER = "0.0.1";
+const VER = "0.0.2";
 console.log(`here is module netwgraph.js ${VER}`);
 if (document.currentScript) throw Error("netwgraph.js must be loaded as a module");
 
@@ -1927,7 +1927,7 @@ async function setupGraphDisplayer(opt) {
         hideOrShowBtnRight();
         adjustGraphSize();
     }
-    const debounceAfterSize = debounce(adjustAfterResize, 1000);
+    const debounceAfterSize = modTools.debounce(adjustAfterResize, 1000);
     window.addEventListener("resize", () => debounceAfterSize());
     function setGraphSize() {
         const bcr = elt3dGraph.getBoundingClientRect();
@@ -2518,7 +2518,7 @@ async function testMyOwn(gData, sampleFingerPrint) {
 
     addLinkText();
     triggerShowNode();
-    await waitSeconds(1);
+    await modTools.waitSeconds(1);
     addOnClick();
     addNodeLinkHighlighter();
 

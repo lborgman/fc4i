@@ -1,5 +1,5 @@
 // @ts-check
-const TOOLS_VER = "0.0.5";
+const TOOLS_VER = "0.0.6";
 console.log(`here is module tools.js ${TOOLS_VER}`);
 if (document.currentScript) { throw "tools.js is not loaded as module"; }
 
@@ -971,7 +971,12 @@ function affixScriptToHead(url, onloadFunction) {
 ////////////////////////////////////
 ///// Helper functions. Throttle, debounce, etc
 
-function waitSeconds(sec) {
+/**
+ * 
+ * @param {number} sec 
+ * @returns 
+ */
+export function waitSeconds(sec) {
     console.log("start wait", sec)
     return new Promise(resolve => {
         function ready() {
