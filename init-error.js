@@ -1,5 +1,5 @@
 // @ts-check
-const INIT_ERROR_VER = "0.1.5";
+const INIT_ERROR_VER = "0.1.6";
 console.log(`here is init-error.js ${INIT_ERROR_VER}`);
 
 {
@@ -57,7 +57,7 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
             background: orange;
             padding: 4px;
             text-wrap: wrap;
-            overflow-wrap: anywhere;
+            overflow-wrap: break-word;
         `;
         dlg.appendChild(pre);
         let txtPre = location.href;

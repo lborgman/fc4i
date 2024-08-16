@@ -3,13 +3,21 @@
 // https://stackoverflow.com/questions/75798624/d3-force-graph-zoom-to-node
 // https://github.com/jackyzha0/quartz
 
+//// Rewrite 
+// https://stackoverflow.com/questions/74295935/d3-v6-add-label-to-the-nodes
+
 const VER = "0.0.2";
 console.log(`here is module netwgraph.js ${VER}`);
 if (document.currentScript) throw Error("netwgraph.js must be loaded as a module");
 
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
-
+const modThree = await import("three");
+console.log({ modThree });
+const mod3dForceGraph = await import("3d-force-graph");
+console.log({ mod3dForceGraph });
+const modSpriteText = await import("three-spritetext");
+console.log({ modSpriteText });
 
 const debounceTriggerLinks = modTools.debounce(() => {
     modMdc.mkMDCsnackbar("Updating links...");
@@ -2198,7 +2206,7 @@ async function addLinkText() {
     // https://github.com/vasturiano/3d-force-graph/blob/master/example/text-links/index.html
     graph = graph.linkThreeObjectExtend(true);
     graph = graph.linkThreeObject(link => {
-        return false;
+        return link; // FIX-ME:
         if (link.text) {
             // extend link with text sprite
             const sprite = new SpriteText(`${link.text}`);
@@ -2228,6 +2236,8 @@ async function addLinkText() {
     });
 }
 function showNodeAsText(node) {
+    // return node; // FIX-ME
+
     const isNodeDoc = nodeDoc == node;
     // if (isNodeDoc) { console.log("nodeDoc", { node }); }
     const isFc4i = node.fc4i != undefined;
@@ -2266,7 +2276,10 @@ function showNodeAsText(node) {
         if (!allUsed) retTxt += "…";
         return retTxt;
     }
-    const sprite = new SpriteText(txtShort);
+    // console.log({ modSpriteText });
+    // const sprite = new SpriteText(txtShort);
+
+    const sprite = new modSpriteText.default(txtShort);
     sprite.material.transparent = false;
     const numTags = node.fc4i.r.tags.length;
     const idxClr = Math.min(numTags, colorsRainbow.length - 1);
@@ -2285,9 +2298,12 @@ function showNodeAsText(node) {
     return sprite;
 }
 function showNodeAsImg(node) {
+    return node; // FIX-ME:
     // const imgTexture = new THREE.TextureLoader().load(`./imgs/${img}`);
+
     if (node.fc4i.r.images.length == 0) return showNodeAsText(node);
     if (node == nodeDoc) return showNodeAsText(node);
+
     const blobImg = node.fc4i.r.images[0];
     // st.backgroundImage = `url(${URL.createObjectURL(imgBlob)})`;
     const urlImg = URL.createObjectURL(blobImg);
@@ -2310,6 +2326,7 @@ function showNodeAsImg(node) {
     return sprite;
 }
 function showNode(node) {
+    // return; // FIX-ME: temp
     if (imagesMode) return showNodeAsImg(node);
     return showNodeAsText(node);
 }
@@ -2510,17 +2527,17 @@ async function testMyOwn(gData, sampleFingerPrint) {
 
     const graphDisplayer = await setupGraphDisplayer();
     let ourDisplayer = graphDisplayer;
-    const useHtml = true;
+    let useHtml = false; // FIX-ME
     if (useHtml) { ourDisplayer = await getHtmlGraphDisplayer(); }
     graph = ourDisplayer.graphData(gData);
 
     graph = graph.nodeOpacity(1.0);
 
-    addLinkText();
+    // addLinkText(); // FIX-ME:
     triggerShowNode();
     await modTools.waitSeconds(1);
     addOnClick();
-    addNodeLinkHighlighter();
+    // addNodeLinkHighlighter();
 
     // https://stackoverflow.com/questions/69914793/three-js-rotate-around-axis-at-an-absoulte-angle
     // setTimeout(() => {

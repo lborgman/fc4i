@@ -20,13 +20,25 @@ https://github.com/vasturiano/three-spritetext/blob/master/example/basic/index.h
         "three": "//unpkg.com/three/build/three.module.js",
         "three/addons/": "//unpkg.com/three/examples/jsm/",
         "three-spritetext": "//unpkg.com/three-spritetext/dist/three-spritetext.mjs"
+
+        https://threejs.org/docs/index.html#manual/en/introduction/Installation
+        "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js"
+        "three-spritetext": "https://unpkg.com/three-spritetext/dist/three-spritetext.mjs"
     -->
+
+
+
+    <base href="..">
+    <script>console.log("baseURI", document.baseURI);</script>
+    <script src="./init-error.js"></script>
+                <!-- "3d-force-graph": "./src/js/mod/3d-force-graph.mjs", -->
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three/examples/jsm/",
-                "three-spritetext": "https://unpkg.com/three-spritetext/dist/three-spritetext.mjs"
+                "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+                "3d-force-graph": "./src/js/mod/3d-force-graph.min.js",
+                "three-spritetext": "./src/js/mod/three-spritetext.mjs"
             }
         }
     </script>
@@ -34,9 +46,6 @@ https://github.com/vasturiano/three-spritetext/blob/master/example/basic/index.h
 
 
     <!-- See index.html -->
-    <base href="..">
-    <script>console.log("baseURI", document.baseURI);</script>
-    <script src="./init-error.js"></script>
     <script type="module" src="./pwa.js"></script>
     <script type="module" src="./anchors-with-base.js"></script>
     <script src="./fc4i-importmaps.js"></script>
@@ -231,13 +240,16 @@ https://github.com/vasturiano/three-spritetext/blob/master/example/basic/index.h
     <!-- https://www.npmjs.com/package/three?activeTab=versions -->
     <!-- <script src="https://unpkg.com/three-spritetext"></script> -->
     <!-- <script type="module" src="three/addons/"></script> -->
-    <script src="https://unpkg.com/3d-force-graph"></script>
 
+    <!-- <script src="https://unpkg.com/3d-force-graph"></script> -->
+
+    <!-- 
     <script type="module">
         console.log(">>>>> importing ...")
         // import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js';
         // import { CSS2DRenderer, CSS2DObject } from 'three/addons/';
     </script>
+    -->
 
 </head>
 
