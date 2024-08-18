@@ -1,16 +1,16 @@
-const FC4I_IMPORTMAPS_VER = "0.2.5";
+const FC4I_IMPORTMAPS_VER = "0.2.6";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
 {
     // https://www.npmjs.com/package/three?activeTab=versions, Current Tags
-    const threeVersion = "0.167.1";
+    // const threeVersion = "0.167.1";
     const relImports = {
         // https://github.com/vasturiano/3d-force-graph
         // Not a module?
         // Anyway ForceGraph3D will be defined in window by import("3d-force-graph")!
         // "three": "https://unpkg.com/three",
-        "three": "https://unpkg.com/three/build/three.module.js",
-        "three-spritetext": "https://unpkg.com/three-spritetext",
+        // "three": "https://unpkg.com/three/build/three.module.js",
+        // "three-spritetext": "https://unpkg.com/three-spritetext",
 
         // https://threejs.org/docs/index.html#manual/en/introduction/Installation
         // "three": "https://cdn.jsdelivr.net/npm/three@<version>/build/three.module.js",

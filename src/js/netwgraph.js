@@ -12,10 +12,13 @@ if (document.currentScript) throw Error("netwgraph.js must be loaded as a module
 
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
+
 const modThree = await import("three");
 console.log({ modThree });
+
 const mod3dForceGraph = await import("3d-force-graph");
 console.log({ mod3dForceGraph });
+
 const modSpriteText = await import("three-spritetext");
 console.log({ modSpriteText });
 
