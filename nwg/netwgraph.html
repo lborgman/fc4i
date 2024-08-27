@@ -36,18 +36,57 @@ https://github.com/vasturiano/three-spritetext/blob/master/example/basic/index.h
                 "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
                 "three": "https://cdn.jsdelivr.net/npm/three@0.162/build/three.module.js",
                 "3d-force-graph": "./src/js/mod/3d-force-graph.mjs",
+                "3d-force-graph": "./src/js/mod/3d-force-graph.js",
+                "3d-force-graph": "./src/js/mod/3d-force-graph.min.js",
                 "three-spritetext": "./src/js/mod/three-spritetext.min.js"
     -->
     <script type="importmap">
         {
             "imports": {
                 "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
-                "3d-force-graph": "./src/js/mod/3d-force-graph.min.js",
-                "three-spritetext": "./src/js/mod/three-spritetext.mjs"
+                "DragControls": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/DragControls.js",
+                "TrackballControls": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/TrackballControls.js",
+                "three/examples/jsm/controls/TrackballControls.js": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/TrackballControls.js",
+                "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/controls/FlyControls.js": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/FlyControls.js",
+                "three/examples/jsm/postprocessing/EffectComposer.js": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/postprocessing/EffectComposer.js",
+                "three/examples/jsm/postprocessing/RenderPass.js": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/postprocessing/RenderPass.js",
+
+                "d3-array": "https://cdn.jsdelivr.net/npm/d3-array@3/+esm",
+                "d3-dispatch": "https://cdn.jsdelivr.net/npm/d3-dispatch@3/+esm",
+                "d3-scale": "https://cdn.jsdelivr.net/npm/d3-scale@3/+esm",
+                "d3-scale-chromatic": "https://cdn.jsdelivr.net/npm/d3-scale-chromatic@3/+esm",
+                "d3-timer": "https://cdn.jsdelivr.net/npm/d3-timer@3/+esm",
+                "d3-quadtree": "https://cdn.jsdelivr.net/npm/d3-quadtree@3/+esm",
+                "polished": "https://cdn.jsdelivr.net/npm/polished@3/+esm",
+
+                "3d-force-graph": "./src/js/mod/3d-force-graph.mjs",
+                "accessor-fn": "./src/js/mod/accessor-fn.mjs",
+                "d3-binarytree": "./src/js/mod/d3-binarytree.mjs",
+                "d3-octree": "./src/js/mod/d3-octree.mjs",
+                "d3-force-3d": "./src/js/mod/d3-force-3d.mjs",
+                "data-joint": "./src/js/mod/data-joint.mjs",
+                "index-array-by": "./src/js/mod/index-array-by.mjs",
+                "isObject.js": "./src/js/mod/isObject.js",
+                "kapsule": "./src/js/mod/kapsule.mjs",
+                "lodash-es/debounce.js": "./src/js/mod/debounce.js",
+                "ngraph.forcelayout": "./src/js/mod/ngraph.forcelayout.mjs",
+                "ngraph.graph": "./src/js/mod/ngraph.graph.mjs",
+                "tinycolor2": "./src/js/mod/tinycolor.mjs",
+                "three-forcegraph": "./src/js/mod/three-forcegraph.mjs",
+                "three-render-objects": "./src/js/mod/three-render-objects.mjs",
+                "three-spritetext": "./src/js/mod/three-spritetext.mjs",
+
+                "@tweenjs/tween.js": "./src/js/mod/tween.esm.js"
             }
         }
     </script>
-    <!-- <script type="module" src="three"></script> -->
+    <script type="module">
+        // debugger;
+        // const tc = await import("tinycolor2");
+        // debugger;
+    </script>
+
 
 
     <!-- See index.html -->

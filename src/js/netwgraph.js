@@ -6,7 +6,7 @@
 //// Rewrite 
 // https://stackoverflow.com/questions/74295935/d3-v6-add-label-to-the-nodes
 
-const VER = "0.0.2";
+const VER = "0.0.3";
 console.log(`here is module netwgraph.js ${VER}`);
 if (document.currentScript) throw Error("netwgraph.js must be loaded as a module");
 
@@ -15,12 +15,16 @@ const modTools = await importFc4i("toolsJs");
 
 const modThree = await import("three");
 console.log({ modThree });
+// if (typeof THREE != "undefined") throw Error("THREE was defined");
+const THREE = modThree;
 
 const mod3dForceGraph = await import("3d-force-graph");
 console.log({ mod3dForceGraph });
+window.ForceGraph3D = mod3dForceGraph.default;
 
 const modSpriteText = await import("three-spritetext");
 console.log({ modSpriteText });
+
 
 const debounceTriggerLinks = modTools.debounce(() => {
     modMdc.mkMDCsnackbar("Updating links...");

@@ -1,5 +1,6 @@
+console.log("here is 3d-force-graph.mjs");
 import { AmbientLight, DirectionalLight, Vector3, REVISION } from 'three';
-import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
+import { DragControls } from 'DragControls';
 import ThreeForceGraph from 'three-forcegraph';
 import ThreeRenderObjects from 'three-render-objects';
 import accessorFn from 'accessor-fn';
