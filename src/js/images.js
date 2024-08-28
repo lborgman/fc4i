@@ -1,7 +1,7 @@
 // FIX-ME: Something is wrong with the next line if it is on line 1???
-console.log("here is module images.js");
+const version = "0.1.0";
+console.log(`here is images.js, module ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 let debugPasteLineOn = true;
 debugPasteLineOn = false;

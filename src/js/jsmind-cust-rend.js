@@ -1,15 +1,11 @@
 // "use strict";
-const CUST_REND_VER = "0.0.2";
-console.log(`here is module jsmind-cust-rend.js ${CUST_REND_VER}`);
-if (document.currentScript) throw Error("This is a module");
+const CUST_REND_VER = "0.0.3";
+console.log(`here is jsmind-cust-rend.js, module,${CUST_REND_VER}`);
+if (document.currentScript) throw Error("import .currentScript"); // is module
 
 const modTools = await importFc4i("toolsJs");
 const debounce = modTools.debounce;
 const wait4mutations = modTools.wait4mutations;
-
-console.log("here is module jsmind-cust-rend.js");
-if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 // FIX-ME: Why is this called in share.html?
 if (typeof jsMind != "undefined" && !jsMind.mm4iSupported) {

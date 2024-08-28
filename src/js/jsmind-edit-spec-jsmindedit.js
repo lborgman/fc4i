@@ -1,10 +1,11 @@
-console.log("Here is module jsmind-edit-spec-jsmindedit.js");
+const VERSION = "0.1.0";
+console.log(`Here is jsmind-edit-spec-jsmindedit.js, module, ${VERSION}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 const modDb = await importFc4i("db-mindmaps");
 
-const modJsEditCommon = await importFc4i("jsmind-edit-common");
+// const modJsEditCommon = await importFc4i("jsmind-edit-common");
 
 modDb.setDBprefix("jsmindedit-");
 

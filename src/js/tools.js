@@ -1,6 +1,6 @@
 // @ts-check
-const TOOLS_VER = "0.0.6";
-console.log(`here is module tools.js ${TOOLS_VER}`);
+const TOOLS_VER = "0.0.7";
+console.log(`here is tools.js, module, ${TOOLS_VER}`);
 if (document.currentScript) { throw "tools.js is not loaded as module"; }
 
 // https://firebase.google.com/docs/reference/js/firebase.auth.Error
@@ -10,6 +10,7 @@ let theSWcacheVersion = "Fix this! (not known yet)";
 // https://dev.to/somedood/promises-and-events-some-pitfalls-and-workarounds-elp
 /** When awaited, this function blocks until the `event` fires once. */
 // function blockUntilEvent(target: EventTarget, event: string)
+/*
 function blockUntilEvent(target, event, msTimeout) {
     return new Promise(resolve => {
         let tmr = setTimeout(() => {
@@ -40,13 +41,13 @@ function blockUntilEvent(target, event, msTimeout) {
     }
     );
 }
+*/
 
 const thePromiseDOMready = new Promise(function (resolve) {
     const rs = document.readyState;
     if (!["loading", "interactive", "complete"].includes(rs)) throw Error(`Unknown readystate: ${rs}`);
-    // if (document.readyState === "complete") return resolve();
-    if (document.readyState === "complete") return resolve();
-    if (document.readyState === "interactive") return resolve();
+    if (document.readyState === "complete") return resolve(true);
+    if (document.readyState === "interactive") return resolve(true);
     document.addEventListener("DOMContentLoaded", resolve);
 });
 export async function promiseDOMready() { return thePromiseDOMready; }
@@ -59,6 +60,7 @@ export async function promiseDOMready() { return thePromiseDOMready; }
 
 
 // https://stackoverflow.com/questions/41802259/javascript-deep-check-objects-have-same-keys
+/*
 const deepSameKeys = (o1, o2) => {
     let retNotSame;
     if (deepSameInner(o1, o2)) {
@@ -101,13 +103,16 @@ const deepSameKeys = (o1, o2) => {
         });
     }
 };
+*/
 
+/*
 function getLocalISOtime(dateTime) {
     const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     const atTime = dateTime ? new Date(dateTime) : Date.now();
     const localISOTime = (new Date(atTime - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
     return localISOTime;
 }
+*/
 
 // Quick fix for waiting for mkElt is really ready!
 // javascript - Performance of MutationObserver to detect nodes in entire DOM - Stack Overflow
@@ -149,12 +154,14 @@ export function wait4mutations(elt, ms, observeWhat, msMaxWait) {
     });
 }
 
+/*
 function mkButton(attrib, inner) {
     const btn = mkElt("button", attrib, inner);
     btn.classList.add("popup-button");
     btn.classList.add("color-button");
     return btn;
 }
+*/
 (function () {
     // FIXME: Just return if from Puppeteer;
     // https://antoinevastel.com/bot%20detection/2018/01/17/detect-chrome-headless-v2.html

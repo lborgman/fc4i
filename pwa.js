@@ -1,4 +1,4 @@
-const version = "1.6.6";
+const version = "1.6.7";
 
 /*
     This is a boilerplate for handling a simple PWA.
@@ -84,7 +84,7 @@ const logStrongStyle = logStyle + " font-size:18px;";
 function logConsole(...msg) { console.log(`%cpwa.js`, logStyle, ...msg); }
 function logStrongConsole(...msg) { console.log(`%cpwa.js`, logStrongStyle, ...msg); }
 
-logStrongConsole(`Here is module pwa.js, ${version}`, import.meta.url);
+logStrongConsole(`Here is pwa.js, module ${version}`, import.meta.url);
 
 
 const idDebugSection = "pwa-debug-output";

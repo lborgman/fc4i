@@ -1,8 +1,6 @@
-"use strict";
-
-console.log("here is module jsmind-edit-common.js", import.meta);
+const version = "0.1.0";
+console.log(`here is jsmind-edit-common.js, module, ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 const modCustRend = await importFc4i("jsmind-cust-rend");
 const modMMhelpers = await importFc4i("mindmap-helpers");

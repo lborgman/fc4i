@@ -1,5 +1,5 @@
 // @ts-check
-const INIT_ERROR_VER = "0.1.6";
+const INIT_ERROR_VER = "0.1.7";
 console.log(`here is init-error.js ${INIT_ERROR_VER}`);
 
 {
@@ -110,7 +110,7 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
 /**
  * 
  * @param {string} type 
- * @param {Object} attrib 
+ * @param {Object=} attrib 
  * @param {any=} inner 
  * @returns {HTMLElement}
  */

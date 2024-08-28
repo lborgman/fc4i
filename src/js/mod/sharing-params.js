@@ -1,5 +1,5 @@
-const version = "0.1.1";
-console.log(`here is module sharing-params.js ${version}`);
+const VERSION = "0.1.2";
+console.log(`here is sharing-params.js, module, ${VERSION}`);
 if (document.currentScript) throw Error("Should be imported, is module"); // is module
 
 // https://developer.chrome.com/articles/web-share-target/

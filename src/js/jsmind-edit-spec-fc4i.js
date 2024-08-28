@@ -1,6 +1,6 @@
-console.log("Here is module jsmind-edit-spec-fc4i.js");
+const version = "0.1.0";
+console.log(`Here is jsmind-edit-spec-fc4i.js, module, ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 
 function getLink2KeyInFc4i(keyFc4i) {

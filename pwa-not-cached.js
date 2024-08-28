@@ -1,6 +1,6 @@
 // See pwa.js for documentation
 
-const version = "1.1.7";
+const version = "1.1.8";
 export function getVersion() { return version; }
 
 const doSwReset = false;
@@ -19,7 +19,7 @@ function logStrongConsole(...msg) {
 function logInstallEvent(...msg) { console.log("%cpwa-nc", styleInstallEvents, ...msg); }
 
 
-logStrongConsole(`here is module pwa-not-cached.js, ${version}`);
+logStrongConsole(`here is pwa-not-cached.js, module ${version}`);
 if (document.currentScript) throw Error("pwa-not-cached.js not loaded as module");
 
 

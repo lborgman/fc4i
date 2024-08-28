@@ -1,5 +1,5 @@
-const VER = "0.1.2";
-console.log(`here is module anchors-with-base.js ${VER}`);
+const VER = "0.1.3";
+console.log(`here is anchors-with-base.js, module ${VER}`);
 if (document.currentScript) throw Error("Should be imported as a module");
 
 document.body.addEventListener("click", evt => {

@@ -6,8 +6,8 @@
 //// Rewrite 
 // https://stackoverflow.com/questions/74295935/d3-v6-add-label-to-the-nodes
 
-const VER = "0.0.3";
-console.log(`here is module netwgraph.js ${VER}`);
+const VER = "0.0.4";
+console.log(`here is netwgraph.js, module, ${VER}`);
 if (document.currentScript) throw Error("netwgraph.js must be loaded as a module");
 
 const modMdc = await importFc4i("util-mdc");

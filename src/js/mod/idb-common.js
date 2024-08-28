@@ -1,6 +1,6 @@
-console.log("here is module idb-common.js");
+const VERSION = "0.1.0";
+console.log(`here is idb-common.js, module, ${VERSION}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
-if (!import.meta.url) throw Error("!import.meta.url"); // is module
 
 // https://github.com/jakearchibald/idb
 const dbName = "rem10m1h";
