@@ -114,6 +114,7 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
  * @param {any=} inner 
  * @returns {HTMLElement}
  */
+// eslint-disable-next-line no-unused-vars
 function mkElt(type, attrib, inner) {
     const elt = document.createElement(type);
 
@@ -147,6 +148,7 @@ function mkElt(type, attrib, inner) {
 // https://stackoverflow.com/questions/61080783/handling-errors-in-async-event-handlers-in-javascript-in-the-web-browser
 // Error handling with Async/Await in JS - ITNEXT
 // https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a
+// eslint-disable-next-line no-unused-vars
 function errorHandlerAsyncEvent(asyncFun) {
     // console.warn("typeof asyncFun", typeof asyncFun);
     return function (evt) {
@@ -156,5 +158,18 @@ function errorHandlerAsyncEvent(asyncFun) {
         })
     }
 }
+
+/**
+ * 
+ * @param {string} relLink 
+ * @returns {string}
+ */
+// eslint-disable-next-line no-unused-vars
+function makeAbsLink(relLink) {
+    if (relLink.startsWith("/")) throw Error(`relLink should not start with "/" "${relLink}`);
+    const u = new URL(relLink, document.baseURI);
+    return u.href;
+}
+// window.makeAbsLink = makeAbsLink;
 
 // throw "Test error";

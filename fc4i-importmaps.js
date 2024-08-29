@@ -88,17 +88,14 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
     }
     window.importFc4i = importFc4i;
 
-    /**
-     * 
-     * @param {string} relLink 
-     * @returns {string}
-     */
+    /*
     const makeAbsLink = (relLink) => {
         if (relLink.startsWith("/")) throw Error(`relLink should not start with "/" "${relLink}`);
         const u = new URL(relLink, document.baseURI);
         return u.href;
     }
     window.makeAbsLink = makeAbsLink;
+     */
 }
 
 // console.log("END fc4i-importmaps");

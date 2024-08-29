@@ -1208,7 +1208,8 @@ async function mkMenu() {
     // liIntro.addEventListener("click", evt => { showIntro(); })
 
     // const liAbout = modMdc.mkMDCmenuItem(mkElt("a", { href: "/about.html#fc4i" }, "About"));
-    const aboutLink = (new URL("./about", document.baseURI)).href;
+    // const aboutLink = (new URL("./about", document.baseURI)).href;
+    const aboutLink = makeAbsLink("./about");
     const liAbout = modMdc.mkMDCmenuItem(mkElt("a", { href: aboutLink }, "About"));
 
     const liNew = modMdc.mkMDCmenuItem("New");
