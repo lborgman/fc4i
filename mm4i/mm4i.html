@@ -23,7 +23,7 @@
     <meta name="theme-color" content="#c0ca33">
 
     <title>Mindmaps 4 Internet</title>
-    <link rel="icon" type="image/svg+xml" href="/img/mm4i.svg">
+    <link rel="icon" type="image/svg+xml" href="./img/mm4i.svg">
 
 
     <!-- for MWC, https://github.com/material-components/material-web -->
@@ -68,6 +68,7 @@
             padding-right: 8px;
             padding-left: 8px;
         }
+
         .display-jsmind-search #jsmind-search-inputs {
             display: flex;
         }
@@ -90,11 +91,11 @@
     <script src="./ext/jsmind/jsmind-dbg.js"></script>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/jsmind@0.5/es6/jsmind.draggable-node.js"></script> -->
-    <!-- <script src="/ext/jsmind/230406-jsmind.draggable-node.js"></script> -->
+    <!-- <script src="./ext/jsmind/230406-jsmind.draggable-node.js"></script> -->
 
-    <!-- <script src="/ext/jsmind/chrome-src-jsmind.draggable-node.js"></script> -->
+    <!-- <script src="./ext/jsmind/chrome-src-jsmind.draggable-node.js"></script> -->
 
-    <!-- <script src="/src/js/mindmap-helpers.js"></script> -->
+    <!-- <script src="./src/js/mindmap-helpers.js"></script> -->
 </head>
 
 <body class="NOno-test-items">
@@ -135,7 +136,8 @@
             const modJsEditCommon = await importFc4i("jsmind-edit-common");
             modJsEditCommon.basicInit4jsmind();
             modJsEditCommon.pageSetup();
-            modJsEditCommon.addToPageMenu("About", "/about.html#mm4i");
+            const aboutLink = makeAbsLink("./about");
+            modJsEditCommon.addToPageMenu("About", aboutLink);
         })();
     </script>
 </body>
