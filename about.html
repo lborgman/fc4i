@@ -108,11 +108,32 @@
             text-decoration: none;
         }
 
-        #header-images a span {
+        #header-images a.mdc-card span {
+            position: relative;
             padding: 4px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: clip;
+        }
+
+        #header-images a.mdc-card span::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 30px;
+            content: "";
+            content: "…";
+            font-size: 0.5rem;
+            line-height: 300%;
+            color: red;
+            text-align: right;
+            vertical-align: text-bottom;
+            background: orange;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 206, 0) 0%,
+                    rgba(255, 255, 206, 1) 70%,
+                    rgba(255, 255, 206, 1) 100%);
         }
 
 
@@ -148,23 +169,23 @@
         <div id="header-images">
             <a class="mdc-card" href="#fc4i">
                 <img src="./img/fc4i.svg" />
-                <span> Flashcards 4 Internet </span>
+                <span>Flashcards 4 Internet </span>
             </a>
             <a class="mdc-card" href="#mm4i">
                 <img src="./img/mm4i.svg" />
-                <span> Mindmaps 4 Internet </span>
+                <span>Mindmaps 4 Internet </span>
             </a>
             <a class="mdc-card" href="#nwg">
                 <img src="./img/nwg.svg" />
-                <span> Network view</span>
+                <span>Network view</span>
             </a>
             <a class="mdc-card" href="#loci">
                 <img src="./img/loci.svg" />
-                <span> Memory Palace</span>
+                <span>Memory Palace</span>
             </a>
             <a class="mdc-card" href="#tl">
                 <img src="./img/tl.svg" />
-                <span> Text + Link</span>
+                <span>Text+Link</span>
             </a>
         </div>
 
