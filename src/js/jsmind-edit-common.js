@@ -5,6 +5,7 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 const modCustRend = await importFc4i("jsmind-cust-rend");
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
+const modTools = await importFc4i("toolsJs");
 
 // const modTools = await importFc4i("toolsJs");
 
@@ -1457,7 +1458,8 @@ export async function pageSetup() {
         return jm;
     }
 
-    addScrollIntoViewOnSelect(jmDisplayed);
+    // addScrollIntoViewOnSelect(jmDisplayed);
+    addScrollIntoViewOnSelect();
     function jsmindSearchNodes(strSearch) {
         const nodeEltArray = [...jsMindContainer.querySelectorAll("jmnode[nodeid]")];
         nodeEltArray.forEach(n => n.classList.remove("jsmind-hit"));
@@ -1910,12 +1912,18 @@ function addDebugLog(msg) {
     }
 }
 
-export function addScrollIntoViewOnSelect(jmDisp) {
+export function addScrollIntoViewOnSelect() {
+    const jmDisp = jmDisplayed;
     jmDisp.add_event_listener(function (t, d) {
         // console.log({ t, d });
         if (t !== jsMind.event_type.select) return;
-        const id = d.node;
-        const n = jmDisp.get_node(id);
+        // const id = d.node;
+        // const n = jmDisp.get_node(id);
+        scrollSelectedNodeIntoView();
+        return;
+        const n = jmDisp.get_selected_node();
+        scrollNodeIntoView(n);
+        return;
         // const elt = n._data.view.element;
         const elt = jsMind.my_get_DOM_element_from_node(n);
 
@@ -1928,6 +1936,27 @@ export function addScrollIntoViewOnSelect(jmDisp) {
         // console.log({scrollOpt})
         elt.scrollIntoView(scrollOpt);
     });
+}
+function scrollSelectedNodeIntoView() {
+    const n = jmDisplayed.get_selected_node();
+    scrollNodeIntoView(n);
+}
+const debounceScrollSelectedNodeIntoView = modTools.debounce(scrollSelectedNodeIntoView, 1000);
+window.addEventListener("resize", () => debounceScrollSelectedNodeIntoView());
+
+
+function scrollNodeIntoView(node) {
+    const elt = jsMind.my_get_DOM_element_from_node(node);
+    // FIX-ME: test .scrollIntoView - problem with vertical
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    const scrollOpt = {
+        behavior: "smooth",
+        block: "nearest"
+    };
+    // console.log({scrollOpt})
+    elt.scrollIntoView(scrollOpt);
+
+
 }
 
 /*
