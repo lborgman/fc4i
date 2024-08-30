@@ -5,7 +5,7 @@ const VERSION = "0.1.0";
 console.log(`here is mindmap-helpers.js, module, ${VERSION}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
-const URL_MINDMAPS_PAGE = "/mm4i/mm4i.html";
+const URL_MINDMAPS_PAGE = "./mm4i/mm4i.html";
 
 
 importFc4i("jsmind-cust-rend");
@@ -28,7 +28,9 @@ function getNextMindmapKey() { return "mm-" + new Date().toISOString(); }
 
 export function showMindmap(key) {
     // const url = new URL(linkMindmapsPage, location);
-    const url = new URL( URL_MINDMAPS_PAGE , location);
+    // const url = new URL( URL_MINDMAPS_PAGE , location);
+    const absLink = makeAbsLink(URL_MINDMAPS_PAGE);
+    const url = new URL(absLink);
     url.searchParams.set("mindmap", key);
     // location.href = url; // FIX-ME:
     location.href = url.href; // FIX-ME:
@@ -153,7 +155,9 @@ export async function getMindmapsHits(customKey) {
 }
 
 export function mkEltLinkMindmapA(topic, mkey, mhits, provider) {
-    const url = new URL(URL_MINDMAPS_PAGE, location);
+    // const url = new URL(URL_MINDMAPS_PAGE, location);
+    const absLink = makeAbsLink(URL_MINDMAPS_PAGE);
+    const url = new URL(absLink);
     url.searchParams.set("mindmap", mkey);
     if (mhits) {
         url.searchParams.set("provider", provider);
