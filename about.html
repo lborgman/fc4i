@@ -16,7 +16,7 @@
     <script>console.log("baseURI", document.baseURI);</script>
     <script src="./init-error.js"></script>
     <script type="module" src="./pwa.js"></script>
-    <script type="module" src="./anchors-with-base.js" ></script>
+    <script type="module" src="./anchors-with-base.js"></script>
     <script src="./fc4i-importmaps.js"></script>
     <script type="module" src="./src/js/tools.js"></script>
 
@@ -95,14 +95,11 @@
 
         #header-images {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: repeat(5, minmax(0, 20%));
             gap: 10px;
-            /* background-color: greenyellow; */
-            width: 128vw;
+            background-color: greenyellow;
             margin-left: 10px;
-            margin-bottom: -30px;
-            transform-origin: top left;
-            transform: scale(0.6);
+            width: calc(100% - 10px);
         }
 
         #header-images a {
@@ -113,7 +110,11 @@
 
         #header-images a span {
             padding: 4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: clip;
         }
+
 
         #temp-helper {
             display: flex;
@@ -143,7 +144,7 @@
 
 <body id="page-about">
     <main>
-        <h1>About Flashcards 4 Internet & helpers (<span id="PWA-version")>get ver</span>)</h1>
+        <h1>About Flashcards 4 Internet & helpers (<span id="PWA-version" )>get ver</span>)</h1>
         <div id="header-images">
             <a class="mdc-card" href="#fc4i">
                 <img src="./img/fc4i.svg" />
