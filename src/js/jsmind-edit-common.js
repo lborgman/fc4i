@@ -1268,7 +1268,9 @@ export async function pageSetup() {
         const liDragAccessibility = mkMenuItem("Drag accessiblity", dialogDragAccessibility);
 
         // const liMindmaps = funMindmapsDialog ? mkMenuItem("Mindmaps", funMindmapsDialog) : undefined;
-        const liMindmapsA = mkMenuItemA("List Mindmaps", "/mm4i/mm4i.html");
+        // const liMindmapsA = mkMenuItemA("List Mindmaps", "/mm4i/mm4i.html");
+        const mm4iAbsLink = makeAbsLink("./mm4i/mm4i.html");
+        const liMindmapsA = mkMenuItemA("List Mindmaps", mm4iAbsLink);
         console.log({ liMindmapsA });
 
         const liEditMindmap = mkMenuItem("Edit Mindmap", dialogEditMindmap);
