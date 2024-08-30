@@ -1,4 +1,3 @@
-// "use strict";
 const CUST_REND_VER = "0.0.3";
 console.log(`here is jsmind-cust-rend.js, module,${CUST_REND_VER}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
@@ -1299,7 +1298,7 @@ export class CustomRenderer4jsMind {
                 divImgPreview.style.backgroundImage = "none";
                 return;
             }
-            const isValid = isValidUrl(maybeUrl);
+            const isValid = modTools.isValidUrl(maybeUrl);
             if (true == isValid) {
                 radChoiceLink.checked = true;
                 radChoiceLink.disabled = false;
@@ -1615,7 +1614,7 @@ export class CustomRenderer4jsMind {
                 delete currentShapeEtc.nodeLink;
                 // return;
             } else {
-                if (isValidUrl(maybeUrl) == true) {
+                if (modTools.isValidUrl(maybeUrl) == true) {
                     console.log("inpLink", maybeUrl);
                     currentShapeEtc.nodeLink = maybeUrl;
                     aLinkPreview.href = maybeUrl;

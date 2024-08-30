@@ -1094,7 +1094,7 @@ function getUrllNotValidMsg(id) {
 }
 
 // To check top level domains async fetchReTLD() must be called first!
-function isValidUrl(strUrl, protocol) {
+export function isValidUrl(strUrl, protocol) {
     protocol = protocol || "https:";
     try {
         // new URL() only checks for well formatted so do some more checks first
