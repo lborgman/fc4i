@@ -4,7 +4,7 @@
     "description": "Mindmaps that can link to fc4i items and web pages",
     "icons": [
         {
-            "src": "/img/mm4i.svg",
+            "src": "../img/mm4i.svg",
             "type": "image/svg+xml",
             "sizes": "any",
             "purpose": "any"
