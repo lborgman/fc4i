@@ -1939,6 +1939,7 @@ export function addScrollIntoViewOnSelect() {
     });
 }
 function scrollSelectedNodeIntoView() {
+    if (!jmDisplayed) return;
     const n = jmDisplayed.get_selected_node();
     scrollNodeIntoView(n);
 }
