@@ -1941,6 +1941,7 @@ export function addScrollIntoViewOnSelect() {
 function scrollSelectedNodeIntoView() {
     if (!jmDisplayed) return;
     const n = jmDisplayed.get_selected_node();
+    if (!n) return;
     scrollNodeIntoView(n);
 }
 const debounceScrollSelectedNodeIntoView = modTools.debounce(scrollSelectedNodeIntoView, 1000);
