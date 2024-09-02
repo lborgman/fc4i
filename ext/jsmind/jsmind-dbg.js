@@ -1912,7 +1912,7 @@
         const dTxt = element.querySelector("div.jmnode-text");
         const ch = dTxt.clientHeight;
         const sh = dTxt.scrollHeight;
-        console.log({ ch, sh });
+        console.log("markTextOverFlow", { ch, sh });
         const isOverflow = sh > ch;
         if (isOverflow) {
             element.classList.add("text-overflow");

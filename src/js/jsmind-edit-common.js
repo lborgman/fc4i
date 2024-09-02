@@ -284,6 +284,7 @@ export function applyNodeShapeEtc(node, eltJmnode) {
 export async function applyShapeEtc(shapeEtc, eltJmnode) {
     const eltShape = eltJmnode.querySelector(".jmnode-bg");
     if (!eltShape) {
+        throw Error("eltShape is null, no .jmnode-bg found");
         if (eltJmnode.childElementCount > 1) {
             // FIX-ME: just delete this???
             console.error("old custom format 2");

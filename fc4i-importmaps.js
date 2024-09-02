@@ -32,7 +32,15 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "is-displayed": "./src/js/is-displayed.js",
 
         // The jsmind entry is not used yet:
-        "jsmind": "./ext/jsmind/jsmind-dbg.js",
+        /*
+        <script
+            type="text/javascript"
+            src="//cdn.jsdelivr.net/npm/jsmind@0.8.5/es6/jsmind.js"
+        ></script>
+        */
+        // "jsmind": "./ext/jsmind/jsmind-dbg.js",
+        // "jsmind": "https://cdn.jsdelivr.net/npm/jsmind@0.8.5/es6/jsmind.js",
+        "jsmind": "./ext/jsmind/es6/jsmind.js",
 
         "jsmind-edit-common": "./src/js/jsmind-edit-common.js",
         "jsmind-edit-spec-fc4i": "./src/js/jsmind-edit-spec-fc4i.js",

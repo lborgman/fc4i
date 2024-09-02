@@ -2310,8 +2310,6 @@ export class CustomRenderer4jsMind {
             console.log({ currTemp, initTemp, sameW, sameH });
             if (!sameW || !sameH) {
                 this.THEjmDisplayed.set_node_background_image(node_ID_copied, undefined, currTemp.width, currTemp.height);
-                delete currTemp.width;
-                delete currTemp.height;
             }
             console.log({ currTemp });
 
@@ -2319,9 +2317,11 @@ export class CustomRenderer4jsMind {
                 console.log("setTimeout in save", { eltJmnode });
                 // FIX-ME: set size once again to trigger a reflow. (Bug in jsMind.)
                 this.THEjmDisplayed.set_node_background_image(node_ID_copied, undefined, currTemp.width, currTemp.height);
+                delete currTemp.width;
+                delete currTemp.height;
                 await modJsEditCommon.fixJmnodeProblem(eltJmnode);
                 modJsEditCommon.applyNodeShapeEtc(node_copied, eltJmnode);
-                modMMhelpers.DBrequestSaveThisMindmap(this.THEjmDisplayed);
+                setTimeout(()=> { modMMhelpers.DBrequestSaveThisMindmap(this.THEjmDisplayed); }, 2000);
 
                 // FIX-ME: use lastElementChild instead???
                 // if (node_copied.data.fc4i) this.updateJmnodeFromCustom(eltJmnode);
