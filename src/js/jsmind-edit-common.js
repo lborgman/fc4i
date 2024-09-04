@@ -832,6 +832,7 @@ export async function pageSetup() {
         }
         return;
     }
+    console.log({ mind });
 
     const modJmDrag = await getDraggableNodes();
     modJmDrag.setupNewDragging();
@@ -870,7 +871,7 @@ export async function pageSetup() {
 
 
     const nowBefore = Date.now();
-    jmDisplayed = displayMindMap(mind, usedOptJmDisplay);
+    jmDisplayed = await displayMindMap(mind, usedOptJmDisplay);
     // "dblclick"
 
     modCustRend.setOurCustomRendererJm(jmDisplayed);
@@ -1453,9 +1454,9 @@ export async function pageSetup() {
         return divMenu;
     }
 
-    function displayMindMap(mind, options) {
+    async function displayMindMap(mind, options) {
         const jm = new jsMind(options);
-        jm.show(mind);
+        await jm.show_async(mind);
         return jm;
     }
 
