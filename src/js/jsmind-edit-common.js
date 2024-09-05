@@ -430,7 +430,7 @@ export function basicInit4jsmind() {
     errorHandlerAsyncEvent(startDraggable());
 
     function addDragDropTouch() {
-        // if (!confirm("Load DragDropTouch.js?")) return;
+        if (!confirm("Load DragDropTouch.js?")) return;
         const elt = mkElt("script", { src: "/ext/DragDropTouch.js" });
         document.head.appendChild(elt);
     }
