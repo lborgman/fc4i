@@ -245,6 +245,7 @@ async function teardownPointHandle() {
 
 function requestCheckDistance() {
     if (!eltPointHandle) return;
+    checkPointHandleDistance();
     requestAnimationFrame(requestCheckDistance);
 }
 function checkPointHandleDistance() {
@@ -272,8 +273,10 @@ function checkPointHandleDistance() {
         posPointHandle.startX = evtPointerLast.clientX;
         posPointHandle.startY = evtPointerLast.clientY;
     }
-    const diffX = posPointHandle.startX - evt.clientX;
-    const diffY = posPointHandle.startY - evt.clientY;
+    // const diffX = posPointHandle.startX - evt.clientX;
+    const diffX = posPointHandle.startX - evtPointerLast.clientX;
+    // const diffY = posPointHandle.startY - evt.clientY;
+    const diffY = posPointHandle.startY - evtPointerLast.clientY;
     const diff2 = diffX * diffX + diffY * diffY;
     const diffOk = !(diff2 < diffPointHandle * diffPointHandle);
     if (!diffOk) return;
@@ -285,10 +288,10 @@ function checkPointHandleDistance() {
     const dRight = posPointHandle.dRight;
     const dTop = posPointHandle.dTop;
     const dBottom = posPointHandle.dBottom;
-    const leftInside = startX - evt.clientX < dRight + dOutside;
-    const rightInside = evt.clientX - startX < dLeft + dOutside;
-    const topInside = startY - evt.clientY < dBottom + dOutside;
-    const bottomInside = evt.clientY - startY < dTop + dOutside;
+    const leftInside = startX - evtPointerLast.clientX < dRight + dOutside;
+    const rightInside = evtPointerLast.clientX - startX < dLeft + dOutside;
+    const topInside = startY - evtPointerLast.clientY < dBottom + dOutside;
+    const bottomInside = evtPointerLast.clientY - startY < dTop + dOutside;
     const isInside = leftInside && rightInside && topInside && bottomInside;
     // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
     if (isInside) return;

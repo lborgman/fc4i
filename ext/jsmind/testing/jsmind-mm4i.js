@@ -1926,12 +1926,15 @@ await modTools.promiseDOMready();
         return engine.toLowerCase() === 'svg' ? new SvgGraph(view) : new CanvasGraph(view);
     }
 
-    window.useRejection = confirm("Use rejection?");
+    // window.useRejection = confirm("Use rejection?");
+    window.useRejection = false;
     console.log({ useRejection });
-    const answer = prompt("Delay resolve", 200).trim();
-    if (!/[0-9]+/.test(answer)) throw Error(`Need integer: ${answer}`);
-    window.delayResolve = parseInt(answer);
-    console.log({ answer, delayResolve });
+
+    // const answer = prompt("Delay resolve", 200).trim();
+    // if (!/[0-9]+/.test(answer)) throw Error(`Need integer: ${answer}`);
+    // window.delayResolve = parseInt(answer);
+    window.delayResolve = 20;
+    console.log({ delayResolve });
 
     /**
      * @license BSD
