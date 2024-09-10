@@ -19,6 +19,11 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         } else {
             console.log("Unknown event class", evt);
         }
+        if (evt.reason) {
+            console.log("had reason");
+        } else {
+            console.log("had NO reason");
+        }
         // @ts-ignore
         const ourError = evt.reason ? evt.reason : evt;
         // @ts-ignore
@@ -102,7 +107,12 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         document.addEventListener("DOMContentLoaded", () => { doDisplay(evtError); });
     }
     window.addEventListener("error", evt => { displayError(evt); });
-    window.addEventListener("unhandledrejection", evt => { displayError(evt); });
+    window.addEventListener("unhandledrejection", evt => {
+        console.log("in unhandledrejection", window.useRejection, evt);
+        // displayError(evt);
+        // https://stackoverflow.com/questions/76230924/get-location-information-for-promiserejectionevent
+        reportError(evt.reason);
+    });
 
     if (!document.currentScript) throw Error("init-error.js must not be loaded as a module");
 }

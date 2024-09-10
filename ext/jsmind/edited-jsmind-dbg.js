@@ -2108,7 +2108,7 @@
                 d_e.style.visibility = 'hidden';
                 parent_node.appendChild(d_e);
                 view_data.expander = d_e;
-                d.draggable = true;
+                // d.draggable = true;
                 switch (node.direction) {
                     case Direction.left:
                         d.classList.add("left-side");

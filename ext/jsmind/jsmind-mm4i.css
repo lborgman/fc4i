@@ -420,6 +420,7 @@ jmnodes jmnode {
     /* Try to handle overlfow in .jmnode-text */
     display: grid;
     grid-template-rows: 1fr;
+    width: max-content;
 }
 
 jmnodes jmnode.text-overflow div.jmnode-text {
@@ -504,9 +505,12 @@ jmnodes jmnode .jmnode-text {
     text-shadow: 1px 0 black, -1px 0 black, 0 1px black, 0 -1px black, 0 0 2px black;
 }
 
-.jsmind_container jmnodes jmnode[nodeid='root'] {
-    overflow: hidden;
-    overflow: visible;
+/* .jsmind_container jmnodes jmnode[nodeid='root'] { */
+.jsmind_container jmnodes jmnode.root {
+    NOoverflow: hidden;
+    NOoverflow: visible;
+    text-decoration: wavy underline;
+    text-underline-position: under;
 }
 
 /* https://css-tricks.com/almanac/properties/t/touch-action/ */

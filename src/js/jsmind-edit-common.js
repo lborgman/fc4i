@@ -1,14 +1,17 @@
-const version = "0.1.0";
+// @ts-check
+
+const version = "0.1.001";
 console.log(`here is jsmind-edit-common.js, module, ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
+
+const importFc4i = window.importFc4i;
+const mkElt = window.mkElt;
+
 
 const modCustRend = await importFc4i("jsmind-cust-rend");
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
-
-// const modTools = await importFc4i("toolsJs");
-
 
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
@@ -34,10 +37,12 @@ const theMirrorWays = [
     // "cloneNode",
 ];
 Object.freeze(theMirrorWays);
+/*
 const ifMirrorWay = (ourWay) => {
     if (!theMirrorWays.includes(ourWay)) throw Error(`Unknown mirror way: ${ourWay}`);
     return ourWay == theDragTouchAccWay;
 }
+*/
 
 const checkTheDragTouchAccWay = () => {
     if (!theMirrorWays.includes(theDragTouchAccWay)) throw Error(`Unknown mirror way: ${theDragTouchAccWay}`);
@@ -154,51 +159,104 @@ theDragTouchAccWay = "pointHandle"; // FIX-ME:
 
 
 /////////////////////////////////////////////////////
+
+/**
+ * @typedef {Object}
+ * @property {number} dTop - target top
+ * @property {number} dBottom
+ * @property {number} dLeft
+ * @property {number} dRight
+ * @property {number} startX
+ * @property {number} startY
+ * */
 let posPointHandle;
+
+let evtPointerLast; /** @type {PointerEvents} */
+/**
+ * 
+ * @param {PointerEvent} evt 
+ */
+function savePointerEvent(evt) { evtPointerLast = evt; }
+
 let jmnodesPointHandle;
-let pointPointHandle;
+let eltPointHandle;
 const sizePointHandle = 20;
 const diffPointHandle = 60;
+
+
+
+// https://javascript.info/pointer-events
+
+/*
+ * 
+ * @param {PointerEvent} evt 
+ * 
+ * @return {EventListenerOrEventListenerObject}
+ */
 function startPointHandle(evt) {
     // evt.stopPropagation();
     // evt.preventDefault();
-    posPointHandle = {};
-    pointPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
-    jmnodesPointHandle.appendChild(pointPointHandle);
-    // jmnodesPointHandle.addEventListener("mousemove", checkPointHandleDistance);
-    jmnodesPointHandle.addEventListener("drag", checkPointHandleDistance);
+    if (!evt.target) return;
+    const target = evt.target; /** @type {HTMLElement} */
+    target.setPointerCapture(evt.pointerId);
+    posPointHandle = {
+        start: {
+            clientX: evt.clientX,
+            clientY: evt.clientY,
+            screenX: evt.screenX,
+            screenY: evt.screenY,
+            eltDragged: evt.target,
+            evtId: evt.pointerId
+        },
+        current: {}
+    };
+    eltPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
+    jmnodesPointHandle.appendChild(eltPointHandle);
+    eltPointHandle.style.left = evt.clientX - sizePointHandle / 2;
+    eltPointHandle.style.top = evt.clientY - sizePointHandle / 2;
+    jmnodesPointHandle.addEventListener("pointermove", savePointerEvent);
+    requestCheckDistance();
 }
 function stopPointHandle(evt) {
+    console.log("stopPointHandle");
     // evt.stopPropagation();
     // evt.preventDefault();
-    // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
-    jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
-    pointPointHandle?.remove();
+    jmnodesPointHandle.removeEventListener("pointermove", savePointerEvent);
+    eltPointHandle?.remove();
+    eltPointHandle = undefined;
 }
 function setupPointHandle() {
+    console.log("setupPointHandle");
     jmnodesPointHandle = document.body.querySelector("jmnodes");
-    // jmnodesPointHandle.addEventListener("mousedown", startPointHandle);
-    // jmnodesPointHandle.addEventListener("mouseup", stopPointHandle);
-    jmnodesPointHandle.addEventListener("dragstart", startPointHandle);
-    jmnodesPointHandle.addEventListener("dragend", stopPointHandle);
+    if (!jmnodesPointHandle) throw Error("Could not find <jmnodes>");
+    jmnodesPointHandle.addEventListener("pointerdown", startPointHandle);
+    jmnodesPointHandle.addEventListener("pointerup", stopPointHandle);
 }
 async function teardownPointHandle() {
     jmnodesPointHandle = document.body.querySelector("jmnodes");
-    jmnodesPointHandle.removeEventListener("dragstart", startPointHandle);
-    jmnodesPointHandle.removeEventListener("dragend", stopPointHandle);
+    if (!jmnodesPointHandle) throw Error("jmnodesPointHandle not found");
+    // jmnodesPointHandle.removeEventListener("dragstart", startPointHandle);
+    // jmnodesPointHandle.removeEventListener("dragend", stopPointHandle);
+    jmnodesPointHandle?.removeEventListener("pointerdown", startPointHandle);
+    jmnodesPointHandle?.removeEventListener("pointerup", stopPointHandle);
     stopPointHandle();
     modJsmindDraggable.setPointerDiff(0, 0);
 }
-function checkPointHandleDistance(evt) {
-    if (posPointHandle.startX == undefined) {
-        // console.log("checkPointHandleDistance", evt);
 
-        const target = evt.target.closest("jmnode");
+function requestCheckDistance() {
+    if (!eltPointHandle) return;
+    requestAnimationFrame(requestCheckDistance);
+}
+function checkPointHandleDistance() {
+    if (posPointHandle.startX == undefined) {
+        if (!evtPointerLast) return;
+        // console.log("checkPointHandleDistance", evt);
+        const target = evtPointerLast.target.closest("jmnode");
         const bcrNode = target.getBoundingClientRect();
-        posPointHandle.dTop = evt.clientY - bcrNode.top;
-        posPointHandle.dBottom = bcrNode.bottom - evt.clientY;
-        posPointHandle.dLeft = evt.clientX - bcrNode.left;
-        posPointHandle.dRight = bcrNode.right - evt.clientX;
+        posPointHandle.dTop = evtPointerLast.clientY - bcrNode.top;
+        posPointHandle.dBottom = bcrNode.bottom - evtPointerLast.clientY;
+        posPointHandle.dLeft = evtPointerLast.clientX - bcrNode.left;
+        posPointHandle.dRight = bcrNode.right - evtPointerLast.clientX;
         let insideNode = false;
         ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
             const d = posPointHandle[dT];
@@ -207,12 +265,12 @@ function checkPointHandleDistance(evt) {
         });
         if (insideNode) return;
 
-        pointPointHandle.style.left = evt.clientX - sizePointHandle / 2;
-        pointPointHandle.style.top = evt.clientY - sizePointHandle / 2;
-        jmnodesPointHandle.appendChild(pointPointHandle)
+        eltPointHandle.style.left = evtPointerLast.clientX - sizePointHandle / 2;
+        eltPointHandle.style.top = evtPointerLast.clientY - sizePointHandle / 2;
+        // jmnodesPointHandle.appendChild(eltPointHandle)
         console.log("checkPointHandleDistance start", { posPointHandle });
-        posPointHandle.startX = evt.clientX;
-        posPointHandle.startY = evt.clientY;
+        posPointHandle.startX = evtPointerLast.clientX;
+        posPointHandle.startY = evtPointerLast.clientY;
     }
     const diffX = posPointHandle.startX - evt.clientX;
     const diffY = posPointHandle.startY - evt.clientY;
@@ -235,7 +293,7 @@ function checkPointHandleDistance(evt) {
     // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
     if (isInside) return;
 
-    pointPointHandle.classList.add("active");
+    eltPointHandle.classList.add("active");
     console.log("added active to pph");
     posPointHandle.diffX = posPointHandle.diffX || diffX;
     posPointHandle.diffY = posPointHandle.diffY || diffY;
@@ -250,12 +308,12 @@ function checkPointHandleDistance(evt) {
 function movePointHandle(evt) {
     // evt.stopPropagation();
     // evt.preventDefault();
-    const sp = pointPointHandle.style;
+    const sp = eltPointHandle.style;
     sp.left = evt.clientX + posPointHandle.diffX - sizePointHandle / 2;
     sp.top = evt.clientY + posPointHandle.diffY - sizePointHandle / 2;
 }
 function getposPointHandle() {
-    const sp = pointPointHandle.style;
+    const sp = eltPointHandle.style;
     const clientX = sp.left;
     const clientY = sp.top;
     return { clientX, clientY };
@@ -429,10 +487,14 @@ export function basicInit4jsmind() {
     }
     errorHandlerAsyncEvent(startDraggable());
 
-    function addDragDropTouch() {
+    async function addDragDropTouch() {
         if (!confirm("Load DragDropTouch.js?")) return;
-        const elt = mkElt("script", { src: "/ext/DragDropTouch.js" });
-        document.head.appendChild(elt);
+        // const elt = mkElt("script", { src: "/ext/DragDropTouch.js" });
+        // document.head.appendChild(elt);
+        const ddtLink = "https://drag-drop-touch-js.github.io/dragdroptouch/dist/drag-drop-touch.esm.min.js";
+        const modDDT = await import(ddtLink);
+        modDDT.enableDragDropTouch();
+        debugger;
     }
     if (hasTouchEvents()) {
         addDragDropTouch();
@@ -1098,9 +1160,10 @@ export async function pageSetup() {
     }
 
     // These bubbles up:
-    jsMindContainer.addEventListener("mousedown", evt => hideContextMenuOnEvent(evt));
+    // jsMindContainer.addEventListener("mousedown", evt => hideContextMenuOnEvent(evt));
+    // jsMindContainer.addEventListener("touchstart", evt => hideContextMenuOnEvent(evt));
+    jsMindContainer.addEventListener("pointerdown", evt => hideContextMenuOnEvent(evt));
     jsMindContainer.addEventListener("keydown", evt => hideContextMenuOnEvent(evt));
-    jsMindContainer.addEventListener("touchstart", evt => hideContextMenuOnEvent(evt));
     jsMindContainer.addEventListener("click", evt => hideContextMenuOnEvent(evt));
     jsMindContainer.addEventListener("click", evt => {
         // evt.stopPropagation();
@@ -1578,7 +1641,8 @@ export async function pageSetup() {
             // console.log("showDraggable", ele.style.cursor);
             ele.style.userSelect = 'none';
         };
-        ele.addEventListener("mousedown", mouseDownHandler);
+        // ele.addEventListener("mousedown", mouseDownHandler);
+        ele.addEventListener("pointerdown", mouseDownHandler);
         // ele.addEventListener("dragstart", mouseUpHandler);
         showDraggable();
 
