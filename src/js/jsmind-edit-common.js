@@ -328,7 +328,7 @@ function movePointHandle() {
     sp.top = top;
     const eltsOver = document.elementsFromPoint(left, top);
     const eltFromOverJmnode = (eltsOver.filter(elt => { return elt.tagName == "JMNODE" }))[0];
-    console.log("from over jmnode", eltFromOverJmnode);
+    // console.log("from over jmnode", eltFromOverJmnode);
     if (eltFromOverJmnode) {
         if (eltOverJmnode) {
             if (eltOverJmnode != eltFromOverJmnode) { unmarkOver(); }
