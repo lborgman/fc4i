@@ -309,15 +309,46 @@ function checkPointHandleDistance() {
         // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
         // jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
         // jmnodesPointHandle.addEventListener("drag", movePointHandle);
+    } else {
+        movePointHandle();
     }
-    movePointHandle();
 }
+let eltOverJmnode;
 function movePointHandle() {
-    // evt.stopPropagation();
-    // evt.preventDefault();
+    const cssClsDragTarget = "jsmind-drag-target";
+    const clientX = evtPointerLast.clientX;
+    const clientY = evtPointerLast.clientY;
+    // const bcr = eltPointHandle.getBoundingClientRect();
+    // const clientX = bcr.left + bcr.width / 2;
+    // const clientY = bcr.top + bcr.height / 2;
     const sp = eltPointHandle.style;
-    sp.left = evtPointerLast.clientX + posPointHandle.diffX - sizePointHandle / 2;
-    sp.top = evtPointerLast.clientY + posPointHandle.diffY - sizePointHandle / 2;
+    const left = clientX + posPointHandle.diffX - sizePointHandle / 2;
+    sp.left = left;
+    const top = clientY + posPointHandle.diffY - sizePointHandle / 2;
+    sp.top = top;
+    const eltsOver = document.elementsFromPoint(left, top);
+    const eltFromOverJmnode = (eltsOver.filter(elt => { return elt.tagName == "JMNODE" }))[0];
+    console.log("from over jmnode", eltFromOverJmnode);
+    if (eltFromOverJmnode) {
+        if (eltOverJmnode) {
+            if (eltOverJmnode != eltFromOverJmnode) { unmarkOver(); }
+        }
+        if (!eltOverJmnode) {
+            markOver(eltFromOverJmnode);
+        }
+    } else {
+        unmarkOver();
+    }
+    function markOver(elt) {
+        eltOverJmnode = elt;
+        eltOverJmnode.classList.add(cssClsDragTarget);
+    }
+    function unmarkOver() {
+        if (eltOverJmnode) {
+            eltOverJmnode.classList.remove(cssClsDragTarget);
+            eltOverJmnode = undefined;
+        }
+    }
 }
 function getposPointHandle() {
     const sp = eltPointHandle.style;
