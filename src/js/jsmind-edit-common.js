@@ -296,24 +296,28 @@ function checkPointHandleDistance() {
     // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
     if (isInside) return;
 
-    eltPointHandle.classList.add("active");
-    console.log("added active to pph");
-    posPointHandle.diffX = posPointHandle.diffX || diffX;
-    posPointHandle.diffY = posPointHandle.diffY || diffY;
-    const newDiffX = posPointHandle.diffX - sizePointHandle / 2;
-    const newDiffY = posPointHandle.diffY - sizePointHandle / 2;
-    modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
-    // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
-    // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
-    jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
-    jmnodesPointHandle.addEventListener("drag", movePointHandle);
+    if (!eltPointHandle.classList.contains("active")) {
+        eltPointHandle.classList.add("active");
+        console.log("added active to pph");
+        posPointHandle.diffX = posPointHandle.diffX || diffX;
+        posPointHandle.diffY = posPointHandle.diffY || diffY;
+        const newDiffX = posPointHandle.diffX - sizePointHandle / 2;
+        const newDiffY = posPointHandle.diffY - sizePointHandle / 2;
+        modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
+
+        // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
+        // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
+        // jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
+        // jmnodesPointHandle.addEventListener("drag", movePointHandle);
+    }
+    movePointHandle();
 }
-function movePointHandle(evt) {
+function movePointHandle() {
     // evt.stopPropagation();
     // evt.preventDefault();
     const sp = eltPointHandle.style;
-    sp.left = evt.clientX + posPointHandle.diffX - sizePointHandle / 2;
-    sp.top = evt.clientY + posPointHandle.diffY - sizePointHandle / 2;
+    sp.left = evtPointerLast.clientX + posPointHandle.diffX - sizePointHandle / 2;
+    sp.top = evtPointerLast.clientY + posPointHandle.diffY - sizePointHandle / 2;
 }
 function getposPointHandle() {
     const sp = eltPointHandle.style;
