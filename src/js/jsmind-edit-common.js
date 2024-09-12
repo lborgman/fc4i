@@ -308,14 +308,13 @@ function checkPointHandleDistance() {
 
     if (!eltPointHandle.classList.contains("active")) {
         eltPointHandle.classList.add("active");
-        // eltJmnodeFrom.classList.add(cssClsDragFrom);
-        // modJsmindDraggable.markAsDragged(eltJmnodeFrom, true);
         console.log("added active to pph");
         posPointHandle.diffX = posPointHandle.diffX || diffX;
         posPointHandle.diffY = posPointHandle.diffY || diffY;
         const newDiffX = posPointHandle.diffX - sizePointHandle / 2;
         const newDiffY = posPointHandle.diffY - sizePointHandle / 2;
         modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
+        modJsmindDraggable.nextHereIamMeansStart();
 
         // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
         // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);

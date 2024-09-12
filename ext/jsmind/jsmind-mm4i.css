@@ -529,7 +529,9 @@ jmnodes {
 }
 
 .jsmind-drag-dragged {
-    outline: 5px dotted yellow;
+    outline: 5px inset white !important;
+    opacity: 0.5;
+    filter: grayscale(0.8);
 }
 
 /*
@@ -540,7 +542,7 @@ jmnodes {
 
 @media (pointer:coarse) {}
 
-.jsmind-drag-from {
+.OLDjsmind-drag-from {
     opacity: 0.5;
     filter: grayscale(0.8);
 }

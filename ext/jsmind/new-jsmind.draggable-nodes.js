@@ -453,7 +453,8 @@ export async function setupNewDragging() {
     // https://stackoverflow.com/questions/43275189/html-5-drag-events-dragleave-fired-after-dragenter
     // dragenter fires before dragleave!!
     // So... we only have to listen to dragenter, or??
-    eltJmnodes.addEventListener("OLDdragenter", evt => {
+    // eltJmnodes.addEventListener("OLDdragenter", evt => {}
+    eltJmnodes.addEventListener("pointerenter", evt => {
         return;
         // if (eltTarget) return;
         const target = evt.target;
@@ -483,7 +484,8 @@ export async function setupNewDragging() {
             eltTarget = undefined;
         }
     });
-    eltJmnodes.addEventListener("OLDdragleave", evt => {
+    // eltJmnodes.addEventListener("OLDdragleave", evt => {}
+    eltJmnodes.addEventListener("pointerleave", evt => {
         return;
         const target = evt.target;
         const tn = target.tagName;
@@ -762,7 +764,27 @@ let nodeAbove, nodeBelow, nodeParent;
 let oldElementAtPoint;
 // let oldJmnodeAtPoint; // this is eltTarget!
 const dragPauseTimer = new TimeoutTimer(500, whenDragPauses);
+
+export function nextHereIamMeansStart() {
+    colClientX = undefined;
+    colClientY = undefined;
+    dragPauseTimer.stop();
+    // eltDragged = evt.target;
+    if (eltDragged) markAsDragged(eltDragged, false);
+    eltDragged = undefined;
+    eltTarget = undefined;
+    eltTParent = undefined;
+    // childDragLine = undefined;
+}
 export function hiHereIam(cX, cY) {
+    if (!eltDragged) {
+        // FIX-ME: elementsFromPoint?
+        const elt = document.elementFromPoint(cX, cY);
+        eltDragged = elt.closest("jmnode");
+        if (!eltDragged) { debugger; }
+        markAsDragged(eltDragged, true);
+        return;
+    }
     if (colClientX == cX && colClientY == cY) return;
     colClientX = cX;
     colClientY = cY;
@@ -771,6 +793,8 @@ export function hiHereIam(cX, cY) {
 export function stopNow() {
     dragPauseTimer.stop();
 }
+
+
 function whenDragPauses() {
     const newElementAtPoint = document.elementFromPoint(colClientX, colClientY);
     if (!newElementAtPoint) return; // FIX-ME: clear up here, or?
