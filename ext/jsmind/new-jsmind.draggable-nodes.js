@@ -301,7 +301,8 @@ export async function setupNewDragging() {
     // let eltDragged;
 
     let childDragLine;
-    eltJmnodes.addEventListener("dragstart", evt => {
+    // eltJmnodes.addEventListener("OLDdragstart", evt => {}
+    eltJmnodes.addEventListener("NOpointerdown", evt => {
         eltDragged = evt.target;
         // FIX-ME: What is happening here???
         if (!eltDragged) return;
@@ -313,8 +314,9 @@ export async function setupNewDragging() {
         // start
         startTrackingDrag();
     });
-    eltJmnodes.addEventListener("dragend", evt => {
-        // console.log("dragend", { eltDragged }, eltDragged.getAttribute("nodeid"), { eltTarget }, eltTarget?.getAttribute("nodeid"));
+    // eltJmnodes.addEventListener("OLDdragend", evt => {}
+    eltJmnodes.addEventListener("NOpointerup", evt => {
+        // console.log("OLDdragend", { eltDragged }, eltDragged.getAttribute("nodeid"), { eltTarget }, eltTarget?.getAttribute("nodeid"));
         stopTrackingDrag();
         // toTParent.stop();
         childDragLine?.removeLine();
@@ -451,7 +453,7 @@ export async function setupNewDragging() {
     // https://stackoverflow.com/questions/43275189/html-5-drag-events-dragleave-fired-after-dragenter
     // dragenter fires before dragleave!!
     // So... we only have to listen to dragenter, or??
-    eltJmnodes.addEventListener("dragenter", evt => {
+    eltJmnodes.addEventListener("OLDdragenter", evt => {
         return;
         // if (eltTarget) return;
         const target = evt.target;
@@ -459,7 +461,7 @@ export async function setupNewDragging() {
         if (target === eltDragged) return;
         if (tn === "JMNODES") { leaveJmnode(); return; }
         informDragStatus(`Over ${tn}, ${target.textContent.substring(0, 100)}`);
-        // console.log("dragenter", evt.target?.tagName, !!eltTarget);
+        // console.log("OLDdragenter", evt.target?.tagName, !!eltTarget);
         if (tn !== "JMNODE") {
             const closestJmnode = target.closest("jmnode");
             if (!closestJmnode) { leaveJmnode(); return; }
@@ -481,7 +483,7 @@ export async function setupNewDragging() {
             eltTarget = undefined;
         }
     });
-    eltJmnodes.addEventListener("dragleave", evt => {
+    eltJmnodes.addEventListener("OLDdragleave", evt => {
         return;
         const target = evt.target;
         const tn = target.tagName;
@@ -517,7 +519,7 @@ export async function setupNewDragging() {
     });
 
     let eltAbove, eltBelow;
-    eltJmnodes.addEventListener("drag", evt => {
+    eltJmnodes.addEventListener("OLDdrag", evt => {
         return;
         childDragLine?.moveFreeEnd(evt.clientX, evt.clientY);
 
@@ -559,20 +561,19 @@ export async function setupNewDragging() {
     });
 }
 
-function markAsDragged(jmnode, on) { markDragNode(jmnode, "dragged", on); }
-function markAsTarget(jmnode, on) { markDragNode(jmnode, "target", on); }
-function markAsTParent(jmnode, on) {
+export function markAsDragged(jmnode, on) { markDragNode(jmnode, "dragged", on); }
+export function markAsTarget(jmnode, on) { markDragNode(jmnode, "target", on); }
+export function markAsTParent(jmnode, on) {
     // console.warn("markAsTParent", jmnode, on);
     markDragNode(jmnode, "tparent", on);
 }
-// function markAsNearChild(jmnode, on) { markDragNode(jmnode, "near-child", on); }
-function markAsUpperChild(jmnode, on) { markDragNode(jmnode, "upper-child", on); }
-function markAsLowerChild(jmnode, on) {
+export function markAsUpperChild(jmnode, on) { markDragNode(jmnode, "upper-child", on); }
+export function markAsLowerChild(jmnode, on) {
     // console.warn("markAsLowerChild", jmnode, on);
     markDragNode(jmnode, "lower-child", on);
 }
-function markAsDroppedAt(jmnode, on) { markDragNode(jmnode, "dropped-at", on); }
-function markDragNode(jmnode, how, on) {
+export function markAsDroppedAt(jmnode, on) { markDragNode(jmnode, "dropped-at", on); }
+export function markDragNode(jmnode, how, on) {
     if (jmnode.tagName !== "JMNODE") throw Error(`${jmnode.tagName} !== "JMNODE`);
     if (jmnode.tagName !== "JMNODE") return;
 
@@ -707,15 +708,15 @@ class ScrollAtDragBorder {
         this.scroller.stopX();
     }
     startScroller() {
-        this.elt2move.addEventListener("dragstart", evt => {
+        this.elt2move.addEventListener("OLDdragstart", evt => {
             this.showVisuals();
         });
-        this.elt2move.addEventListener("drag", evt => {
+        this.elt2move.addEventListener("OLDdrag", evt => {
             // console.log("scroller drag");
             this.checkPoint(evt.clientX, evt.clientY);
             // this.checkPoint(useClientX(evt), useClientY(evt));
         });
-        this.elt2move.addEventListener("dragend", evt => {
+        this.elt2move.addEventListener("OLDdragend", evt => {
             this.hideVisuals();
             this.stopScrolling();
         });
@@ -761,6 +762,15 @@ let nodeAbove, nodeBelow, nodeParent;
 let oldElementAtPoint;
 // let oldJmnodeAtPoint; // this is eltTarget!
 const dragPauseTimer = new TimeoutTimer(500, whenDragPauses);
+export function hiHereIam(cX, cY) {
+    if (colClientX == cX && colClientY == cY) return;
+    colClientX = cX;
+    colClientY = cY;
+    dragPauseTimer.restart();
+}
+export function stopNow() {
+    dragPauseTimer.stop();
+}
 function whenDragPauses() {
     const newElementAtPoint = document.elementFromPoint(colClientX, colClientY);
     if (!newElementAtPoint) return; // FIX-ME: clear up here, or?
@@ -918,25 +928,25 @@ const trackPointerFun = evt => {
 }
 export function startTrackingPointer() {
     const jmns = document.querySelector("jmnodes");
-    jmns.addEventListener("pointermove", trackPointerFun);
+    jmns.addEventListener("NOpointermove", trackPointerFun);
 }
 export function stopTrackingPointer() {
     dragPauseTimer.stop();
     const jmns = document.querySelector("jmnodes");
-    jmns.removeEventListener("pointermove", trackPointerFun);
+    jmns.removeEventListener("NOpointermove", trackPointerFun);
 }
 
 // FIX-ME: jmnodes
-export function startTrackingDrag() {
+export function OLDstartTrackingDrag() {
     // console.warn("startTrackingDrag");
     const jmns = document.querySelector("jmnodes");
-    // jmns.addEventListener("drag", trackPointerFun);
-    jmns.addEventListener("drag", trackPointerFun);
+    // jmns.addEventListener("OLDdrag", trackPointerFun);
+    jmns.addEventListener("OLDdrag", trackPointerFun);
 }
-export function stopTrackingDrag() {
+export function OLDstopTrackingDrag() {
     // console.warn("stopTrackingDrag");
     dragPauseTimer.stop();
     const jmns = document.querySelector("jmnodes");
-    // jmns.removeEventListener("drag", trackPointerFun);
-    jmns.removeEventListener("drag", trackPointerFun);
+    // jmns.removeEventListener("OLDdrag", trackPointerFun);
+    jmns.removeEventListener("OLDdrag", trackPointerFun);
 }
