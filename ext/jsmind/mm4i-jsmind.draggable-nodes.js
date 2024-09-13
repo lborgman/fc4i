@@ -4,10 +4,13 @@
  *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
+ * 
+ * @copyright 2024 lennart.borgman@gmail.com
  */
 /*
  This is initially a copy from Chrome dev tools source 230406. 
  Just surrounded by (() => {...})()
+ https://github.com/hizzgdev/jsmind/
 */
 
 const version = "0.1.000";
@@ -282,6 +285,8 @@ let eltDragged;
 let eltTarget;
 let eltTParent;
 let childDragLine;
+// const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
+let instScrollAtDragBorder ;
 export async function setupNewDragging() {
     ourJm = await new Promise((resolve, reject) => {
         const draggablePlugin = new jsMind.plugin('draggable_nodes', function (thisIsOurJm) {
@@ -295,8 +300,9 @@ export async function setupNewDragging() {
 
     const eltJmnodes = eltRoot.closest("jmnodes");
 
-    const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
-    instScrollAtDragBorder.startScroller();
+    // const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
+    // instScrollAtDragBorder.startScroller();
+    instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
 
     // FIX-ME: make local again
     // let eltDragged;
@@ -724,6 +730,9 @@ class ScrollAtDragBorder {
             this.stopScrolling();
         });
     }
+    showScroller() { this.showVisuals(); }
+    hideScroller() { this.hideVisuals(); }
+    checkScroll(cX, cY) { this.checkPoint(cX, cY); }
 }
 
 function informDragStatus(msg) {
@@ -776,8 +785,10 @@ export function nextHereIamMeansStart() {
     eltTarget = undefined;
     eltTParent = undefined;
     // childDragLine = undefined;
+    instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
+    instScrollAtDragBorder.checkPoint(cX, cY);
     if (!eltDragged) {
         // FIX-ME: elementsFromPoint?
         const elt = document.elementFromPoint(cX, cY);
@@ -793,6 +804,7 @@ export function hiHereIam(cX, cY) {
 }
 export function stopNow() {
     dragPauseTimer.stop();
+    instScrollAtDragBorder.hideScroller();
     // eltJmnodes.addEventListener("NOpointerup", evt => {
     // console.log("OLDdragend", { eltDragged }, eltDragged.getAttribute("nodeid"), { eltTarget }, eltTarget?.getAttribute("nodeid"));
     stopTrackingPointer();
