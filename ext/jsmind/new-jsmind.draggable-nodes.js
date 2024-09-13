@@ -281,6 +281,7 @@ let ourJm;
 let eltDragged;
 let eltTarget;
 let eltTParent;
+let childDragLine;
 export async function setupNewDragging() {
     ourJm = await new Promise((resolve, reject) => {
         const draggablePlugin = new jsMind.plugin('draggable_nodes', function (thisIsOurJm) {
@@ -300,7 +301,7 @@ export async function setupNewDragging() {
     // FIX-ME: make local again
     // let eltDragged;
 
-    let childDragLine;
+    // let childDragLine;
     // eltJmnodes.addEventListener("OLDdragstart", evt => {}
     eltJmnodes.addEventListener("NOpointerdown", evt => {
         eltDragged = evt.target;
@@ -454,7 +455,7 @@ export async function setupNewDragging() {
     // dragenter fires before dragleave!!
     // So... we only have to listen to dragenter, or??
     // eltJmnodes.addEventListener("OLDdragenter", evt => {}
-    eltJmnodes.addEventListener("pointerenter", evt => {
+    eltJmnodes.addEventListener("OLDpointerenter", evt => {
         return;
         // if (eltTarget) return;
         const target = evt.target;
@@ -485,8 +486,8 @@ export async function setupNewDragging() {
         }
     });
     // eltJmnodes.addEventListener("OLDdragleave", evt => {}
-    eltJmnodes.addEventListener("pointerleave", evt => {
-        return;
+    eltJmnodes.addEventListener("OLDpointerleave", evt => {
+        // return;
         const target = evt.target;
         const tn = target.tagName;
         if (target === eltDragged) return;
@@ -522,7 +523,7 @@ export async function setupNewDragging() {
 
     let eltAbove, eltBelow;
     eltJmnodes.addEventListener("OLDdrag", evt => {
-        return;
+        return; // hiHereIam
         childDragLine?.moveFreeEnd(evt.clientX, evt.clientY);
 
         if (!eltTParent) return;
@@ -792,10 +793,139 @@ export function hiHereIam(cX, cY) {
 }
 export function stopNow() {
     dragPauseTimer.stop();
+    // eltJmnodes.addEventListener("NOpointerup", evt => {
+    // console.log("OLDdragend", { eltDragged }, eltDragged.getAttribute("nodeid"), { eltTarget }, eltTarget?.getAttribute("nodeid"));
+    stopTrackingPointer();
+    // toTParent.stop();
+    childDragLine?.removeLine();
+    childDragLine = undefined;
+    if (eltDragged) markAsDragged(eltDragged, false);
+    informDragStatus();
+
+    if (!nodeParent && !eltTarget) return;
+
+    const idDragged = getNodeIdFromDOMelt(eltDragged);
+    const root_node = ourJm.get_root();
+    const eltRoot = getDOMeltFromNode(root_node);
+    const bcrRoot = eltRoot.getBoundingClientRect();
+    const rootMiddleX = (bcrRoot.left + bcrRoot.right) / 2;
+
+    // const dragPosX = evt.clientX;
+    // const dragPosX = useClientX(evt);
+    // const direction = rootMiddleX < dragPosX ? jsMind.direction.right : jsMind.direction.left;
+    const direction = rootMiddleX < colClientX ? jsMind.direction.right : jsMind.direction.left;
+    // console.log({ direction });
+
+    if (eltTarget) {
+        markAsTarget(eltTarget, false);
+        const id_target = getNodeIdFromDOMelt(eltTarget);
+        ourJm.move_node(idDragged, "_last_", id_target, direction);
+        setTimeout(unMark, 2000);
+        return;
+    }
+
+    const idParent = getNodeIdFromDOMelt(nodeParent)
+    if (!nodeBelow) {
+        ourJm.move_node(idDragged, "_last_", idParent, direction);
+        const before = "_last_";
+        // console.log("ourJm.move_node", { idDragged, before, idParent, direction });
+    } else {
+        const idBelow = getNodeIdFromDOMelt(nodeBelow);
+        ourJm.move_node(idDragged, idBelow, idParent, direction);
+        // console.log("ourJm.move_node", { idDragged, idBelow, idParent, direction });
+    }
+    function unMark() {
+        console.warn("unMark", { nodeParent });
+        if (nodeParent) markAsTParent(nodeParent, false);
+        if (nodeAbove) markAsUpperChild(nodeAbove, false);
+        if (nodeBelow) markAsLowerChild(nodeBelow, false);
+        if (eltTarget) markAsTarget(eltTarget, false);
+    }
+    setTimeout(unMark, 2000);
+    return;
+
+    /*
+    let eltAbove, eltBelow;
+    debugger; // eslint-disable-line no-debugger
+    if (!eltTarget) {
+        // FIX-ME: between
+        if (!eltTParent) return;
+        const id_tparent = getNodeIdFromDOMelt(eltTParent);
+        const node_tparent = ourJm.get_node(id_tparent);
+        console.log({ id_tparent, node_tparent, eltTParent });
+        const eltChilds = node_tparent.children.map(child_node => getDOMeltFromNode(child_node));
+        const bcrTParent = eltTParent.getBoundingClientRect();
+        const midXTP = (bcrTParent.left + bcrTParent.right) / 2;
+        // const toTheRight = evt.clientX > midXTP;
+        const toTheRight = useClientX(evt) > midXTP;
+        eltChilds.forEach(eltC => {
+            if (eltC == eltDragged) return;
+            // function thirdAbove(bcr1, bcr2, dragPos)
+            const bcrC = eltC.getBoundingClientRect();
+            const isAbove = thirdAbove(bcrTParent, bcrC, evt);
+            if (toTheRight !== isAbove.right) return;
+            console.log(eltC.textContent, { isAbove }, isAbove.above, isAbove.right, toTheRight);
+            // Child node are ordered:
+            if (isAbove.above === -1) {
+                eltAbove = eltC;
+            } else {
+                eltBelow = eltBelow || eltC;
+            }
+        });
+        console.log({ eltAbove, eltBelow }, eltAbove?.textContent, eltBelow?.textContent);
+        if (eltAbove) markAsUpperChild(eltAbove, true);
+        if (eltBelow) markAsLowerChild(eltBelow, true);
+
+        const idTParent = getNodeIdFromDOMelt(eltTParent);
+        if (eltBelow) {
+            const idBelow = getNodeIdFromDOMelt(eltBelow);
+            ourJm.move_node(idDragged, idBelow, idTParent, direction);
+        } else {
+            ourJm.move_node(idDragged, "_last_", idTParent, direction);
+        }
+        finishMarking();
+        return;
+    }
+    const idTarget = getNodeIdFromDOMelt(eltTarget);
+    if (eltTParent) {
+        const idTParent = getNodeIdFromDOMelt(eltTParent);
+        ourJm.move_node(idDragged, idTarget, idTParent, direction);
+    } else {
+        ourJm.move_node(idDragged, "_last_", idTarget, direction);
+    }
+    finishMarking();
+    */
+    /*
+    function clearMarking() {
+        console.warn("clearMarking");
+        debugger; // eslint-disable-line no-debugger
+        markAsDragged(eltDragged, false);
+        markAsDroppedAt(eltDragged, false);
+        if (eltTarget) markAsTarget(eltTarget, false);
+
+        // FIX-ME: eltTParent vs nodeParent???
+        console.warn("clearMarking", { nodeParent, eltTParent });
+        // if (eltTParent) markAsTParent(eltTParent, false);
+        if (nodeParent) markAsTParent(nodeParent, false);
+
+        if (eltAbove) markAsUpperChild(eltAbove, false);
+        if (eltBelow) markAsLowerChild(eltBelow, false);
+    }
+    function finishMarking() {
+        const idDragged = getNodeIdFromDOMelt(eltDragged);
+        ourJm.select_node(idDragged);
+        markAsDroppedAt(eltDragged, true);
+        setTimeout(clearMarking, 2000);
+    }
+    */
+    // });
+
 }
 
 
 function whenDragPauses() {
+    // hiHereIam
+    childDragLine?.moveFreeEnd(colClientX, colClientY);
     const newElementAtPoint = document.elementFromPoint(colClientX, colClientY);
     if (!newElementAtPoint) return; // FIX-ME: clear up here, or?
     if (newElementAtPoint != oldElementAtPoint) {
