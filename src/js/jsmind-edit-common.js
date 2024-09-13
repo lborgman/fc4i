@@ -176,7 +176,12 @@ let evtPointerLast; /** @type {PointerEvents} */
  * 
  * @param {PointerEvent} evt 
  */
-function savePointerEvent(evt) { evtPointerLast = evt; }
+function savePointerEvent(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.stopImmediatePropagation();
+    evtPointerLast = evt;
+}
 
 let jmnodesPointHandle;
 let eltPointHandle;
@@ -198,6 +203,8 @@ function initializePointHandle(evt) {
     // evt.preventDefault();
     if (!evt.target) return;
     const target = evt.target; /** @type {HTMLElement} */
+    const targetJmnode = target.closest("jmnode");
+    if (!targetJmnode) return;
     target.setPointerCapture(evt.pointerId);
     posPointHandle = {
         start: {
