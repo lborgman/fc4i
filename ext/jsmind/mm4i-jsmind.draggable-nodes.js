@@ -10,8 +10,8 @@
  Just surrounded by (() => {...})()
 */
 
-const version = "0.0.2";
-console.log(`here is new-jsmind.draggable-nodes.js, module ${version}`);
+const version = "0.1.000";
+console.log(`here is mm4i-jsmind.draggable-nodes.js, module ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
 // ChatGPT: Not bad, but it checks for below...

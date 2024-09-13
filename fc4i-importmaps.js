@@ -50,14 +50,12 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "local-settings": "./src/js/mod/local-settings.js",
         "mindmap-helpers": "./src/js/mindmap-helpers.js",
         "my-svg": "./src/js/mod/my-svg.js",
-        "new-jsmind.draggable-nodes": "./ext/jsmind/new-jsmind.draggable-nodes.js",
-        // "pwa": "./src/js/mod/pwa.js",
+        "mm4i-jsmind.draggable-nodes": "./ext/jsmind/mm4i-jsmind.draggable-nodes.js",
         "sharing-params": "./src/js/mod/sharing-params.js",
+        "toolsJs": "./src/js/tools.js",
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
-        "toolsJs": "./src/js/tools.js",
-
         "pannellum2d": "./ext/pannellum/pannellum2d.js",
     };
     /*

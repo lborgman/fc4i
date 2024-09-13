@@ -16,7 +16,7 @@ const modTools = await importFc4i("toolsJs");
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
 async function getDraggableNodes() {
-    return await importFc4i("new-jsmind.draggable-nodes");
+    return await importFc4i("mm4i-jsmind.draggable-nodes");
 }
 
 let theCustomRenderer;
