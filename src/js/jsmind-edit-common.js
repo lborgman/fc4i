@@ -2259,8 +2259,9 @@ const pointDist = cm2screenPixels(60 / 38);
 console.log({ pointDist });
 
 function cm2screenPixels(cm) {
-    const dpcm = estimateDpcm();
-    const px = cm * dpcm / window.devicePixelRatio;
+    const dpcm1 = estimateDpcm();
+    console.log({ dpcm1 });
+    const px = cm * dpcm1 / window.devicePixelRatio;
     console.log({ cm, px });
     return px;
 }
@@ -2275,10 +2276,11 @@ function estimateDpcm() {
     return dpcm;
 }
 
-function showTestGrid(cmGrid, comparePx, compareWhat) {
+function showCmTestGrid(cmGrid, comparePx, compareWhat) {
     const cmPx = cm2screenPixels(cmGrid);
     compareWhat = compareWhat || "Compare: ";
-    const style = `
+    const eltBg = document.createElement("div");
+    eltBg.style = `
         position: fixed;
         top: 0;
         left: 0;
@@ -2290,12 +2292,13 @@ function showTestGrid(cmGrid, comparePx, compareWhat) {
             linear-gradient(to right, black 1px, transparent 1px),
             linear-gradient(to bottom, black 1px, transparent 1px);
         background-size: ${cmPx}px ${cmPx}px;
+        z-index: 9999;
     `;
-    // const eltBg = mkElt("div", {style});
-    const eltBg = document.createElement("div");
-    eltBg.style = style;
     document.body.appendChild(eltBg);
-    let info = `cm: ${cmPx.toFixed(0)}px`;
+
+    const dpcm2 = estimateDpcm();
+    console.log({ dpcm2 });
+    let info = `cm:${cmPx.toFixed(0)}px, dpcm:${dpcm2.toFixed(1)}`;
     if (comparePx) info += `, ${compareWhat}: ${comparePx.toFixed(0)}`;
     const eltInfo = document.createElement("span");
     eltInfo.textContent = info;
@@ -2309,6 +2312,11 @@ function showTestGrid(cmGrid, comparePx, compareWhat) {
         color: black;
         z-index: 9999;
     `;
+    const btn = document.createElement("button");
+    btn.textContent = "Close";
+    btn.addEventListener("click", evt => { eltBg.remove(); eltInfo.remove(); });
+    btn.style.marginLeft = "20px";
+    eltInfo.appendChild(btn);
     document.body.appendChild(eltInfo);
 }
 // showTestGrid(2);
@@ -2318,5 +2326,5 @@ setTimeout(() => {
     if (!r) return;
     const h = r.clientHeight;
     // showTestGrid(2);
-    showTestGrid(2, h, "root h");
+    showCmTestGrid(2, h, "root h");
 }, 3000);
