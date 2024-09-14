@@ -2255,6 +2255,8 @@ export async function dialogFindInMindMaps(key, provider) {
 ///////////////////////////////////////
 /***************** Test cm on screen */
 ///////////////////////////////////////
+const pointDist = cm2screenPixels(60 / 38);
+console.log({ pointDist });
 
 function cm2screenPixels(cm) {
     const dpcm = estimateDpcm();
@@ -2266,7 +2268,6 @@ function estimateDpcm() {
     let x = 10;
     while (x < 2000) {
         x *= 1.01;
-        // console.log(x);
         if (!window.matchMedia(`(min-resolution: ${x}dpcm)`).matches) break;
     }
     const dpcm = x;
@@ -2274,12 +2275,9 @@ function estimateDpcm() {
     return dpcm;
 }
 
-const pointDist = cm2screenPixels(60 / 38);
-console.log({ pointDist });
-setTimeout(() => {
-    const r = document.querySelector("jmnode.root");
-    if (!r) return;
-    const cmPx = cm2screenPixels(2);
+function showTestGrid(cmGrid, comparePx, compareWhat) {
+    const cmPx = cm2screenPixels(cmGrid);
+    compareWhat = compareWhat || "Compare: ";
     const style = `
         position: fixed;
         top: 0;
@@ -2294,10 +2292,13 @@ setTimeout(() => {
         background-size: ${cmPx}px ${cmPx}px;
     `;
     // const eltBg = mkElt("div", {style});
-    const eltBg = mkElt("div");
+    const eltBg = document.createElement("div");
     eltBg.style = style;
     document.body.appendChild(eltBg);
-    const eltInfo = mkElt("span", undefined, `cm: ${cmPx.toFixed(0)}px\nroot height: ${r.clientHeight.toFixed(0)}`);
+    let info = `cm: ${cmPx.toFixed(0)}px`;
+    if (comparePx) info += `, ${compareWhat}: ${comparePx.toFixed(0)}`;
+    const eltInfo = document.createElement("span");
+    eltInfo.textContent = info;
     eltInfo.style = `
         position: fixed;
         top: 0;
@@ -2309,5 +2310,13 @@ setTimeout(() => {
         z-index: 9999;
     `;
     document.body.appendChild(eltInfo);
-    // alert(`pointDist: ${pointDist}px\nroot height: ${r.clientHeight}`);
+}
+// showTestGrid(2);
+
+setTimeout(() => {
+    const r = document.querySelector("jmnode.root");
+    if (!r) return;
+    const h = r.clientHeight;
+    // showTestGrid(2);
+    showTestGrid(2, h, "root h");
 }, 3000);
