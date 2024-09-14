@@ -2273,5 +2273,34 @@ setTimeout(() => {
     const r = document.querySelector("jmnode.root");
     if (!r) return;
     const pointDist = cm2screenPixels(60 / 38);
-    alert(`pointDist: ${pointDist}px\nroot height: ${r.clientHeight}`);
+    const cmPx = cm2screenPixels(1);
+    const style = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        opacity: 0.5;
+        background-color: red;
+        background-image:
+            linear-gradient(to right, black 1px, transparent 1px),
+            linear-gradient(to bottom, black 1px, transparent 1px);
+        background-size: ${cmPx}px ${cmPx}px;
+    `;
+    // const eltBg = mkElt("div", {style});
+    const eltBg = mkElt("div");
+    eltBg.style = style;
+    document.body.appendChild(eltBg);
+    const eltInfo = mkElt("span", undefined, `cm: ${cmPx}px\nroot height: ${r.clientHeight}`);
+    eltInfo.style = `
+        position: fixed;
+        top: 100px;
+        left: 0;
+        display: inline-block;
+        padding: 4px;
+        background: yellow;
+        color: black;
+    `;
+    document.body.appendChild(eltInfo);
+    // alert(`pointDist: ${pointDist}px\nroot height: ${r.clientHeight}`);
 }, 3000);
