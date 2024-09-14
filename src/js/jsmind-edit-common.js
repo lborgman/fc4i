@@ -2298,8 +2298,10 @@ function showCmTestGrid(cmGrid, comparePx, compareWhat) {
 
     const dpcm2 = estimateDpcm();
     console.log({ dpcm2 });
-    let info = `cm:${cmPx.toFixed(0)}px, dpcm:${dpcm2.toFixed(1)}`;
-    if (comparePx) info += `, ${compareWhat}: ${comparePx.toFixed(0)}`;
+    const screenW = screen.width;
+    const cmScreenW = screenW / cmPx;
+    let info = `screen:${screenW}px/${cmScreenW.toFixed(1)}cm --- cm:${cmPx.toFixed(0)}px - dpcm:${dpcm2.toFixed(1)}`;
+    if (comparePx) info += ` - ${compareWhat}: ${comparePx.toFixed(0)}px`;
     const eltInfo = document.createElement("span");
     eltInfo.textContent = info;
     eltInfo.style = `
