@@ -2270,6 +2270,8 @@ function estimateDpcm() {
     return dpcm;
 }
 setTimeout(() => {
+    const r = document.querySelector("jmnode.root");
+    if (!r) return;
     const pointDist = cm2screenPixels(60 / 38);
-    alert(`pointDist: ${pointDist}px`);
+    alert(`pointDist: ${pointDist}px\nroot height: ${r.clientHeight}`);
 }, 3000);
