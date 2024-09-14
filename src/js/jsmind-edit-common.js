@@ -2252,6 +2252,10 @@ export async function dialogFindInMindMaps(key, provider) {
 }
 
 
+///////////////////////////////////////
+/***************** Test cm on screen */
+///////////////////////////////////////
+
 function cm2screenPixels(cm) {
     const dpcm = estimateDpcm();
     const px = cm * dpcm / window.devicePixelRatio;
@@ -2269,11 +2273,13 @@ function estimateDpcm() {
     console.log({ dpcm });
     return dpcm;
 }
+
+const pointDist = cm2screenPixels(60 / 38);
+console.log({ pointDist });
 setTimeout(() => {
     const r = document.querySelector("jmnode.root");
     if (!r) return;
-    const pointDist = cm2screenPixels(60 / 38);
-    const cmPx = cm2screenPixels(1);
+    const cmPx = cm2screenPixels(2);
     const style = `
         position: fixed;
         top: 0;
@@ -2291,15 +2297,16 @@ setTimeout(() => {
     const eltBg = mkElt("div");
     eltBg.style = style;
     document.body.appendChild(eltBg);
-    const eltInfo = mkElt("span", undefined, `cm: ${cmPx}px\nroot height: ${r.clientHeight}`);
+    const eltInfo = mkElt("span", undefined, `cm: ${cmPx.toFixed(0)}px\nroot height: ${r.clientHeight.toFixed(0)}`);
     eltInfo.style = `
         position: fixed;
-        top: 100px;
+        top: 0;
         left: 0;
         display: inline-block;
         padding: 4px;
         background: yellow;
         color: black;
+        z-index: 9999;
     `;
     document.body.appendChild(eltInfo);
     // alert(`pointDist: ${pointDist}px\nroot height: ${r.clientHeight}`);
