@@ -201,6 +201,7 @@ const diffPointHandle = 60;
 function initializePointHandle(evt) {
     // evt.stopPropagation();
     // evt.preventDefault();
+    // elementsFromPoint
     if (!evt.target) return;
     const target = evt.target; /** @type {HTMLElement} */
     const targetJmnode = target.closest("jmnode");
@@ -2249,3 +2250,26 @@ export async function dialogFindInMindMaps(key, provider) {
     // Fix-me: path??
     dialogMindMaps("/mm4i/mm4i.html", info, arrMindmapsHits, provider);
 }
+
+
+function cm2screenPixels(cm) {
+    const dpcm = estimateDpcm();
+    const px = cm * dpcm / window.devicePixelRatio;
+    console.log({ cm, px });
+    return px;
+}
+function estimateDpcm() {
+    let x = 10;
+    while (x < 20000) {
+        x *= 1.05;
+        // console.log(x);
+        if (!window.matchMedia(`(min-resolution: ${x}dpcm)`).matches) break;
+    }
+    const dpcm = x;
+    console.log({ dpcm });
+    return dpcm;
+}
+setTimeout(() => {
+    const pointDist = cm2screenPixels(60 / 38);
+    alert(`pointDist: ${pointDist}px`);
+}, 3000);
