@@ -2264,8 +2264,8 @@ function cm2screenPixels(cm) {
 }
 function estimateDpcm() {
     let x = 10;
-    while (x < 20000) {
-        x *= 1.05;
+    while (x < 2000) {
+        x *= 1.01;
         // console.log(x);
         if (!window.matchMedia(`(min-resolution: ${x}dpcm)`).matches) break;
     }
