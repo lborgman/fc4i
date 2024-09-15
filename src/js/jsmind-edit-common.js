@@ -2258,8 +2258,8 @@ export async function dialogFindInMindMaps(key, provider) {
 
 // FIX-ME: Is any of these correct here???
 // const ratio = 1;
-const ratio = window.devicePixelRatio;
-// const ratio = 1 / window.devicePixelRatio;
+// const ratio = window.devicePixelRatio;
+const ratio = 1 / window.devicePixelRatio;
 
 const pointDist = cm2screenPixels(60 / 38);
 console.log({ pointDist });
