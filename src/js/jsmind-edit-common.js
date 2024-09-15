@@ -2255,13 +2255,19 @@ export async function dialogFindInMindMaps(key, provider) {
 ///////////////////////////////////////
 /***************** Test cm on screen */
 ///////////////////////////////////////
+
+// FIX-ME: Is any of these correct here???
+const ratio = 1;
+// const ratio = window.devicePixelRatio;
+// const ratio = 1 / window.devicePixelRatio;
+
 const pointDist = cm2screenPixels(60 / 38);
 console.log({ pointDist });
 
 function cm2screenPixels(cm) {
     const dpcm1 = estimateDpcm();
     console.log({ dpcm1 });
-    const px = cm * dpcm1 / window.devicePixelRatio;
+    const px = cm * dpcm1 * ratio;
     console.log({ cm, px });
     return px;
 }
@@ -2300,7 +2306,11 @@ function showCmTestGrid(cmGrid, comparePx, compareWhat) {
     console.log({ dpcm2 });
     const screenW = screen.width;
     const cmScreenW = screenW / cmPx;
-    let info = `screen:${screenW}px/${cmScreenW.toFixed(1)}cm --- cm:${cmPx.toFixed(0)}px - dpcm:${dpcm2.toFixed(1)}`;
+    let info = `
+        screen:${screenW}px/${cmScreenW.toFixed(1)}cm
+        - ratio:${ratio}
+        --- cm:${cmPx.toFixed(0)}px
+        - dpcm:${dpcm2.toFixed(1)}`;
     if (comparePx) info += ` - ${compareWhat}: ${comparePx.toFixed(0)}px`;
     const eltInfo = document.createElement("span");
     eltInfo.textContent = info;
