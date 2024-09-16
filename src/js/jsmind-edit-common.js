@@ -2269,6 +2269,7 @@ function testCmOnScreen() {
         a: {
             name: "Pixel 7",
             screenMmWidth: 73.2 - 2.54 * 0.17,
+            devicePixelRatio: 2.625,
             corr: 0.670,
             devUA: "(Linux; Android 13; Pixel 7)"
         },
@@ -2306,15 +2307,21 @@ function testCmOnScreen() {
     const devRec = knownDevices[dev];
     console.log(devRec);
 
-    if (location.protocol == "http:" || location.protocol == "https:") {
+    if (location.protocol == "http:") {
         // Emulating mobile device?
         const re = new RegExp("\\(.*?\\)");
         const devUA = re.exec(navigator.userAgent)[0];
         console.log({ devUA });
         if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
         if (devRec.devUA && devRec.devUA != devUA) {
-            alert(`.devUA!="${devUA}"`);
-            throw Error("devUA did not match")
+            throw Error(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
+        }
+    }
+    if (devRec.devicePixelRatio) {
+        const devRatio = devRec.devicePixelRatio;
+        const winRatio = window.devicePixelRatio;
+        if (devRatio != winRatio) {
+            throw Error(`devicePixelRatio, d${devRatio} != w${winRatio}`);
         }
     }
 
