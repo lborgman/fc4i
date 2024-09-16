@@ -2314,15 +2314,15 @@ function testCmOnScreen() {
         console.log({ devUA });
         if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
         if (devRec.devUA && devRec.devUA != devUA) {
-            // throw Error(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
-            alert(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
+            throw Error(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
         }
     }
     if (devRec.devicePixelRatio) {
         const devRatio = devRec.devicePixelRatio;
         const winRatio = window.devicePixelRatio;
         if (devRatio != winRatio) {
-            throw Error(`devicePixelRatio, d${devRatio} != w${winRatio}`);
+            // throw Error(`devicePixelRatio, d${devRatio} != w${winRatio}`);
+            alert(`devicePixelRatio, d${devRatio} != w${winRatio}`);
         }
     }
 
