@@ -2312,7 +2312,10 @@ function testCmOnScreen() {
         const devUA = re.exec(navigator.userAgent)[0];
         console.log({ devUA });
         if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
-        if (devRec.devUA && devRec.devUA != devUA) throw Error("devUA did not match")
+        if (devRec.devUA && devRec.devUA != devUA) {
+            alert(`.devUA!="${devUA}"`);
+            throw Error("devUA did not match")
+        }
     }
 
 
