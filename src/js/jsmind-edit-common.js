@@ -2314,7 +2314,8 @@ function testCmOnScreen() {
         console.log({ devUA });
         if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
         if (devRec.devUA && devRec.devUA != devUA) {
-            throw Error(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
+            // throw Error(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
+            alert(`devUA did not match: w"${devUA}"!=d"${devRec.devUA}"A`);
         }
     }
     if (devRec.devicePixelRatio) {
