@@ -206,19 +206,26 @@ function initializePointHandle(evt) {
     const target = evt.target; /** @type {HTMLElement} */
     const targetJmnode = target.closest("jmnode");
     if (!targetJmnode) return;
-    target.setPointerCapture(evt.pointerId);
+    try {
+        console.log("setPointerCapture", evt.pointerId);
+        // target.setPointerCapture(evt.pointerId);
+    } catch (err) {
+        console.log("setPointerCapture", evt.pointerId, err);
+    }
     posPointHandle = {
         start: {
             clientX: evt.clientX,
             clientY: evt.clientY,
-            screenX: evt.screenX,
-            screenY: evt.screenY,
-            eltDragged: evt.target,
+            // screenX: evt.screenX,
+            // screenY: evt.screenY,
+            // eltDragged: evt.target,
+            eltDragged: jmnodeFromPoint(evt.clientX, evt.clientY),
             evtId: evt.pointerId
         },
         current: {}
     };
     eltPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
+    eltPointHandle.style.PointerEvents = "none"; // FIX-ME: why???
     jmnodesPointHandle.appendChild(eltPointHandle);
     eltPointHandle.style.left = evt.clientX - sizePointHandle / 2;
     eltPointHandle.style.top = evt.clientY - sizePointHandle / 2;
@@ -260,16 +267,30 @@ async function teardownPointHandle() {
 
 function requestCheckDistance() {
     if (!eltPointHandle) return;
+    // console.log("requestCheckDistance");
     checkPointHandleDistance();
     requestAnimationFrame(requestCheckDistance);
 }
 let eltJmnodeFrom;
+function jmnodeFromPoint(cX, cY) {
+    const eltsHere = document.elementsFromPoint(cX, cY);
+    const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
+    return eltJmnode
+}
 function checkPointHandleDistance() {
     if (posPointHandle.startX == undefined) {
         if (!evtPointerLast) return;
         // console.log("checkPointHandleDistance", evt);
         if (eltJmnodeFrom) throw Error("eltJmnodeFrom was already set");
+
         eltJmnodeFrom = evtPointerLast.target.closest("jmnode");
+        console.log("old:", { eltJmnodeFrom });
+
+        // const eltsHere = document.elementsFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
+        // eltJmnodeFrom = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
+        eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
+        console.log("new:", { eltJmnodeFrom });
+
         console.log("checkPHD", { eltJmnodeFrom });
         const bcrNode = eltJmnodeFrom.getBoundingClientRect();
         posPointHandle.dTop = evtPointerLast.clientY - bcrNode.top;
@@ -291,13 +312,14 @@ function checkPointHandleDistance() {
         posPointHandle.startX = evtPointerLast.clientX;
         posPointHandle.startY = evtPointerLast.clientY;
     }
-    // const diffX = posPointHandle.startX - evt.clientX;
     const diffX = posPointHandle.startX - evtPointerLast.clientX;
-    // const diffY = posPointHandle.startY - evt.clientY;
     const diffY = posPointHandle.startY - evtPointerLast.clientY;
     const diff2 = diffX * diffX + diffY * diffY;
     const diffOk = !(diff2 < diffPointHandle * diffPointHandle);
-    if (!diffOk) return;
+    console.log("check dist", diffX, diffY, diff2, "<=>", diffPointHandle * diffPointHandle);
+    if (!diffOk) {
+        return;
+    }
 
     const dOutside = 10;
     const startX = posPointHandle.startX;
@@ -311,8 +333,10 @@ function checkPointHandleDistance() {
     const topInside = startY - evtPointerLast.clientY < dBottom + dOutside;
     const bottomInside = evtPointerLast.clientY - startY < dTop + dOutside;
     const isInside = leftInside && rightInside && topInside && bottomInside;
-    // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
-    if (isInside) return;
+    if (isInside) {
+        console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
+        return;
+    }
 
     if (!eltPointHandle.classList.contains("active")) {
         eltPointHandle.classList.add("active");
@@ -2269,21 +2293,30 @@ function testCmOnScreen() {
         a: {
             name: "Pixel 7",
             screenMmWidth: 73.2 - 2.54 * 0.17,
+            devUA: "(Linux; Android 13; Pixel 7)",
             devicePixelRatio: 2.625,
             corr: 0.670,
-            devUA: "(Linux; Android 13; Pixel 7)"
+            measuredPixelRatio: 2.875,
+            measuredCorr: 0.741
         },
 
         //// Works for Samsung Galaxy S8 Plus, 7.1cm, devicePixelRatio==4, 1/r=0.250
         b: {
             name: "Samsung Galaxy S8+",
             screenMmWidth: 73.4 - 2.54 * 0.08,
-            corr: 0.777,
-            devUA: "(Linux; Android 13; SM-G981B)"
+            devicePixelRatio: 4,
+            devUA: "(Linux; Android 13; SM-G981B)",
+            corr: 0.777
         },
 
         //// Works for Samsung Galaxy S20 Ultra, devicePixelRatio==3.5, 1/r=0.286
-        c: { name: "Samsung Galaxy S20 Ultra", screenMmWidth: 76 - 2.54 * 0.33 }
+        c: {
+            name: "Samsung Galaxy S20 Ultra",
+            screenMmWidth: 76 - 2.54 * 0.33,
+            devicePixelRatio: 3.5,
+            devUA: "(Linux; Android 13; SM-G981B)",
+            corr: 0.693
+        }
 
     }
 
