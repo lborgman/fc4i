@@ -2256,66 +2256,132 @@ export async function dialogFindInMindMaps(key, provider) {
 /***************** Test cm on screen */
 ///////////////////////////////////////
 
-// FIX-ME: Is any of these correct here???
-// const ratio = 1;
-// const ratio = window.devicePixelRatio;
-// const ratio = 1 / window.devicePixelRatio;
-const ratio = 1 / 2;
+testCmOnScreen();
+function testCmOnScreen() {
 
-const pointDist = cm2screenPixels(60 / 38);
-console.log({ pointDist });
+    ////////// In Google Chrome on Windows:
 
-function cm2screenPixels(cm) {
-    const dpcm1 = estimateDpcm();
-    console.log({ dpcm1 });
-    const px = cm * dpcm1 * ratio;
-    console.log({ cm, px });
-    return px;
-}
-function estimateDpcm() {
-    let x = 10;
-    while (x < 2000) {
-        x *= 1.01;
-        if (!window.matchMedia(`(min-resolution: ${x}dpcm)`).matches) break;
+    // Known by Google Chrome dev tools
+    // Width from https://GSMArena.com/
+    const knownDevices = {
+
+        //// Works for Pixel 7, devicePixelRatio==2.625, 1/r=0.381
+        a: {
+            name: "Pixel 7",
+            screenMmWidth: 73.2 - 2.54 * 0.17,
+            corr: 0.670,
+            devUA: "(Linux; Android 13; Pixel 7)"
+        },
+
+        //// Works for Samsung Galaxy S8 Plus, 7.1cm, devicePixelRatio==4, 1/r=0.250
+        b: {
+            name: "Samsung Galaxy S8+",
+            screenMmWidth: 73.4 - 2.54 * 0.08,
+            corr: 0.777,
+            devUA: "(Linux; Android 13; SM-G981B)"
+        },
+
+        //// Works for Samsung Galaxy S20 Ultra, devicePixelRatio==3.5, 1/r=0.286
+        c: { name: "Samsung Galaxy S20 Ultra", screenMmWidth: 76 - 2.54 * 0.33 }
+
     }
-    const dpcm = x;
-    console.log({ dpcm });
-    return dpcm;
-}
 
-function showCmTestGrid(cmGrid, comparePx, compareWhat) {
-    const cmPx = cm2screenPixels(cmGrid);
-    compareWhat = compareWhat || "Compare: ";
-    const eltBg = document.createElement("div");
-    eltBg.style = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        opacity: 0.5;
-        background-color: red;
-        background-image:
-            linear-gradient(to right, black 1px, transparent 1px),
-            linear-gradient(to bottom, black 1px, transparent 1px);
-        background-size: ${cmPx}px ${cmPx}px;
-        z-index: 9999;
+
+    let dev = "none";
+    let corr = 1;
+
+    function promptDev(parDev) {
+        let txtPrompt = ``;
+        for (const [k, v] of Object.entries(knownDevices)) {
+            txtPrompt += `  ${k}: ${v.name}\n`;
+        }
+        return prompt(txtPrompt, parDev);
+    }
+    while (!Object.keys(knownDevices).includes(dev)) {
+        dev = promptDev(dev)?.trim();
+        if (!dev) return;
+        console.log({ dev });
+
+    }
+    const devRec = knownDevices[dev];
+    console.log(devRec);
+
+    if (location.protocol == "http:" || location.protocol == "https:") {
+        // Emulating mobile device?
+        const re = new RegExp("\\(.*?\\)");
+        const devUA = re.exec(navigator.userAgent)[0];
+        console.log({ devUA });
+        if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
+        if (devRec.devUA && devRec.devUA != devUA) throw Error("devUA did not match")
+    }
+
+
+    corr = devRec.corr || corr;
+    const devName = devRec.name;
+    const devCmW = devRec.screenMmWidth / 10;
+    const txtPromptCorr = `
+        ${devName}
+        Real Width: ${devCmW.toFixed(1)}cm
+        devicePixelRatio==${window.devicePixelRatio},
+
+        Correction:
     `;
-    document.body.appendChild(eltBg);
+    const corrTxt = prompt(txtPromptCorr, corr.toFixed(3));
+    if (!corrTxt) return;
+    corr = corrTxt ? parseFloat(corrTxt) : null;
 
-    const dpcm2 = estimateDpcm();
-    console.log({ dpcm2 });
-    const screenPx = screen.width;
-    const screenCm = screenPx / cmPx;
-    let info = `
-        screen:${screenPx}px/${screenCm.toFixed(1)}cm
-        - ratio:${ratio}
-        --- cm:${cmPx.toFixed(0)}px
-        - dpcm:${dpcm2.toFixed(1)}`;
-    if (comparePx) info += ` - ${compareWhat}: ${comparePx.toFixed(0)}px`;
-    const eltInfo = document.createElement("span");
-    eltInfo.textContent = info;
-    eltInfo.style = `
+    function cm2screenPixels(cm) {
+        const dpcm1 = estimateDpcm();
+        console.log({ dpcm1 });
+        const px = cm * dpcm1 / (window.devicePixelRatio * corr);
+        console.log({ cm, px });
+        return px;
+    }
+    function estimateDpcm() {
+        let x = 10;
+        while (x < 2000) {
+            x *= 1.01;
+            if (!window.matchMedia(`(min-resolution: ${x}dpcm)`).matches) break;
+        }
+        const dpcm = x;
+        console.log({ dpcm });
+        return dpcm;
+    }
+
+    function showCmTestGrid(cmGrid, comparePx, compareWhat) {
+        const cmPx = cm2screenPixels(cmGrid);
+        compareWhat = compareWhat || "Compare: ";
+        const eltBg = document.createElement("div");
+        eltBg.style = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            opacity: 0.5;
+            background-color: red;
+            background-image:
+                linear-gradient(to right, black 1px, transparent 1px),
+                linear-gradient(to bottom, black 1px, transparent 1px);
+            background-size: ${cmPx}px ${cmPx}px;
+            z-index: 9999;
+        `;
+        document.body.appendChild(eltBg);
+
+        const dpcm2 = estimateDpcm();
+        console.log({ dpcm2 });
+        const screenPx = screen.width;
+        const screenCm = screenPx / cm2screenPixels(1);
+        const bestCorr = corr * devCmW / screenCm;
+        let info = `
+            ${devName}, Spec screen:${screenPx}px/${devCmW.toFixed(2)}cm
+            - corr:${corr}(${bestCorr.toFixed(3)})/${screenCm.toFixed(2)}cm
+            --- cm:${cmPx.toFixed(0)}px
+            - dpcm:${dpcm2.toFixed(1)}`;
+        if (comparePx) info += ` - ${compareWhat}: ${comparePx.toFixed(0)}px`;
+        const eltInfo = document.createElement("span");
+        eltInfo.textContent = info;
+        eltInfo.style = `
         position: fixed;
         top: 0;
         left: 0;
@@ -2325,19 +2391,19 @@ function showCmTestGrid(cmGrid, comparePx, compareWhat) {
         color: black;
         z-index: 9999;
     `;
-    const btn = document.createElement("button");
-    btn.textContent = "Close";
-    btn.addEventListener("click", evt => { eltBg.remove(); eltInfo.remove(); });
-    btn.style.marginLeft = "20px";
-    eltInfo.appendChild(btn);
-    document.body.appendChild(eltInfo);
-}
-// showTestGrid(2);
+        const btn = document.createElement("button");
+        btn.textContent = "Close";
+        btn.addEventListener("click", () => { eltBg.remove(); eltInfo.remove(); });
+        btn.style.marginLeft = "20px";
+        eltInfo.appendChild(btn);
+        document.body.appendChild(eltInfo);
+    }
 
-setTimeout(() => {
-    const r = document.querySelector("jmnode.root");
-    if (!r) return;
-    const h = r.clientHeight;
-    // showTestGrid(2);
-    showCmTestGrid(2, h, "root h");
-}, 3000);
+    if (corr) {
+        // showCmTestGrid(2);
+        setTimeout(() => {
+            showCmTestGrid(2);
+            console.log({ knownDevices });
+        }, 1000);
+    }
+}
