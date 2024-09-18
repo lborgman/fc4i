@@ -9,9 +9,166 @@ const mkElt = window.mkElt;
 
 
 const modCustRend = await importFc4i("jsmind-cust-rend");
-const modMMhelpers = await importFc4i("mindmap-helpers");
-const modMdc = await importFc4i("util-mdc");
-const modTools = await importFc4i("toolsJs");
+// FIX-ME: comment out temporary!
+// const modMMhelpers = await importFc4i("mindmap-helpers");
+// const modMdc = await importFc4i("util-mdc");
+// const modTools = await importFc4i("toolsJs");
+
+class PointHandle {
+    static sizePointHandle = 20;
+    static diffPointHandle = 60;
+
+    /** @type {HTMLElement} */
+    #eltPointHandle;
+    /** @type {HTMLElement} */
+    #jmnodesPointHandle;
+    #state = "idle";
+
+    constructor() {
+        this.#eltPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
+        this.#eltPointHandle.style.pointerEvents = "none"; // FIX-ME: why???
+    }
+    get idle() { return this.#state = "idle"; }
+    get element() { return this.#eltPointHandle; }
+    initializePointHandle(evt) {
+        if (!evt.target) return;
+        const target = evt.target;
+        const targetJmnode = target.closest("jmnode");
+        if (!targetJmnode) return;
+        posPointHandle = {
+            start: {
+                clientX: evt.clientX,
+                clientY: evt.clientY,
+                eltDragged: targetJmnode,
+                evtId: evt.pointerId
+            },
+            current: {}
+        };
+        this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
+        this.#eltPointHandle.style.left = `${evt.clientX - PointHandle.sizePointHandle / 2}`;
+        this.#eltPointHandle.style.top = `${evt.clientY - PointHandle.sizePointHandle / 2}`;
+        this.#jmnodesPointHandle.addEventListener("pointermove", savePointerPos);
+        requestCheckDistance();
+    }
+    teardownPointHandleAndAct() {
+        console.log("teardownPointHandle");
+        this.#jmnodesPointHandle.removeEventListener("pointermove", savePointerPos);
+        this.#eltPointHandle?.remove();
+        this.#eltPointHandle = undefined;
+        if (eltJmnodeFrom) {
+            eltJmnodeFrom = undefined;
+        }
+        if (eltOverJmnode) {
+
+        }
+        console.log("teardwon...", { eltJmnodeFrom });
+        modJsmindDraggable.stopNow();
+        evtPointerLast = undefined;
+    }
+    setupPointHandle() {
+        console.log("setupPointHandle");
+        const eltJmnodes = document.body.querySelector("jmnodes");
+        if (!eltJmnodes) throw Error("Could not find <jmnodes>");
+        this.#jmnodesPointHandle = /** @type {HTMLElement} */ eltJmnodes;
+        const THIS = this;
+        this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
+        this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
+    }
+    async teardownPointHandle() {
+        this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle);
+        this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct);
+        this.teardownPointHandleAndAct();
+        modJsmindDraggable.setPointerDiff(0, 0);
+    }
+    checkPointHandleDistance() {
+        if (!evtPointerLast) return;
+        // if (posPointHandle.startX == undefined)
+        if (!eltJmnodeFrom) {
+            if (eltJmnodeFrom) throw Error("eltJmnodeFrom was already set");
+
+            // eltJmnodeFrom = evtPointerLast.target.closest("jmnode");
+            // console.log("old:", { eltJmnodeFrom });
+
+            // const eltsHere = document.elementsFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
+            // eltJmnodeFrom = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
+            eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
+            console.log("new:", { eltJmnodeFrom });
+
+            console.log("checkPHD", { eltJmnodeFrom });
+            const bcrNode = eltJmnodeFrom.getBoundingClientRect();
+            posPointHandle.dTop = evtPointerLast.clientY - bcrNode.top;
+            posPointHandle.dBottom = bcrNode.bottom - evtPointerLast.clientY;
+            posPointHandle.dLeft = evtPointerLast.clientX - bcrNode.left;
+            posPointHandle.dRight = bcrNode.right - evtPointerLast.clientX;
+            let insideNode = false;
+            ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
+                const d = posPointHandle[dT];
+                // if (d <= 0) throw Error(`${dT} < 0, =${d}`);
+                if (d <= 0) insideNode = true;
+            });
+            if (insideNode) return;
+
+            eltPointHandle.style.left = evtPointerLast.clientX - sizePointHandle / 2;
+            eltPointHandle.style.top = evtPointerLast.clientY - sizePointHandle / 2;
+            // jmnodesPointHandle.appendChild(eltPointHandle)
+            console.log("checkPointHandleDistance start", { posPointHandle });
+            posPointHandle.startX = evtPointerLast.clientX;
+            posPointHandle.startY = evtPointerLast.clientY;
+        }
+        const diffX = posPointHandle.startX - evtPointerLast.clientX;
+        const diffY = posPointHandle.startY - evtPointerLast.clientY;
+        const diff2 = diffX * diffX + diffY * diffY;
+        const diffPH = PointHandle.diffPointHandle;
+        const diffPH2 = diffPH * diffPH;
+        const diffOk = !(diff2 < diffPH2);
+        console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
+        if (!diffOk) {
+            return;
+        }
+
+        const dOutside = 10;
+        const startX = posPointHandle.startX;
+        const startY = posPointHandle.startY;
+        const dLeft = posPointHandle.dLeft;
+        const dRight = posPointHandle.dRight;
+        const dTop = posPointHandle.dTop;
+        const dBottom = posPointHandle.dBottom;
+        const leftInside = startX - evtPointerLast.clientX < dRight + dOutside;
+        const rightInside = evtPointerLast.clientX - startX < dLeft + dOutside;
+        const topInside = startY - evtPointerLast.clientY < dBottom + dOutside;
+        const bottomInside = evtPointerLast.clientY - startY < dTop + dOutside;
+        const isInside = leftInside && rightInside && topInside && bottomInside;
+        if (isInside) {
+            console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
+            return;
+        }
+
+        if (!this.#eltPointHandle.classList.contains("active")) {
+            this.#eltPointHandle.classList.add("active");
+            console.log("added active to pph");
+            posPointHandle.diffX = posPointHandle.diffX || diffX;
+            posPointHandle.diffY = posPointHandle.diffY || diffY;
+            const newDiffX = posPointHandle.diffX - PointHandle.sizePointHandle / 2;
+            const newDiffY = posPointHandle.diffY - PointHandle.sizePointHandle / 2;
+            modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
+            modJsmindDraggable.nextHereIamMeansStart();
+
+            // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
+            // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
+            // jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
+            // jmnodesPointHandle.addEventListener("drag", movePointHandle);
+        } else {
+            movePointHandle();
+        }
+    }
+
+}
+const pointHandle = new PointHandle();
+console.log({ pointHandle })
+console.log(pointHandle.element);
+// debugger;
+
+
 
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
@@ -57,7 +214,7 @@ function switchDragTouchAccWay(newWay) {
             break;
         case "pointHandle":
             // setTimeout(setupPointHandle, 1000);
-            setupPointHandle();
+            pointHandle.setupPointHandle();
             break;
         default:
             throw Error(`Not handled theMirrorWay=${theDragTouchAccWay}`);
@@ -176,17 +333,18 @@ let evtPointerLast; /** @type {PointerEvents} */
  * 
  * @param {PointerEvent} evt 
  */
-function savePointerEvent(evt) {
+function savePointerPos(evt) {
     evt.preventDefault();
     evt.stopPropagation();
     evt.stopImmediatePropagation();
-    evtPointerLast = evt;
+
+    // evtPointerLast = evt;
+    evtPointerLast = evtPointerLast || {};
+    evtPointerLast.clientX = evt.clientX;
+    evtPointerLast.clientY = evt.clientX;
+    evtPointerLast.target = evt.target;
 }
 
-let jmnodesPointHandle;
-let eltPointHandle;
-const sizePointHandle = 20;
-const diffPointHandle = 60;
 
 
 
@@ -198,77 +356,11 @@ const diffPointHandle = 60;
  * 
  * @return {EventListenerOrEventListenerObject}
  */
-function initializePointHandle(evt) {
-    // evt.stopPropagation();
-    // evt.preventDefault();
-    // elementsFromPoint
-    if (!evt.target) return;
-    const target = evt.target; /** @type {HTMLElement} */
-    const targetJmnode = target.closest("jmnode");
-    if (!targetJmnode) return;
-    try {
-        console.log("setPointerCapture", evt.pointerId);
-        // target.setPointerCapture(evt.pointerId);
-    } catch (err) {
-        console.log("setPointerCapture", evt.pointerId, err);
-    }
-    posPointHandle = {
-        start: {
-            clientX: evt.clientX,
-            clientY: evt.clientY,
-            // screenX: evt.screenX,
-            // screenY: evt.screenY,
-            // eltDragged: evt.target,
-            eltDragged: jmnodeFromPoint(evt.clientX, evt.clientY),
-            evtId: evt.pointerId
-        },
-        current: {}
-    };
-    eltPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
-    eltPointHandle.style.PointerEvents = "none"; // FIX-ME: why???
-    jmnodesPointHandle.appendChild(eltPointHandle);
-    eltPointHandle.style.left = evt.clientX - sizePointHandle / 2;
-    eltPointHandle.style.top = evt.clientY - sizePointHandle / 2;
-    jmnodesPointHandle.addEventListener("pointermove", savePointerEvent);
-    requestCheckDistance();
-}
-function teardownPointHandleAndAct() {
-    console.log("teardownPointHandle");
-    jmnodesPointHandle.removeEventListener("pointermove", savePointerEvent);
-    eltPointHandle?.remove();
-    eltPointHandle = undefined;
-    if (eltJmnodeFrom) {
-        eltJmnodeFrom = undefined;
-    }
-    if (eltOverJmnode) {
-
-    }
-    console.log("teardwon...", { eltJmnodeFrom });
-    modJsmindDraggable.stopNow();
-    evtPointerLast = undefined;
-}
-function setupPointHandle() {
-    console.log("setupPointHandle");
-    jmnodesPointHandle = document.body.querySelector("jmnodes");
-    if (!jmnodesPointHandle) throw Error("Could not find <jmnodes>");
-    jmnodesPointHandle.addEventListener("pointerdown", initializePointHandle);
-    jmnodesPointHandle.addEventListener("pointerup", teardownPointHandleAndAct);
-}
-async function teardownPointHandle() {
-    jmnodesPointHandle = document.body.querySelector("jmnodes");
-    if (!jmnodesPointHandle) throw Error("jmnodesPointHandle not found");
-    // jmnodesPointHandle.removeEventListener("dragstart", startPointHandle);
-    // jmnodesPointHandle.removeEventListener("dragend", stopPointHandle);
-    jmnodesPointHandle?.removeEventListener("pointerdown", initializePointHandle);
-    jmnodesPointHandle?.removeEventListener("pointerup", teardownPointHandleAndAct);
-    teardownPointHandleAndAct();
-    modJsmindDraggable.setPointerDiff(0, 0);
-}
 
 function requestCheckDistance() {
-    if (!eltPointHandle) return;
+    if (!pointHandle.idle) return;
     // console.log("requestCheckDistance");
-    checkPointHandleDistance();
+    pointHandle.checkPointHandleDistance();
     requestAnimationFrame(requestCheckDistance);
 }
 let eltJmnodeFrom;
@@ -277,91 +369,14 @@ function jmnodeFromPoint(cX, cY) {
     const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
     return eltJmnode
 }
-function checkPointHandleDistance() {
-    if (posPointHandle.startX == undefined) {
-        if (!evtPointerLast) return;
-        // console.log("checkPointHandleDistance", evt);
-        if (eltJmnodeFrom) throw Error("eltJmnodeFrom was already set");
-
-        eltJmnodeFrom = evtPointerLast.target.closest("jmnode");
-        console.log("old:", { eltJmnodeFrom });
-
-        // const eltsHere = document.elementsFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-        // eltJmnodeFrom = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
-        eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-        console.log("new:", { eltJmnodeFrom });
-
-        console.log("checkPHD", { eltJmnodeFrom });
-        const bcrNode = eltJmnodeFrom.getBoundingClientRect();
-        posPointHandle.dTop = evtPointerLast.clientY - bcrNode.top;
-        posPointHandle.dBottom = bcrNode.bottom - evtPointerLast.clientY;
-        posPointHandle.dLeft = evtPointerLast.clientX - bcrNode.left;
-        posPointHandle.dRight = bcrNode.right - evtPointerLast.clientX;
-        let insideNode = false;
-        ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
-            const d = posPointHandle[dT];
-            // if (d <= 0) throw Error(`${dT} < 0, =${d}`);
-            if (d <= 0) insideNode = true;
-        });
-        if (insideNode) return;
-
-        eltPointHandle.style.left = evtPointerLast.clientX - sizePointHandle / 2;
-        eltPointHandle.style.top = evtPointerLast.clientY - sizePointHandle / 2;
-        // jmnodesPointHandle.appendChild(eltPointHandle)
-        console.log("checkPointHandleDistance start", { posPointHandle });
-        posPointHandle.startX = evtPointerLast.clientX;
-        posPointHandle.startY = evtPointerLast.clientY;
-    }
-    const diffX = posPointHandle.startX - evtPointerLast.clientX;
-    const diffY = posPointHandle.startY - evtPointerLast.clientY;
-    const diff2 = diffX * diffX + diffY * diffY;
-    const diffOk = !(diff2 < diffPointHandle * diffPointHandle);
-    console.log("check dist", diffX, diffY, diff2, "<=>", diffPointHandle * diffPointHandle);
-    if (!diffOk) {
-        return;
-    }
-
-    const dOutside = 10;
-    const startX = posPointHandle.startX;
-    const startY = posPointHandle.startY;
-    const dLeft = posPointHandle.dLeft;
-    const dRight = posPointHandle.dRight;
-    const dTop = posPointHandle.dTop;
-    const dBottom = posPointHandle.dBottom;
-    const leftInside = startX - evtPointerLast.clientX < dRight + dOutside;
-    const rightInside = evtPointerLast.clientX - startX < dLeft + dOutside;
-    const topInside = startY - evtPointerLast.clientY < dBottom + dOutside;
-    const bottomInside = evtPointerLast.clientY - startY < dTop + dOutside;
-    const isInside = leftInside && rightInside && topInside && bottomInside;
-    if (isInside) {
-        console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
-        return;
-    }
-
-    if (!eltPointHandle.classList.contains("active")) {
-        eltPointHandle.classList.add("active");
-        console.log("added active to pph");
-        posPointHandle.diffX = posPointHandle.diffX || diffX;
-        posPointHandle.diffY = posPointHandle.diffY || diffY;
-        const newDiffX = posPointHandle.diffX - sizePointHandle / 2;
-        const newDiffY = posPointHandle.diffY - sizePointHandle / 2;
-        modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
-        modJsmindDraggable.nextHereIamMeansStart();
-
-        // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
-        // jmnodesPointHandle.removeEventListener("mousemove", checkPointHandleDistance);
-        // jmnodesPointHandle.removeEventListener("drag", checkPointHandleDistance);
-        // jmnodesPointHandle.addEventListener("drag", movePointHandle);
-    } else {
-        movePointHandle();
-    }
-}
 let eltOverJmnode;
 // const cssClsDragFrom = "jsmind-drag-from";
 // const cssClsDragTarget = "jsmind-drag-target";
 function movePointHandle() {
+    if (!posPointHandle.diffX) return;
     const clientX = evtPointerLast.clientX;
     const clientY = evtPointerLast.clientY;
+    if (!clientX) return;
     // const bcr = eltPointHandle.getBoundingClientRect();
     // const clientX = bcr.left + bcr.width / 2;
     // const clientY = bcr.top + bcr.height / 2;
@@ -2280,7 +2295,7 @@ export async function dialogFindInMindMaps(key, provider) {
 /***************** Test cm on screen */
 ///////////////////////////////////////
 
-testCmOnScreen();
+// testCmOnScreen();
 function testCmOnScreen() {
 
     ////////// In Google Chrome on Windows:

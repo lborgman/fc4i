@@ -7,10 +7,12 @@ const debounce = modTools.debounce;
 const wait4mutations = modTools.wait4mutations;
 
 // FIX-ME: Why is this called in share.html?
+/*
 if (typeof jsMind != "undefined" && !jsMind.mm4iSupported) {
     // throw Error("This version of jsMind does not support mm4i");
-    console.error("This version of jsMind does not support mm4i");
+    // console.error("This version of jsMind does not support mm4i");
 }
+*/
 
 // FIX-ME: clean up
 const modMMhelpers = await importFc4i("mindmap-helpers");
