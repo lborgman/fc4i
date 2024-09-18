@@ -10,9 +10,9 @@ const mkElt = window.mkElt;
 
 const modCustRend = await importFc4i("jsmind-cust-rend");
 // FIX-ME: comment out temporary!
-// const modMMhelpers = await importFc4i("mindmap-helpers");
-// const modMdc = await importFc4i("util-mdc");
-// const modTools = await importFc4i("toolsJs");
+const modMMhelpers = await importFc4i("mindmap-helpers");
+const modMdc = await importFc4i("util-mdc");
+const modTools = await importFc4i("toolsJs");
 
 class PointHandle {
     static sizePointHandle = 20;
