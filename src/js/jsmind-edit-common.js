@@ -1436,8 +1436,8 @@ export async function pageSetup() {
         const liTestConvertToCustom = mkMenuItem("Link node to custom content", pasteCustom2node);
         markIfNoSelected(liTestConvertToCustom);
 
-        const liTestPointHandle = mkMenuItem("test pointHandle", setupPointHandle);
-        liTestPointHandle.classList.add("test-item");
+        // const liTestPointHandle = mkMenuItem("test pointHandle", setupPointHandle);
+        // liTestPointHandle.classList.add("test-item");
 
         // https://html2canvas.hertzen.com/getting-started.html
         // const liTestMirror = mkMenuItem("test mirror", testStartMirror);
@@ -1616,7 +1616,7 @@ export async function pageSetup() {
             liTestTabindex,
             liTestDragBetween,
             liTestPinchZoom,
-            liTestPointHandle,
+            // liTestPointHandle,
         ];
         const arrMenuAll = [...arrMenuEntries, ...extraPageMenuItems, ...arrMenuTestEntries];
 
