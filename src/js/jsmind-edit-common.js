@@ -18,11 +18,9 @@ class PointHandle {
     static sizePointHandle = 20;
     static diffPointHandle = 60;
 
-    /** @type {HTMLElement} */
-    #eltPointHandle;
-    /** @type {HTMLElement} */
-    #jmnodesPointHandle;
-    #state = "idle";
+    /** @type {HTMLElement} */ #eltPointHandle;
+    /** @type {HTMLElement} */ #jmnodesPointHandle;
+    /** @type {string} */ #state = "idle";
 
     constructor() {
         this.#eltPointHandle = mkElt("div", { id: "jsmindtest-point-handle" });
@@ -54,7 +52,7 @@ class PointHandle {
         console.log("teardownPointHandle");
         this.#jmnodesPointHandle.removeEventListener("pointermove", savePointerPos);
         this.#eltPointHandle?.remove();
-        this.#eltPointHandle = undefined;
+        // this.#eltPointHandle = undefined;
         if (eltJmnodeFrom) {
             eltJmnodeFrom = undefined;
         }
@@ -67,9 +65,10 @@ class PointHandle {
     }
     setupPointHandle() {
         console.log("setupPointHandle");
-        const eltJmnodes = document.body.querySelector("jmnodes");
-        if (!eltJmnodes) throw Error("Could not find <jmnodes>");
-        this.#jmnodesPointHandle = /** @type {HTMLElement} */ eltJmnodes;
+        /** @type {HTMLElement | null} */
+        const elt = document.body.querySelector("jmnodes");
+        if (!elt) throw Error("Could not find <jmnodes>");
+        this.#jmnodesPointHandle = elt;
         const THIS = this;
         this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
         this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
