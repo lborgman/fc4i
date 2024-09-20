@@ -1,5 +1,5 @@
 //========== Specific ====================================================
-const SW_VERSION = "0.4.1443";
+const SW_VERSION = "0.4.1454";
 
 
 // https://www.npmjs.com/package/workbox-sw
@@ -8,8 +8,17 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox
 
 // throw Error("Test worker error");
 const logColors = "color: green; background: yellow;";
-console.log(`%csw-worker-input.js ${SW_VERSION} is here`, logColors + " font-size: 20px;");
+// console.log(`%csw-worker-input.js ${SW_VERSION} is here`, logColors + " font-size: 20px;");
 
+const logStyle = "color: green; background: yellow; padding:2px; border-radius:2px;";
+const logStrongStyle = logStyle + " font-size:18px;";
+function logConsole(...msg) {
+    console.log(`%csw-workbox.js`, logStyle, ...msg);
+}
+function logStrongConsole(...msg) {
+    console.log(`%csw-workbox.js`, logStrongStyle, ...msg);
+}
+logStrongConsole(`${SW_VERSION} is here`);
 
 // https://stackoverflow.com/questions/61080783/handling-errors-in-async-event-handlers-in-javascript-in-the-web-browser
 // Error handling with Async/Await in JS - ITNEXT
@@ -38,8 +47,8 @@ workbox.setConfig({
 
 importScripts("src/js/umd/idb.js");
 // importScripts("src/js/db-fc4i.js");
-console.log("%cservice-worker.js after import workbox-sw.js, idb.js and db-fc4i.js", logColors);
-// setLastSWstatus({ status: "starting SW", when: toOurTime(new Date()) });
+// console.log("%cservice-worker.js after import workbox-sw.js, idb.js and db-fc4i.js", logColors);
+logConsole("After import workbox-sw.js, idb.js and db-fc4i.js");
 
 // JavaScript timers do not survive SW shutdown. So check to notify here at SW startup:
 (async () => {
@@ -83,8 +92,8 @@ async function broadcastToClients(msg) {
 }
 
 async function shareTargetHandler(evt) {
-    console.warn("shareTargetHandler");
-    console.warn("shareTargetHandler", { evt }, evt.respondWith);
+    logStrongConsole("shareTargetHandler");
+    logStrongConsole("shareTargetHandler", { evt }, evt.respondWith);
     // const formData = await evt.request.formData();
     // console.warn({ formData });
     // clients.openWindow("share.html?text=DUMMY-TEXT&title=DUMMY-title&url=DUMMY-url");
@@ -110,7 +119,8 @@ async function checkToNotify(matchValues) {
     broadcastToClients(data);
 }
 function displayNotificationFromRecord(expiredRecord, timerInfo) {
-    console.log("%cdisplayNotificationFromRecord", logColors, { expiredRecord, timerInfo });
+    // console.log("%cdisplayNotificationFromRecord", logColors, { expiredRecord, timerInfo });
+    logConsole("displayNotificationFromRecord", { expiredRecord, timerInfo });
     const title = `(${timerInfo}) ${expiredRecord.title}`;
     const body = expiredRecord.desc;
     const encodedKey = decodeURIComponent(expiredRecord.key);
@@ -119,13 +129,14 @@ function displayNotificationFromRecord(expiredRecord, timerInfo) {
     console.log("%ckey", "color:red; font-size:20px;", { url });
 
     const displayed = displayNotification(title, body, url);
-    console.log("%cwas displayed", logColors, { displayed });
+    // console.log("%cwas displayed", logColors, { displayed });
+    logConsole("Was displayed", { displayed });
 }
 
 async function displayExpiredLongTimeNotification(objExpired) {
     const { expiredRecord, expiredTimers } = objExpired;
-    // const href = location.href;
-    console.log("%cdisplayExpiredLongTimeNotification", logColors, { objExpired, expiredRecord, expiredTimers });
+    // console.log("%cdisplayExpiredLongTimeNotification", logColors, { objExpired, expiredRecord, expiredTimers });
+    logConsole("displayExpiredLongTimeNotification", { objExpired, expiredRecord, expiredTimers });
     const timerInfo = expiredTimers[0].txtLength;
 
     displayNotificationFromRecord(expiredRecord, timerInfo);
@@ -143,26 +154,28 @@ async function displayExpiredLongTimeNotification(objExpired) {
             recT.msDelay = -recT.msDelay;
         }
     }
-    // const db = await getDb();
-    // const res = await db.put(idbStoreName, expiredRecord);
-    // console.log("%cService Worker stored notification done", logColors, { res });
-    console.log("%cService Worker stored notification done", logColors);
+    // console.log("%cService Worker stored notification done", logColors);
+    logConsole("Service Worker stored notification done");
 }
 self.addEventListener('notificationclick', (evt) => {
-    console.log("%cService Worker notificationclick", logColors, { evt });
+    // console.log("%cService Worker notificationclick", logColors, { evt });
+    logConsole("notificationclick", { evt });
     if (!evt.notification.data.action) {
         // Was a normal notification click
-        console.log('%cNotification Click.', logColors);
+        // console.log('%cNotification Click.', logColors);
+        logConsole('Notification Click.');
         return;
     }
     switch (evt.notification.data.action) {
         case 'display-url':
             const url = evt.notification.data.url;
-            console.log(`%cDisplay url ${url}`, logColors);
+            // console.log(`%cDisplay url ${url}`, logColors);
+            logConsole(`Display url ${url}`);
             clients.openWindow(url);
             break;
         default:
-            console.log(`%cUnknown action clicked: '${evt.action}'`, logColors);
+            // console.log(`%cUnknown action clicked: '${evt.action}'`, logColors);
+            logStrongConsole(`Unknown action clicked: '${evt.action}'`);
             break;
     }
 });
@@ -221,7 +234,8 @@ const restartAutoCheck = (() => {
     let tmr;
     const delayMs = 2000; // FIXME:
     return (clientPort) => {
-        console.log("%crestartCheckAutoCheck", logColors, { clientPort });
+        // console.log("%crestartCheckAutoCheck", logColors, { clientPort });
+        logConsole("restartCheckAutoCheck", { clientPort });
         clearTimeout(tmr);
         const promise = new Promise((resolve, reject) => {
             tmr = setTimeout(function () {
@@ -239,7 +253,8 @@ const restartAutoCheck = (() => {
             }, 300)
         })
         promise.catch(error => {
-            console.log("%checkSave() error)", logColors, { error });
+            // console.log("%checkSave() error)", logColors, { error });
+            logStrongConsole("checkSave() error)", { error });
             throw error;
         });
     }
@@ -256,7 +271,8 @@ self.addEventListener("message", errorHandlerAsyncEvent(async evt => {
     if (evt.data) {
         msgType = evt.data.type;
     }
-    console.log("%cservice-worker message", logColors, { evt, msgType });
+    // console.log("%cservice-worker message", logColors, { evt, msgType });
+    logConsole("message", { evt, msgType });
     if (evt.data) {
         switch (msgType) {
             case "TEST_TIMER":
@@ -337,7 +353,8 @@ self.addEventListener("message", errorHandlerAsyncEvent(async evt => {
             case "CHECK_NOTIFY":
                 const msDelay = evt.data.msDelay;
                 const matchValues = evt.data.matchValues;
-                console.log("%cservice-worker message", logColors, { matchValues });
+                // console.log("%cservice-worker message", logColors, { matchValues });
+                logConsole("message", { matchValues });
                 clearTimeout(tmrCheck);
                 tmrCheck = setTimeout(() => { checkToNotify(matchValues); }, msDelay)
                 break;
@@ -376,7 +393,8 @@ self.addEventListener("install", (evt) => {
 */
 // https://stackoverflow.com/questions/70331036/why-service-workers-fetch-event-handler-not-being-called-but-still-worked
 self.addEventListener("activate", (evt) => {
-    console.warn("service-worker activate event");
+    // console.warn("service-worker activate event");
+    logStrongConsole("service-worker activate event");
     evt.waitUntil(self.clients.claim()); // Become available to all pages
 });
 
@@ -399,7 +417,8 @@ function displayNotification(title, body, url) {
         console.error("Notification requested but not permitted");
         return false;
     }
-    console.log("%cdisplayNotification", logColors, { title, options });
+    // console.log("%cdisplayNotification", logColors, { title, options });
+    logConsole("displayNotification", { title, options });
     self.registration.showNotification(title, options);
     return true;
 }
