@@ -41,7 +41,7 @@ class PointHandle {
         this.#myState = state;
         const elt = this.#eltPointHandle;
         const par = elt.parentElement;
-        console.trace("set", { state, elt, par });
+        console.log(">>>> set state", { state, elt, par });
         PointHandle.myStates.forEach(st => {
             this.#jmnodesPointHandle.classList.remove(`pointhandle-state-${st}`);
         })
@@ -62,38 +62,50 @@ class PointHandle {
         this.#eltPointHandle.style.pointerEvents = "none"; // FIX-ME: why???
     }
     get element() { return this.#eltPointHandle; }
-    initializePointHandle(evt) {
+    savePosBounded = (evt) => {
+        savePointerPos.bind(this)(evt);
+    }
+    initializePointHandle = (evt) => {
+        if (!(evt instanceof PointerEvent)) throw Error("Expeced PointerEvent");
         if (!evt.target) return;
         const target = evt.target;
-        const targetJmnode = target.closest("jmnode");
-        if (!targetJmnode) return;
+        const jmnodeDragged = target.closest("jmnode");
+        if (!jmnodeDragged) return;
 
-        savePointerPos(evt);
+        const clientX = evt.clientX;
+        const clientY = evt.clientY;
         posPointHandle = {
             start: {
-                clientX: evt.clientX,
-                clientY: evt.clientY,
-                eltDragged: targetJmnode,
-                evtId: evt.pointerId
+                clientX,
+                clientY,
+                jmnodeDragged,
+                // evtId: evt.pointerId
             },
             current: {}
         };
+        savePointerPos(evt);
+        const elt = document.elementFromPoint(clientX, clientY);
+        if (elt != target) throw Error("elt != target");
+        console.log("INIT", { elt, posPointHandle });
         this.#state = "init";
 
-        this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
-        this.#eltPointHandle.style.left = `${evt.clientX - PointHandle.sizePointHandle / 2}`;
-        this.#eltPointHandle.style.top = `${evt.clientY - PointHandle.sizePointHandle / 2}`;
+        // this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
+        document.body.appendChild(this.#eltPointHandle);
+        this.#eltPointHandle.style.left = `${clientX - PointHandle.sizePointHandle / 2}px`;
+        this.#eltPointHandle.style.top = `${clientY - PointHandle.sizePointHandle / 2}px`;
 
-        this.#state = "dist";
-        const THIS = this;
-        this.#jmnodesPointHandle.addEventListener("pointermove", savePointerPos.bind(THIS));
+        // this.#state = "dist";
+        // const THIS = this;
+        // this.#jmnodesPointHandle.addEventListener("pointermove", savePointerPos.bind(this));
+        this.#jmnodesPointHandle.addEventListener("pointermove", this.savePosBounded);
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
         console.log("teardownPointHandle");
         const THIS = this;
-        this.#jmnodesPointHandle.removeEventListener("pointermove", savePointerPos.bind(THIS));
-        this.#eltPointHandle?.remove();
+        // this.#jmnodesPointHandle.removeEventListener("pointermove", savePointerPos.bind(THIS));
+        this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
+        this.#eltPointHandle?.remove(); 
         // this.#eltPointHandle = undefined;
         if (eltJmnodeFrom) {
             eltJmnodeFrom = undefined;
@@ -125,14 +137,15 @@ class PointHandle {
     }
     checkPointHandleDistance() {
         if (!evtPointerLast) return;
+        // console.log("checkPointHandleDistance");
         if (!eltJmnodeFrom) {
             eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
             console.log("new:", { eltJmnodeFrom });
             const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
-            posPointHandle.dTop = evtPointerLast.clientY - bcrFrom.top;
-            posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.clientY;
-            posPointHandle.dLeft = evtPointerLast.clientX - bcrFrom.left;
-            posPointHandle.dRight = bcrFrom.right - evtPointerLast.clientX;
+            posPointHandle.dTop = evtPointerLast.screenY - bcrFrom.top;
+            posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.screenY;
+            posPointHandle.dLeft = evtPointerLast.screenX - bcrFrom.left;
+            posPointHandle.dRight = bcrFrom.right - evtPointerLast.screenX;
             let insideNode = false;
             ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
                 const d = posPointHandle[dT];
@@ -146,17 +159,18 @@ class PointHandle {
             this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
             this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}px`;
             console.log("checkPointHandleDistance start", { posPointHandle });
-            posPointHandle.startX = evtPointerLast.clientX;
-            posPointHandle.startY = evtPointerLast.clientY;
+            // posPointHandle.startX = evtPointerLast.screenX;
+            // posPointHandle.startY = evtPointerLast.screenY;
         }
-        const diffX = posPointHandle.startX - evtPointerLast.clientX;
-        const diffY = posPointHandle.startY - evtPointerLast.clientY;
+        const diffX = posPointHandle.start.clientX - evtPointerLast.clientX;
+        const diffY = posPointHandle.start.clientY - evtPointerLast.clientY;
+        if (isNaN(diffX) || isNaN(diffY)) throw Error("diffX or diffY isNaN");
         if (this.#state == "dist") {
             const diff2 = diffX * diffX + diffY * diffY;
             const diffPH = PointHandle.diffPointHandle;
             const diffPH2 = diffPH * diffPH;
             const diffOk = !(diff2 < diffPH2);
-            console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
+            // console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
             if (!diffOk) {
                 return;
             }
@@ -164,19 +178,21 @@ class PointHandle {
         }
 
         const dOutside = 10;
-        const startX = posPointHandle.startX;
-        const startY = posPointHandle.startY;
+        // const startX = posPointHandle.startX;
+        // const startY = posPointHandle.startY;
+        const startX = posPointHandle.start.screenX;
+        const startY = posPointHandle.start.screenY;
         const dLeft = posPointHandle.dLeft;
         const dRight = posPointHandle.dRight;
         const dTop = posPointHandle.dTop;
         const dBottom = posPointHandle.dBottom;
-        const leftInside = startX - evtPointerLast.clientX < dRight + dOutside;
-        const rightInside = evtPointerLast.clientX - startX < dLeft + dOutside;
-        const topInside = startY - evtPointerLast.clientY < dBottom + dOutside;
-        const bottomInside = evtPointerLast.clientY - startY < dTop + dOutside;
+        const leftInside = startX - evtPointerLast.screenX < dRight + dOutside;
+        const rightInside = evtPointerLast.screenX - startX < dLeft + dOutside;
+        const topInside = startY - evtPointerLast.screenY < dBottom + dOutside;
+        const bottomInside = evtPointerLast.screenY - startY < dTop + dOutside;
         const isInside = leftInside && rightInside && topInside && bottomInside;
         if (isInside) {
-            console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
+            // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
             return;
         }
 
@@ -368,13 +384,14 @@ let evtPointerLast; /** @type {PointerEvents} */
  * @param {PointerEvent} evt 
  */
 function savePointerPos(evt) {
+    if (!(evt instanceof PointerEvent)) throw Error("Expeced PointerEvent");
     evt.preventDefault();
     evt.stopPropagation();
     evt.stopImmediatePropagation();
 
     // evtPointerLast = evt;
     const clientX = evt.clientX;
-    const clientY = evt.clientX;
+    const clientY = evt.clientY;
     const target = evt.target;
     evtPointerLast = { clientX, clientY, target };
 }
@@ -400,6 +417,7 @@ function requestCheckPointerHandleMove() {
 }
 let eltJmnodeFrom;
 function jmnodeFromPoint(cX, cY) {
+    console.log({ cX, cY });
     const eltsHere = document.elementsFromPoint(cX, cY);
     const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
     return eltJmnode
@@ -458,9 +476,9 @@ function movePointHandle() {
 /*
 function getposPointHandle() {
     const sp = eltPointHandle.style;
-    const clientX = sp.left;
-    const clientY = sp.top;
-    return { clientX, clientY };
+    const screenX = sp.left;
+    const screenY = sp.top;
+    return { screenX, screenY };
 }
 */
 /////////////////////////////////////////////////////
@@ -1399,7 +1417,7 @@ export async function pageSetup() {
     jsMindContainer.addEventListener("NOcontextmenu", evt => {
         if (targetIsJmnode(evt)) {
             evt.preventDefault();
-            if (!(evt instanceof MouseEvent)) { throw Error("not MouseEvent"); }
+            if (!(evt instanceof PointerEvent)) { throw Error("not PointerEvent"); }
             // if (!(evt.clientX && evt.clientY)) { throw Error("evt does not have position"); }
             const x = `${evt.clientX}`;
             const y = `${evt.clientY}`;
