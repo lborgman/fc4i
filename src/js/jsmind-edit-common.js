@@ -69,8 +69,13 @@ class PointHandle {
         if (!(evt instanceof PointerEvent)) throw Error("Expeced PointerEvent");
         if (!evt.target) return;
         const target = evt.target;
+        if (!(target instanceof HTMLElement)) throw Error("target is not HTMLElement");
         const jmnodeDragged = target.closest("jmnode");
         if (!jmnodeDragged) return;
+
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
 
         const clientX = evt.clientX;
         const clientY = evt.clientY;
