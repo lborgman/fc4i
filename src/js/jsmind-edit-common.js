@@ -8,6 +8,9 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 const importFc4i = window.importFc4i;
 // @ts-ignore
 const mkElt = window.mkElt;
+// @ts-ignore
+const jsMind = window.jsMind;
+if (!jsMind) { throw Error("jsMind is not setup"); }
 
 
 const modCustRend = await importFc4i("jsmind-cust-rend");
@@ -22,6 +25,10 @@ class PointHandle {
 
     static myStates = ["idle", "init", "dist", "move"];
     #myState;
+
+    /** @type {HTMLElement} */ #eltPointHandle;
+    /** @type {HTMLElement} */ #jmnodesPointHandle;
+
     static knownState(state) { return PointHandle.myStates.indexOf(state); }
     get #state() { return this.#myState; }
     set #state(state) {
@@ -32,12 +39,22 @@ class PointHandle {
             if (idxNew - 1 != idxOld) throw Error(`${state} can't follow ${this.#myState}`);
         }
         this.#myState = state;
-        console.trace("set", { state });
+        const elt = this.#eltPointHandle;
+        const par = elt.parentElement;
+        console.trace("set", { state, elt, par });
+        PointHandle.myStates.forEach(st => {
+            this.#jmnodesPointHandle.classList.remove(`pointhandle-state-${st}`);
+        })
+        this.#jmnodesPointHandle.classList.add(`pointhandle-state-${state}`);
     }
-    stateMove() { return this.#myState == "move"; }
+    stateMoving() {
+        // FIX-ME:
+        return this.#myState != "idle";
+        if (this.#myState == "move") return true;
+        if (this.#myState == "dist") return true;
+        return false;
+    }
 
-    /** @type {HTMLElement} */ #eltPointHandle;
-    /** @type {HTMLElement} */ #jmnodesPointHandle;
 
     constructor() {
         this.#myState = "idle";
@@ -50,7 +67,8 @@ class PointHandle {
         const target = evt.target;
         const targetJmnode = target.closest("jmnode");
         if (!targetJmnode) return;
-        this.#state = "init";
+
+        savePointerPos(evt);
         posPointHandle = {
             start: {
                 clientX: evt.clientX,
@@ -60,6 +78,8 @@ class PointHandle {
             },
             current: {}
         };
+        this.#state = "init";
+
         this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
         this.#eltPointHandle.style.left = `${evt.clientX - PointHandle.sizePointHandle / 2}`;
         this.#eltPointHandle.style.top = `${evt.clientY - PointHandle.sizePointHandle / 2}`;
@@ -67,7 +87,7 @@ class PointHandle {
         this.#state = "dist";
         const THIS = this;
         this.#jmnodesPointHandle.addEventListener("pointermove", savePointerPos.bind(THIS));
-        requestCheckDistance();
+        requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
         console.log("teardownPointHandle");
@@ -105,24 +125,14 @@ class PointHandle {
     }
     checkPointHandleDistance() {
         if (!evtPointerLast) return;
-        // if (posPointHandle.startX == undefined)
         if (!eltJmnodeFrom) {
-            if (eltJmnodeFrom) throw Error("eltJmnodeFrom was already set");
-
-            // eltJmnodeFrom = evtPointerLast.target.closest("jmnode");
-            // console.log("old:", { eltJmnodeFrom });
-
-            // const eltsHere = document.elementsFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-            // eltJmnodeFrom = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
             eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
             console.log("new:", { eltJmnodeFrom });
-
-            console.log("checkPHD", { eltJmnodeFrom });
-            const bcrNode = eltJmnodeFrom.getBoundingClientRect();
-            posPointHandle.dTop = evtPointerLast.clientY - bcrNode.top;
-            posPointHandle.dBottom = bcrNode.bottom - evtPointerLast.clientY;
-            posPointHandle.dLeft = evtPointerLast.clientX - bcrNode.left;
-            posPointHandle.dRight = bcrNode.right - evtPointerLast.clientX;
+            const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
+            posPointHandle.dTop = evtPointerLast.clientY - bcrFrom.top;
+            posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.clientY;
+            posPointHandle.dLeft = evtPointerLast.clientX - bcrFrom.left;
+            posPointHandle.dRight = bcrFrom.right - evtPointerLast.clientX;
             let insideNode = false;
             ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
                 const d = posPointHandle[dT];
@@ -131,23 +141,27 @@ class PointHandle {
             });
             if (insideNode) return;
 
-            this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}`;
-            this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}`;
+            this.#state = "dist";
+
+            this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
+            this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}px`;
             console.log("checkPointHandleDistance start", { posPointHandle });
             posPointHandle.startX = evtPointerLast.clientX;
             posPointHandle.startY = evtPointerLast.clientY;
         }
         const diffX = posPointHandle.startX - evtPointerLast.clientX;
         const diffY = posPointHandle.startY - evtPointerLast.clientY;
-        const diff2 = diffX * diffX + diffY * diffY;
-        const diffPH = PointHandle.diffPointHandle;
-        const diffPH2 = diffPH * diffPH;
-        const diffOk = !(diff2 < diffPH2);
-        console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
-        if (!diffOk) {
-            return;
+        if (this.#state == "dist") {
+            const diff2 = diffX * diffX + diffY * diffY;
+            const diffPH = PointHandle.diffPointHandle;
+            const diffPH2 = diffPH * diffPH;
+            const diffOk = !(diff2 < diffPH2);
+            console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
+            if (!diffOk) {
+                return;
+            }
+            this.#state = "move";
         }
-        this.#state = "move";
 
         const dOutside = 10;
         const startX = posPointHandle.startX;
@@ -184,6 +198,7 @@ class PointHandle {
 const pointHandle = new PointHandle();
 console.log({ pointHandle })
 console.log(pointHandle.element);
+window["ourPointHandle"] = pointHandle; // FIX-ME:
 // debugger;
 
 
@@ -253,12 +268,12 @@ async function dialogMirrorWay() {
     ]);
 
     // const srcVideoMirror = "https://drive.google.com/file/d/17gmHG7X14szrG04nIskIAAP4mNnr9Tm8/preview";
-    const srcVideoMirror = "/img/vid/screen-20230513-mirror.mp4";
-    const posterVideoMirror = "/img/vid/screen-20230513-mirror.jpg";
-    const aspectratioVideoMirror = "1048 / 1248";
-    const eltVidMirror = mkVidElt(srcVideoMirror, posterVideoMirror);
+    // const srcVideoMirror = "/img/vid/screen-20230513-mirror.mp4";
+    // const posterVideoMirror = "/img/vid/screen-20230513-mirror.jpg";
+    // const aspectratioVideoMirror = "1048 / 1248";
+    // const eltVidMirror = mkVidElt(srcVideoMirror, posterVideoMirror);
     // altsDesc.cloneNode = mkElt("div", undefined, [ eltVidMirror ]);
-
+    /*
     function mkVidElt(src, poster, aspectRatio) {
         aspectRatio = aspectRatio || "1 / 1";
         // https://stackoverflow.com/questions/24157940/iframe-height-auto-css
@@ -293,6 +308,7 @@ async function dialogMirrorWay() {
         // return divBoth;
         return eltVideo;
     }
+    */
 
     altsDesc.pointHandle = mkElt("div", undefined, [
         "Default when screen supports touch.",
@@ -375,12 +391,12 @@ function savePointerPos(evt) {
  * @return {EventListenerOrEventListenerObject}
  */
 
-function requestCheckDistance() {
+function requestCheckPointerHandleMove() {
     // if (!pointHandle.idle) return;
-    if (!pointHandle.stateMove()) return;
+    if (!pointHandle.stateMoving()) return;
     // console.log("requestCheckDistance");
     pointHandle.checkPointHandleDistance();
-    requestAnimationFrame(requestCheckDistance);
+    requestAnimationFrame(requestCheckPointerHandleMove);
 }
 let eltJmnodeFrom;
 function jmnodeFromPoint(cX, cY) {
@@ -425,7 +441,6 @@ function movePointHandle() {
     } else {
         unmarkOver();
     }
-    */
     function markOver(elt) {
         eltOverJmnode = elt;
         // eltOverJmnode.classList.add(cssClsDragTarget);
@@ -438,13 +453,16 @@ function movePointHandle() {
             eltOverJmnode = undefined;
         }
     }
+    */
 }
+/*
 function getposPointHandle() {
     const sp = eltPointHandle.style;
     const clientX = sp.left;
     const clientY = sp.top;
     return { clientX, clientY };
 }
+*/
 /////////////////////////////////////////////////////
 
 export const arrShapeClasses = getMatchesInCssRules(/\.(jsmind-shape-[^.:#\s]*)/);
@@ -729,6 +747,7 @@ export async function pageSetup() {
     if (!jsMindContainer) throw Error(`Could not find ${idDivJmnodesMain}`);
 
     function clearSearchHits() {
+        if (!jsMindContainer) throw Error(`Could not find ${idDivJmnodesMain}`);
         const nodeEltArray = [...jsMindContainer.querySelectorAll("jmnode[nodeid]")];
         nodeEltArray.forEach(n => n.classList.remove("jsmind-hit"));
     }
@@ -794,7 +813,7 @@ export async function pageSetup() {
 
 
     const btnDebugLogClear = mkElt("button", undefined, "Clear");
-    btnDebugLogClear.addEventListener("click", evt => {
+    btnDebugLogClear.addEventListener("click", () => {
         divDebugLogLog.textContent = "";
     });
     const divDebugLogHeader = mkElt("div", { id: "jsmind-test-debug-header" }, [
@@ -816,7 +835,7 @@ export async function pageSetup() {
             const url = new URL("/nwg/netwgraph.html", location.href);
             const sp = new URLSearchParams(location.search);
             const mm = sp.get("mindmap");
-            url.searchParams.set("mindmap", mm);
+            if (mm) { url.searchParams.set("mindmap", mm); }
             return url.href;
         }
         async function mkFabNetwG() {
@@ -824,11 +843,11 @@ export async function pageSetup() {
             const iconHub = modMdc.mkMDCicon("hub");
 
             const aIconHub = mkElt("a", { href: "/nwg/netwgraph.html" }, iconHub);
-            aIconHub.addEventListener("click", evt => {
+            aIconHub.addEventListener("click", () => {
                 // aIconHub.href = mkTestNetwGraphURL();
                 aIconHub.href = mkNetwGraphURL();
             });
-            aIconHub.addEventListener("contextmenu", evt => {
+            aIconHub.addEventListener("contextmenu", () => {
                 aIconHub.href = mkNetwGraphURL();
             });
 
@@ -877,6 +896,7 @@ export async function pageSetup() {
     addJsmindButtons();
 
     async function addJsmindButtons() {
+        if (!jsMindContainer) { throw Error(`jsMindContainer is null`) };
         btnJsmindDebug = modMdc.mkMDCiconButton("adb", "Debug log", 40);
         btnJsmindDebug.id = idBtnJsmindDebug;
         btnJsmindDebug.classList.add("test-item");
@@ -916,6 +936,7 @@ export async function pageSetup() {
             clearSearchHits();
             if (visibleSearchInputs()) {
                 const divInputs = document.getElementById("jsmind-search-inputs");
+                if (!divInputs) { throw Error(`Could not find jsmind-search-inputs`); }
                 if (divInputs.classList.contains("showing-provider-hits")) {
                     setProviderNodeHits();
                 } else {
@@ -933,8 +954,9 @@ export async function pageSetup() {
 
         const btnCloseProvHits = modMdc.mkMDCiconButton("clear", "Clear search hits");
         btnCloseProvHits.classList.add("icon-button-sized");
-        btnCloseProvHits.addEventListener("click", evt => {
+        btnCloseProvHits.addEventListener("click", () => {
             const divInputs = document.getElementById("jsmind-search-inputs");
+            if (!divInputs) { throw Error(`Could not find jsmind-search-inputs`); }
             divInputs.classList.remove("showing-provider-hits");
             clearSearchHits();
             const divHits = document.getElementById(idDivHits);
@@ -961,14 +983,14 @@ export async function pageSetup() {
         eltProvHits.appendChild(btnCloseProvHits);
         // ]);
 
-        inpSearch.addEventListener("input", evt => {
+        inpSearch.addEventListener("input", () => {
             restartJsmindSearch();
         })
         divJsmindSearch.appendChild(divSearchInputs);
     }
-    // function displaySearchInputs() { jsMindContainer.classList.add("display-jsmind-search"); }
-    // function hideSearchInputs() { jsMindContainer.classList.remove("display-jsmind-search"); }
+    // @ts-ignore
     function toggleSearchInputs() { jsMindContainer.classList.toggle("display-jsmind-search"); }
+    // @ts-ignore
     function visibleSearchInputs() { return jsMindContainer.classList.contains("display-jsmind-search"); }
     const restartJsmindSearch = (() => {
         let tmr;
@@ -1102,8 +1124,10 @@ export async function pageSetup() {
         const eltJmnodes = getJmnodesFromJm(jmDisplayed);
         eltJmnodes.classList.add("showing-hits");
         if (hitType == "provider") {
+            // @ts-ignore
             jsMindContainer.classList.add("display-jsmind-search");
             const divInputs = document.getElementById("jsmind-search-inputs");
+            // @ts-ignore
             divInputs.classList.add("showing-provider-hits");
         }
         console.log({ arrHits: arrIdHits });
@@ -1122,7 +1146,7 @@ export async function pageSetup() {
             return;
         }
         const btnCurr = await modMdc.mkMDCbutton("wait");
-        btnCurr.addEventListener("click", evt => {
+        btnCurr.addEventListener("click", () => {
             const num = getBtnCurrNum();
             selectHit(num);
         })
@@ -1168,8 +1192,10 @@ export async function pageSetup() {
         divHits.classList.remove("display-none");
     }
 
-    if (nodeHits) { setProviderNodeHits(); }
+    // if (nodeHits) { setProviderNodeHits(); }
+    setProviderNodeHits();
     async function setProviderNodeHits() {
+        if (!nodeHits) return;
         const arrIdHits = nodeHits.split(",");
         setNodeHitsFromArray(arrIdHits, "provider");
     }
@@ -1331,6 +1357,7 @@ export async function pageSetup() {
                 // const eltCustom = eltJmnode.querySelector(".jsmind-custom-image");
                 const eltCustom = target;
                 const strCustom = eltCustom.dataset.jsmindCustom;
+                if (!strCustom) { throw Error("Not custom"); }
                 const objCustom = JSON.parse(strCustom);
                 const prov = objCustom.provider;
                 const go = await modMdc.mkMDCdialogConfirm(`Show entry in ${prov}?`);
@@ -1372,6 +1399,8 @@ export async function pageSetup() {
     jsMindContainer.addEventListener("NOcontextmenu", evt => {
         if (targetIsJmnode(evt)) {
             evt.preventDefault();
+            if (!(evt instanceof MouseEvent)) { throw Error("not MouseEvent"); }
+            // if (!(evt.clientX && evt.clientY)) { throw Error("evt does not have position"); }
             const x = `${evt.clientX}`;
             const y = `${evt.clientY}`;
             restartDisplayContextMenu(evt.target, x, y);
@@ -1468,10 +1497,9 @@ export async function pageSetup() {
         // const liTestMirror = mkMenuItem("test mirror", testStartMirror);
         const liDragAccessibility = mkMenuItem("Drag accessiblity", dialogDragAccessibility);
 
-        // const liMindmaps = funMindmapsDialog ? mkMenuItem("Mindmaps", funMindmapsDialog) : undefined;
-        // const liMindmapsA = mkMenuItemA("List Mindmaps", "/mm4i/mm4i.html");
-        const mm4iAbsLink = makeAbsLink("./mm4i/mm4i.html");
-        const liMindmapsA = mkMenuItemA("List Mindmaps", mm4iAbsLink);
+        // const mm4iAbsLink = makeAbsLink("./mm4i/mm4i.html");
+        // const liMindmapsA = mkMenuItemA("List Mindmaps", mm4iAbsLink);
+        const liMindmapsA = mkMenuItemA("List Mindmaps", "./mm4i/mm4i.html");
         console.log({ liMindmapsA });
 
         const liEditMindmap = mkMenuItem("Edit Mindmap", dialogEditMindmap);
@@ -1661,6 +1689,7 @@ export async function pageSetup() {
     // addScrollIntoViewOnSelect(jmDisplayed);
     addScrollIntoViewOnSelect();
     function jsmindSearchNodes(strSearch) {
+        // @ts-ignore
         const nodeEltArray = [...jsMindContainer.querySelectorAll("jmnode[nodeid]")];
         nodeEltArray.forEach(n => n.classList.remove("jsmind-hit"));
         if (strSearch.length === 0) return;
@@ -1668,7 +1697,7 @@ export async function pageSetup() {
         // FIX-ME: words
         const matchingNodes = nodeEltArray.filter(node => {
             const topic = node.textContent;
-            // console.log({ node, topic });
+            // @ts-ignore
             const topicLower = topic.toLocaleLowerCase();
             return topicLower.indexOf(searchLower) >= 0;
         });
@@ -1976,7 +2005,8 @@ function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
 
 // https://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes/47355187#47355187
 export function standardizeColorTo6Hex(strColor) {
-    var ctx = document.createElement('canvas').getContext('2d');
+    const ctx = document.createElement('canvas').getContext('2d');
+    if (!ctx) { throw Error("Could not get canvas 2d"); }
     ctx.fillStyle = strColor;
     return ctx.fillStyle;
 }
@@ -2010,6 +2040,7 @@ export function getMatchesInCssRules(re) {
         }
         if (!cssRules) continue;
         for (let cssRule of cssRules) {
+            if (!(cssRule instanceof CSSStyleRule)) { continue; }
             const selectorText = cssRule.selectorText;
             if (!selectorText) {
                 // console.log("*** cssRule", cssRule);
@@ -2083,10 +2114,10 @@ I know this could be more compact, but I think this is easier to read/explain.
 
 function getJmnodesIn(idContainer) {
     const eltContainer = document.getElementById(idContainer)
-    const j = eltContainer.querySelector("jmnodes");
+    const j = eltContainer?.querySelector("jmnodes");
     return j;
 }
-function getJmnodesMain() { return getJmnodesIn(idContainer); }
+// function getJmnodesMain() { return getJmnodesIn(idContainer); }
 
 
 
@@ -2098,13 +2129,16 @@ function getJmnodesMain() { return getJmnodesIn(idContainer); }
 function addDebugLog(msg) {
     // const divDebugLogLog = mkElt("div", { id: "jsmind-test-div-debug-log-log" });
     const divDebugLogLog = document.getElementById("jsmind-test-div-debug-log-log");
+    if (!divDebugLogLog) { return; }
     const prevRow = divDebugLogLog.lastElementChild;
-    const prevMsg = prevRow?.firstElementChild.textContent;
-    if (msg === prevMsg) {
+    const prevMsg = prevRow?.firstElementChild?.textContent;
+    if (prevRow && msg === prevMsg) {
         const eltCounter = prevRow.lastElementChild;
+        if (!eltCounter) throw Error("Could not find eltCounter");
+        // @ts-ignore
         const txtCounter = eltCounter.textContent.trim();
-        let counter = txtCounter === "" ? 1 : parseInt(txtCounter);
-        eltCounter.textContent = ++counter;
+        let counter = (txtCounter == null || txtCounter === "") ? 1 : parseInt(txtCounter);
+        eltCounter.textContent = `${++counter}`;
     } else {
         const entry = mkElt("span", { class: "debug-entry" }, msg);
         const counter = mkElt("span", { class: "debug-counter" }, " ");
@@ -2219,10 +2253,10 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
             // https://stackoverflow.com/questions/63869394/parse-html-as-a-plain-text-via-javascript
             const elt = document.createElement("div");
             elt.innerHTML = topic;
-            const txt = elt.textContent;
-            name = txt;
+            // const txt = elt.textContent;
+            // name = txt;
             const child1 = elt.firstElementChild;
-            // const custom = child1.dataset["jsmind-custom"];
+            // @ts-ignore
             const strCustom = child1.dataset.jsmindCustom;
             if (strCustom) {
                 // console.log({ txt, strCustom })
@@ -2274,8 +2308,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
     if (showNew) {
         const liNew = modMdc.mkMDCmenuItem("New mindmap");
         liNew.addEventListener("click", errorHandlerAsyncEvent(async evt => {
-            // await createAndShowNewMindmapFc4i();
-            await createAndShowNewMindmap(linkMindmapsPage);
+            await modMMhelpers.createAndShowNewMindmap(linkMindmapsPage);
         }));
         // arrLiMenu.push(liNew);
 
@@ -2372,10 +2405,10 @@ function testCmOnScreen() {
         return prompt(txtPrompt, parDev);
     }
     while (!Object.keys(knownDevices).includes(dev)) {
-        dev = promptDev(dev)?.trim();
-        if (!dev) return;
+        const tmp = promptDev(dev)?.trim();
+        if (!tmp) return;
+        dev = tmp;
         console.log({ dev });
-
     }
     const devRec = knownDevices[dev];
     console.log(devRec);
@@ -2383,6 +2416,7 @@ function testCmOnScreen() {
     if (location.protocol == "http:") {
         // Emulating mobile device?
         const re = new RegExp("\\(.*?\\)");
+        // @ts-ignore
         const devUA = re.exec(navigator.userAgent)[0];
         console.log({ devUA });
         if (!devRec.devUA) throw Error(`devRec.devUA is not set, should be "${devUA}"`);
@@ -2412,7 +2446,7 @@ function testCmOnScreen() {
     `;
     const corrTxt = prompt(txtPromptCorr, corr.toFixed(3));
     if (!corrTxt) return;
-    corr = corrTxt ? parseFloat(corrTxt) : null;
+    corr = corrTxt ? parseFloat(corrTxt) : 0;
 
     function cm2screenPixels(cm) {
         const dpcm1 = estimateDpcm();
@@ -2436,6 +2470,7 @@ function testCmOnScreen() {
         const cmPx = cm2screenPixels(cmGrid);
         compareWhat = compareWhat || "Compare: ";
         const eltBg = document.createElement("div");
+        // @ts-ignore
         eltBg.style = `
             position: fixed;
             top: 0;
@@ -2465,6 +2500,7 @@ function testCmOnScreen() {
         if (comparePx) info += ` - ${compareWhat}: ${comparePx.toFixed(0)}px`;
         const eltInfo = document.createElement("span");
         eltInfo.textContent = info;
+        // @ts-ignore
         eltInfo.style = `
         position: fixed;
         top: 0;
