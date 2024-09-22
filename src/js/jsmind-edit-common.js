@@ -34,7 +34,7 @@ class PointHandle {
      * @param {string} state 
      * @returns {number}
      */
-    static idxState(state) { return PointHandle.myStates.indexOf(state) ; }
+    static idxState(state) { return PointHandle.myStates.indexOf(state); }
     /**
      * 
      * @param {string} state 
@@ -114,12 +114,32 @@ class PointHandle {
         evt.preventDefault();
         evt.stopImmediatePropagation();
         if (!evt.pointerId) debugger;
-        jmnodeDragged.setPointerCapture( evt.pointerId);
-        if (!jmnodeDragged.hasPointerCapture(evt.pointerId)) debugger;
+        const pointerId = evt.pointerId;
+
+        const idDebugCapture = "debug-capture";
+        let eltDebugCapture = document.getElementById(idDebugCapture);
+        if (!eltDebugCapture) {
+            eltDebugCapture = mkElt("div", undefined, "start debug capture");
+            // @ts-ignore
+            eltDebugCapture.style = `
+                position: fixed;
+                width: 100vw;
+                height: 40px;
+                background: red;
+                color: black;
+                bottom: 0;
+            `;
+            document.body.appendChild(eltDebugCapture);
+        }
+
+        jmnodeDragged.setPointerCapture(pointerId);
+        if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
         jmnodeDragged.addEventListener("lostpointercapture", evt => {
             console.log("lostpointercapture", evt);
-            alert("lostpointercapture");
-        })
+            if (!eltDebugCapture) return;
+            eltDebugCapture.textContent = "lost capture";
+        });
+
 
         if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
 
