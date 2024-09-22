@@ -132,6 +132,7 @@ class PointHandle {
             document.body.appendChild(eltDebugCapture);
         }
 
+        jmnodeDragged.style.touchAction = "none";
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
         jmnodeDragged.addEventListener("lostpointercapture", evt => {
