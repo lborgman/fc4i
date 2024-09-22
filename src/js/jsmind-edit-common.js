@@ -100,6 +100,7 @@ class PointHandle {
     get element() { return this.#eltPointHandle; }
     savePosBounded = (evt) => {
         evt.preventDefault();
+        evt.stopPropagation();
         evt.stopImmediatePropagation();
         savePointerPos.bind(this)(evt);
     }
@@ -112,6 +113,7 @@ class PointHandle {
         if (!jmnodeDragged) return;
 
         evt.preventDefault();
+        evt.stopPropagation();
         evt.stopImmediatePropagation();
         if (!evt.pointerId) debugger;
         const pointerId = evt.pointerId;
