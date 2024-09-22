@@ -99,6 +99,8 @@ class PointHandle {
     }
     get element() { return this.#eltPointHandle; }
     savePosBounded = (evt) => {
+        evt.preventDefault();
+        evt.stopImmediatePropagation();
         savePointerPos.bind(this)(evt);
     }
     initializePointHandle = (evt) => {
@@ -111,7 +113,13 @@ class PointHandle {
 
         evt.preventDefault();
         evt.stopImmediatePropagation();
+        if (!evt.pointerId) debugger;
         jmnodeDragged.setPointerCapture( evt.pointerId);
+        if (!jmnodeDragged.hasPointerCapture(evt.pointerId)) debugger;
+        jmnodeDragged.addEventListener("lostpointercapture", evt => {
+            console.log("lostpointercapture", evt);
+            alert("lostpointercapture");
+        })
 
         if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
 
