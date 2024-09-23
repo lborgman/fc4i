@@ -2300,13 +2300,13 @@ await modTools.promiseDOMready();
 
                         const msWaited = Date.now() - startTime;
                         if (msWaited > msMaxWait) {
-                            console.error(`fc4i temp init_node_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`,
+                            console.error(`fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`,
                                 bcr,
                                 { W, tempW }, { H, tempH }, { Wtext, tempWtext }, { Htext, tempHtext });
                             if (window.useRejection) {
-                                reject(`REJECTION: fc4i temp init_node_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
+                                reject(`REJECTION: fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
                             } else {
-                                throw Error(`Error: fc4i temp init_node_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
+                                throw Error(`Error: fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
                             }
 
                             return;
@@ -2319,7 +2319,8 @@ await modTools.promiseDOMready();
         }
 
 
-        /* See init_node_size */
+        /* See init_nodes_size */
+        /*
         ORIGinit_nodes() {
             var nodes = this.jm.mind.nodes;
             var doc_frag = $.d.createDocumentFragment();
@@ -2334,6 +2335,7 @@ await modTools.promiseDOMready();
                 }
             });
         }
+        */
         init_nodes() {
             console.log(">>>>>> init_nodes");
             const nodes = this.jm.mind.nodes;
@@ -2357,11 +2359,14 @@ await modTools.promiseDOMready();
 
 
         add_node(node) {
-            console.log(">>>>>> add_node");
+            console.trace(">>>>>> add_node");
             this.create_node_element(node, this.e_nodes);
+            let prom ;
             this.run_in_c11y_mode_if_needed(() => {
-                this.init_nodes_size(node);
+                // this.init_nodes_size(node);
+                    prom = this.init_nodes_size(node);
             });
+            return prom;
         }
         run_in_c11y_mode_if_needed(func) {
             if (!!this.container.offsetParent) {
@@ -3500,7 +3505,7 @@ await modTools.promiseDOMready();
             }
             return this.mind.get_node(node);
         }
-        add_node(parent_node, node_id, topic, data, direction) {
+        async add_node(parent_node, node_id, topic, data, direction) {
             if (this.get_editable()) {
                 var the_parent_node = this.get_node(parent_node);
                 var dir = Direction.of(direction);
@@ -3509,7 +3514,7 @@ await modTools.promiseDOMready();
                 }
                 var node = this.mind.add_node(the_parent_node, node_id, topic, data, dir);
                 if (!!node) {
-                    this.view.add_node(node);
+                    await this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
                     this.view.reset_node_custom_style(node);

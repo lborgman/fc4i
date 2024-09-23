@@ -1693,7 +1693,7 @@ export async function pageSetup() {
                 let new_node;
                 switch (rel) {
                     case "child":
-                        new_node = jm.add_node(selected_node, new_node_id, new_node_topic);
+                        new_node = await jm.add_node(selected_node, new_node_id, new_node_topic);
                         console.log(`child .add_node(${selected_node.id}, ${new_node_id}, ${new_node_topic})`);
                         break;
                     case "brother":
@@ -1701,7 +1701,7 @@ export async function pageSetup() {
                         if (!mother_node) {
                             modMdc.mkMDCdialogAlert("This node can't have siblings");
                         } else {
-                            new_node = jm.add_node(mother_node, new_node_id, new_node_topic);
+                            new_node = await jm.add_node(mother_node, new_node_id, new_node_topic);
                             console.log(`brother .add_node(${mother_node.id}, ${new_node_id}, ${new_node_topic})`);
                         }
                         break;
