@@ -54,7 +54,7 @@ class PointHandle {
 
         const elt = this.#eltPointHandle;
         const par = elt.parentElement;
-        console.log(">>>> set state", { state, elt, par });
+        console.log(">>>> set state", state, { elt, par });
         showDebugState(state);
 
         PointHandle.myStates.forEach(st => {
@@ -151,6 +151,8 @@ class PointHandle {
         ///// This error happens, but it is ok
         // if (elt != target) throw Error("elt != target");
         // console.log("INIT", { elt, posPointHandle });
+        // this.element = target;
+        eltJmnodeFrom = jmnodeDragged;
         this.#state = "init";
 
         this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
@@ -197,6 +199,7 @@ class PointHandle {
     checkPointHandleDistance() {
         if (!evtPointerLast) return;
         if (this.isState("init")) {
+            /*
             eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
             // console.log("new:", { eltJmnodeFrom });
             const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
@@ -210,6 +213,7 @@ class PointHandle {
                 if (d <= 0) insideNode = true;
             });
             if (insideNode) return;
+            */
 
             this.#state = "dist";
 

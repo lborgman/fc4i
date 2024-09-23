@@ -286,7 +286,7 @@ let eltTarget;
 let eltTParent;
 let childDragLine;
 // const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
-let instScrollAtDragBorder ;
+let instScrollAtDragBorder;
 export async function setupNewDragging() {
     ourJm = await new Promise((resolve, reject) => {
         const draggablePlugin = new jsMind.plugin('draggable_nodes', function (thisIsOurJm) {
@@ -988,12 +988,15 @@ function whenDragPauses() {
     // console.log({ arrCol });
     const getY = (entry) => (entry.bcr.top + entry.bcr.bottom) / 2;
     nodeAbove = undefined; nodeBelow = undefined;
-    let entryOverLower;
-    let entryOverUpper;
+    // let entryOverLower;
+    // let entryOverUpper;
     arrCol.forEach(entry => {
         // if (entryOver) return;
         const entryTop = entry.bcr.top;
         const entryBottom = entry.bcr.bottom;
+
+
+        /*
         const entryMiddle = (entryTop - entryBottom) / 2;
         if (entryTop > colClientY && colClientY > entryMiddle) {
             entryOverUpper = entry;
@@ -1001,12 +1004,15 @@ function whenDragPauses() {
         if (entryBottom < colClientY && colClientY < entryMiddle) {
             entryOverLower = entry;
         }
-        const entryY = getY(entry);
-        if (entryY <= colClientY) {
-            if (!entryAbove || entryY > getY(entryAbove)) entryAbove = entry;
-        }
-        if (entryY >= colClientY) {
-            if (!entryBelow || entryY < getY(entryBelow)) entryBelow = entry;
+        */
+        if (entry.id != "root") {
+            const entryY = getY(entry);
+            if (entryY <= colClientY) {
+                if (!entryAbove || entryY > getY(entryAbove)) entryAbove = entry;
+            }
+            if (entryY >= colClientY) {
+                if (!entryBelow || entryY < getY(entryBelow)) entryBelow = entry;
+            }
         }
     });
     // console.log(arrCol, { entryAbove, entryBelow, nodeParent });
