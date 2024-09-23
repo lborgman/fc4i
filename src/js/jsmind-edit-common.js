@@ -29,24 +29,63 @@ class PointHandle {
     /** @type {HTMLElement} */ #eltPointHandle;
     /** @type {HTMLElement} */ #jmnodesPointHandle;
 
-    static knownState(state) { return PointHandle.myStates.indexOf(state); }
+    /**
+     * 
+     * @param {string} state 
+     * @returns {number}
+     */
+    static idxState(state) { return PointHandle.myStates.indexOf(state); }
+    /**
+     * 
+     * @param {string} state 
+     * @returns {boolean}
+     */
+    static knownState(state) { return PointHandle.idxState(state) > -1; }
+
     get #state() { return this.#myState; }
     set #state(state) {
-        const idxOld = PointHandle.knownState(this.#myState);
-        const idxNew = PointHandle.knownState(state);
+        const idxOld = PointHandle.idxState(this.#myState);
+        const idxNew = PointHandle.idxState(state);
         if (idxNew == -1) throw Error(`Unknown state: ${state}`);
         if (idxNew != 0) {
             if (idxNew - 1 != idxOld) throw Error(`${state} can't follow ${this.#myState}`);
         }
         this.#myState = state;
+
         const elt = this.#eltPointHandle;
         const par = elt.parentElement;
         console.log(">>>> set state", { state, elt, par });
+        showDebugState(state);
+
         PointHandle.myStates.forEach(st => {
             this.#jmnodesPointHandle.classList.remove(`pointhandle-state-${st}`);
         })
         this.#jmnodesPointHandle.classList.add(`pointhandle-state-${state}`);
     }
+    /**
+     * 
+     * @param {string} state 
+     * @returns {boolean}
+     */
+    isState(state) {
+        if (!PointHandle.knownState(state)) throw Error(`Unrecognized state "${state}"`);
+        return this.#state == state;
+    }
+    /**
+     * 
+     * @param {string} state 
+     * @returns {boolean}
+     */
+    isBeforeState(state) {
+        if (!PointHandle.knownState(state)) throw Error(`Unrecognized state "${state}"`);
+        const idxCurr = PointHandle.myStates.indexOf(this.#state);
+        const idx = PointHandle.myStates.indexOf(state);
+        return idx < idxCurr;
+    }
+    /**
+     * 
+     * @returns {boolean}
+     */
     stateMoving() {
         // FIX-ME:
         return this.#myState != "idle";
@@ -63,6 +102,9 @@ class PointHandle {
     }
     get element() { return this.#eltPointHandle; }
     savePosBounded = (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
         savePointerPos.bind(this)(evt);
     }
     initializePointHandle = (evt) => {
@@ -76,6 +118,22 @@ class PointHandle {
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
+        if (!evt.pointerId) debugger;
+        const pointerId = evt.pointerId;
+
+        showDebugCapture("start debug capture");
+
+        // jmnodeDragged.style.touchAction = "none";
+        jmnodeDragged.setPointerCapture(pointerId);
+        if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
+        jmnodeDragged.addEventListener("lostpointercapture", evt => {
+            // console.log("lostpointercapture", evt);
+            showDebugCapture("lost capture");
+            this.#myState = "idle";
+        });
+
+
+        if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
 
         const clientX = evt.clientX;
         const clientY = evt.clientY;
@@ -90,36 +148,32 @@ class PointHandle {
         };
         savePointerPos(evt);
         const elt = document.elementFromPoint(clientX, clientY);
-        if (elt != target) throw Error("elt != target");
-        console.log("INIT", { elt, posPointHandle });
+        ///// This error happens, but it is ok
+        // if (elt != target) throw Error("elt != target");
+        // console.log("INIT", { elt, posPointHandle });
         this.#state = "init";
 
-        // this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
-        document.body.appendChild(this.#eltPointHandle);
+        this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
+        // document.body.appendChild(this.#eltPointHandle);
+
         this.#eltPointHandle.style.left = `${clientX - PointHandle.sizePointHandle / 2}px`;
         this.#eltPointHandle.style.top = `${clientY - PointHandle.sizePointHandle / 2}px`;
 
-        // this.#state = "dist";
-        // const THIS = this;
-        // this.#jmnodesPointHandle.addEventListener("pointermove", savePointerPos.bind(this));
         this.#jmnodesPointHandle.addEventListener("pointermove", this.savePosBounded);
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
-        console.log("teardownPointHandle");
-        const THIS = this;
-        // this.#jmnodesPointHandle.removeEventListener("pointermove", savePointerPos.bind(THIS));
+        // console.log("teardownPointHandle");
         this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
-        this.#eltPointHandle?.remove(); 
-        // this.#eltPointHandle = undefined;
+        this.#eltPointHandle?.remove();
+        this.#state = "idle";
         if (eltJmnodeFrom) {
             eltJmnodeFrom = undefined;
         }
         if (eltOverJmnode) {
 
         }
-        console.log("teardwon...", { eltJmnodeFrom });
-        this.#state = "idle";
+        // console.log("teardwon...", { eltJmnodeFrom });
         modJsmindDraggable.stopNow();
         evtPointerLast = undefined;
     }
@@ -142,10 +196,9 @@ class PointHandle {
     }
     checkPointHandleDistance() {
         if (!evtPointerLast) return;
-        // console.log("checkPointHandleDistance");
-        if (!eltJmnodeFrom) {
+        if (this.isState("init")) {
             eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-            console.log("new:", { eltJmnodeFrom });
+            // console.log("new:", { eltJmnodeFrom });
             const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
             posPointHandle.dTop = evtPointerLast.screenY - bcrFrom.top;
             posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.screenY;
@@ -154,7 +207,6 @@ class PointHandle {
             let insideNode = false;
             ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
                 const d = posPointHandle[dT];
-                // if (d <= 0) throw Error(`${dT} < 0, =${d}`);
                 if (d <= 0) insideNode = true;
             });
             if (insideNode) return;
@@ -163,14 +215,12 @@ class PointHandle {
 
             this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
             this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}px`;
-            console.log("checkPointHandleDistance start", { posPointHandle });
-            // posPointHandle.startX = evtPointerLast.screenX;
-            // posPointHandle.startY = evtPointerLast.screenY;
+            // console.log("checkPointHandleDistance start", { posPointHandle });
         }
         const diffX = posPointHandle.start.clientX - evtPointerLast.clientX;
         const diffY = posPointHandle.start.clientY - evtPointerLast.clientY;
         if (isNaN(diffX) || isNaN(diffY)) throw Error("diffX or diffY isNaN");
-        if (this.#state == "dist") {
+        if (this.isState("dist")) {
             const diff2 = diffX * diffX + diffY * diffY;
             const diffPH = PointHandle.diffPointHandle;
             const diffPH2 = diffPH * diffPH;
@@ -179,12 +229,18 @@ class PointHandle {
             if (!diffOk) {
                 return;
             }
+            posPointHandle.diffX = diffX;
+            posPointHandle.diffY = diffY;
+            modJsmindDraggable.setPointerDiff(diffX, diffY);
+            modJsmindDraggable.nextHereIamMeansStart();
             this.#state = "move";
+            return;
         }
+        movePointHandle();
 
+        // I don't think checking inside is needed any more??
+        /*
         const dOutside = 10;
-        // const startX = posPointHandle.startX;
-        // const startY = posPointHandle.startY;
         const startX = posPointHandle.start.screenX;
         const startY = posPointHandle.start.screenY;
         const dLeft = posPointHandle.dLeft;
@@ -200,7 +256,9 @@ class PointHandle {
             // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
             return;
         }
+        */
 
+        /*
         if (!this.#eltPointHandle.classList.contains("active")) {
             this.#eltPointHandle.classList.add("active");
             console.log("added active to pph");
@@ -213,6 +271,7 @@ class PointHandle {
         } else {
             movePointHandle();
         }
+        */
     }
 
 }
@@ -422,7 +481,7 @@ function requestCheckPointerHandleMove() {
 }
 let eltJmnodeFrom;
 function jmnodeFromPoint(cX, cY) {
-    console.log({ cX, cY });
+    // console.log({ cX, cY });
     const eltsHere = document.elementsFromPoint(cX, cY);
     const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
     return eltJmnode
@@ -2549,4 +2608,47 @@ function testCmOnScreen() {
             console.log({ knownDevices });
         }, 1000);
     }
+}
+
+
+
+let eltBottomDebug;
+let eltDebugCapture;
+let eltDebugState;
+function getBottomDebug() {
+    if (eltBottomDebug) return eltBottomDebug;
+    eltDebugCapture = mkElt("div");
+    eltDebugState = mkElt("div");
+    eltBottomDebug = mkElt("div", undefined, [eltDebugState, eltDebugCapture]);
+    // @ts-ignore
+    eltBottomDebug.style = `
+                position: fixed;
+                width: 100vw;
+                height: 30px;
+                padding: 4px;
+                background: black;
+                color: wheat;
+                bottom: 0;
+                display: grid;
+                grid-template-columns: 60px 1fr;
+            `;
+    document.body.appendChild(eltBottomDebug);
+
+}
+function getEltDebugCapture() {
+    if (eltDebugCapture) return eltDebugCapture;
+    getBottomDebug();
+    return eltDebugCapture;
+}
+function getEltDebugState() {
+    if (eltDebugState) return eltDebugState;
+    getBottomDebug();
+    return eltDebugState;
+}
+
+function showDebugCapture(msg) {
+    (getEltDebugCapture()).textContent = msg;
+}
+function showDebugState(msg) {
+    (getEltDebugState()).textContent = msg;
 }
