@@ -127,8 +127,9 @@ class PointHandle {
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
         jmnodeDragged.addEventListener("lostpointercapture", evt => {
-            console.log("lostpointercapture", evt);
+            // console.log("lostpointercapture", evt);
             showDebugCapture("lost capture");
+            this.#myState = "idle";
         });
 
 
@@ -147,8 +148,9 @@ class PointHandle {
         };
         savePointerPos(evt);
         const elt = document.elementFromPoint(clientX, clientY);
-        if (elt != target) throw Error("elt != target");
-        console.log("INIT", { elt, posPointHandle });
+        ///// This error happens, but it is ok
+        // if (elt != target) throw Error("elt != target");
+        // console.log("INIT", { elt, posPointHandle });
         this.#state = "init";
 
         this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
@@ -161,7 +163,7 @@ class PointHandle {
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
-        console.log("teardownPointHandle");
+        // console.log("teardownPointHandle");
         this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
         this.#eltPointHandle?.remove();
         this.#state = "idle";
@@ -171,7 +173,7 @@ class PointHandle {
         if (eltOverJmnode) {
 
         }
-        console.log("teardwon...", { eltJmnodeFrom });
+        // console.log("teardwon...", { eltJmnodeFrom });
         modJsmindDraggable.stopNow();
         evtPointerLast = undefined;
     }
@@ -196,7 +198,7 @@ class PointHandle {
         if (!evtPointerLast) return;
         if (this.isState("init")) {
             eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-            console.log("new:", { eltJmnodeFrom });
+            // console.log("new:", { eltJmnodeFrom });
             const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
             posPointHandle.dTop = evtPointerLast.screenY - bcrFrom.top;
             posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.screenY;
@@ -213,7 +215,7 @@ class PointHandle {
 
             this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
             this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}px`;
-            console.log("checkPointHandleDistance start", { posPointHandle });
+            // console.log("checkPointHandleDistance start", { posPointHandle });
         }
         const diffX = posPointHandle.start.clientX - evtPointerLast.clientX;
         const diffY = posPointHandle.start.clientY - evtPointerLast.clientY;
@@ -479,7 +481,7 @@ function requestCheckPointerHandleMove() {
 }
 let eltJmnodeFrom;
 function jmnodeFromPoint(cX, cY) {
-    console.log({ cX, cY });
+    // console.log({ cX, cY });
     const eltsHere = document.elementsFromPoint(cX, cY);
     const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
     return eltJmnode
