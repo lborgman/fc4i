@@ -2624,8 +2624,8 @@ function getBottomDebug() {
                 width: 100vw;
                 height: 30px;
                 padding: 4px;
-                background: red;
-                color: black;
+                background: black;
+                color: wheat;
                 bottom: 0;
                 display: grid;
                 grid-template-columns: 60px 1fr;
