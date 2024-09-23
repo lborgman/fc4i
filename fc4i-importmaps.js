@@ -50,7 +50,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "local-settings": "./src/js/mod/local-settings.js",
         "mindmap-helpers": "./src/js/mindmap-helpers.js",
         "my-svg": "./src/js/mod/my-svg.js",
-        "mm4i-jsmind.draggable-nodes": "./ext/jsmind/mm4i-jsmind.draggable-nodes.js",
+        "mm4i-jsmind.draggable-nodes": "./ext/jsmind/testing/mm4i-jsmind.draggable-nodes.js",
         "sharing-params": "./src/js/mod/sharing-params.js",
         "toolsJs": "./src/js/tools.js",
         "util-mdc": "./src/js/mod/util-mdc.js",

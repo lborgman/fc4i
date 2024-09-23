@@ -232,7 +232,7 @@ class PointHandle {
             posPointHandle.diffX = diffX;
             posPointHandle.diffY = diffY;
             modJsmindDraggable.setPointerDiff(diffX, diffY);
-            modJsmindDraggable.nextHereIamMeansStart();
+            modJsmindDraggable.nextHereIamMeansStart(eltJmnodeFrom);
             this.#state = "move";
             return;
         }
