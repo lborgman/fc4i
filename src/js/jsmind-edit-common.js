@@ -51,9 +51,12 @@ class PointHandle {
             if (idxNew - 1 != idxOld) throw Error(`${state} can't follow ${this.#myState}`);
         }
         this.#myState = state;
+
         const elt = this.#eltPointHandle;
         const par = elt.parentElement;
         console.log(">>>> set state", { state, elt, par });
+        showDebugState(state);
+
         PointHandle.myStates.forEach(st => {
             this.#jmnodesPointHandle.classList.remove(`pointhandle-state-${st}`);
         })
@@ -118,29 +121,14 @@ class PointHandle {
         if (!evt.pointerId) debugger;
         const pointerId = evt.pointerId;
 
-        const idDebugCapture = "debug-capture";
-        let eltDebugCapture = document.getElementById(idDebugCapture);
-        if (!eltDebugCapture) {
-            eltDebugCapture = mkElt("div", undefined, "start debug capture");
-            // @ts-ignore
-            eltDebugCapture.style = `
-                position: fixed;
-                width: 100vw;
-                height: 40px;
-                background: red;
-                color: black;
-                bottom: 0;
-            `;
-            document.body.appendChild(eltDebugCapture);
-        }
+        showDebugCapture("start debug capture");
 
         jmnodeDragged.style.touchAction = "none";
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
         jmnodeDragged.addEventListener("lostpointercapture", evt => {
             console.log("lostpointercapture", evt);
-            if (!eltDebugCapture) return;
-            eltDebugCapture.textContent = "lost capture";
+            showDebugCapture("lost capture");
         });
 
 
@@ -2618,4 +2606,47 @@ function testCmOnScreen() {
             console.log({ knownDevices });
         }, 1000);
     }
+}
+
+
+
+let eltBottomDebug;
+let eltDebugCapture;
+let eltDebugState;
+function getBottomDebug() {
+    if (eltBottomDebug) return eltBottomDebug;
+    eltDebugCapture = mkElt("div");
+    eltDebugState = mkElt("div");
+    eltBottomDebug = mkElt("div", undefined, [eltDebugState, eltDebugCapture]);
+    // @ts-ignore
+    eltBottomDebug.style = `
+                position: fixed;
+                width: 100vw;
+                height: 30px;
+                padding: 4px;
+                background: red;
+                color: black;
+                bottom: 0;
+                display: grid;
+                grid-template-columns: 60px 1fr;
+            `;
+    document.body.appendChild(eltBottomDebug);
+
+}
+function getEltDebugCapture() {
+    if (eltDebugCapture) return eltDebugCapture;
+    getBottomDebug();
+    return eltDebugCapture;
+}
+function getEltDebugState() {
+    if (eltDebugState) return eltDebugState;
+    getBottomDebug();
+    return eltDebugState;
+}
+
+function showDebugCapture(msg) {
+    (getEltDebugCapture()).textContent = msg;
+}
+function showDebugState(msg) {
+    (getEltDebugState()).textContent = msg;
 }
