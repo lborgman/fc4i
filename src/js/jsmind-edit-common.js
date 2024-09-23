@@ -123,7 +123,7 @@ class PointHandle {
 
         showDebugCapture("start debug capture");
 
-        jmnodeDragged.style.touchAction = "none";
+        // jmnodeDragged.style.touchAction = "none";
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
         jmnodeDragged.addEventListener("lostpointercapture", evt => {
