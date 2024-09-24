@@ -53,8 +53,9 @@ class PointHandle {
         this.#myState = state;
 
         const elt = this.#eltPointHandle;
-        const par = elt.parentElement;
-        console.log(">>>> set state", state, { elt, par });
+
+        // const par = elt.parentElement;
+        // console.log(">>>> set state", state, { elt, par });
         showDebugState(state);
 
         PointHandle.myStates.forEach(st => {

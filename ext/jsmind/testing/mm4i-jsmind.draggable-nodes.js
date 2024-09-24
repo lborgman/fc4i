@@ -340,8 +340,9 @@ export function markAsLowerChild(jmnode, on) {
 }
 export function markAsDroppedAt(jmnode, on) { markDragNode(jmnode, "dropped-at", on); }
 export function markDragNode(jmnode, how, on) {
+    console.log("////MARK", how, on);
     if (jmnode.tagName !== "JMNODE") throw Error(`${jmnode.tagName} !== "JMNODE`);
-    if (jmnode.tagName !== "JMNODE") return;
+    // if (jmnode.tagName !== "JMNODE") return;
 
     let cssClass;
     switch (how) {
