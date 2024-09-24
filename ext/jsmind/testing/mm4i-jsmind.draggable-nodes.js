@@ -1013,6 +1013,15 @@ function whenDragPauses() {
             if (entryY >= colClientY) {
                 if (!entryBelow || entryY < getY(entryBelow)) entryBelow = entry;
             }
+        } else {
+            const middleX = (entry.bcr.left + entry.bcr.right) / 2;
+            if (colClientX < middleX) {
+                entry.eltNode.classList.add("jsmind-drag-root-leftside");
+                entry.eltNode.classList.remove("jsmind-drag-root-rightside");
+            } else {
+                entry.eltNode.classList.remove("jsmind-drag-root-leftside");
+                entry.eltNode.classList.add("jsmind-drag-root-rightside");
+            }
         }
     });
     // console.log(arrCol, { entryAbove, entryBelow, nodeParent });
