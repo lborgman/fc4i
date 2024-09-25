@@ -866,6 +866,9 @@ export async function pageSetup() {
             line_width: 10,
             line_color: "green",
         },
+        layout: {
+            pspace: 32,
+        },
         shortcut: {
             enable: true, 		// whether to enable shortcut
             handles: {}, 			// Named shortcut key event processor

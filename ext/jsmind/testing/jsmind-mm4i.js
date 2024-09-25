@@ -1600,6 +1600,7 @@ await modTools.promiseDOMready();
         }
         expand_node(node) {
             node.expanded = true;
+            node._data.view.element.classList.add("is-expanded");
             this.part_layout(node);
             this.set_visible(node.children, true);
             this.jm.invoke_event_handle(EventType.show, {
@@ -1610,6 +1611,7 @@ await modTools.promiseDOMready();
         }
         collapse_node(node) {
             node.expanded = false;
+            node._data.view.element.classList.remove("is-expanded");
             this.part_layout(node);
             this.set_visible(node.children, false);
             this.jm.invoke_event_handle(EventType.show, {
@@ -2361,10 +2363,10 @@ await modTools.promiseDOMready();
         add_node(node) {
             console.trace(">>>>>> add_node");
             this.create_node_element(node, this.e_nodes);
-            let prom ;
+            let prom;
             this.run_in_c11y_mode_if_needed(() => {
                 // this.init_nodes_size(node);
-                    prom = this.init_nodes_size(node);
+                prom = this.init_nodes_size(node);
             });
             return prom;
         }
@@ -3217,6 +3219,56 @@ await modTools.promiseDOMready();
             jsMind.current = this;
             this.options = merge_option(options);
             logger.level(LogLevel[this.options.log_level]);
+
+            // Check options names, see file 2.options.md
+            const topLevelOptions = [
+                "container",
+                "editable",
+                "theme",
+                "mode",
+                "support_html",
+                "view",
+                "layout",
+                "shortcut",
+                "log_level", // not mentioned!
+                "default_event_handle", // not mentioned!
+                "plugin", // not mentioned!
+            ];
+            const ourOptions = this.options;
+            Object.keys(ourOptions).forEach(opt => {
+                if (topLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
+            });
+            const viewOptions = options.view;
+            if (viewOptions) {
+                const viewLevelOptions = [
+                    "engine",
+                    "hmargin",
+                    "vmargin",
+                    "line_width",
+                    "line_color",
+                    "line_style",
+                    "custom_line_render",
+                    "draggable",
+                    "hide_scrollbars_when_draggable",
+                    "node_overflow",
+                ];
+                Object.keys(viewOptions).forEach(opt => {
+                    if (viewLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
+                });
+            }
+            const layoutOptions = options.layout;
+            if (layoutOptions) {
+                const layoutLevelOptions = [
+                    "hspace",
+                    "vspace",
+                    "pspace",
+                    "cousin_space",
+                ];
+                Object.keys(layoutOptions).forEach(opt => {
+                    if (layoutLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
+                });
+            }
+
             this.version = __version__;
             this.initialized = false;
             this.mind = null;

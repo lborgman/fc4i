@@ -133,8 +133,19 @@
         /*********************/
         /***** Expanding jmnode */
 
+        jmnodes jmexpander {
+            height: 32px;
+            width: 32px;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 32px;
+            border-radius: 50%;
+            background: green;
+            color: black;
+        }
+
         /* This does not display if I have set overflow:hidden on jmnode. */
-        jmnode.has-children::after {
+        NOjmnode.has-children::after {
             content: "+";
             overflow: visible;
             position: absolute;
@@ -222,8 +233,6 @@
         jmnodes > jmnodejmnode.jsmind-drag-target.jsmind-drag-root-rightside {
             border-right: 8px dotted red !important;
         }
-    </style>
-    </style>
     </style>
     <link id="jsmind-my-colors" rel="stylesheet" href="./css/var-colors.css">
 
