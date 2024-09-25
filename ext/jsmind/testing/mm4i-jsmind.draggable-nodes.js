@@ -544,7 +544,7 @@ export function nextHereIamMeansStart(eltFrom) {
     colClientY = undefined;
     dragPauseTimer.stop();
     // eltDragged = evt.target;
-    if (eltDragged) markAsDragged(eltDragged, false);
+    if (eltDragged) markAsDragged(eltDragged, true);
     eltDragged = eltFrom;
     eltTarget = undefined;
     eltTParent = undefined;

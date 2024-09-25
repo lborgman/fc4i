@@ -1612,22 +1612,6 @@ div.bg-choice:not(input[disabled]):has(input:checked) {
 
 
 
-.jsmind_container jmnodes jmnode {
-    /*
-    max-width: 150px;
-    max-height: 94px;
-    display: grid;
-    grid-template-rows: 1fr;
-    */
-    transition-duration: 1s;
-    transition-property: left, top, width, height, transform 0.3s;
-    /* Try to handle overlfow in .jmnode-text with grid */
-}
-
-.jsmind_container jmnodes jmnode .jmnode-text {
-    overflow: hidden;
-}
-
 /* This does not display if I have set overflow:hidden on jmnode. */
 jmnode.has-children::after {
     content: "+";
@@ -1669,9 +1653,6 @@ jmnode.has-children.right-side::after {
 
 
 
-jmnode.selected {
-    outline: 8px dotted blue;
-}
 
 .jsmind-renderer-img {
     position: absolute;

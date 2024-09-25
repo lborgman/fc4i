@@ -91,19 +91,135 @@
             background: gray;
         }
 
-        jmnodes.pointhandle-state-idle #jsmindtest-point-handle { background: black; }
-        jmnodes.pointhandle-state-init #jsmindtest-point-handle { background: yellow; }
-        jmnodes.pointhandle-state-dist #jsmindtest-point-handle { background: greenyellow; }
-        jmnodes.pointhandle-state-move #jsmindtest-point-handle { background: red; }
+        jmnodes.pointhandle-state-idle #jsmindtest-point-handle {
+            background: black;
+        }
 
+        jmnodes.pointhandle-state-init #jsmindtest-point-handle {
+            background: yellow;
+        }
+
+        jmnodes.pointhandle-state-dist #jsmindtest-point-handle {
+            background: greenyellow;
+        }
+
+        jmnodes.pointhandle-state-move #jsmindtest-point-handle {
+            background: red;
+        }
+
+
+
+        /*********************/
+        /***** jmnode */
         jmnode {
             touch-action: none;
         }
 
-        jmnode.jsmind-drag-target.jsmind-drag-root-leftside {
+        jmnodes jmnode.selected {
+            outline: 8px dotted blue;
+        }
+
+        .jsmind_container jmnodes jmnode {
+            transition-duration: 1s;
+            transition-property: left, top, width, height, transform 0.3s;
+        }
+
+        .jsmind_container jmnodes jmnode .jmnode-text {
+            overflow: hidden;
+        }
+
+
+
+        /*********************/
+        /***** Expanding jmnode */
+
+        /* This does not display if I have set overflow:hidden on jmnode. */
+        jmnode.has-children::after {
+            content: "+";
+            overflow: visible;
+            position: absolute;
+            font-size: 28px;
+            top: calc(50% - 32px / 2);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid green;
+            background: rgba(0, 255, 0, 0.8);
+            background: rgba(0, 255, 0, 0.9);
+            background: green;
+            color: white;
+            z-index: 100;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        jmnode.has-children.is-expanded::after {
+            content: "-";
+        }
+
+        jmnode.has-children.left-side::after {
+            left: -30px;
+        }
+
+        jmnode.has-children.right-side::after {
+            right: -30px;
+        }
+
+        #jsmind_container jmnodes jmexpander {
+            visibility: hidden;
+        }
+
+
+
+        /*********************/
+        /***** Moving jmnode */
+
+        jmnodes > jmnode.jsmind-drag-dragged {
+            outline: 5px inset white !important;
+            opacity: 0.5 !important;
+            filter: grayscale(0.8) !important;
+        }
+
+        jmnodes > jmnode.jsmind-drag-target {
+            outline: 5px dotted red !important;
+            box-shadow: 0 var(--shup) var(--shsize) var(--shsize) red !important;
+            box-shadow: 0 var(--shup) var(--shsize) var(--shsize) blue !important;
+        }
+
+        jmnodes > jmnode.jsmind-drag-tparent {
+            outline: 5px dotted orange !important;
+        }
+
+        jmnodes > jmnode.jsmind-drag-tparent {
+            box-shadow: 0 var(--shup) calc(1.5 * var(--shsize)) calc(1.5 * var(--shsize)) orange !important;
+        }
+
+        /* .NOjsmind-drag-near-child { outline: 2px dashed red !important; } */
+
+        jmnodes > jmnode.jsmind-drag-upper-child {
+            outline: 3px dashed red !important;
+            transform: translate(0, -15px) !important;
+            transform-origin: top left !important;
+        }
+
+        jmnodes > jmnode.jsmind-drag-lower-child {
+            outline: 3px dashed red !important;
+            transform: translate(0, 15px) !important;
+            transform-origin: bottom left !important;
+        }
+
+        jmnodes > jmnode.jsmind-drag-dropped-at {
+            outline: 7px dotted lawngreen !important;
+        }
+
+
+        jmnodes > jmnodejmnode.jsmind-drag-target.jsmind-drag-root-leftside {
             border-left: 8px dotted red !important;
         }
-        jmnode.jsmind-drag-target.jsmind-drag-root-rightside {
+
+        jmnodes > jmnodejmnode.jsmind-drag-target.jsmind-drag-root-rightside {
             border-right: 8px dotted red !important;
         }
     </style>

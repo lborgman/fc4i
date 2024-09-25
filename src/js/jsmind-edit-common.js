@@ -492,8 +492,6 @@ function jmnodeFromPoint(cX, cY) {
     return eltJmnode
 }
 let eltOverJmnode;
-// const cssClsDragFrom = "jsmind-drag-from";
-// const cssClsDragTarget = "jsmind-drag-target";
 let movePointHandleProblem = false;
 function movePointHandle() {
     if (movePointHandleProblem) return;
