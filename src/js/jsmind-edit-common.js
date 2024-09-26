@@ -115,6 +115,7 @@ class PointHandle {
         if (!(target instanceof HTMLElement)) throw Error("target is not HTMLElement");
         const jmnodeDragged = target.closest("jmnode");
         if (!jmnodeDragged) return;
+        if (jmnodeDragged.getAttribute("nodeid") == "root") return;
 
         evt.preventDefault();
         evt.stopPropagation();
