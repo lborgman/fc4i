@@ -327,24 +327,37 @@ export async function setupNewDragging() {
 
 }
 
-export function markAsDragged(jmnode, on) { markDragNode(jmnode, "dragged", on); }
-export function markAsTarget(jmnode, on) { markDragNode(jmnode, "target", on); }
-export function markAsTParent(jmnode, on) {
-    // console.warn("markAsTParent", jmnode, on);
+function markAsDragged(jmnode, on) {
+    if (on) unmarkDragged();
+    markDragNode(jmnode, "dragged", on);
+}
+function markAsTarget(jmnode, on) {
+    if (on) unmarkTarget();
+    markDragNode(jmnode, "target", on);
+}
+function markAsTParent(jmnode, on) {
+    if (on) unmarkDragged();
     markDragNode(jmnode, "tparent", on);
 }
-export function markAsUpperChild(jmnode, on) { markDragNode(jmnode, "upper-child", on); }
-export function markAsLowerChild(jmnode, on) {
-    // console.warn("markAsLowerChild", jmnode, on);
+function markAsUpperChild(jmnode, on) {
+    if (on) unmarkUpperChild();
+    markDragNode(jmnode, "upper-child", on);
+}
+function markAsLowerChild(jmnode, on) {
+    if (on) unmarkLowerChild();
     markDragNode(jmnode, "lower-child", on);
 }
-export function markAsDroppedAt(jmnode, on) { markDragNode(jmnode, "dropped-at", on); }
-export function markDragNode(jmnode, how, on) {
+function markAsDroppedAt(jmnode, on) { markDragNode(jmnode, "dropped-at", on); }
+
+const markNames = ["dragged", "target", "tparent", "upper-child", "lower-child", "dropped-at"];
+function markDragNode(jmnode, how, on) {
     console.log("////MARK", how, on);
     if (jmnode.tagName !== "JMNODE") throw Error(`${jmnode.tagName} !== "JMNODE`);
-    // if (jmnode.tagName !== "JMNODE") return;
 
-    let cssClass;
+    if (markNames.indexOf(how) == -1) throw Error(`Don't know how to mark as ${how}`);
+    const cssClass = `jsmind-drag-${how}`;
+
+    /*
     switch (how) {
         case "dragged":
             cssClass = "jsmind-drag-dragged";
@@ -355,9 +368,7 @@ export function markDragNode(jmnode, how, on) {
         case "tparent":
             cssClass = "jsmind-drag-tparent";
             break;
-        case "old-near-child":
-            cssClass = "jsmind-drag-near-child";
-            break;
+        // case "old-near-child": cssClass = "jsmind-drag-near-child"; break;
         case "upper-child":
             cssClass = "jsmind-drag-upper-child";
             break;
@@ -370,6 +381,7 @@ export function markDragNode(jmnode, how, on) {
         default:
             throw Error(`Don't know how to mark as ${how}`);
     }
+    */
     if (on) {
         jmnode.classList.add(cssClass);
     } else {
@@ -544,8 +556,8 @@ export function nextHereIamMeansStart(eltFrom) {
     colClientY = undefined;
     dragPauseTimer.stop();
     // eltDragged = evt.target;
-    if (eltDragged) markAsDragged(eltDragged, true);
     eltDragged = eltFrom;
+    markAsDragged(eltDragged, true);
     eltTarget = undefined;
     eltTParent = undefined;
     // childDragLine = undefined;
@@ -566,6 +578,13 @@ export function hiHereIam(cX, cY) {
     colClientY = cY;
     dragPauseTimer.restart();
 }
+
+function unmarkTParent() { if (nodeParent) markAsTParent(nodeParent, false); }
+function unmarkUpperChild() { if (nodeAbove) markAsUpperChild(nodeAbove, false); }
+function unmarkLowerChild() { if (nodeBelow) markAsLowerChild(nodeBelow, false); }
+function unmarkTarget() { if (eltTarget) markAsTarget(eltTarget, false); }
+function unmarkDragged() { if (eltDragged) markAsDragged(eltDragged, false); }
+
 export function stopNow() {
     dragPauseTimer.stop();
     instScrollAtDragBorder.hideScroller();
@@ -592,106 +611,29 @@ export function stopNow() {
         markAsTarget(eltTarget, false);
         const id_target = getNodeIdFromDOMelt(eltTarget);
         ourJm.move_node(idDragged, "_last_", id_target, direction);
-        setTimeout(unMark, 2000);
+        setTimeout(unMarkAll, 2000);
         return;
     }
 
     const idParent = getNodeIdFromDOMelt(nodeParent)
     if (!nodeBelow) {
         ourJm.move_node(idDragged, "_last_", idParent, direction);
-        const before = "_last_";
+        // const before = "_last_";
         // console.log("ourJm.move_node", { idDragged, before, idParent, direction });
     } else {
         const idBelow = getNodeIdFromDOMelt(nodeBelow);
         ourJm.move_node(idDragged, idBelow, idParent, direction);
         // console.log("ourJm.move_node", { idDragged, idBelow, idParent, direction });
     }
-    function unMark() {
-        console.warn("unMark", { nodeParent });
-        if (nodeParent) markAsTParent(nodeParent, false);
-        if (nodeAbove) markAsUpperChild(nodeAbove, false);
-        if (nodeBelow) markAsLowerChild(nodeBelow, false);
-        if (eltTarget) markAsTarget(eltTarget, false);
+    function unMarkAll() {
+        console.warn("----- unMarkAll");
+        unmarkTParent();
+        unmarkUpperChild();
+        unmarkLowerChild();
+        unmarkTarget();
+        unmarkDragged();
     }
-    setTimeout(unMark, 2000);
-    return;
-
-    /*
-    let eltAbove, eltBelow;
-    debugger; // eslint-disable-line no-debugger
-    if (!eltTarget) {
-        // FIX-ME: between
-        if (!eltTParent) return;
-        const id_tparent = getNodeIdFromDOMelt(eltTParent);
-        const node_tparent = ourJm.get_node(id_tparent);
-        console.log({ id_tparent, node_tparent, eltTParent });
-        const eltChilds = node_tparent.children.map(child_node => getDOMeltFromNode(child_node));
-        const bcrTParent = eltTParent.getBoundingClientRect();
-        const midXTP = (bcrTParent.left + bcrTParent.right) / 2;
-        // const toTheRight = evt.clientX > midXTP;
-        const toTheRight = useClientX(evt) > midXTP;
-        eltChilds.forEach(eltC => {
-            if (eltC == eltDragged) return;
-            // function thirdAbove(bcr1, bcr2, dragPos)
-            const bcrC = eltC.getBoundingClientRect();
-            const isAbove = thirdAbove(bcrTParent, bcrC, evt);
-            if (toTheRight !== isAbove.right) return;
-            console.log(eltC.textContent, { isAbove }, isAbove.above, isAbove.right, toTheRight);
-            // Child node are ordered:
-            if (isAbove.above === -1) {
-                eltAbove = eltC;
-            } else {
-                eltBelow = eltBelow || eltC;
-            }
-        });
-        console.log({ eltAbove, eltBelow }, eltAbove?.textContent, eltBelow?.textContent);
-        if (eltAbove) markAsUpperChild(eltAbove, true);
-        if (eltBelow) markAsLowerChild(eltBelow, true);
-
-        const idTParent = getNodeIdFromDOMelt(eltTParent);
-        if (eltBelow) {
-            const idBelow = getNodeIdFromDOMelt(eltBelow);
-            ourJm.move_node(idDragged, idBelow, idTParent, direction);
-        } else {
-            ourJm.move_node(idDragged, "_last_", idTParent, direction);
-        }
-        finishMarking();
-        return;
-    }
-    const idTarget = getNodeIdFromDOMelt(eltTarget);
-    if (eltTParent) {
-        const idTParent = getNodeIdFromDOMelt(eltTParent);
-        ourJm.move_node(idDragged, idTarget, idTParent, direction);
-    } else {
-        ourJm.move_node(idDragged, "_last_", idTarget, direction);
-    }
-    finishMarking();
-    */
-    /*
-    function clearMarking() {
-        console.warn("clearMarking");
-        debugger; // eslint-disable-line no-debugger
-        markAsDragged(eltDragged, false);
-        markAsDroppedAt(eltDragged, false);
-        if (eltTarget) markAsTarget(eltTarget, false);
-
-        // FIX-ME: eltTParent vs nodeParent???
-        console.warn("clearMarking", { nodeParent, eltTParent });
-        // if (eltTParent) markAsTParent(eltTParent, false);
-        if (nodeParent) markAsTParent(nodeParent, false);
-
-        if (eltAbove) markAsUpperChild(eltAbove, false);
-        if (eltBelow) markAsLowerChild(eltBelow, false);
-    }
-    function finishMarking() {
-        const idDragged = getNodeIdFromDOMelt(eltDragged);
-        ourJm.select_node(idDragged);
-        markAsDroppedAt(eltDragged, true);
-        setTimeout(clearMarking, 2000);
-    }
-    */
-    // });
-
+    setTimeout(unMarkAll, 2000);
 }
 
 
@@ -704,10 +646,7 @@ function whenDragPauses() {
         oldElementAtPoint = newElementAtPoint;
         const newEltTarget = newElementAtPoint.closest("jmnode");
         if (newEltTarget != eltTarget) {
-            if (eltTarget) {
-                // handle leave
-                markAsTarget(eltTarget, false);
-            }
+            unmarkTarget();
             eltTarget = newEltTarget;
             if (eltTarget) {
                 // handle enter
