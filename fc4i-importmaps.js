@@ -70,6 +70,8 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         document.currentScript.insertAdjacentElement("afterend", elt);
     */
 
+    const isImporting = {};
+
     /**
      * 
      * @param {string} idOrLink 
@@ -83,16 +85,29 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             console.error(`idOrLink should not start with "/" "${idOrLink}"`);
             throw Error(`idOrLink should not start with "/" "${idOrLink}"`);
         }
+        if (isImporting[idOrLink]) {
+            console.error(`Cyclic import for ${idOrLink}`);
+            debugger;
+            throw Error(`Cyclic import for ${idOrLink}`);
+        }
+        isImporting[idOrLink] = true;
+        let ourImportLink;
         if (idOrLink.startsWith(".")) {
             // FIX-ME: why is this necessary when using <base ...>? file issue?
-            return await import(makeAbsLink(idOrLink));
+            // return await import(makeAbsLink(idOrLink));
+            ourImportLink = makeAbsLink(idOrLink);
         }
-        const relUrl = relImports[idOrLink];
-        if (relUrl == undefined) {
-            console.error(`modId "${idOrLink}" is not known by importFc4i`);
-            throw Error(`modId "${idOrLink}" is not known by importFc4i`);
+        if (!ourImportLink) {
+            const relUrl = relImports[idOrLink];
+            if (relUrl == undefined) {
+                console.error(`modId "${idOrLink}" is not known by importFc4i`);
+                throw Error(`modId "${idOrLink}" is not known by importFc4i`);
+            }
+            ourImportLink = relUrl;
         }
-        return import(relUrl);
+        const mod = await import(ourImportLink);
+        isImporting[idOrLink] = false;
+        return mod;
     }
     window.importFc4i = importFc4i;
 

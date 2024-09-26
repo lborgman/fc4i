@@ -319,7 +319,6 @@ body#page-about {
 
 .div-url-top {
     display: flex;
-    NOgap: 10px;
     flex-wrap: wrap;
 }
 
@@ -336,12 +335,9 @@ body#page-about {
     flex-direction: column;
     gap: 10px;
     width: 40px;
-    Xbackground: red;
 }
 
-div.div-url-locked {
-    Xbackground: red;
-}
+/* div.div-url-locked { Xbackground: red; } */
 
 div.div-url-locked-value {
     background: grey;
@@ -399,7 +395,7 @@ div.edit-url-unlocked label.tf-url-edit {
     --thumb-h: 80px
 }
 
-.subject-summary-span.has-image {}
+/* .subject-summary-span.has-image {} */
 
 .has-image>.subject-summary-span {
     grid-template-columns: 7px var(--thumb-w) 1fr;
@@ -601,8 +597,6 @@ div.div-images {
 NOcanvas {
     border: 1px dotted red;
     display: inline-block;
-    xheight: 200px;
-    xwidth: 200px;
     position: absolut;
     left: 10px;
     top: 10px;
@@ -686,9 +680,7 @@ details.older-rem-list>div>div {
     padding-top: 20px;
 }
 
-details.older-rem-list>div>div>div {
-    NOpadding: 0 10px;
-}
+/* details.older-rem-list>div>div>div { NOpadding: 0 10px; } */
 
 #home-title {
     font-size: 1.4rem;
@@ -753,7 +745,6 @@ details.older-rem-list>div>div>div {
 
 div.div-confidence-status {
     display: grid;
-    NOgrid-template-columns: 7px 40px 1fr;
     grid-template-columns: 7px 1fr;
     gap: 10px;
     position: relative;
@@ -1057,7 +1048,6 @@ body.no-test-items .test-item {
     position: relative;
     border: 1px solid olive;
     border-radius: 2px;
-    NOmargin-left: 15px;
     padding-left: 2px;
     padding-right: 4px;
     background-color: gray;
@@ -1184,8 +1174,6 @@ body.no-test-items .test-item {
     overflow-y: hidden;
     margin-left: 0;
     margin-right: 0;
-    Xoutline: 4px dashed green;
-    xbackground-color: skyblue;
 }
 
 .grow-wrap>textarea,
@@ -1299,11 +1287,10 @@ summary {
     display: grid;
     grid-template-rows: 0fr;
     overflow: hidden;
-    Xtransition: grid-template-rows 1s;
     transition-duration: 1s;
     transition-property: none;
     /* https://matthewlein.com/tools/ceaser */
-    xtransition-timing-function: cubic-bezier(1.000, 0.010, 1.000, 0.225);
+    /* transition-timing-function: cubic-bezier(1.000, 0.010, 1.000, 0.225); */
 }
 
 .expander:has(*:nth-child(10)) {
@@ -1389,8 +1376,6 @@ xdetails[open]:has(.expander)>.expander>.expander-content {
     grid-template-rows: min-content 1fr;
     /* https://stackoverflow.com/questions/72137185/make-children-full-height-of-parent-flex-box-css */
     flex-grow: 1;
-    NOborder: 1px dotted red;
-    NObackground: orange;
 }
 
 div.mdc-dialog__surface:has(#jsmind-ednode) {
@@ -1406,15 +1391,11 @@ div.mdc-dialog__surface:has(#jsmind-ednode) {
     grid-template-rows: 40% min-content 1fr;
     /* https://css-tricks.com/animating-css-grid-how-to-examples/ */
     transition: 1s;
-    NOborder: 2px dashed blueviolet;
-    NObackground: aqua;
 }
 
 #jsmind-ednode-parts>* {
     /* https://css-tricks.com/preventing-a-grid-blowout/ */
     min-width: 0;
-    NObackground: red;
-    NOborder: 2px dotted yellow;
 }
 
 #jsmind-ednode-parts div.tab-elts {
@@ -1423,7 +1404,6 @@ div.mdc-dialog__surface:has(#jsmind-ednode) {
 }
 
 #jsmind-ednode div.normal-content {
-    Xbackground: red;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -1431,7 +1411,7 @@ div.mdc-dialog__surface:has(#jsmind-ednode) {
 
 
 #jsmind-ednode-content {
-    dislay: flex;
+    display: flex;
     flex-direction: column;
     gap: 10px;
 }
@@ -1582,7 +1562,6 @@ div.bg-choice:not(input[disabled]):has(input:checked) {
     min-height: fit-content;
     margin-top: 10px;
     display: none;
-    NObackground: orange;
 }
 
 #jsmind-search-inputs.showing-provider-hits #provider-hits {
@@ -1601,9 +1580,7 @@ div.bg-choice:not(input[disabled]):has(input:checked) {
     outline: 3px dotted greenyellow;
 }
 
-.jsmind_container {
-    xposition: relative;
-}
+/* .jsmind_container { } */
 
 .jsmind-menu-no-selected-node {
     opacity: 0.5;
@@ -1658,16 +1635,12 @@ jmnode.has-children.right-side::after {
     position: absolute;
     bottom: -4;
     left: -4;
-    NObackground: red;
 }
 
 .jsmind-renderer-img>button {
     background-size: cover;
     color: white;
     border: 1px solid white;
-    NOborder-radius: 4px;
-    NOwidth: 40px;
-    NOheight: 40px;
 }
 
 .is-left .jsmind-renderer-img {
@@ -1684,13 +1657,6 @@ jmnode.has-children.right-side::after {
     position: absolute;
     bottom: -8;
     left: -4;
-    NObackground: yellowgreen;
-    NObackground: skyblue;
-    NOborder: 1px solid black;
-    NOborder-radius: 4px;
-    NOborder-radius: 40%;
-    NOwidth: 48px;
-    NOheight: 48px;
     background-size: cover
 }
 
@@ -1733,7 +1699,6 @@ jmnode.has-children.right-side::after {
     top: calc(50% - var(--size-open-close) / 2);
     border-radius: 50%;
     border: 2px solid red;
-    NOvisibility: hidden;
 }
 
 .open-close:hover {
@@ -1866,6 +1831,7 @@ button.btn-edit-item-confidence {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     /* start showing ellipsis when 3rd line is reached */
     white-space: pre-wrap;
     /* let the text wrap preserving spaces */
@@ -1915,12 +1881,10 @@ html.hide-error-popups .error-popup {
     grid-template-columns: 1fr var(--thumb-w);
     align-items: end;
     gap: 5px;
-    NOheight: 100%;
     overflow: hidden;
 }
 
 .jsmind-test-custom-clip-inner>span:first-child {
-    NObackground-color: red;
     line-height: normal;
     white-space: normal;
     overflow: hidden;

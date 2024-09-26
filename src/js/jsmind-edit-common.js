@@ -12,8 +12,9 @@ const mkElt = window.mkElt;
 const jsMind = window.jsMind;
 if (!jsMind) { throw Error("jsMind is not setup"); }
 
+// Circular import
+// const modCustRend = await importFc4i("jsmind-cust-rend");
 
-const modCustRend = await importFc4i("jsmind-cust-rend");
 // FIX-ME: comment out temporary!
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
@@ -52,7 +53,7 @@ class PointHandle {
         }
         this.#myState = state;
 
-        const elt = this.#eltPointHandle;
+        // const elt = this.#eltPointHandle;
 
         // const par = elt.parentElement;
         // console.log(">>>> set state", state, { elt, par });
@@ -120,15 +121,16 @@ class PointHandle {
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
-        if (!evt.pointerId) debugger;
+        // @
+        if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
 
         showDebugCapture("start debug capture");
 
         // jmnodeDragged.style.touchAction = "none";
         jmnodeDragged.setPointerCapture(pointerId);
-        if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger;
-        jmnodeDragged.addEventListener("lostpointercapture", evt => {
+        if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger; // eslint-disable-line no-debugger
+        jmnodeDragged.addEventListener("lostpointercapture", () => {
             // console.log("lostpointercapture", evt);
             showDebugCapture("lost capture");
             this.#myState = "idle";
@@ -149,7 +151,7 @@ class PointHandle {
             current: {}
         };
         savePointerPos(evt);
-        const elt = document.elementFromPoint(clientX, clientY);
+        // const elt = document.elementFromPoint(clientX, clientY);
         ///// This error happens, but it is ok
         // if (elt != target) throw Error("elt != target");
         // console.log("INIT", { elt, posPointHandle });
@@ -296,12 +298,19 @@ async function getDraggableNodes() {
 }
 
 let theCustomRenderer;
+/*
 async function setCustomRenderer() {
     if (theCustomRenderer) return;
+    const modCustRend = await importFc4i("jsmind-cust-rend");
     theCustomRenderer = await modCustRend.getOurCustomRenderer();
 }
+*/
 
-function getCustomRenderer() {
+async function getCustomRenderer() {
+    if (!theCustomRenderer) {
+        const modCustRend = await importFc4i("jsmind-cust-rend");
+        theCustomRenderer = await modCustRend.getOurCustomRenderer();
+    }
     return theCustomRenderer;
 }
 
@@ -657,7 +666,7 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
         // select custom
         // FIX-ME: is theCustomRenderer available here???
         // const renderer = await getOurCustomRenderer();
-        const renderer = theCustomRenderer;
+        const renderer = await getCustomRenderer();
         const rec = await renderer.getCustomRec(key, provider);
         if (rec) {
             foundCustom = true;
@@ -816,7 +825,7 @@ export async function pageSetup() {
     const nodeProvider = new URLSearchParams(location.search).get("provider");
     // let inpSearch;
     // let useCanvas = true;
-    setCustomRenderer();
+    // setCustomRenderer();
     // let useCanvas = false;
     // useCanvas = confirm("Use canvas?");
 
@@ -1181,15 +1190,11 @@ export async function pageSetup() {
 
     const nowBefore = Date.now();
     jmDisplayed = await displayMindMap(mind, usedOptJmDisplay);
-    // "dblclick"
 
+    const modCustRend = await importFc4i("jsmind-cust-rend");
     modCustRend.setOurCustomRendererJm(jmDisplayed);
     modCustRend.setOurCustomRendererJmOptions(defaultOptJmDisplay);
     const render = await modCustRend.getOurCustomRenderer();
-
-    // "dblclick"
-    // eltJmnode.addEventListener("dblclick", customRenderer.jmnodeDblclick);
-    // const globals = render.getMindmapGlobals();
 
     const eltJmnodes = getJmnodesFromJm(jmDisplayed);
     eltJmnodes.addEventListener("dblclick", render.mindmapDblclick);
@@ -1258,13 +1263,13 @@ export async function pageSetup() {
             eltTxt.textContent = `${num} (${arrIdHits.length})`;
         }
         const btnPrev = await modMdc.mkMDCbutton("<");
-        btnPrev.addEventListener("click", evt => {
+        btnPrev.addEventListener("click", () => {
             let nextNum = getBtnCurrNum() - 1;
             if (nextNum < 1) nextNum = arrIdHits.length;
             setHitTo(nextNum);
         });
         const btnNext = await modMdc.mkMDCbutton(">");
-        btnNext.addEventListener("click", evt => {
+        btnNext.addEventListener("click", () => {
             let nextNum = getBtnCurrNum() + 1;
             if (nextNum > arrIdHits.length) nextNum = 1;
             setHitTo(nextNum);
@@ -1308,9 +1313,9 @@ export async function pageSetup() {
                 const id_added = operation_node_id;
                 const added_node = jmDisplayed.get_node(id_added);
                 console.log({ operation_type, id_added, added_node });
-                const id_parent = datadata[0];
+                // const id_parent = datadata[0];
                 if (id_added != datadata[1]) throw Error(`id_added (${id_added}) != datadata[1] (${datadata[1]})`);
-                const topic_added = datadata[2];
+                // const topic_added = datadata[2];
                 // jmMirrored?.add_node(id_parent, id_added, topic_added);
                 break;
             case "update_node":
@@ -1327,15 +1332,14 @@ export async function pageSetup() {
                     // modCustRend.addJmnodeBgAndText(eltJmnode);
                     // const isCustomNode = topic.search(" data-jsmind-custom=") > 0;
                     if (!isPlainNode) {
-                        getCustomRenderer().updateJmnodeFromCustom(eltJmnode);
-                        // } else {
-                        // getCustomRenderer().updateEltNodeLink(eltJmnode);
+                        (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
                     }
                 }
                 break;
             case "move_node":
                 {
                     console.warn("move_node event");
+                    /*
                     function walkMoved(id_moved) {
                         // FIX-ME: class left, etc
                         console.log({ id_moved });
@@ -1344,15 +1348,14 @@ export async function pageSetup() {
                             walkMoved(child.id);
                         });
                     }
+                    */
                     const id_moved = operation_node_id;
                     const moved_node = jmDisplayed.get_node(id_moved);
                     const eltJmnode = jsMind.my_get_DOM_element_from_node(moved_node);
                     const isPlainNode = eltJmnode.childElementCount == 0;
                     // modCustRend.addJmnodeBgAndText(eltJmnode);
                     if (!isPlainNode) {
-                        getCustomRenderer().updateJmnodeFromCustom(eltJmnode);
-                        // } else {
-                        // getCustomRenderer().updateEltNodeLink(eltJmnode);
+                        (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
                     }
                     // const before_id = datadata[1];
                     // const parent_id = datadata[2];
@@ -1438,7 +1441,9 @@ export async function pageSetup() {
             const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
             jmDisplayed.toggle_node(node_id);
             // eltJmnode.classList.toggle("is-expanded");
-            modMMhelpers.DBrequestSaveThisMindmap(getCustomRenderer().THEjmDisplayed);
+            (async () => {
+                modMMhelpers.DBrequestSaveThisMindmap((await getCustomRenderer()).THEjmDisplayed);
+            })();
         }
         if (target.dataset.jsmindCustom) {
             setTimeout(async () => {
@@ -1690,6 +1695,7 @@ export async function pageSetup() {
                     if (fromClipBoard?.length > 0) {
                         fromClipBoard = fromClipBoard
                             .trim()
+                            // @ts-ignore
                             .replaceAll(/\s/g, "x")
                             .slice(0, 100);
                     }
@@ -1946,29 +1952,23 @@ export async function pageSetup() {
         */
 
         const provider = objCustomCopied.provider;
-        if (!getCustomRenderer().getProviderNames().includes(provider)) throw Error(`Provider ${provider} is unknown`);
+        if (!(await getCustomRenderer()).getProviderNames().includes(provider)) throw Error(`Provider ${provider} is unknown`);
         const providerKey = objCustomCopied.key;
 
-        const strJsmindTopic = getCustomRenderer().customData2jsmindTopic(providerKey, provider);
+        const strJsmindTopic = (await getCustomRenderer()).customData2jsmindTopic(providerKey, provider);
 
         console.log("eltJmnode", eltJmnode, strJsmindTopic);
         if (jmOwner) {
             const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
             jmOwner.update_node(node_id, strJsmindTopic);
             jmOwner.set_node_background_image(node_id, undefined, 150, 100);
-            ///// Do the rest in callback at update_node!
-            // console.log("eltJmnode befor fix", eltJmnode);
-            // fixRenderImg(eltRendererImg);
-            // const modCustom = await getJsmindCust();
-            // modCustom.NOaddJmnodeBgAndText(eltJmnode);
-            // getCustomRenderer().updateJmnodeFromCustom(eltJmnode, jmOwner);
         } else {
             const s = eltJmnode.style;
             s.height = s.height || "140px";
             s.width = s.width || "140px";
-            const eltCustom = getCustomRenderer().jsmindTopic2customElt(strJsmindTopic);
+            const eltCustom = (await getCustomRenderer()).jsmindTopic2customElt(strJsmindTopic);
             eltJmnode.appendChild(eltCustom);
-            getCustomRenderer().updateJmnodeFromCustom(eltJmnode, jmOwner);
+            (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode, jmOwner);
         }
     }
 }
@@ -2058,18 +2058,7 @@ function isVeryOldCustomFormat(eltJmnode) {
         return true;
     }
 }
-function fixOldCustomAndUpdate(eltJmnode) {
-    if (!jsMind.mm4iSupported) return;
-    const childLast = eltJmnode.lastElementChild;
-    const strCustom = childLast.dataset.jsmindCustom
-    const isOldCustom = childLast.classList.contains("jsmind-renderer-img");
-    if (strCustom) {
-        // if (!isOldCustom) { fixRenderImg(childLast); }
-        getCustomRenderer().updateJmnodeFromCustom(eltJmnode);
-        // } else {
-        // getCustomRenderer().updateEltNodeLink(eltJmnode);
-    }
-}
+/* function fixOldCustomAndUpdate(eltJmnode) { } */
 
 function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
     setTimeout(() => {
@@ -2080,7 +2069,7 @@ function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
         [...eltJmnodes.getElementsByTagName("jmnode")].forEach(async eltJmnode => {
             if (isVeryOldCustomFormat(eltJmnode)) return;
             // await fixJmnodeProblem(eltJmnode); // FIX-ME: Remove when this is fixed in jsmind
-            fixOldCustomAndUpdate(eltJmnode);
+            // fixOldCustomAndUpdate(eltJmnode);
             const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
             if (node_id == 21) console.warn("node_id 21");
             const node = jmDisplayed.get_node(node_id);
@@ -2170,6 +2159,7 @@ function getRectangleInEllipse(w, h) {
 
 // https://codepen.io/davidhalford/pen/AbKBNr
 function getCorrectTextColor(color) {
+    // @ts-ignore
     const hex = to6HexColor(color).substring(1);
 
     /*

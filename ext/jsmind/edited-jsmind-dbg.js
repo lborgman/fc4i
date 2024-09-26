@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
 * @license BSD-3-Clause
 * @copyright 2014-2023 hizzgdev@163.com
@@ -288,7 +289,7 @@
                             mu.disconnect();
                             mu = undefined;
                         } else {
-                            mu = new MutationObserver(mutations => {
+                            mu = new MutationObserver(() => {
                                 console.log("mutations!");
                                 restartTimer();
                             });

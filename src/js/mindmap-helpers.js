@@ -1,4 +1,3 @@
-"use strict";
 // FIX-ME: Put minmaps in localStorage for now
 
 const VERSION = "0.1.0";
@@ -8,7 +7,7 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 const URL_MINDMAPS_PAGE = "./mm4i/mm4i.html";
 
 
-importFc4i("jsmind-cust-rend");
+// importFc4i("jsmind-cust-rend");
 
 const modTools = await importFc4i("toolsJs");
 const throttleSaveMindmap = modTools.throttleTO(DBsaveNowThisMindmap, 300);
