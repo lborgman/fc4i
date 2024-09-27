@@ -1633,8 +1633,8 @@ jmnode.has-children.right-side::after {
 
 .jsmind-renderer-img {
     position: absolute;
-    bottom: -4;
-    left: -4;
+    bottom: -4px;
+    left: -4px;
 }
 
 .jsmind-renderer-img>button {
@@ -1643,22 +1643,26 @@ jmnode.has-children.right-side::after {
     border: 1px solid white;
 }
 
-.is-left .jsmind-renderer-img {
+.left-side .jsmind-renderer-img {
     left: unset;
     right: -4px;
 }
 
-.is-left .jsmind-plain-link {
-    left: unset;
-    right: -4px;
-}
+
 
 .jsmind-plain-link {
     position: absolute;
     bottom: -15px;
+    left: -4px;
     /* background-size: cover; */
     text-decoration: none;
 }
+
+.left-side .jsmind-plain-link {
+    left: unset;
+    right: -4px;
+}
+
 
 .jsmind-plain-link>button {
     display: flex;
