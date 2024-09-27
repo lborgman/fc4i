@@ -1196,9 +1196,29 @@ export async function pageSetup() {
     modCustRend.setOurCustomRendererJmOptions(defaultOptJmDisplay);
     const render = await modCustRend.getOurCustomRenderer();
 
-    const eltJmnodes = getJmnodesFromJm(jmDisplayed);
-    eltJmnodes.addEventListener("dblclick", render.mindmapDblclick);
+
+    // Double click on Windows and Android
     jmDisplayed.disable_event_handle("dblclick");
+    const eltJmnodes = getJmnodesFromJm(jmDisplayed);
+    // Windows
+    eltJmnodes.addEventListener("dblclick", evt => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+        render.mindmapDblclick(evt);
+    });
+    // Android
+    let jmnodesLastTouch = 0;
+    eltJmnodes.addEventListener("touchend", (evt) => {
+        const currentTime = Date.now();
+        const touchLength = currentTime - jmnodesLastTouch;
+        if (touchLength < 500 && touchLength > 0) {
+            render.mindmapDblclick(evt);
+            jmnodesLastTouch = 0;
+        }
+        jmnodesLastTouch = currentTime;
+    });
+
 
     render.applyThisMindmapGlobals();
 
@@ -2034,8 +2054,6 @@ export async function fixJmnodeProblem(eltJmnode) {
             eltRendererImg.dataset.jsmindCustom = customData;
         }
     }
-    // FIX-ME: This should only be done once
-    // eltJmnode.addEventListener("dblclick", customRenderer.jmnodeDblclick);
 }
 function isVeryOldCustomFormat(eltJmnode) {
     const child1 = eltJmnode.firstElementChild;

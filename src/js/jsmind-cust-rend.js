@@ -2346,6 +2346,7 @@ export class CustomRenderer4jsMind {
 
         }
     }
+    /*
     jmnodeDblclick = (evt) => {
         evt.preventDefault();
         evt.stopPropagation();
@@ -2356,10 +2357,8 @@ export class CustomRenderer4jsMind {
         if (tn !== "JMNODE") { eltJmnode = target.closest("jmnode"); }
         this.editNodeDialog(eltJmnode);
     }
+    */
     mindmapDblclick = (evt) => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        evt.stopImmediatePropagation();
         const target = evt.target;
         let eltJmnode;
         let eltJmnodes;
