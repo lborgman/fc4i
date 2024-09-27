@@ -1,3 +1,4 @@
+// @ts-check
 const FC4I_IMPORTMAPS_VER = "0.2.6";
 console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
 // https://github.com/WICG/import-maps/issues/92
@@ -85,12 +86,47 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             console.error(`idOrLink should not start with "/" "${idOrLink}"`);
             throw Error(`idOrLink should not start with "/" "${idOrLink}"`);
         }
+        const getStackTrace = function () {
+            var obj = {};
+            Error.captureStackTrace(obj, getStackTrace);
+            const s = obj.stack;
+            return s.split(/\n\s*/);
+        };
+
         if (isImporting[idOrLink]) {
-            console.error(`Cyclic import for ${idOrLink}`);
+            const prevStack = isImporting[idOrLink];
+            const prev = `\n>>>PREV "${idOrLink}" stack: ` + prevStack.join("\n  >>>prev ");
+            const currStack = getStackTrace();
+            const curr = `\nCURR "${idOrLink}" stack: ` + currStack.join("\n  >>>curr ");
+            console.warn(`Maybe cyclic import for ${idOrLink}`, prev, curr, isImporting);
+            const getStackPoints = (stack) => {
+                // Skip Error and importFc4i
+                // FIX-ME: check skip
+                const points = stack.slice(2).map(row => {
+                    const m = row.match(/\((.*?)\)/);
+                    // if (!m) throw Error(`row did not match: ${row}`);
+                    if (!m) return row.slice(3); // skip "at "
+                    const m1 = m[1];
+                    return m1;
+                });
+                return points;
+            }
+            const prevPoints = getStackPoints(prevStack);
+            const currPoints = getStackPoints(currStack);
+            // FIX-ME: how do I see if it is cyclic????
+
+            // const setPrev = new Set(prevPoints);
+            // let samePoint;
+            // currPoints.forEach(p => { if (setPrev.has(p)) samePoint = p; });
+            // console.log("samePoint", samePoint);
+
+            // Is starting point for curr in prev?
+            const currStartPoint = currPoints.slice(-1);
+            const inPrev = prevPoints.indexOf(currStartPoint) > -1;
+            console.log("inPrev", inPrev);
             debugger;
-            throw Error(`Cyclic import for ${idOrLink}`);
+            if (inPrev) throw Error(`Cyclic import for ${idOrLink} at ${currStartPoint}`);
         }
-        isImporting[idOrLink] = true;
         let ourImportLink;
         if (idOrLink.startsWith(".")) {
             // FIX-ME: why is this necessary when using <base ...>? file issue?
@@ -105,6 +141,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             }
             ourImportLink = relUrl;
         }
+        isImporting[idOrLink] = getStackTrace();
         const mod = await import(ourImportLink);
         isImporting[idOrLink] = false;
         return mod;

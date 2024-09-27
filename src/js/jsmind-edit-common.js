@@ -1442,7 +1442,9 @@ export async function pageSetup() {
             jmDisplayed.toggle_node(node_id);
             // eltJmnode.classList.toggle("is-expanded");
             (async () => {
-                modMMhelpers.DBrequestSaveThisMindmap((await getCustomRenderer()).THEjmDisplayed);
+                // modMMhelpers.DBrequestSaveThisMindmap((await getCustomRenderer()).THEjmDisplayed);
+                const renderer = await getCustomRenderer();
+                modMMhelpers.DBrequestSaveThisMindmap(renderer.THEjmDisplayed);
             })();
         }
         if (target.dataset.jsmindCustom) {
