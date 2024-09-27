@@ -1535,6 +1535,10 @@ export class CustomRenderer4jsMind {
         function getBgCssValueFromElts() {
             // const elt = divBgChoices.querySelector("input[name=bg-choice]:checked")
             const elt = getBgCssValueElt();
+            if (!elt) {
+                debugger; // FIX-ME: how can this happen?
+                return;
+            }
             const id = elt.id;
             console.log("getBgCssValue", elt, id);
             switch (id) {
