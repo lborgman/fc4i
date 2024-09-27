@@ -1164,14 +1164,16 @@ export class CustomRenderer4jsMind {
         ].join("; ");
 
 
+        /*
         function tempApplyBgToCopied() {
             const cssBgVal = getBgCssValueFromElts();
             console.log("old tempApplyBgToCopied", cssBgVal);
             applyJmnodeBgCssValue(eltCopied, cssBgVal);
         }
+        */
         // const debounceTempApplyBgToCopied = debounce(tempApplyBgToCopied, 2000);
-        function newTempApplyBgToCopied() {
-            const cssBgVal = getBgCssValueFromElts();
+        async function newTempApplyBgToCopied() {
+            const cssBgVal = await getBgCssValueFromElts();
             // const strCss = typeof cssBgVal == "string" ? cssBgVal : JSON.stringify(cssBgVal).slice(1, -1);
             if (typeof cssBgVal != "string") throw Error("cssBgVal not string");
             setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
@@ -1520,25 +1522,29 @@ export class CustomRenderer4jsMind {
             // Tried reboot etc.
             // Suspect a chrome bug since there is another event handler here.
             // Try a timeout here:
-            setTimeout(() => {
+            setTimeout(async () => {
                 console.log("in timeout");
-                const checked = getBgCssValueElt();
+                const checked = await getBgCssValueElt();
                 console.log({ checked });
                 debounceTempApplyBgToCopied();
             }, 100);
         }));
 
-        function getBgCssValueElt() {
-            const elt = divBgChoices.querySelector("input[name=bg-choice]:checked")
+        async function getBgCssValueElt() {
+            // console.trace("getBgCssValueElt");
+            let msWaited = 0;
+            const msStep = 200;
+            let elt;
+            while ((!elt) && (msWaited < 2000)) {
+                await modTools.waitSeconds(msStep / 1000);
+                msWaited += msStep;
+                elt = divBgChoices.querySelector("input[name=bg-choice]:checked")
+            }
+            if (!elt) throw Error("Could not find input[name=bg-choice]:checked");
             return elt;
         }
-        function getBgCssValueFromElts() {
-            // const elt = divBgChoices.querySelector("input[name=bg-choice]:checked")
-            const elt = getBgCssValueElt();
-            if (!elt) {
-                debugger; // FIX-ME: how can this happen?
-                return;
-            }
+        async function getBgCssValueFromElts() {
+            const elt = await getBgCssValueElt();
             const id = elt.id;
             console.log("getBgCssValue", elt, id);
             switch (id) {
@@ -2327,7 +2333,7 @@ export class CustomRenderer4jsMind {
                 delete currTemp.height;
                 await modJsEditCommon.fixJmnodeProblem(eltJmnode);
                 modJsEditCommon.applyNodeShapeEtc(node_copied, eltJmnode);
-                setTimeout(()=> { modMMhelpers.DBrequestSaveThisMindmap(this.THEjmDisplayed); }, 2000);
+                setTimeout(() => { modMMhelpers.DBrequestSaveThisMindmap(this.THEjmDisplayed); }, 2000);
 
                 // FIX-ME: use lastElementChild instead???
                 // if (node_copied.data.fc4i) this.updateJmnodeFromCustom(eltJmnode);
