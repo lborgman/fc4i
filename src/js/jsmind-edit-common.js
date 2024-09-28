@@ -131,7 +131,6 @@ class PointHandle {
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger; // eslint-disable-line no-debugger
         jmnodeDragged.addEventListener("lostpointercapture", () => {
-            // console.log("lostpointercapture", evt);
             showDebugCapture("lost capture");
             this.#myState = "idle";
         });
@@ -488,10 +487,14 @@ function savePointerPos(evt) {
  */
 
 function requestCheckPointerHandleMove() {
-    // if (!pointHandle.idle) return;
-    if (!pointHandle.stateMoving()) return;
-    // console.log("requestCheckDistance");
-    pointHandle.checkPointHandleDistance();
+    try {
+        if (!pointHandle.stateMoving()) return;
+        pointHandle.checkPointHandleDistance();
+    } catch (err) {
+        console.log("ERROR requestCheckPointerHandleMove", err);
+        eltReqFrame.textContent = err;
+        debugger; // eslint-disable-line no-debugger
+    }
     requestAnimationFrame(requestCheckPointerHandleMove);
 }
 let eltJmnodeFrom;
@@ -2630,24 +2633,26 @@ function testCmOnScreen() {
 
 
 let eltBottomDebug;
-let eltDebugCapture;
 let eltDebugState;
+let eltDebugCapture;
+let eltReqFrame;
 function getBottomDebug() {
     if (eltBottomDebug) return eltBottomDebug;
-    eltDebugCapture = mkElt("div");
-    eltDebugState = mkElt("div");
-    eltBottomDebug = mkElt("div", undefined, [eltDebugState, eltDebugCapture]);
+    eltDebugState = mkElt("div"); eltDebugState.style.color = "gray";
+    eltDebugCapture = mkElt("div"); eltDebugCapture.style.color = "wheat";
+    eltReqFrame = mkElt("div"); eltReqFrame.style.color = "red";
+    eltBottomDebug = mkElt("div", undefined, [eltDebugState, eltDebugCapture, eltReqFrame]);
     // @ts-ignore
     eltBottomDebug.style = `
                 position: fixed;
                 width: 100vw;
+                left: 0px;
                 height: 30px;
                 padding: 4px;
                 background: black;
-                color: wheat;
                 bottom: 0;
                 display: grid;
-                grid-template-columns: 60px 1fr;
+                grid-template-columns: 50px 1fr 1fr;
             `;
     document.body.appendChild(eltBottomDebug);
 

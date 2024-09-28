@@ -124,8 +124,10 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             const currStartPoint = currPoints.slice(-1);
             const inPrev = prevPoints.indexOf(currStartPoint) > -1;
             console.log("inPrev", inPrev);
-            debugger;
-            if (inPrev) throw Error(`Cyclic import for ${idOrLink} at ${currStartPoint}`);
+            if (inPrev) {
+                debugger; // eslint-disable-line no-debugger
+                throw Error(`Cyclic import for ${idOrLink} at ${currStartPoint}`);
+            }
         }
         let ourImportLink;
         if (idOrLink.startsWith(".")) {
