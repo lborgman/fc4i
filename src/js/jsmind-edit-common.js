@@ -1759,9 +1759,9 @@ export async function pageSetup() {
             liMindmapsA,
         ];
         const arrMenuTestEntries = [
-            liTestSvgDrawLine,
-            liTestTabindex,
-            liTestDragBetween,
+            // liTestSvgDrawLine,
+            // liTestTabindex,
+            // liTestDragBetween,
             liTestPinchZoom,
             // liTestPointHandle,
         ];
