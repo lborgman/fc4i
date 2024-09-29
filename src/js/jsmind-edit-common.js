@@ -126,7 +126,7 @@ class PointHandle {
 
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
-        if (["mouse", "touch","pen"].indexOf(evt.pointerType) == -1) {
+        if (["mouse", "touch", "pen"].indexOf(evt.pointerType) == -1) {
             const msg = `ERROR: Unknown pointerType: "${evt.pointerType}"`;
             alert(msg);
             debugger;
@@ -1200,21 +1200,37 @@ export async function pageSetup() {
     const eltJmnodes = getJmnodesFromJm(jmDisplayed);
     // Windows
     eltJmnodes.addEventListener("dblclick", evt => {
+        // FIX-ME: there is no .eventType - is this a bug?
+        // if ((evt.eventType != "mouse") && (evt.eventType != "pen")) return;
+        if (!(evt instanceof MouseEvent)) return;
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
         render.mindmapDblclick(evt);
     });
     // Android
-    let jmnodesLastTouch = 0;
+    const jmnodesLastTouchend = {
+        ms: 0,
+        clientX: -1,
+        clientY: -1,
+    }
     eltJmnodes.addEventListener("touchend", (evt) => {
+        if (evt.eventType != "touch") throw Error(`"touchend", but eventType:${evt.eventType}`);
         const currentTime = Date.now();
-        const touchLength = currentTime - jmnodesLastTouch;
-        if (touchLength < 500 && touchLength > 0) {
+        const msTouchLength = currentTime - jmnodesLastTouchend.ms;
+        const dX = jmnodesLastTouchend.clientX - evt.clientX;
+        const dY = jmnodesLastTouchend.clientY - evt.clientY;
+        const touchDistance = Math.sqrt(dX * dX + dY * dY);
+        if (isNaN(touchDistance)) throw Error(`touchDistance isNaN, dX:${dX}, dY:${dY}`);
+        if (msTouchLength < 500 && msTouchLength > 0 && touchDistance < 10) {
             render.mindmapDblclick(evt);
-            jmnodesLastTouch = 0;
+            jmnodesLastTouchend.ms = 0;
+            jmnodesLastTouchend.clientX = -1;
+            jmnodesLastTouchend.clientY = -1;
         }
-        jmnodesLastTouch = currentTime;
+        jmnodesLastTouchend.ms = currentTime;
+        jmnodesLastTouchend.clientX = evt.clientX;
+        jmnodesLastTouchend.clientY = evt.clientY;
     });
 
 
