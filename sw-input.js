@@ -1,5 +1,5 @@
 //========== Specific ====================================================
-const SW_VERSION = "0.4.1537";
+const SW_VERSION = "0.4.1538";
 
 
 // https://www.npmjs.com/package/workbox-sw

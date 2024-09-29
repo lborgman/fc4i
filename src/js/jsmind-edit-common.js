@@ -1646,7 +1646,7 @@ export async function pageSetup() {
                     const jmnodes = document.querySelector("jmnodes");
                     // const options = { }
                     // const pz = new PinchZoom(jmnodes, options);
-                    const pz = new modPZ.default(jmnodes);
+                    const pz = new modPZ.default(jmnodes.parentElement);
                 }
                 // setTimeout(addZoom, 1000);
                 addZoom();
