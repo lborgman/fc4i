@@ -3,6 +3,9 @@ const TOOLS_VER = "0.0.7";
 console.log(`here is tools.js, module, ${TOOLS_VER}`);
 if (document.currentScript) { throw "tools.js is not loaded as module"; }
 
+// @ts-ignore
+const mkElt = window.mkElt;
+
 // https://firebase.google.com/docs/reference/js/firebase.auth.Error
 
 let theSWcacheVersion = "Fix this! (not known yet)";
@@ -277,7 +280,7 @@ const theErrorPopupId = "error-popup";
 const theStartTime = new Date();
 
 
-function isAndroidWebView() {
+export function isAndroidWebView() {
     // return true;
     // https://developer.chrome.com/multidevice/user-agent
     return (navigator.userAgent.indexOf(" wv") !== -1);
@@ -1151,4 +1154,29 @@ async function fetchReTLD() {
         reTLD = new RegExp("^https://[^/]{0,}[^.][.](" + lines.join("|") + ")" + "($|/)");
     }
     return reTLD;
+}
+
+
+export function showInfoPermissionsClipboard() {
+    showInfoPermissions("Can't read clipboard");
+}
+async function showInfoPermissions(txtWhich) {
+    const hrefAndroid = "https://support.google.com/chrome/answer/114662?hl=en&co=GENIE.Platform%3DAndroid&oco=1";
+    const hrefDesktop = "https://support.google.com/chrome/answer/114662?hl=en&co=GENIE.Platform%3DDesktop&oco=1";
+    const aUnblockAndroid = mkElt("a", { target: "blank", href: hrefAndroid }, "Android");
+    const aUnblockDesktop = mkElt("a", { target: "blank", href: hrefDesktop }, "Desktop");
+    const pLink = mkElt("p", undefined, [aUnblockAndroid, " ", aUnblockDesktop]);
+    pLink.style = `
+        display: flex;
+        gap: 20px;
+        `;
+    const body = mkElt("section", undefined, [
+        mkElt("h1", undefined, txtWhich),
+        mkElt("p", undefined, [
+            "This can be fixed as explained here: ",
+        ]),
+        pLink
+    ]);
+    const modMdc = await importFc4i("util-mdc");
+    modMdc.mkMDCdialogAlert(body);
 }

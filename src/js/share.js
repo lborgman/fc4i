@@ -378,7 +378,7 @@ export async function mkEltInputRemember(record, headerTitle, saveNewNow) {
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
                 debugPasteLine(`addPasteButton event 1`);
-                modImages.alertHowToUnblockPermissions();
+                modTools.showInfoPermissionsClipboard();
                 return;
             }
             debugPasteLine(`addPasteButton event 2`);

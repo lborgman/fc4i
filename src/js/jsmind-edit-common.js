@@ -121,11 +121,10 @@ class PointHandle {
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
-        // @
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
 
-        showDebugCapture("start debug capture");
+        showDebugCapture("start capture");
 
         // jmnodeDragged.style.touchAction = "none";
         jmnodeDragged.setPointerCapture(pointerId);

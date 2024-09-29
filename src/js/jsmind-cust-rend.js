@@ -1676,7 +1676,7 @@ export class CustomRenderer4jsMind {
             const modImages = await importFc4i("images");
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
-                modImages.alertHowToUnblockPermissions();
+                modTools.showInfoPermissionsClipboard();
                 return false;
             }
             const resultImageBlobs = await modImages.getImagesFromClipboard();
@@ -1704,7 +1704,7 @@ export class CustomRenderer4jsMind {
                 switch (err.name) {
                     case "NotAllowedError":
                         // handleClipboardReadNotAllowed();
-                        modImages.alertHowToUnblockPermissions();
+                        modTools.showInfoPermissionsClipboard();
                         break;
                     case "DataError":
                         modImages.alertNoImagesFound();

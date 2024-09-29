@@ -161,27 +161,12 @@ export async function isClipboardPermissionStateOk() {
         case 'prompt': // Something seems to have changed 2023-06-29
             return true;
         case 'denied':
-            // alertHowToUnblockPermissions();
+            // showInfoPermissionsClipboard();
             return false;
         default:
             debugger; // eslint-disable-line no-debugger
             throw Error(`Unknown permission state: ${permissionStatus.state}`);
     }
-}
-export async function alertHowToUnblockPermissions() {
-    const aUnblock = mkElt("a", {
-        target: "blank",
-        href: "https://www.getbeamer.com/help/how-to-unblock-notification-permissions-on-any-browser"
-    }, "How to fix it");
-    const body = mkElt("div", undefined, [
-        mkElt("h1", undefined, "Can't read clipboard"),
-        mkElt("p", undefined, [
-            "This can be fixed the same way as explained here: ",
-            aUnblock
-        ])
-    ]);
-    const modMdc = await importFc4i("util-mdc");
-    modMdc.mkMDCdialogAlert(body);
 }
 
 export async function getImagesFromClipboard() {

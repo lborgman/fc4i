@@ -440,7 +440,7 @@
                     const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
                     if (clipboardAccessOk == false) {
                         debugPasteLine(`addPasteButton event 1`);
-                        modImages.alertHowToUnblockPermissions();
+                        modTools.showInfoPermissionsClipboard();
                         return;
                     }
                     const resultImageBlobs = await modImages.getImagesFromClipboard();
