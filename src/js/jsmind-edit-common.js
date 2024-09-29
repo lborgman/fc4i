@@ -22,10 +22,12 @@ const modTools = await importFc4i("toolsJs");
 
 class PointHandle {
     static sizePointHandle = 20;
-    static diffPointHandle = 60;
+    // static diffPointHandle = 60;
 
     static myStates = ["idle", "init", "dist", "move"];
     #myState;
+    #pointerType;
+    #diffPointHandle = 1;
 
     /** @type {HTMLElement} */ #eltPointHandle;
     /** @type {HTMLElement} */ #jmnodesPointHandle;
@@ -121,8 +123,16 @@ class PointHandle {
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
+
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
+        if (["mouse", "touch","pen"].indexOf(evt.pointerType) == -1) {
+            const msg = `ERROR: Unknown pointerType: "${evt.pointerType}"`;
+            alert(msg);
+            debugger;
+        }
+        this.#pointerType = evt.pointerType;
+        if (evt.pointerType == "touch") { this.#diffPointHandle = 60; }
 
         showDebugCapture("start capture");
 
@@ -201,22 +211,6 @@ class PointHandle {
     checkPointHandleDistance() {
         if (!evtPointerLast) return;
         if (this.isState("init")) {
-            /*
-            eltJmnodeFrom = jmnodeFromPoint(posPointHandle.start.clientX, posPointHandle.start.clientY);
-            // console.log("new:", { eltJmnodeFrom });
-            const bcrFrom = eltJmnodeFrom.getBoundingClientRect();
-            posPointHandle.dTop = evtPointerLast.screenY - bcrFrom.top;
-            posPointHandle.dBottom = bcrFrom.bottom - evtPointerLast.screenY;
-            posPointHandle.dLeft = evtPointerLast.screenX - bcrFrom.left;
-            posPointHandle.dRight = bcrFrom.right - evtPointerLast.screenX;
-            let insideNode = false;
-            ["dTop", "dBottom", "dLeft", "dRight"].forEach(dT => {
-                const d = posPointHandle[dT];
-                if (d <= 0) insideNode = true;
-            });
-            if (insideNode) return;
-            */
-
             this.#state = "dist";
 
             this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
@@ -228,7 +222,8 @@ class PointHandle {
         if (isNaN(diffX) || isNaN(diffY)) throw Error("diffX or diffY isNaN");
         if (this.isState("dist")) {
             const diff2 = diffX * diffX + diffY * diffY;
-            const diffPH = PointHandle.diffPointHandle;
+            // const diffPH = PointHandle.diffPointHandle;
+            const diffPH = this.#diffPointHandle;
             const diffPH2 = diffPH * diffPH;
             const diffOk = !(diff2 < diffPH2);
             // console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
