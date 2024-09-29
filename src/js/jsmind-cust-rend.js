@@ -1672,7 +1672,7 @@ export class CustomRenderer4jsMind {
             ]);
             const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
         }
-        async function addBgFromClipboard(blob) {
+        async function addBgFromClipboard() {
             const modImages = await importFc4i("images");
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
@@ -1685,12 +1685,17 @@ export class CustomRenderer4jsMind {
                     modImages.alertNoImagesFound();
                     return false;
                 } else {
-                    const toDiv = divCurrentImage;
+                    console.log(eltCopied); debugger;
+                    // const toDiv = divCurrentImage;
                     const maxBlobSize = 20 * 1000;
+                    // FIX-ME: only one
                     for (const blob of resultImageBlobs) {
                         const eltImg = await modImages.mkImageCardFromBigImage(blob, maxBlobSize);
-                        modImages.addFunOnRemoveImageCard(eltImg, removeBg);
-                        toDiv.appendChild(eltImg);
+                        // modImages.addFunOnRemoveImageCard(eltImg, removeBg);
+                        // toDiv.appendChild(eltImg);
+                        const bg = eltCopied.firstElementChild;
+                        const ub =eltImg.dataset.urlBlob;
+                        bg.style.backgroundImage = `url("${ub}")`;
                     }
                 }
             } else {

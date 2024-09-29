@@ -645,6 +645,7 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     }
     const bgCssText = shapeEtc.background?.CSS;
     if (bgCssText) {
+        const modCustRend = await importFc4i("jsmind-cust-rend");
         modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
     }
 
