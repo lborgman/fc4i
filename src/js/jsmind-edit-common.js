@@ -1677,25 +1677,6 @@ export async function pageSetup() {
         );
         liTestSvgDrawLine.classList.add("test-item");
 
-        const liTestTouch = mkMenuItem("Test for touch (and Pixel 7 pointer coarse)",
-            () => {
-                const hasTouch = hasTouchEvents();
-                addDebugLog(`Has touch: ${hasTouch}`);
-                const isCoarse = window.matchMedia('(any-pointer:coarse)').matches;
-                addDebugLog(`Pointer is coarse: ${isCoarse}`);
-            });
-        liTestTouch.classList.add("test-item");
-        const liTestMouse = mkMenuItem("Test for mouse",
-            // https://stackoverflow.com/questions/21054126/how-to-detect-if-a-device-has-mouse-support/50687322#50687322
-            // https://bugs.chromium.org/p/chromium/issues/detail?id=1088262
-            () => {
-                const hasCursor = window.matchMedia('(pointer:fine)').matches;
-                addDebugLog(
-                    `window.matchMedia('(pointer:fine)').matches; ${hasCursor}`
-                );
-            });
-        liTestMouse.classList.add("test-item");
-
         const liAddChild = mkMenuItem("Add child node", () => addNode("child"));
         markIfNoSelected(liAddChild);
 
@@ -1778,8 +1759,6 @@ export async function pageSetup() {
             liMindmapsA,
         ];
         const arrMenuTestEntries = [
-            liTestTouch,
-            liTestMouse,
             liTestSvgDrawLine,
             liTestTabindex,
             liTestDragBetween,
