@@ -1224,9 +1224,9 @@ export async function pageSetup() {
         const msTouchLength = currentTime - jmnodesLastTouchend.ms;
 
         const touches = evt.touches || evt.changedTouches;
-        if (!touches) throw Error(`evt.touches is undefined`);
+        if (!touches) throw Error(`touches is undefined`);
         const touch = touches[0];
-        if (!touch) throw Error(`evt.touches[0] is undefined`);
+        if (!touch) throw Error(`touch is undefined`);
         const clientX = touch.clientX;
         const clientY = touch.clientY;
         const dX = jmnodesLastTouchend.clientX - clientX;
