@@ -1222,19 +1222,23 @@ export async function pageSetup() {
         if (evt.type != "touchend") throw Error(`"touchend", but event.type:${evt.type}`);
         const currentTime = Date.now();
         const msTouchLength = currentTime - jmnodesLastTouchend.ms;
-        const dX = jmnodesLastTouchend.clientX - evt.clientX;
-        const dY = jmnodesLastTouchend.clientY - evt.clientY;
+
+        const touch = evt.touches[0];
+        const clientX = touch.clientX;
+        const clientY = touch.clientY;
+        const dX = jmnodesLastTouchend.clientX - clientX;
+        const dY = jmnodesLastTouchend.clientY - clientY;
         const touchDistance = Math.sqrt(dX * dX + dY * dY);
-        if (isNaN(touchDistance)){
-        const msg = `
+        if (isNaN(touchDistance)) {
+            const msg = `
             touchDistance isNaN, dX:${dX}, dY:${dY}
             evt.type:${evt.type}
             evt.clientX:${evt.clientX}
             evt.clientY:${evt.clientY}
             jmnodesLastTouchend.clientX:${jmnodesLastTouchend.clientX}
-        `;
+            `;
 
-        throw Error(msg);
+            throw Error(msg);
         }
         if (msTouchLength < 500 && msTouchLength > 0 && touchDistance < 10) {
             render.mindmapDblclick(evt);
