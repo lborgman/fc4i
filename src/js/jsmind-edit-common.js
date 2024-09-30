@@ -1219,7 +1219,7 @@ export async function pageSetup() {
     }
     eltJmnodes.addEventListener("touchend", (evt) => {
         // if (evt.eventType != "touch") throw Error(`"touchend", but eventType:${evt.eventType}`);
-        if (evt.type != "touch") throw Error(`"touchend", but event.type:${evt.type}`);
+        if (evt.type != "touchend") throw Error(`"touchend", but event.type:${evt.type}`);
         const currentTime = Date.now();
         const msTouchLength = currentTime - jmnodesLastTouchend.ms;
         const dX = jmnodesLastTouchend.clientX - evt.clientX;
