@@ -1225,7 +1225,15 @@ export async function pageSetup() {
         const dX = jmnodesLastTouchend.clientX - evt.clientX;
         const dY = jmnodesLastTouchend.clientY - evt.clientY;
         const touchDistance = Math.sqrt(dX * dX + dY * dY);
-        if (isNaN(touchDistance)) throw Error(`touchDistance isNaN, dX:${dX}, dY:${dY}`);
+        if (isNaN(touchDistance)){
+        const msg = `
+            touchDistance isNaN, dX:${dX}, dY:${dY}
+            evt.clientX:${evt.clientX}
+            jmnodesLastTouchend.clientX:${jmnodesLastTouchend.clientX}
+        `;
+
+        throw Error(msg);
+        }
         if (msTouchLength < 500 && msTouchLength > 0 && touchDistance < 10) {
             render.mindmapDblclick(evt);
             jmnodesLastTouchend.ms = 0;
