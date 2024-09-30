@@ -1228,7 +1228,9 @@ export async function pageSetup() {
         if (isNaN(touchDistance)){
         const msg = `
             touchDistance isNaN, dX:${dX}, dY:${dY}
+            evt.type:${evt.type}
             evt.clientX:${evt.clientX}
+            evt.clientY:${evt.clientY}
             jmnodesLastTouchend.clientX:${jmnodesLastTouchend.clientX}
         `;
 
