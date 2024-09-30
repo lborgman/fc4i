@@ -178,6 +178,7 @@ class PointHandle {
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
+        if (!this.#eltPointHandle.parentElement) return;
         // console.log("teardownPointHandle");
         this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
         this.#eltPointHandle?.remove();
@@ -1856,7 +1857,9 @@ export async function pageSetup() {
         // https://htmldom.dev/drag-to-scroll/ <- spam now
         // https://phuoc.ng/collection/html-dom/drag-to-scroll/
         /* .container { cursor: grab; overflow: auto; } */
-        let posScrollData;
+        const posScrollData = {};
+        const posPointerData = {};
+        let isGrabMoving = false;
 
         const isMousedownTarget = (targ) => {
             if (Array.isArray(mousedownTargets)) {
@@ -1874,8 +1877,8 @@ export async function pageSetup() {
             }
             evt.preventDefault();
             evt.stopPropagation();
-            console.log("mouseDownHandler", { mouseUpHandler, mouseMoveHandler });
-            // Change the cursor and prevent user from selecting the text
+            console.log("grabDownHandler", { grabUpHandler, grabMoveHandler });
+            /*
             posScrollData = {
                 // The current scroll
                 left: ele.scrollLeft,
@@ -1884,29 +1887,52 @@ export async function pageSetup() {
                 x: evt.clientX,
                 y: evt.clientY,
             };
+            */
+            posScrollData.left = ele.scrollLeft;
+            posScrollData.top = ele.scrollTop;
+            posScrollData.clientX = evt.clientX;
+            posScrollData.clientY = evt.clientY;
+
+            posPointerData.clientX = evt.clientX;
+            posPointerData.clientY = evt.clientY;
+            // Change the cursor and prevent user from selecting the text
             ele.style.cursor = "grabbing";
 
-            ele.addEventListener('mousemove', mouseMoveHandler);
-            ele.addEventListener('mouseup', mouseUpHandler);
+            ele.addEventListener('mousemove', grabMoveHandler);
+            ele.addEventListener('mouseup', grabUpHandler);
             // ele.addEventListener('pointerup', mouseUpHandler);
-            ele.addEventListener("mouseleave", mouseUpHandler);
+            ele.addEventListener("mouseleave", grabUpHandler);
+
+            isGrabMoving = true;
+            requestGrabMove();
         };
-        const mouseMoveHandler = (evt) => {
-            // How far the mouse has been moved
-            const dx = evt.clientX - posScrollData.x;
-            const dy = evt.clientY - posScrollData.y;
-            // console.log("mouseMoveHandler dx, dy, .scrollLeft", dx, dy, ele.scrollLeft, posScrollData);
+        const grabMoveHandler = (evt) => {
+            console.log("grabMoveHandler");
+            posPointerData.clientX = evt.clientX;
+            posPointerData.clientY = evt.clientY;
+        }
+        const requestGrabMove = () => {
+            if (!isGrabMoving) return;
+            // console.log("requestGrabMove");
+            const dx = posPointerData.clientX - posScrollData.clientX;
+            const dy = posPointerData.clientY - posScrollData.clientY;
+            if (isNaN(dx)) debugger;
+            if (isNaN(dy)) debugger;
 
             // Scroll the element
             ele.scrollTop = posScrollData.top - dy;
             ele.scrollLeft = posScrollData.left - dx;
+
+            requestAnimationFrame(requestGrabMove);
         };
-        const mouseUpHandler = (evt) => {
+        const grabUpHandler = (evt) => {
             evt.preventDefault();
             evt.stopPropagation();
-            console.log("addGrabAndScroll mouseUpHandler");
-            ele.removeEventListener('mousemove', mouseMoveHandler);
-            ele.removeEventListener('mouseup', mouseUpHandler);
+            console.log("grabUpHandler");
+            isGrabMoving = false;
+
+            ele.removeEventListener('mousemove', grabMoveHandler);
+            ele.removeEventListener('mouseup', grabUpHandler);
 
             // ele.style.cursor = 'grab';
             ele.style.removeProperty('cursor');
