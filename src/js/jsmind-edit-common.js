@@ -1204,6 +1204,7 @@ export async function pageSetup() {
     eltJmnodes.addEventListener("dblclick", evt => {
         // FIX-ME: there is no .eventType - is this a bug?
         // if ((evt.eventType != "mouse") && (evt.eventType != "pen")) return;
+        if ((evt.type != "mouse") && (evt.type != "pen")) return;
         if (!(evt instanceof MouseEvent)) return;
         evt.preventDefault();
         evt.stopPropagation();
@@ -1217,7 +1218,8 @@ export async function pageSetup() {
         clientY: -1,
     }
     eltJmnodes.addEventListener("touchend", (evt) => {
-        if (evt.eventType != "touch") throw Error(`"touchend", but eventType:${evt.eventType}`);
+        // if (evt.eventType != "touch") throw Error(`"touchend", but eventType:${evt.eventType}`);
+        if (evt.type != "touch") throw Error(`"touchend", but event.type:${evt.type}`);
         const currentTime = Date.now();
         const msTouchLength = currentTime - jmnodesLastTouchend.ms;
         const dX = jmnodesLastTouchend.clientX - evt.clientX;
