@@ -137,6 +137,7 @@ class PointHandle {
         showDebugCapture("start capture");
 
         // jmnodeDragged.style.touchAction = "none";
+        console.log("jmnodeDragged.setPointerCapture");
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger; // eslint-disable-line no-debugger
         jmnodeDragged.addEventListener("lostpointercapture", () => {
@@ -1852,7 +1853,8 @@ export async function pageSetup() {
     }
 
     function addGrabAndScroll(ele, mousedownTargets) {
-        // https://htmldom.dev/drag-to-scroll/
+        // https://htmldom.dev/drag-to-scroll/ <- spam now
+        // https://phuoc.ng/collection/html-dom/drag-to-scroll/
         /* .container { cursor: grab; overflow: auto; } */
         let posScrollData;
 
@@ -1872,7 +1874,7 @@ export async function pageSetup() {
             }
             evt.preventDefault();
             evt.stopPropagation();
-            // mouseDownHandler2();
+            console.log("mouseDownHandler", { mouseUpHandler, mouseMoveHandler });
             // Change the cursor and prevent user from selecting the text
             posScrollData = {
                 // The current scroll
@@ -1883,10 +1885,10 @@ export async function pageSetup() {
                 y: evt.clientY,
             };
             ele.style.cursor = "grabbing";
-            // console.log("mouseDownHandler", ele.style.cursor);
 
             ele.addEventListener('mousemove', mouseMoveHandler);
             ele.addEventListener('mouseup', mouseUpHandler);
+            // ele.addEventListener('pointerup', mouseUpHandler);
             ele.addEventListener("mouseleave", mouseUpHandler);
         };
         const mouseMoveHandler = (evt) => {
@@ -1899,12 +1901,15 @@ export async function pageSetup() {
             ele.scrollTop = posScrollData.top - dy;
             ele.scrollLeft = posScrollData.left - dx;
         };
-        const mouseUpHandler = function () {
-            // console.log("ele mouseup");
+        const mouseUpHandler = (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            console.log("addGrabAndScroll mouseUpHandler");
             ele.removeEventListener('mousemove', mouseMoveHandler);
             ele.removeEventListener('mouseup', mouseUpHandler);
 
-            ele.style.cursor = 'grab';
+            // ele.style.cursor = 'grab';
+            ele.style.removeProperty('cursor');
             // console.log("mouseUpHandler", ele.style.cursor);
             ele.style.removeProperty('user-select');
         };
