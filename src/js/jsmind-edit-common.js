@@ -1225,6 +1225,8 @@ export async function pageSetup() {
 
         const touches = evt.touches || evt.changedTouches;
         if (!touches) throw Error(`touches is undefined`);
+        if (!Array.isArray(touches)) throw Error(`touches is not array`);
+        if (touches.length == 0) throw Error(`touches.length == 0`);
         const touch = touches[0];
         if (!touch) throw Error(`touch is undefined`);
         const clientX = touch.clientX;
