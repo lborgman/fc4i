@@ -1223,19 +1223,23 @@ export async function pageSetup() {
         const currentTime = Date.now();
         const msTouchLength = currentTime - jmnodesLastTouchend.ms;
 
-        const touches = evt.touches || evt.changedTouches;
-        if (!touches) throw Error(`touches is undefined`);
-        // if (!Array.isArray(touches)) throw Error(`touches is not array`);
-        if (touches.length == 0) throw Error(`touches.length == 0`);
-        const touch = touches[0] || touches.item(0);
-        if (!touch) throw Error(`touch is undefined`);
-        const clientX = touch.clientX;
-        const clientY = touch.clientY;
-        const dX = jmnodesLastTouchend.clientX - clientX;
-        const dY = jmnodesLastTouchend.clientY - clientY;
-        const touchDistance = Math.sqrt(dX * dX + dY * dY);
-        if (isNaN(touchDistance)) {
-            const msg = `
+        let touchDistance = 0;
+        let clientX = evt.clientX;
+        let clientY = evt.clientY;
+        if (clientX == undefined) {
+            const touches = evt.touches || evt.changedTouches;
+            if (!touches) throw Error(`touches is undefined`);
+            // if (!Array.isArray(touches)) throw Error(`touches is not array`);
+            if (touches.length == 0) throw Error(`touches.length == 0`);
+            const touch = touches[0] || touches.item(0);
+            if (!touch) throw Error(`touch is undefined`);
+            clientX = touch.clientX;
+            clientY = touch.clientY;
+            const dX = jmnodesLastTouchend.clientX - clientX;
+            const dY = jmnodesLastTouchend.clientY - clientY;
+            touchDistance = Math.sqrt(dX * dX + dY * dY);
+            if (isNaN(touchDistance)) {
+                const msg = `
             touchDistance isNaN, dX:${dX}, dY:${dY}
             evt.type:${evt.type}
             evt.clientX:${evt.clientX}
@@ -1243,7 +1247,8 @@ export async function pageSetup() {
             jmnodesLastTouchend.clientX:${jmnodesLastTouchend.clientX}
             `;
 
-            throw Error(msg);
+                throw Error(msg);
+            }
         }
         if (msTouchLength < 500 && msTouchLength > 0 && touchDistance < 10) {
             render.mindmapDblclick(evt);
