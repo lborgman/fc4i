@@ -1,0 +1,45 @@
+machine_name     : "mm4i <user@example.com>";
+machine_license  : MIT;
+machine_comment  : "mm4i pointer events";
+
+start_states     : [Idle];
+end_states       : [];
+
+flow: down;
+
+// arrange [Green, Yellow];
+
+Idle 'up' => Idle;
+
+
+Idle 'n_down' => n_Down;
+
+n_Down 'up' => n_Click;
+n_Click 'timeout' => Idle;
+n_Click 'n_down' => n_Dblclick;
+n_Dblclick 'up' => Idle;
+
+n_Down 'move' => n_Move;
+n_Move 'up' => Idle;
+
+
+
+Idle 'c_down' => c_Down;
+c_Down 'move' => c_Move;
+c_Down 'c_Down' => Zoom;
+Zoom 'move' => Zoom;
+Zoom 'up' => Idle;
+
+
+// [Red Yellow Green] ~> Off;
+
+
+
+// visual styling
+
+state Idle    : { background-color: yellow;        corners: rounded; };
+state c_Down  : { background-color: lightskyblue; };
+state n_Down  : { background-color: blue; text-color: white; };
+state n_Move  : { background-color: gray; };
+state c_Move  : { background-color: lightgray; text-color: black; };
+state Zoom    : { background-color: pink; }
