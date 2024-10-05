@@ -66,8 +66,8 @@ state c_Down  : { background-color: lightskyblue; };
 state c_Move  : { background-color: lightgray; text-color: black; };
 state Zoom    : { background-color: pink; };
 `;
-const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
+export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 
-export const state = fsm.state;
+export const state = () => fsm.state;
 export const hook_action = fsm.hook_action;
 export const hook_entry = fsm.hook_entry;

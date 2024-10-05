@@ -9,6 +9,15 @@
 const modTools = await importFc4i("toolsJs");
 await modTools.promiseDOMready();
 
+setTimeout(async () => {
+    const modJsEditCommon = await importFc4i("jsmind-edit-common");
+    modJsEditCommon.showDebugJssmAction("action");
+    modJsEditCommon.showDebugJssmState("state");
+}, 1000);
+
+const modFsm = await importFc4i("mm4i-fsm");
+window.fsm = modFsm.fsm;
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :

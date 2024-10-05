@@ -2682,13 +2682,23 @@ function testCmOnScreen() {
 let eltBottomDebug;
 let eltDebugState;
 let eltDebugCapture;
+let eltDebugJssmAction;
+let eltDebugJssmState;
 let eltReqFrame;
 function getBottomDebug() {
     if (eltBottomDebug) return eltBottomDebug;
     eltDebugState = mkElt("div"); eltDebugState.style.color = "gray";
     eltDebugCapture = mkElt("div"); eltDebugCapture.style.color = "wheat";
-    eltReqFrame = mkElt("div"); eltReqFrame.style.color = "red";
-    eltBottomDebug = mkElt("div", undefined, [eltDebugState, eltDebugCapture, eltReqFrame]);
+    eltReqFrame = mkElt("div"); eltReqFrame.style.color = "ligh skyblue";
+    eltDebugJssmAction = mkElt("div"); eltDebugJssmAction.style.color = "red";
+    eltDebugJssmState = mkElt("div"); eltDebugJssmState.style.color = "orange";
+    eltBottomDebug = mkElt("div", undefined, [
+        eltDebugState,
+        eltDebugCapture,
+        eltReqFrame,
+        eltDebugJssmAction,
+        eltDebugJssmState,
+    ]);
     // @ts-ignore
     eltBottomDebug.style = `
                 position: fixed;
@@ -2699,7 +2709,7 @@ function getBottomDebug() {
                 background: black;
                 bottom: 0;
                 display: grid;
-                grid-template-columns: 50px 1fr 1fr;
+                grid-template-columns: 50px 1fr 1fr 1fr 1fr;
             `;
     document.body.appendChild(eltBottomDebug);
 
@@ -2715,9 +2725,29 @@ function getEltDebugState() {
     return eltDebugState;
 }
 
+function getEltDebugJssmState() {
+    if (eltDebugJssmState) return eltDebugJssmState;
+    getBottomDebug();
+    return eltDebugJssmState;
+}
+function getEltDebugJssmAction() {
+    if (eltDebugJssmAction) return eltDebugJssmAction;
+    getBottomDebug();
+    return eltDebugJssmAction;
+}
+
+
 function showDebugCapture(msg) {
     (getEltDebugCapture()).textContent = msg;
 }
 function showDebugState(msg) {
     (getEltDebugState()).textContent = msg;
 }
+
+export function showDebugJssmState(msg) {
+    (getEltDebugJssmState()).textContent = msg;
+}
+export function showDebugJssmAction(msg) {
+    (getEltDebugJssmAction()).textContent = msg;
+}
+
