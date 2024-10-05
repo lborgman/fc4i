@@ -1,3 +1,11 @@
+const MM4I_FSM_VER = "0.0.3";
+console.log(`here is mm4i-fsm.js, module,${MM4I_FSM_VER}`);
+if (document.currentScript) throw Error("import .currentScript"); // is module
+
+const modJssm = await importFc4i("jssm");
+console.log({ modJssm });
+
+const fsmDeclaration = `
 machine_name     : "mm4i <user@example.com>";
 machine_license  : MIT;
 machine_comment  : "mm4i pointer events";
@@ -57,3 +65,9 @@ state n_Dblclick : { corners: rounded; };
 state c_Down  : { background-color: lightskyblue; };
 state c_Move  : { background-color: lightgray; text-color: black; };
 state Zoom    : { background-color: pink; };
+`;
+const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
+
+export const state = fsm.state;
+export const hook_action = fsm.hook_action;
+export const hook_entry = fsm.hook_entry;
