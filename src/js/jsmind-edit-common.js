@@ -121,8 +121,8 @@ class PointHandle {
         if (jmnodeDragged.getAttribute("nodeid") == "root") return;
 
         evt.preventDefault();
-        evt.stopPropagation();
-        evt.stopImmediatePropagation();
+        // evt.stopPropagation();
+        // evt.stopImmediatePropagation();
 
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
@@ -1902,7 +1902,7 @@ export async function pageSetup() {
                 return;
             }
             evt.preventDefault();
-            evt.stopPropagation();
+            // evt.stopPropagation();
             console.log("grabDownHandler", { grabUpHandler, grabMoveHandler });
             /*
             posScrollData = {
@@ -1979,11 +1979,10 @@ export async function pageSetup() {
 
     }
 
-    // https://javascript.info/bezier-curve
     /*
+    // https://javascript.info/bezier-curve
         For 4 control points:
         P = (1−t)3P1 + 3(1−t)2tP2 +3(1−t)t2P3 + t3P4
-    */
     function makePoint(x, y) { return { x, y } }
     function isPoint(xy) {
         return !isNaN(xy.x) && !isNaN(xy.y);
@@ -1996,6 +1995,7 @@ export async function pageSetup() {
         }
 
     }
+    */
 
 
     async function convertPlainJmnode2ProviderLink(eltJmnode, jmOwner, objCustomCopied) {
@@ -2747,7 +2747,47 @@ function showDebugState(msg) {
 export function showDebugJssmState(msg) {
     (getEltDebugJssmState()).textContent = msg;
 }
-export function showDebugJssmAction(msg) {
-    (getEltDebugJssmAction()).textContent = msg;
+export function showDebugJssmAction(eltMsg) {
+    // (getEltDebugJssmAction()).textContent = msg;
+    const elt = getEltDebugJssmAction();
+    elt.textContent = "";
+    elt.appendChild(eltMsg);
 }
+
+const modFsm = await importFc4i("mm4i-fsm");
+window.fsm = modFsm.fsm;
+modFsm.fsm.hook_any_action(fsmEvent);
+const eltFsm = document.getElementById("jsmind_container");
+modFsm.setUpListeners(eltFsm);
+
+function fsmEvent(event) {
+    // const modJsEditCommon = await importFc4i("jsmind-edit-common");
+    const eventName = event.action || event;
+    const stateName = event.to || fsm.state();
+    const res = modFsm.fsm.action(event);
+    console.log("fsmEvent", eventName, event, res );
+    const eltAction = mkElt("span", undefined, eventName);
+    if (!fsm._actions.get(event)) {
+        eltAction.style.backgroundColor = "red";
+        eltAction.style.color = "black";
+        eltAction.style.padding = "4px";
+    } else {
+        if (res) {
+            eltAction.style.color = "green";
+        } else {
+            eltAction.style.color = "red";
+        }
+    }
+    showDebugJssmAction(eltAction);
+    showDebugJssmState(stateName);
+}
+window["fsmEvent"] = fsmEvent;
+
+setTimeout(async () => {
+    // const modJsEditCommon = await importFc4i("jsmind-edit-common");
+    const eltAction = mkElt("span", undefined, "(action)");
+    eltAction.style.color = "gray";
+    showDebugJssmAction(eltAction);
+    showDebugJssmState(fsm.state());
+}, 1000);
 

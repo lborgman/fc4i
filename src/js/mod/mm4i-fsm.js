@@ -68,6 +68,20 @@ state Zoom    : { background-color: pink; };
 `;
 export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 
-export const state = () => fsm.state;
-export const hook_action = fsm.hook_action;
-export const hook_entry = fsm.hook_entry;
+// export const hook_action = fsm.hook_action;
+// export const hook_entry = fsm.hook_entry;
+export function setUpListeners(eltFsm) {
+    eltFsm.addEventListener("pointerdown", evt => {
+        const target = evt.target;
+        let action = "c_down";
+        if (target.tagName == "JMNODE") { action = "n_down"; }
+        fsm.action(action);
+    });
+    eltFsm.addEventListener("pointerup", () => { fsm.action("up"); });
+    eltFsm.addEventListener("pointermove", evt => {
+        const target = evt.target;
+        let action = "c_move";
+        if (target.tagName == "JMNODE") { action = "n_move"; }
+        fsm.action(action);
+    });
+}
