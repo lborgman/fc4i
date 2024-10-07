@@ -2761,25 +2761,22 @@ const eltFsm = document.getElementById("jsmind_container");
 modFsm.setUpListeners(eltFsm);
 
 function fsmEvent(event) {
-    // const modJsEditCommon = await importFc4i("jsmind-edit-common");
     const eventName = event.action || event;
-    const stateName = event.to || fsm.state();
-    const res = modFsm.fsm.action(event);
-    console.log("fsmEvent", eventName, event, res );
+    const eventTo = event.to;
+    console.log("fsmEvent", eventName, event);
     const eltAction = mkElt("span", undefined, eventName);
-    if (!fsm._actions.get(event)) {
+    if (!eventTo) {
         eltAction.style.backgroundColor = "red";
         eltAction.style.color = "black";
         eltAction.style.padding = "4px";
+        eltAction.title = `Event ${eventName} had to event.to`;
     } else {
-        if (res) {
-            eltAction.style.color = "green";
-        } else {
-            eltAction.style.color = "red";
-        }
+        eltAction.style.color = "green";
     }
     showDebugJssmAction(eltAction);
-    showDebugJssmState(stateName);
+    if (eventTo) {
+        showDebugJssmState(eventTo);
+    }
 }
 window["fsmEvent"] = fsmEvent;
 

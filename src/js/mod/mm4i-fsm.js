@@ -75,13 +75,28 @@ export function setUpListeners(eltFsm) {
         const target = evt.target;
         let action = "c_down";
         if (target.tagName == "JMNODE") { action = "n_down"; }
-        fsm.action(action);
+        // fsm.action(action);
+        actionWithErrorCheck(action);
     });
-    eltFsm.addEventListener("pointerup", () => { fsm.action("up"); });
+    eltFsm.addEventListener("pointerup", () => {
+        // fsm.action("up");
+        actionWithErrorCheck(action);
+    });
     eltFsm.addEventListener("pointermove", evt => {
         const target = evt.target;
-        let action = "c_move";
+        let action;
+        if (target== eltFsm) { action = "c_move"; }
         if (target.tagName == "JMNODE") { action = "n_move"; }
-        fsm.action(action);
+        if (!action) { return; }
+        // fsm.action(action);
+        actionWithErrorCheck(action);
     });
+    function actionWithErrorCheck(action) {
+        const res = fsm.action(action);
+        if (!res) {
+            const state = fsm.state();
+            const msg = `State: ${state}, fsm.action(${action}) returned ${res}`
+            throw Error(msg);
+        }
+    }
 }
