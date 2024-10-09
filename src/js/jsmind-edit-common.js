@@ -2744,9 +2744,72 @@ function showDebugState(msg) {
     (getEltDebugState()).textContent = msg;
 }
 
+const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+const stateStack = [];
 export function showDebugJssmState(msg) {
-    (getEltDebugJssmState()).textContent = msg;
+    const currState = modFsm.fsm.state();
+    stateStack.unshift(currState);
+    stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
+    console.log("stateStack", stateStack);
+
+    // (getEltDebugJssmState()).textContent = msg;
+    const elt = getEltDebugJssmState();
+    // elt.textContent = msg;
+    elt.textContent = currState;
+    elt.style.cursor = "pointer";
+    elt.title = "Click to show fsm jssm";
+    elt.addEventListener("click", async evt => {
+        // const modFsm = await importFc4i("mm4i-fsm");
+        const decl = modFsm.fsmDeclaration;
+        let markedDecl = decl;
+
+        markLatestStates();
+        function markLatestStates() {
+            for (let i = 0, len = stateStack.length; i < len; i++) {
+                const color = rainbow[i];
+                const state = stateStack[i];
+                markState(state, color);
+            }
+        }
+
+        /**
+         * 
+         * @param {string} state 
+         * @param {string} color 
+         */
+        function markState(state, color) {
+            const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
+            console.log({ decl });
+            console.log({ strMarkState });
+            const strState = `state ${currState}.*?\\};`;
+            const reState = new RegExp(strState, "ms");
+            console.log(reState.toString());
+            if (!reState.test(decl)) throw Error(`${reState.toString()} not found`);
+            markedDecl = markedDecl.replace(reState, strMarkState);
+        }
+
+
+        openExternalViz();
+
+        function openExternalViz() {
+            const urlDotsViz = "http://localhost:8080/viz-dots-fsl.html";
+            const url = new URL(urlDotsViz);
+
+            // url.searchParams.set("fsl", decl);
+            url.searchParams.set("fsl", markedDecl);
+
+            winProxyDotsViz?.close();
+            winProxyDotsViz = window.open(undefined, "fsm-graph");
+            if (winProxyDotsViz) {
+                winProxyDotsViz.location = url.href;
+            } else {
+                window.open(url.href, "fsm-graph");
+            }
+        }
+    });
 }
+let winProxyDotsViz;
+
 export function showDebugJssmAction(eltMsg) {
     // (getEltDebugJssmAction()).textContent = msg;
     const elt = getEltDebugJssmAction();

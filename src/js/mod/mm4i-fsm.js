@@ -5,13 +5,13 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 const modJssm = await importFc4i("jssm");
 console.log({ modJssm });
 
-const fsmDeclaration = `
+export const fsmDeclaration = `
 machine_name     : "mm4i <user@example.com>";
 machine_license  : MIT;
 machine_comment  : "mm4i pointer events";
 
 start_states     : [Idle];
-end_states       : [];
+end_states       : [Idle];
 
 flow: down;
 
@@ -78,21 +78,21 @@ export function setUpListeners(eltFsm) {
         actionWithErrorCheck(action);
     });
     eltFsm.addEventListener("pointerup", () => {
-        const action = "pointerup";
+        const action = "up";
         actionWithErrorCheck(action);
     });
     eltFsm.addEventListener("pointermove", evt => {
         const target = evt.target;
         let action;
-        if (target== eltFsm) { action = "c_move"; }
+        if (target == eltFsm) { action = "c_move"; }
         if (target.tagName == "JMNODE") { action = "n_move"; }
         if (!action) { return; }
         actionWithErrorCheck(action);
     });
     function actionWithErrorCheck(action) {
+        const state = fsm.state();
         const res = fsm.action(action);
         if (!res) {
-            const state = fsm.state();
             const msg = `State: ${state}, fsm.action(${action}) returned ${res}`
             throw Error(msg);
         }

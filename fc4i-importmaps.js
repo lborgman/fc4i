@@ -60,6 +60,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "pannellum2d": "./ext/pannellum/pannellum2d.js",
         "jssm": "https://cdn.jsdelivr.net/npm/jssm@latest/dist/jssm.es6.mjs",
         "mm4i-fsm": "./src/js/mod/mm4i-fsm.js",
+        // "viz-js": "https://cdn.jsdelivr.net/npm/viz-js@latest/dist/jssm.es6.mjs",
     };
     /*
         It looks like you can't reliable use importmap this way:
