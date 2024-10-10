@@ -2746,6 +2746,7 @@ function showDebugState(msg) {
 
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 const stateStack = [];
+let eltSmallGraph;
 export function showDebugJssmState(msg) {
     const currState = modFsm.fsm.state();
     stateStack.unshift(currState);
@@ -2762,30 +2763,82 @@ export function showDebugJssmState(msg) {
         // const modFsm = await importFc4i("mm4i-fsm");
         const decl = modFsm.fsmDeclaration;
         let markedDecl = decl;
-
         markLatestStates();
+
+        eltSmallGraph = eltSmallGraph || mkEltSmallGraph();
+
+        if (eltSmallGraph.parentElement) {
+            eltSmallGraph.remove();
+        } else {
+            document.body.appendChild(eltSmallGraph);
+            updateSmallGraph();
+        }
+        return;
+
+        async function updateSmallGraph() {
+            if (!eltSmallGraph.parentElement) return;
+            const modJssmViz = await importFc4i("jssm-viz");
+            const modViz = await importFc4i("viz-js");
+            const dots = modJssmViz.fsl_to_dot(markedDecl);
+            // const instance = modViz.instance;
+            const viz = await modViz.instance();
+            const svg = viz.renderSVGElement(dots);
+            // document.getElementById("graph").appendChild(svg);
+            eltSmallGraph.textContent = "";
+            const eltSvg = mkElt("div");
+            eltSvg.style = `
+                width: 100%;
+                height: 100%;
+            `;
+            // const svgResize = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            // svgResize.setAttribute("viewBox", "0 0 100 100");
+            // svgResize.setAttribute("preserveAspectRatio", "xMidYmid meet");
+            // svgResize.appendChild(svg);
+            // eltSmallGraph.appendChild(eltSvg);
+            // eltSvg.appendChild(svgResize);
+            const cw = eltSmallGraph.clientWidth;
+            const ch = eltSmallGraph.clientHeight;
+            svg.setAttribute("width", cw);
+            svg.setAttribute("height", ch);
+            eltSmallGraph.appendChild(svg);
+        }
+
+        function mkEltSmallGraph() {
+            const elt = mkElt("div")
+            elt.style = `
+                aspect-ratio: 1 / 1;
+                width: 50vw;
+                max-width: 200px;
+                border: 1px solid red;
+                position: fixed;
+                right: 5px;
+                bottom: 50px;
+            `;
+            return elt;
+        }
+
         function markLatestStates() {
             for (let i = 0, len = stateStack.length; i < len; i++) {
                 const color = rainbow[i];
                 const state = stateStack[i];
                 markState(state, color);
             }
-        }
 
-        /**
-         * 
-         * @param {string} state 
-         * @param {string} color 
-         */
-        function markState(state, color) {
-            const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
-            console.log({ decl });
-            console.log({ strMarkState });
-            const strState = `state ${currState}.*?\\};`;
-            const reState = new RegExp(strState, "ms");
-            console.log(reState.toString());
-            if (!reState.test(decl)) throw Error(`${reState.toString()} not found`);
-            markedDecl = markedDecl.replace(reState, strMarkState);
+            /**
+             * 
+             * @param {string} state 
+             * @param {string} color 
+             */
+            function markState(state, color) {
+                const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
+                console.log({ decl });
+                console.log({ strMarkState });
+                const strState = `state ${currState}.*?\\};`;
+                const reState = new RegExp(strState, "ms");
+                console.log(reState.toString());
+                if (!reState.test(decl)) throw Error(`${reState.toString()} not found`);
+                markedDecl = markedDecl.replace(reState, strMarkState);
+            }
         }
 
 
