@@ -70,19 +70,26 @@ export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 
 // export const hook_action = fsm.hook_action;
 // export const hook_entry = fsm.hook_entry;
-export function setUpListeners(eltFsm) {
+export function setupFsmListeners(eltFsm) {
     eltFsm.addEventListener("pointerdown", evt => {
         const target = evt.target;
+        console.log("pointerdown", target);
+        if (!eltFsm.contains(target)) return;
         let action = "c_down";
         if (target.tagName == "JMNODE") { action = "n_down"; }
         actionWithErrorCheck(action);
     });
-    eltFsm.addEventListener("pointerup", () => {
+    eltFsm.addEventListener("pointerup", evt => {
+        const target = evt.target;
+        console.log("pointerup", target);
+        if (!eltFsm.contains(target)) return;
         const action = "up";
         actionWithErrorCheck(action);
     });
     eltFsm.addEventListener("pointermove", evt => {
         const target = evt.target;
+        // console.log("pointermove", target);
+        if (!eltFsm.contains(target)) return;
         let action;
         if (target == eltFsm) { action = "c_move"; }
         if (target.tagName == "JMNODE") { action = "n_move"; }

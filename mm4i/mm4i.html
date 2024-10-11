@@ -82,6 +82,7 @@
 
         #jsmind_container {
             height: 100%;
+            pointer-events: all;
         }
 
 
@@ -187,50 +188,50 @@
         /*********************/
         /***** Moving jmnode */
 
-        jmnodes > jmnode.jsmind-drag-dragged {
+        jmnodes>jmnode.jsmind-drag-dragged {
             outline: 5px inset white !important;
             opacity: 0.5 !important;
             filter: grayscale(0.8) !important;
         }
 
-        jmnodes > jmnode.jsmind-drag-target {
+        jmnodes>jmnode.jsmind-drag-target {
             outline: 5px dotted red !important;
             box-shadow: 0 var(--shup) var(--shsize) var(--shsize) red !important;
             box-shadow: 0 var(--shup) var(--shsize) var(--shsize) blue !important;
         }
 
-        jmnodes > jmnode.jsmind-drag-tparent {
+        jmnodes>jmnode.jsmind-drag-tparent {
             outline: 5px dotted orange !important;
         }
 
-        jmnodes > jmnode.jsmind-drag-tparent {
+        jmnodes>jmnode.jsmind-drag-tparent {
             box-shadow: 0 var(--shup) calc(1.5 * var(--shsize)) calc(1.5 * var(--shsize)) orange !important;
         }
 
         /* .NOjsmind-drag-near-child { outline: 2px dashed red !important; } */
 
-        jmnodes > jmnode.jsmind-drag-upper-child {
+        jmnodes>jmnode.jsmind-drag-upper-child {
             outline: 3px dashed red !important;
             transform: translate(0, -15px) !important;
             transform-origin: top left !important;
         }
 
-        jmnodes > jmnode.jsmind-drag-lower-child {
+        jmnodes>jmnode.jsmind-drag-lower-child {
             outline: 3px dashed red !important;
             transform: translate(0, 15px) !important;
             transform-origin: bottom left !important;
         }
 
-        jmnodes > jmnode.jsmind-drag-dropped-at {
+        jmnodes>jmnode.jsmind-drag-dropped-at {
             outline: 7px dotted lawngreen !important;
         }
 
 
-        jmnodes > jmnodejmnode.jsmind-drag-target.jsmind-drag-root-leftside {
+        jmnodes>jmnodejmnode.jsmind-drag-target.jsmind-drag-root-leftside {
             border-left: 8px dotted red !important;
         }
 
-        jmnodes > jmnodejmnode.jsmind-drag-target.jsmind-drag-root-rightside {
+        jmnodes>jmnodejmnode.jsmind-drag-target.jsmind-drag-root-rightside {
             border-right: 8px dotted red !important;
         }
     </style>
@@ -247,6 +248,10 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@0.5/style/jsmind.css" /> -->
     <link rel="stylesheet" href="./ext/jsmind/jsmind-mm4i.css" />
     <style>
+        body {
+            margin: 0;
+        }
+
         #jsmind-ednode-debug-button {
             right: 48px;
         }

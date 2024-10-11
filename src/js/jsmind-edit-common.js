@@ -1191,6 +1191,17 @@ export async function pageSetup() {
     const nowBefore = Date.now();
     jmDisplayed = await displayMindMap(mind, usedOptJmDisplay);
 
+    // modFsm
+    const modFsm = await importFc4i("mm4i-fsm");
+    window.fsm = modFsm.fsm;
+    modFsm.fsm.hook_any_action(fsmEvent);
+    const eltJsMindContainer = document.getElementById("jsmind_container");
+    if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
+    const eltFsm = eltJsMindContainer.querySelector(".jsmind-inner");
+    if (!eltFsm) throw Error("Could not find .jsmind-inner");
+    modFsm.setupFsmListeners(eltFsm);
+
+
     const modCustRend = await importFc4i("jsmind-cust-rend");
     modCustRend.setOurCustomRendererJm(jmDisplayed);
     modCustRend.setOurCustomRendererJmOptions(defaultOptJmDisplay);
@@ -2710,6 +2721,8 @@ function getBottomDebug() {
                 bottom: 0;
                 display: grid;
                 grid-template-columns: 50px 1fr 1fr 1fr 1fr;
+                cursor: default;
+                pointer-events: all;
             `;
     document.body.appendChild(eltBottomDebug);
 
@@ -2747,7 +2760,8 @@ function showDebugState(msg) {
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 const stateStack = [];
 let eltSmallGraph;
-export function showDebugJssmState(msg) {
+export async function showDebugJssmState(msg) {
+    const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
     stateStack.unshift(currState);
     stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
@@ -2798,8 +2812,16 @@ export function showDebugJssmState(msg) {
             // eltSvg.appendChild(svgResize);
             const cw = eltSmallGraph.clientWidth;
             const ch = eltSmallGraph.clientHeight;
-            svg.setAttribute("width", cw);
-            svg.setAttribute("height", ch);
+            const svgW = parseInt(svg.getAttribute("width"));
+            const svgH = parseInt(svg.getAttribute("height"));
+            console.log({ svgW }, { svgH });
+            const maxSvgHW = Math.max(svgH, svgW);
+            const ratW = svgW / maxSvgHW;
+            const ratH = svgH / maxSvgHW;
+            const newH = Math.floor(ch * ratH);
+            const newW = Math.floor(cw * ratW);
+            svg.setAttribute("width", newW);
+            svg.setAttribute("height", newH);
             eltSmallGraph.appendChild(svg);
         }
 
@@ -2808,11 +2830,17 @@ export function showDebugJssmState(msg) {
             elt.style = `
                 aspect-ratio: 1 / 1;
                 width: 50vw;
-                max-width: 200px;
+
                 border: 1px solid red;
+
                 position: fixed;
                 right: 5px;
                 bottom: 50px;
+
+                display: flex;
+                align-content: flex-end;
+                justify-content: flex-end;
+                flex-wrap: wrap;
             `;
             return elt;
         }
@@ -2870,11 +2898,17 @@ export function showDebugJssmAction(eltMsg) {
     elt.appendChild(eltMsg);
 }
 
+/*
 const modFsm = await importFc4i("mm4i-fsm");
 window.fsm = modFsm.fsm;
 modFsm.fsm.hook_any_action(fsmEvent);
-const eltFsm = document.getElementById("jsmind_container");
-modFsm.setUpListeners(eltFsm);
+const eltJsMindContainer = document.getElementById("jsmind_container");
+if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
+const eltFsm = eltJsMindContainer.querySelector(".jsmind_inner");
+if (!eltFsm) throw Error("Could not find .jsmind_inner");
+modFsm.setupFsmListeners(eltFsm);
+// jsmind
+*/
 
 function fsmEvent(event) {
     const eventName = event.action || event;
@@ -2897,6 +2931,8 @@ function fsmEvent(event) {
 window["fsmEvent"] = fsmEvent;
 
 setTimeout(async () => {
+    const modFsm = await importFc4i("mm4i-fsm");
+    window.fsm = modFsm.fsm;
     // const modJsEditCommon = await importFc4i("jsmind-edit-common");
     const eltAction = mkElt("span", undefined, "(action)");
     eltAction.style.color = "gray";
