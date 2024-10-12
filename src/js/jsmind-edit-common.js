@@ -2763,18 +2763,23 @@ let eltSmallGraph;
 export async function showDebugJssmState(msg) {
     const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
+    const lastState = stateStack[0];
+    if (currState == lastState) return;
+
     stateStack.unshift(currState);
     stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
     console.log("stateStack", stateStack);
 
-    // (getEltDebugJssmState()).textContent = msg;
     const elt = getEltDebugJssmState();
-    // elt.textContent = msg;
     elt.textContent = currState;
     elt.style.cursor = "pointer";
+    elt.style.pointerEvents = "all";
     elt.title = "Click to show fsm jssm";
     elt.addEventListener("click", async evt => {
-        // const modFsm = await importFc4i("mm4i-fsm");
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+
         const decl = modFsm.fsmDeclaration;
         let markedDecl = decl;
         markLatestStates();
@@ -2794,22 +2799,14 @@ export async function showDebugJssmState(msg) {
             const modJssmViz = await importFc4i("jssm-viz");
             const modViz = await importFc4i("viz-js");
             const dots = modJssmViz.fsl_to_dot(markedDecl);
-            // const instance = modViz.instance;
             const viz = await modViz.instance();
             const svg = viz.renderSVGElement(dots);
-            // document.getElementById("graph").appendChild(svg);
             eltSmallGraph.textContent = "";
             const eltSvg = mkElt("div");
             eltSvg.style = `
                 width: 100%;
                 height: 100%;
             `;
-            // const svgResize = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            // svgResize.setAttribute("viewBox", "0 0 100 100");
-            // svgResize.setAttribute("preserveAspectRatio", "xMidYmid meet");
-            // svgResize.appendChild(svg);
-            // eltSmallGraph.appendChild(eltSvg);
-            // eltSvg.appendChild(svgResize);
             const cw = eltSmallGraph.clientWidth;
             const ch = eltSmallGraph.clientHeight;
             const svgW = parseInt(svg.getAttribute("width"));

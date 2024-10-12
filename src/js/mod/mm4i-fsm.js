@@ -20,6 +20,9 @@ flow: down;
 // Idle 'up' => Idle;
 
 
+// Idle 'n_move' => Idle;
+// Idle 'c_move' => Idle;
+
 Idle 'n_down' => n_Down;
 
 n_Down 'up' => n_Click;
@@ -39,7 +42,7 @@ c_Click 'timeout' => Idle;
 c_Click 'n_down' => c_Dblclick;
 c_Dblclick 'up' => Idle;
 
-c_Down 'move' => c_Move;
+// c_Down 'move' => c_Move;
 c_Move 'up' => Idle;
 c_Down 'c_down' => Zoom;
 // Zoom 'move' => Zoom;
@@ -94,7 +97,8 @@ export function setupFsmListeners(eltFsm) {
         if (target == eltFsm) { action = "c_move"; }
         if (target.tagName == "JMNODE") { action = "n_move"; }
         if (!action) { return; }
-        actionWithErrorCheck(action);
+        return;
+        // actionWithErrorCheck(action);
     });
     function actionWithErrorCheck(action) {
         const state = fsm.state();
