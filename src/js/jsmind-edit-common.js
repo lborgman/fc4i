@@ -2832,13 +2832,34 @@ export async function showDebugJssmState(msg) {
 
                 position: fixed;
                 right: 5px;
-                bottom: 50px;
+                bottom: 35px;
+                z-index: 100;
 
                 display: flex;
                 align-content: flex-end;
                 justify-content: flex-end;
                 flex-wrap: wrap;
+
+                pointer-events: all;
+                cursor: pointer;
             `;
+            let isSmall = true;
+            const widthSmall = "50vw";
+            elt.style.width = widthSmall;
+            elt.addEventListener("click", evt => {
+                evt.stopImmediatePropagation();
+                isSmall = !isSmall;
+                if (isSmall) {
+                    elt.style.width = widthSmall;
+                } else {
+                    const maxW = window.innerWidth - 10;
+                    const maxH = window.innerHeight - 35 - 50;
+                    const maxWH = Math.min(maxW, maxH);
+                    elt.style.width = `${maxWH}px`;
+                }
+                updateSmallGraph();
+                console.log("toggle smallGraph", isSmall);
+            })
             return elt;
         }
 
