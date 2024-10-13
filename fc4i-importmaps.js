@@ -103,7 +103,6 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             const prev = `\n>>>PREV "${idOrLink}" stack: ` + prevStack.join("\n  >>>prev ");
             const currStack = getStackTrace();
             const curr = `\nCURR "${idOrLink}" stack: ` + currStack.join("\n  >>>curr ");
-            console.warn(`Maybe cyclic import for ${idOrLink}`, prev, curr, isImporting);
             const getStackPoints = (stack) => {
                 // Skip Error and importFc4i
                 // FIX-ME: check skip
@@ -130,6 +129,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             const inPrev = prevPoints.indexOf(currStartPoint) > -1;
             console.log("inPrev", inPrev);
             if (inPrev) {
+                console.warn(`Probably cyclic import for ${idOrLink}`, prev, curr, isImporting);
                 debugger; // eslint-disable-line no-debugger
                 throw Error(`Cyclic import for ${idOrLink} at ${currStartPoint}`);
             }
