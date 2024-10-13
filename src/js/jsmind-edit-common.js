@@ -1878,7 +1878,8 @@ export async function pageSetup() {
         return Math.sqrt(h * h + w * w);
     }
 
-    if (!hasTouchEvents()) addGrabAndScroll2jsmind();
+
+
     function addGrabAndScroll2jsmind() {
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
@@ -1907,6 +1908,7 @@ export async function pageSetup() {
             return false;
         }
         const mouseDownHandler = (evt) => {
+            return;
             // console.log("ele mousedown");
             if (!isMousedownTarget(evt.target)) {
                 // console.log("not mousedown target");
@@ -1989,6 +1991,10 @@ export async function pageSetup() {
         showDraggable();
 
     }
+
+    if (!hasTouchEvents()) addGrabAndScroll2jsmind();
+
+
 
     /*
     // https://javascript.info/bezier-curve
@@ -2713,6 +2719,7 @@ function getBottomDebug() {
     // @ts-ignore
     eltBottomDebug.style = `
                 position: fixed;
+                z-index: 100;
                 width: 100vw;
                 left: 0px;
                 height: 30px;
@@ -2760,15 +2767,78 @@ function showDebugState(msg) {
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 const stateStack = [];
 let eltSmallGraph;
+let markedDecl;
+async function markLatestStates() {
+    const modFsm = await importFc4i("mm4i-fsm");
+    const decl = modFsm.fsmDeclaration;
+    markedDecl = decl;
+    for (let i = 0, len = stateStack.length; i < len; i++) {
+        const color = rainbow[i];
+        const state = stateStack[i];
+        markState(state, color);
+    }
+    /**
+                 * 
+                 * @param {string} state 
+                 * @param {string} color 
+                 */
+    function markState(state, color) {
+        const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
+        console.log({ decl });
+        console.log({ strMarkState });
+        const strReState = `state ${state}.*?\\};`;
+        const reState = new RegExp(strReState, "ms");
+        console.log(reState.toString());
+        if (!reState.test(decl)) {
+            // throw Error(`${reState.toString()} not found`);
+            markedDecl = `${markedDecl}\n\n${strMarkState}`;
+        } else {
+            markedDecl = markedDecl.replace(reState, strMarkState);
+        }
+    }
+}
+
+
+async function updateSmallGraph() {
+    if (!eltSmallGraph) return;
+    if (!eltSmallGraph.parentElement) return;
+    await markLatestStates();
+    const modJssmViz = await importFc4i("jssm-viz");
+    const modViz = await importFc4i("viz-js");
+    const dots = modJssmViz.fsl_to_dot(markedDecl);
+    const viz = await modViz.instance();
+    const svg = viz.renderSVGElement(dots);
+    eltSmallGraph.textContent = "";
+    const eltSvg = mkElt("div");
+    eltSvg.style = `
+        width: 100%;
+        height: 100%;
+    `;
+    const cw = eltSmallGraph.clientWidth;
+    const ch = eltSmallGraph.clientHeight;
+    const svgW = parseInt(svg.getAttribute("width"));
+    const svgH = parseInt(svg.getAttribute("height"));
+    // console.log({ svgW }, { svgH });
+    const maxSvgHW = Math.max(svgH, svgW);
+    const ratW = svgW / maxSvgHW;
+    const ratH = svgH / maxSvgHW;
+    const newH = Math.floor(ch * ratH);
+    const newW = Math.floor(cw * ratW);
+    svg.setAttribute("width", newW);
+    svg.setAttribute("height", newH);
+    eltSmallGraph.appendChild(svg);
+}
+
 export async function showDebugJssmState(msg) {
     const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
     const lastState = stateStack[0];
-    if (currState == lastState) return;
+    // if (currState == lastState) return;
 
     stateStack.unshift(currState);
     stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
     console.log("stateStack", stateStack);
+    updateSmallGraph();
 
     const elt = getEltDebugJssmState();
     elt.textContent = currState;
@@ -2780,9 +2850,7 @@ export async function showDebugJssmState(msg) {
         evt.stopPropagation();
         evt.stopImmediatePropagation();
 
-        const decl = modFsm.fsmDeclaration;
-        let markedDecl = decl;
-        markLatestStates();
+        // markLatestStates();
 
         eltSmallGraph = eltSmallGraph || mkEltSmallGraph();
 
@@ -2794,33 +2862,6 @@ export async function showDebugJssmState(msg) {
         }
         return;
 
-        async function updateSmallGraph() {
-            if (!eltSmallGraph.parentElement) return;
-            const modJssmViz = await importFc4i("jssm-viz");
-            const modViz = await importFc4i("viz-js");
-            const dots = modJssmViz.fsl_to_dot(markedDecl);
-            const viz = await modViz.instance();
-            const svg = viz.renderSVGElement(dots);
-            eltSmallGraph.textContent = "";
-            const eltSvg = mkElt("div");
-            eltSvg.style = `
-                width: 100%;
-                height: 100%;
-            `;
-            const cw = eltSmallGraph.clientWidth;
-            const ch = eltSmallGraph.clientHeight;
-            const svgW = parseInt(svg.getAttribute("width"));
-            const svgH = parseInt(svg.getAttribute("height"));
-            console.log({ svgW }, { svgH });
-            const maxSvgHW = Math.max(svgH, svgW);
-            const ratW = svgW / maxSvgHW;
-            const ratH = svgH / maxSvgHW;
-            const newH = Math.floor(ch * ratH);
-            const newW = Math.floor(cw * ratW);
-            svg.setAttribute("width", newW);
-            svg.setAttribute("height", newH);
-            eltSmallGraph.appendChild(svg);
-        }
 
         function mkEltSmallGraph() {
             const elt = mkElt("div")
@@ -2853,7 +2894,7 @@ export async function showDebugJssmState(msg) {
                     elt.style.width = widthSmall;
                 } else {
                     const maxW = window.innerWidth - 10;
-                    const maxH = window.innerHeight - 35 - 50;
+                    const maxH = window.innerHeight - 35 - 5;
                     const maxWH = Math.min(maxW, maxH);
                     elt.style.width = `${maxWH}px`;
                 }
@@ -2863,29 +2904,6 @@ export async function showDebugJssmState(msg) {
             return elt;
         }
 
-        function markLatestStates() {
-            for (let i = 0, len = stateStack.length; i < len; i++) {
-                const color = rainbow[i];
-                const state = stateStack[i];
-                markState(state, color);
-            }
-
-            /**
-             * 
-             * @param {string} state 
-             * @param {string} color 
-             */
-            function markState(state, color) {
-                const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
-                console.log({ decl });
-                console.log({ strMarkState });
-                const strState = `state ${currState}.*?\\};`;
-                const reState = new RegExp(strState, "ms");
-                console.log(reState.toString());
-                if (!reState.test(decl)) throw Error(`${reState.toString()} not found`);
-                markedDecl = markedDecl.replace(reState, strMarkState);
-            }
-        }
 
 
         openExternalViz();
@@ -2914,6 +2932,7 @@ export function showDebugJssmAction(eltMsg) {
     const elt = getEltDebugJssmAction();
     elt.textContent = "";
     elt.appendChild(eltMsg);
+    updateSmallGraph();
 }
 
 /*

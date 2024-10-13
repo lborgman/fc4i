@@ -1,3 +1,4 @@
+// @ts-check
 const MM4I_FSM_VER = "0.0.3";
 console.log(`here is mm4i-fsm.js, module,${MM4I_FSM_VER}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
@@ -39,10 +40,10 @@ Idle 'c_down' => c_Down;
 
 c_Down 'up' => c_Click;
 c_Click 'timeout' => Idle;
-c_Click 'n_down' => c_Dblclick;
+c_Click 'c_down' => c_Dblclick;
 c_Dblclick 'up' => Idle;
 
-// c_Down 'move' => c_Move;
+c_Down 'timeout' => c_Move;
 c_Move 'up' => Idle;
 c_Down 'c_down' => Zoom;
 // Zoom 'move' => Zoom;
@@ -55,10 +56,7 @@ Zoom 'up' => Idle;
 
 // visual styling
 
-state Idle    : { background-color: yellow;
-    text-color: black;
-    shape: octagon;
-};
+state Idle    : { background-color: gray; text-color: black; shape: octagon; };
 state n_Down  : { background-color: blue; text-color: white; corners: rounded; };
 state n_Move  : { background-color: gray; corners: rounded; };
 
@@ -69,6 +67,20 @@ state c_Down  : { background-color: lightskyblue; };
 state c_Move  : { background-color: lightgray; text-color: black; };
 state Zoom    : { background-color: pink; };
 `;
+
+
+// https://github.com/oxc-project/oxc/issues/6476 (This is not oxc, but typescript)
+// oxc, Property 'map' does not exist on type 'RegexpStringIterator<RegExpExecArray>'. ts(2339)
+// fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]);
+
+const arrEvents = [... new Set( fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]) ) ].sort();
+function isEvent(str) { return arrEvents.includes(str); }
+export function checkIsEvent(str) { if (!isEvent(str)) throw Error(`Unknown fsm event: ${str}`); }
+
+const arrStates = [... new Set( fsmDeclaration.matchAll(/=> ([^']*?);/g).map(m => m[1]) ) ].sort();
+function isState(str) { return arrStates.includes(str); }
+export function checkIsState(str) { if (!isState(str)) throw Error(`Unknown fsm state: ${str}`); }
+
 export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 
 // export const hook_action = fsm.hook_action;
@@ -101,6 +113,7 @@ export function setupFsmListeners(eltFsm) {
         // actionWithErrorCheck(action);
     });
     function actionWithErrorCheck(action) {
+        checkIsEvent(action);
         const state = fsm.state();
         const res = fsm.action(action);
         if (!res) {
