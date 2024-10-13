@@ -2765,17 +2765,23 @@ function showDebugState(msg) {
 }
 
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
-const stateStack = [];
+// const stateStack = [];
 let eltSmallGraph;
 let markedDecl;
 async function markLatestStates() {
     const modFsm = await importFc4i("mm4i-fsm");
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
-    for (let i = 0, len = stateStack.length; i < len; i++) {
-        const color = rainbow[i];
-        const state = stateStack[i];
-        markState(state, color);
+    // for (let i = 0, len = stateStack.length; i < len; i++) {
+    let iState = 0;
+    for (let i = 0, len = stackLogFsm.length; i < len; i++) {
+        const entry = stackLogFsm[i];
+        if (modFsm.isState(entry)) {
+            const state = entry;
+            const color = rainbow[iState];
+            markState(state, color);
+            iState++;
+        }
     }
     /**
                  * 
@@ -2784,11 +2790,11 @@ async function markLatestStates() {
                  */
     function markState(state, color) {
         const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
-        console.log({ decl });
-        console.log({ strMarkState });
+        // console.log({ decl });
+        // console.log({ strMarkState });
         const strReState = `state ${state}.*?\\};`;
         const reState = new RegExp(strReState, "ms");
-        console.log(reState.toString());
+        // console.log(reState.toString());
         if (!reState.test(decl)) {
             // throw Error(`${reState.toString()} not found`);
             markedDecl = `${markedDecl}\n\n${strMarkState}`;
@@ -2861,15 +2867,15 @@ async function logJssmEvent(event) {
     modFsm.checkIsEvent(eventName);
     showDebugJssmAction(event);
 }
-async function showDebugJssmState(msg) {
+async function showDebugJssmState() {
     const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
-    const lastState = stateStack[0];
+    // const lastState = stateStack[0];
     // if (currState == lastState) return;
 
-    stateStack.unshift(currState);
-    stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
-    console.log("stateStack", stateStack);
+    // stateStack.unshift(currState);
+    // stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
+    // console.log("stateStack", stateStack);
     updateSmallGraph();
 
     const elt = getEltDebugJssmState();

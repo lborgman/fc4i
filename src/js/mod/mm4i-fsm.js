@@ -74,11 +74,11 @@ state Zoom    : { background-color: pink; };
 // fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]);
 
 const arrEvents = [... new Set( fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]) ) ].sort();
-function isEvent(str) { return arrEvents.includes(str); }
+export function isEvent(str) { return arrEvents.includes(str); }
 export function checkIsEvent(str) { if (!isEvent(str)) throw Error(`Unknown fsm event: ${str}`); }
 
 const arrStates = [... new Set( fsmDeclaration.matchAll(/=> ([^']*?);/g).map(m => m[1]) ) ].sort();
-function isState(str) { return arrStates.includes(str); }
+export function isState(str) { return arrStates.includes(str); }
 export function checkIsState(str) { if (!isState(str)) throw Error(`Unknown fsm state: ${str}`); }
 
 export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
