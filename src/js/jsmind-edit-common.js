@@ -2829,7 +2829,39 @@ async function updateSmallGraph() {
     eltSmallGraph.appendChild(svg);
 }
 
-export async function showDebugJssmState(msg) {
+
+
+const stackLogFsm = [];
+function addStackLogFsm(eventOrState) {
+    stackLogFsm.unshift(eventOrState);
+    stackLogFsm.length = Math.min(8, stackLogFsm.length);
+    console.log({ stackLogFsm });
+}
+addStackLogFsm("Idle"); // FIX-ME:
+
+/**
+ * 
+ * @param {string} state 
+ */
+async function logJssmState(state) {
+    const modFsm = await importFc4i("mm4i-fsm");
+    addStackLogFsm(state);
+    modFsm.checkIsState(state)
+    showDebugJssmState(state);
+}
+
+/**
+ * 
+ * @param {string} event 
+ */
+async function logJssmEvent(event) {
+    const modFsm = await importFc4i("mm4i-fsm");
+    const eventName = typeof event == "string" ? event : event.textContent;
+    addStackLogFsm(eventName);
+    modFsm.checkIsEvent(eventName);
+    showDebugJssmAction(event);
+}
+async function showDebugJssmState(msg) {
     const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
     const lastState = stateStack[0];
@@ -2947,6 +2979,10 @@ modFsm.setupFsmListeners(eltFsm);
 // jsmind
 */
 
+/**
+ * 
+ * @param {string} event 
+ */
 function fsmEvent(event) {
     const eventName = event.action || event;
     const eventTo = event.to;
@@ -2960,20 +2996,20 @@ function fsmEvent(event) {
     } else {
         eltAction.style.color = "green";
     }
-    showDebugJssmAction(eltAction);
+    logJssmEvent(eltAction);
     if (eventTo) {
-        showDebugJssmState(eventTo);
+        logJssmState(eventTo);
     }
 }
 window["fsmEvent"] = fsmEvent;
 
 setTimeout(async () => {
     const modFsm = await importFc4i("mm4i-fsm");
-    window.fsm = modFsm.fsm;
+    // window.fsm = modFsm.fsm;
     // const modJsEditCommon = await importFc4i("jsmind-edit-common");
-    const eltAction = mkElt("span", undefined, "(action)");
-    eltAction.style.color = "gray";
-    showDebugJssmAction(eltAction);
-    showDebugJssmState(fsm.state());
+    // const eltAction = mkElt("span", undefined, "(action)");
+    // eltAction.style.color = "gray";
+    // logJssmEvent(eltAction);
+    logJssmState(modFsm.fsm.state());
 }, 1000);
 
