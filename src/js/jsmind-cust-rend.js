@@ -2506,19 +2506,21 @@ function applyBgCssValue(elt, bgCssValues) {
         if (!prop.startsWith("background") && prop != "opacity")
             throw Error(`Bg property not background or opacity: ${prop}`);
         const val = bgCssValues[prop];
-        console.log("applyBgCssValue", prop, val);
+        // console.log("applyBgCssValue", prop, val);
         bgStyle[prop] = val;
     }
 }
+/*
 function applyBgCssText(elt, bgCssText) {
     const bgCssValues = cssTxt2keyVal(bgCssText);
     console.log({ bgCssValues });
     if (typeof bgCssValues == "string") { throw Error(bgCssValues); }
     applyBgCssValue(elt, bgCssValues);
 }
+*/
 export function applyJmnodeBgCssText(jmnode, bgCssText) {
     const bgCssValues = cssTxt2keyVal(bgCssText);
-    console.log({ bgCssValues });
+    // console.log({ bgCssValues });
     // if (typeof bgCssValues == "string") { throw Error(bgCssValues); }
     applyJmnodeBgCssValue(jmnode, bgCssValues);
 }
@@ -2591,7 +2593,7 @@ function cssTxt2keyVal(cssTxt) {
     taVal = taVal.replaceAll(new RegExp("/\\*.*?\\*/", "g"), " ");
     taVal = taVal.replaceAll(/\s+/g, " ").trim();
     if (!taVal.endsWith(";")) taVal += ";";
-    console.log({ taVal });
+    // console.log({ taVal });
     if (!isValidCss(taVal)) return "Invalid CSS";
     const parts = taVal.split(";").map(p => p.trim()).filter(p => p.length > 0);
     const cssKV = {};

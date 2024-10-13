@@ -1193,12 +1193,20 @@ export async function pageSetup() {
 
     // modFsm
     const modFsm = await importFc4i("mm4i-fsm");
-    window.fsm = modFsm.fsm;
+    window["fsm"] = modFsm.fsm;
     modFsm.fsm.hook_any_action(fsmEvent);
     const eltJsMindContainer = document.getElementById("jsmind_container");
     if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
     const eltFsm = eltJsMindContainer.querySelector(".jsmind-inner");
     if (!eltFsm) throw Error("Could not find .jsmind-inner");
+    function actionDownHandler(evt, action) {
+        console.log("eventDownHandler", evt, action);
+    }
+    function actionUpHandler(evt, ) {
+        console.log("eventUpHandler", evt);
+    }
+    modFsm.setActionDownHandler(actionDownHandler);
+    modFsm.setActionUpHandler(actionUpHandler);
     modFsm.setupFsmListeners(eltFsm);
 
 
@@ -2843,7 +2851,7 @@ const stackLogFsm = [];
 function addStackLogFsm(eventOrState) {
     stackLogFsm.unshift(eventOrState);
     stackLogFsm.length = Math.min(8, stackLogFsm.length);
-    console.log({ stackLogFsm });
+    console.log("stackLogFsm", { stackLogFsm });
 }
 addStackLogFsm("Idle"); // FIX-ME:
 
@@ -3009,7 +3017,7 @@ function fsmEvent(event) {
         logJssmState(eventTo);
     }
 }
-window["fsmEvent"] = fsmEvent;
+// window["fsmEvent"] = fsmEvent;
 
 setTimeout(async () => {
     const modFsm = await importFc4i("mm4i-fsm");

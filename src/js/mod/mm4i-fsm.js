@@ -85,23 +85,29 @@ export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 
 // export const hook_action = fsm.hook_action;
 // export const hook_entry = fsm.hook_entry;
+let eventDownHandler;
+let eventUpHandler;
+export function setActionDownHandler(fun) { eventDownHandler = fun; }
+export function setActionUpHandler(fun) { eventUpHandler = fun; }
 export function setupFsmListeners(eltFsm) {
     eltFsm.addEventListener("pointerdown", evt => {
         const target = evt.target;
-        console.log("pointerdown", target);
+        // console.log("pointerdown", target);
         if (!eltFsm.contains(target)) return;
         let action = "c_down";
         if (target.tagName == "JMNODE") { action = "n_down"; }
         actionWithErrorCheck(action);
+        eventDownHandler(evt, action);
     });
     eltFsm.addEventListener("pointerup", evt => {
         const target = evt.target;
-        console.log("pointerup", target);
+        // console.log("pointerup", target);
         if (!eltFsm.contains(target)) return;
         const action = "up";
         actionWithErrorCheck(action);
+        eventUpHandler(evt);
     });
-    eltFsm.addEventListener("pointermove", evt => {
+    eltFsm.addEventListener("NOpointermove", evt => {
         const target = evt.target;
         // console.log("pointermove", target);
         if (!eltFsm.contains(target)) return;

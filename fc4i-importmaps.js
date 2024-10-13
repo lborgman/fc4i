@@ -127,7 +127,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
             // Is starting point for curr in prev?
             const currStartPoint = currPoints.slice(-1);
             const inPrev = prevPoints.indexOf(currStartPoint) > -1;
-            console.log("inPrev", inPrev);
+            // console.log("inPrev", inPrev);
             if (inPrev) {
                 console.warn(`Probably cyclic import for ${idOrLink}`, prev, curr, isImporting);
                 debugger; // eslint-disable-line no-debugger
