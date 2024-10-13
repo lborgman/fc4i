@@ -1228,7 +1228,7 @@ export async function pageSetup() {
         clientX: -1,
         clientY: -1,
     }
-    eltJmnodes.addEventListener("touchend", (evt) => {
+    eltJmnodes.addEventListener("NOtouchend", (evt) => {
         // if (evt.eventType != "touch") throw Error(`"touchend", but eventType:${evt.eventType}`);
         if (evt.type != "touchend") throw Error(`"touchend", but event.type:${evt.type}`);
         const currentTime = Date.now();
@@ -2833,6 +2833,8 @@ async function updateSmallGraph() {
     svg.setAttribute("width", newW);
     svg.setAttribute("height", newH);
     eltSmallGraph.appendChild(svg);
+    // FIX-ME: This does not work:
+    // svg.title = "Toggle small/big graph";
 }
 
 
