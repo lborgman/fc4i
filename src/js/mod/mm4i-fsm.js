@@ -27,7 +27,6 @@ flow: down;
 Idle 'n_down' => n_Down;
 
 n_Down 'up' => n_Click;
-// n_Click 'timeout' => Idle;
 n_Click after 200 ms => Idle;
 n_Click 'n_down' => n_Dblclick;
 n_Dblclick 'up' => Idle;
@@ -40,17 +39,14 @@ n_Move 'up' => Idle;
 Idle 'c_down' => c_Down;
 
 c_Down 'up' => c_Click;
-// c_Click 'timeout' => Idle;
 c_Click after 200 ms => Idle;
 c_Click 'c_down' => c_Dblclick;
 c_Dblclick 'up' => Idle;
 
-// c_Down 'timeout' => c_Move;
 c_Down after 200 ms => c_Move;
 c_Move 'up' => Idle;
-c_Down 'c_down' => Zoom;
-// Zoom 'move' => Zoom;
-Zoom 'up' => Idle;
+c_Down 'c_down' => c_Zoom;
+c_Zoom 'up' => Idle;
 
 
 // [Red Yellow Green] ~> Off;
@@ -59,16 +55,18 @@ Zoom 'up' => Idle;
 
 // visual styling
 
-state Idle    : { background-color: gray; text-color: black; shape: octagon; };
-state n_Down  : { background-color: blue; text-color: white; corners: rounded; };
-state n_Move  : { background-color: gray; corners: rounded; };
+state Idle    : { shape: octagon; background-color: lightgray; };
 
-state n_Click : { corners: rounded; };
-state n_Dblclick : { corners: rounded; };
+state n_Down     : { corners: rounded; background-color: wheat; };
+state n_Move     : { corners: rounded; background-color: wheat; };
+state n_Click    : { corners: rounded; background-color: wheat; };
+state n_Dblclick : { corners: rounded; background-color: wheat; };
 
-state c_Down  : { background-color: lightskyblue; };
-state c_Move  : { background-color: lightgray; text-color: black; };
-state Zoom    : { background-color: pink; };
+state c_Down     : { background-color: lightgray; };
+state c_Move     : { background-color: lightgray; };
+state c_Click    : { background-color: lightgray; };
+state c_Dblclick : { background-color: lightgray; };
+state c_Zoom       : { background-color: lightgray; };
 `;
 
 
