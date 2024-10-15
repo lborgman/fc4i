@@ -1220,7 +1220,7 @@ export async function pageSetup() {
     // modFsm.setActionUpHandler(actionUpHandler);
     function hookSetupPointHandle() {
         // setTimeout(() => {
-            pointHandle.setupPointHandle();
+        pointHandle.setupPointHandle();
         // });
     }
     modFsm.fsm.post_hook_entry("n_Move", hookSetupPointHandle());
@@ -2791,22 +2791,25 @@ function showDebugState(msg) {
 }
 
 const rainbow = ["red", "orange", "yellow", "greenyellow", "aqua", "indigo", "violet"];
-// const stateStack = [];
 let eltSmallGraph;
 let markedDecl;
 async function markLatestStates() {
     const modFsm = await importFc4i("mm4i-fsm");
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
-    // for (let i = 0, len = stateStack.length; i < len; i++) {
+    console.log("markLatestStates", stackLogFsm);
     let iState = 0;
+    const marked = new Set();
     for (let i = 0, len = stackLogFsm.length; i < len; i++) {
         const entry = stackLogFsm[i];
         if (modFsm.isState(entry)) {
             const state = entry;
+            if (marked.has(state)) continue;
             const color = rainbow[iState];
             markState(state, color);
+            console.log("call markstate", i, state, color);
             iState++;
+            marked.add(state);
         }
     }
     /**
@@ -2815,14 +2818,10 @@ async function markLatestStates() {
                  * @param {string} color 
                  */
     function markState(state, color) {
-        const strMarkState = `state ${state} : { background-color: ${color}; shape: ellipse; };`;
-        // console.log({ decl });
-        // console.log({ strMarkState });
+        const strMarkState = `state ${state} : { background-color: ${color}; border-color: cyan; text-color: black; shape: ellipse; };`;
         const strReState = `state ${state}.*?\\};`;
         const reState = new RegExp(strReState, "ms");
-        // console.log(reState.toString());
         if (!reState.test(decl)) {
-            // throw Error(`${reState.toString()} not found`);
             markedDecl = `${markedDecl}\n\n${strMarkState}`;
         } else {
             markedDecl = markedDecl.replace(reState, strMarkState);
@@ -2867,12 +2866,13 @@ async function updateSmallGraph() {
 
 
 const stackLogFsm = [];
+window["showStackLogFsm"] = () => { console.log("showStackLogFsm", stackLogFsm); }
 function addStackLogFsm(eventOrState) {
     stackLogFsm.unshift(eventOrState);
     stackLogFsm.length = Math.min(8, stackLogFsm.length);
-    console.log("stackLogFsm", { stackLogFsm });
+    console.warn("addStackLogFsm", eventOrState, stackLogFsm);
 }
-addStackLogFsm("Idle"); // FIX-ME:
+// addStackLogFsm("Idle"); // FIX-ME:
 
 /**
  * 
