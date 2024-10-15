@@ -27,7 +27,8 @@ flow: down;
 Idle 'n_down' => n_Down;
 
 n_Down 'up' => n_Click;
-n_Click 'timeout' => Idle;
+// n_Click 'timeout' => Idle;
+n_Click after 200 ms => Idle;
 n_Click 'n_down' => n_Dblclick;
 n_Dblclick 'up' => Idle;
 
@@ -39,11 +40,13 @@ n_Move 'up' => Idle;
 Idle 'c_down' => c_Down;
 
 c_Down 'up' => c_Click;
-c_Click 'timeout' => Idle;
+// c_Click 'timeout' => Idle;
+c_Click after 200 ms => Idle;
 c_Click 'c_down' => c_Dblclick;
 c_Dblclick 'up' => Idle;
 
-c_Down 'timeout' => c_Move;
+// c_Down 'timeout' => c_Move;
+c_Down after 200 ms => c_Move;
 c_Move 'up' => Idle;
 c_Down 'c_down' => Zoom;
 // Zoom 'move' => Zoom;

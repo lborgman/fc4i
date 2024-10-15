@@ -2838,7 +2838,7 @@ async function updateSmallGraph() {
     const modJssmViz = await importFc4i("jssm-viz");
     const modViz = await importFc4i("viz-js");
     const dots = modJssmViz.fsl_to_dot(markedDecl);
-    const dotsBetterEdge = dots.replace(/edge.*\]/, 'edge [fontsize=14; fontname="Open Sans"]');
+    const dotsBetterEdge = dots.replace(/edge.*\]/, 'edge [fontsize=14; fontname="Open Sans"; fontcolor="red"]');
     const viz = await modViz.instance();
     const svg = viz.renderSVGElement(dotsBetterEdge);
     eltSmallGraph.textContent = "";
