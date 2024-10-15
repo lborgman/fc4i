@@ -1199,14 +1199,32 @@ export async function pageSetup() {
     if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
     const eltFsm = eltJsMindContainer.querySelector(".jsmind-inner");
     if (!eltFsm) throw Error("Could not find .jsmind-inner");
+    /*
     function actionDownHandler(evt, action) {
         console.log("eventDownHandler", evt, action);
+        // move
+        switch (action) {
+            case "n_down":
+                pointHandle.setupPointHandle();
+                break;
+            default:
+                throw Error(`Can't handle fsm action ${action}`);
+        }
     }
-    function actionUpHandler(evt, ) {
+    function actionUpHandler(evt) {
         console.log("eventUpHandler", evt);
+        pointHandle.teardownPointHandle();
     }
-    modFsm.setActionDownHandler(actionDownHandler);
-    modFsm.setActionUpHandler(actionUpHandler);
+    */
+    // modFsm.setActionDownHandler(actionDownHandler);
+    // modFsm.setActionUpHandler(actionUpHandler);
+    function hookSetupPointHandle() {
+        // setTimeout(() => {
+            pointHandle.setupPointHandle();
+        // });
+    }
+    modFsm.fsm.post_hook_entry("n_Move", hookSetupPointHandle());
+    modFsm.fsm.hook_exit("n_Move", () => pointHandle.teardownPointHandle());
     modFsm.setupFsmListeners(eltFsm);
 
 
@@ -2772,7 +2790,7 @@ function showDebugState(msg) {
     (getEltDebugState()).textContent = msg;
 }
 
-const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+const rainbow = ["red", "orange", "yellow", "greenyellow", "aqua", "indigo", "violet"];
 // const stateStack = [];
 let eltSmallGraph;
 let markedDecl;
@@ -2820,8 +2838,9 @@ async function updateSmallGraph() {
     const modJssmViz = await importFc4i("jssm-viz");
     const modViz = await importFc4i("viz-js");
     const dots = modJssmViz.fsl_to_dot(markedDecl);
+    const dotsBetterEdge = dots.replace(/edge.*\]/, 'edge [fontsize=14; fontname="Open Sans"]');
     const viz = await modViz.instance();
-    const svg = viz.renderSVGElement(dots);
+    const svg = viz.renderSVGElement(dotsBetterEdge);
     eltSmallGraph.textContent = "";
     const eltSvg = mkElt("div");
     eltSvg.style = `

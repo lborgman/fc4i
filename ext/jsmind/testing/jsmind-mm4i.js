@@ -3360,6 +3360,7 @@ await modTools.promiseDOMready();
             }
         }
         _event_bind() {
+            return; // FIX-ME:
             this.view.add_event(this, 'mousedown', this.mousedown_handle);
             this.view.add_event(this, 'click', this.click_handle);
             this.view.add_event(this, 'dblclick', this.dblclick_handle);
