@@ -2889,12 +2889,16 @@ async function logJssmState(state) {
  * 
  * @param {string} event 
  */
-async function logJssmEvent(event) {
+async function logJssmEvent(eventMsg) {
     const modFsm = await importFc4i("mm4i-fsm");
-    const eventName = typeof event == "string" ? event : event.textContent;
-    addStackLogFsm(eventName);
+    // const eventName = typeof event == "string" ? event : event.textContent;
+    const re=new RegExp(/,(.*)=>/);
+    addStackLogFsm(eventMsg);
+    const res = re.exec(eventMsg);
+    if (!res) throw Error(`Could not parse ${eventMsg}`);
+    const eventName = res[1];
     modFsm.checkIsEvent(eventName);
-    showDebugJssmAction(event);
+    showDebugJssmAction(eventName);
 }
 async function showDebugJssmState() {
     const modFsm = await importFc4i("mm4i-fsm");
@@ -2994,11 +2998,12 @@ async function showDebugJssmState() {
 }
 let winProxyDotsViz;
 
-export function showDebugJssmAction(eltMsg) {
+export function showDebugJssmAction(msg) {
     // (getEltDebugJssmAction()).textContent = msg;
     const elt = getEltDebugJssmAction();
-    elt.textContent = "";
-    elt.appendChild(eltMsg);
+    // elt.textContent = "";
+    // elt.appendChild(msg);
+    elt.textContent = msg;
     updateSmallGraph();
 }
 
@@ -3020,6 +3025,7 @@ modFsm.setupFsmListeners(eltFsm);
  */
 function fsmEvent(event) {
     const eventName = event.action || event;
+    const eventFrom = event.from;
     const eventTo = event.to;
     console.log("fsmEvent", eventName, event);
     const eltAction = mkElt("span", undefined, eventName);
@@ -3031,7 +3037,8 @@ function fsmEvent(event) {
     } else {
         eltAction.style.color = "green";
     }
-    logJssmEvent(eltAction);
+    const msg =`${eventFrom},${eventName}=>${eventTo}`;
+    logJssmEvent(msg);
     if (eventTo) {
         logJssmState(eventTo);
     }
