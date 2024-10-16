@@ -19,7 +19,18 @@ if (!jsMind) { throw Error("jsMind is not setup"); }
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
+// modFsm =
+const modFsm = await importFc4i("mm4i-fsm");
 
+// FIX-ME: import from modFsm??
+function NOTgetPointerType(evt) {
+    if (["mouse", "touch", "pen"].indexOf(evt.pointerType) == -1) {
+        const msg = `ERROR: Unknown pointerType: "${evt.pointerType}"`;
+        alert(msg);
+        debugger;
+    }
+    return evt.pointerType;
+}
 class PointHandle {
     static sizePointHandle = 20;
     // static diffPointHandle = 60;
@@ -126,12 +137,8 @@ class PointHandle {
 
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
-        if (["mouse", "touch", "pen"].indexOf(evt.pointerType) == -1) {
-            const msg = `ERROR: Unknown pointerType: "${evt.pointerType}"`;
-            alert(msg);
-            debugger;
-        }
-        this.#pointerType = evt.pointerType;
+        // this.#pointerType = evt.pointerType;
+        this.#pointerType = modFsm.getPointerType(evt);
         if (evt.pointerType == "touch") { this.#diffPointHandle = 60; }
 
         showDebugCapture("start capture");
@@ -191,7 +198,7 @@ class PointHandle {
         }
         // console.log("teardwon...", { eltJmnodeFrom });
         modJsmindDraggable.stopNow();
-        evtPointerLast = undefined;
+        // evtPointerLast = undefined; // FIX-ME
     }
     setupPointHandle() {
         console.log("setupPointHandle");
@@ -211,7 +218,7 @@ class PointHandle {
         modJsmindDraggable.setPointerDiff(0, 0);
     }
     checkPointHandleDistance() {
-        if (!evtPointerLast) return;
+        // if (!evtPointerLast) return; // FIX-ME
         if (this.isState("init")) {
             this.#state = "dist";
 
@@ -452,7 +459,7 @@ theDragTouchAccWay = "pointHandle"; // FIX-ME:
  * */
 let posPointHandle;
 
-let evtPointerLast; /** @type {PointerEvents} */
+const evtPointerLast = {};
 /**
  * 
  * @param {PointerEvent} evt 
@@ -463,13 +470,16 @@ function savePointerPos(evt) {
     evt.stopPropagation();
     evt.stopImmediatePropagation();
 
-    // evtPointerLast = evt;
-    const clientX = evt.clientX;
-    const clientY = evt.clientY;
-    const target = evt.target;
-    evtPointerLast = { clientX, clientY, target };
-}
+    // const clientX = evt.clientX;
+    // const clientY = evt.clientY;
+    // const target = evt.target;
+    // evtPointerLast = { clientX, clientY, target };
+    evtPointerLast.clientX = evt.clientX;
+    evtPointerLast.clientY = evt.clientY;
+    evtPointerLast.target = evt.target;
 
+}
+window.addEventListener("pointermove", savePointerPos);
 
 
 
@@ -1218,14 +1228,42 @@ export async function pageSetup() {
     */
     // modFsm.setActionDownHandler(actionDownHandler);
     // modFsm.setActionUpHandler(actionUpHandler);
+
+    class MouseFollower {
+        #funFollow
+        constructor(funFollow) {
+            this.#funFollow = funFollow;
+        }
+        start() {
+
+        }
+
+    }
     function hookSetupPointHandle() {
         // setTimeout(() => {
         pointHandle.setupPointHandle();
         // });
     }
-    modFsm.fsm.post_hook_entry("n_Move", hookSetupPointHandle());
+    modFsm.fsm.post_hook_entry("n_Move", () => hookSetupPointHandle());
     modFsm.fsm.hook_exit("n_Move", () => pointHandle.teardownPointHandle());
+
+    let funStopScroll;
+    modFsm.fsm.post_hook_entry("c_Move", () => {
+        // /const isMouseEvent 
+        // grabbing
+        console.log("entry c_Move");
+        const jmnodes = getJmnodesFromJm(jmDisplayed);
+        const jsmindInner = jmnodes.closest(".jsmind-inner");
+        funStopScroll = startGrabScroll(jsmindInner);
+    });
+    modFsm.fsm.hook_exit("c_Move", () => {
+        console.log("exit c_Move");
+        funStopScroll();
+    });
+
     modFsm.setupFsmListeners(eltFsm);
+
+
 
 
     const modCustRend = await importFc4i("jsmind-cust-rend");
@@ -1909,14 +1947,41 @@ export async function pageSetup() {
     function addGrabAndScroll2jsmind() {
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
-        // const jsmindInner = jsMindContainer.firstElementChild;
-        // const jsmindInner = jsMindContainer.querySelector(".jsmind-inner");
-        if (!jsmindInner.classList.contains("jsmind-inner")) {
-            throw Error("Not jsmind-inner");
-        }
         addGrabAndScroll(jsmindInner, jmnodes);
     }
 
+    function startGrabScroll(ele) {
+        let isScrolling = true;
+        const ourElement = ele;
+
+        ele.style.cursor = "grabbing";
+        const posScrollData = {
+            left: ele.scrollLeft,
+            top: ele.scrollTop,
+            clientX: evtPointerLast.clientX,
+            clientY: evtPointerLast.clientY,
+        }
+        function requestScroll() {
+            if (!isScrolling) return;
+            // window.addE
+            // evtPointerLast.clientY = evt.clientY;
+            const dx = evtPointerLast.clientX - posScrollData.clientX;
+            const dy = evtPointerLast.clientY - posScrollData.clientY;
+            if (isNaN(dx)) debugger;
+            if (isNaN(dy)) debugger;
+
+            // Scroll the element
+            ele.scrollTop = posScrollData.top - dy;
+            ele.scrollLeft = posScrollData.left - dx;
+
+            requestAnimationFrame(requestScroll);
+        }
+        requestScroll();
+        return () => {
+            ourElement.style.cursor = "";
+            isScrolling = false;
+        }
+    }
     function addGrabAndScroll(ele, mousedownTargets) {
         // https://htmldom.dev/drag-to-scroll/ <- spam now
         // https://phuoc.ng/collection/html-dom/drag-to-scroll/
@@ -2797,6 +2862,7 @@ async function markLatestStates() {
     const modFsm = await importFc4i("mm4i-fsm");
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
+    markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'");
     console.log("markLatestStates", stackLogFsm);
     let iState = 0;
     const marked = new Set();
@@ -2859,20 +2925,22 @@ async function updateSmallGraph() {
     svg.setAttribute("width", newW);
     svg.setAttribute("height", newH);
     eltSmallGraph.appendChild(svg);
-    // FIX-ME: This does not work:
-    // svg.title = "Toggle small/big graph";
+    // svg.title = "Toggle small/big graph"; // FIX-ME: This does not work
 }
 
 
 
 const stackLogFsm = [];
 window["showStackLogFsm"] = () => { console.log("showStackLogFsm", stackLogFsm); }
+/**
+ * 
+ * @param {string} eventOrState 
+ */
 function addStackLogFsm(eventOrState) {
     stackLogFsm.unshift(eventOrState);
     stackLogFsm.length = Math.min(8, stackLogFsm.length);
     console.warn("addStackLogFsm", eventOrState, stackLogFsm);
 }
-// addStackLogFsm("Idle"); // FIX-ME:
 
 /**
  * 
@@ -2892,7 +2960,7 @@ async function logJssmState(state) {
 async function logJssmEvent(eventMsg) {
     const modFsm = await importFc4i("mm4i-fsm");
     // const eventName = typeof event == "string" ? event : event.textContent;
-    const re=new RegExp(/,(.*)=>/);
+    const re = new RegExp(/,(.*)=>/);
     addStackLogFsm(eventMsg);
     const res = re.exec(eventMsg);
     if (!res) throw Error(`Could not parse ${eventMsg}`);
@@ -2903,12 +2971,7 @@ async function logJssmEvent(eventMsg) {
 async function showDebugJssmState() {
     const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
-    // const lastState = stateStack[0];
-    // if (currState == lastState) return;
 
-    // stateStack.unshift(currState);
-    // stateStack.length = Math.min(rainbow.length, stateStack.length, 3);
-    // console.log("stateStack", stateStack);
     updateSmallGraph();
 
     const elt = getEltDebugJssmState();
@@ -3037,7 +3100,7 @@ function fsmEvent(event) {
     } else {
         eltAction.style.color = "green";
     }
-    const msg =`${eventFrom},${eventName}=>${eventTo}`;
+    const msg = `${eventFrom},${eventName}=>${eventTo}`;
     logJssmEvent(msg);
     if (eventTo) {
         logJssmState(eventTo);

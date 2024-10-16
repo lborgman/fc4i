@@ -90,13 +90,32 @@ export const fsm = modJssm.sm(fsmDeclaration.split("\\n"));
 // let eventUpHandler;
 // export function setActionDownHandler(fun) { eventDownHandler = fun; }
 // export function setActionUpHandler(fun) { eventUpHandler = fun; }
+
+export function getPointerType(evt) {
+    const pointerType = evt.pointerType;
+    if (["mouse", "touch", "pen"].indexOf(pointerType) == -1) {
+        const msg = `ERROR: Unknown pointerType: "${pointerType}"`;
+        alert(msg);
+        debugger;
+    }
+    return pointerType;
+}
+
 export function setupFsmListeners(eltFsm) {
     eltFsm.addEventListener("pointerdown", evt => {
+        console.log("fsm, pointerdown", evt);
         const target = evt.target;
         // console.log("pointerdown", target);
         if (!eltFsm.contains(target)) return;
-        let action = "c_down";
-        if (target.tagName == "JMNODE") { action = "n_down"; }
+        // let action = "c_down";
+        let actionWhere = "c";
+        if (target.tagName == "JMNODE") {
+            // action = "n_down";
+            actionWhere = "n";
+        }
+        const pointerType = getPointerType(evt);
+        // FIX-ME: mouse/pen or touch??
+        const action = `${actionWhere}_down`;
         actionWithErrorCheck(action);
         // eventDownHandler(evt, action);
     });
