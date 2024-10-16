@@ -1944,7 +1944,7 @@ export async function pageSetup() {
 
 
 
-    function addGrabAndScroll2jsmind() {
+    function OLDaddGrabAndScroll2jsmind() {
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
         addGrabAndScroll(jsmindInner, jmnodes);
@@ -1967,8 +1967,8 @@ export async function pageSetup() {
             // evtPointerLast.clientY = evt.clientY;
             const dx = evtPointerLast.clientX - posScrollData.clientX;
             const dy = evtPointerLast.clientY - posScrollData.clientY;
-            if (isNaN(dx)) debugger;
-            if (isNaN(dy)) debugger;
+            if (isNaN(dx)) { isScrolling = false; return; }
+            if (isNaN(dy)) { isScrolling = false; return; }
 
             // Scroll the element
             ele.scrollTop = posScrollData.top - dy;
@@ -1982,7 +1982,7 @@ export async function pageSetup() {
             isScrolling = false;
         }
     }
-    function addGrabAndScroll(ele, mousedownTargets) {
+    function OLDaddGrabAndScroll(ele, mousedownTargets) {
         // https://htmldom.dev/drag-to-scroll/ <- spam now
         // https://phuoc.ng/collection/html-dom/drag-to-scroll/
         /* .container { cursor: grab; overflow: auto; } */
@@ -2083,7 +2083,7 @@ export async function pageSetup() {
 
     }
 
-    if (!hasTouchEvents()) addGrabAndScroll2jsmind();
+    // if (!hasTouchEvents()) addGrabAndScroll2jsmind();
 
 
 
