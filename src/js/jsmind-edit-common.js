@@ -1202,6 +1202,9 @@ export async function pageSetup() {
     const modFsm = await importFc4i("mm4i-fsm");
     window["fsm"] = modFsm.fsm;
     modFsm.fsm.hook_any_action(fsmEvent);
+    modFsm.fsm.hook_any_transition(() => {
+        logJssmState(modFsm.fsm.state())
+    });
     const eltJsMindContainer = document.getElementById("jsmind_container");
     if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
     const eltFsm = eltJsMindContainer.querySelector(".jsmind-inner");
@@ -1248,6 +1251,12 @@ export async function pageSetup() {
     modFsm.fsm.post_hook_entry("c_Dblclick", () => { dialogEditMindmap(); });
     // modFsm.fsm.post_hook_entry("n_Dblclick", () => { dialogEditNode(); });
     // editnodedialog
+    // renderer =
+    modFsm.fsm.post_hook_entry("n_Dblclick", () => {
+        const renderer = getOurCustomRenderer();
+        debugger;
+        // dialogEditNode();
+    });
 
     modFsm.setupFsmListeners(eltFsm);
 
@@ -2851,7 +2860,7 @@ async function markLatestStates() {
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
     markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'");
-    console.log("markLatestStates", stackLogFsm);
+    // console.log("markLatestStates", stackLogFsm);
     let iState = 0;
     const marked = new Set();
     for (let i = 0, len = stackLogFsm.length; i < len; i++) {
@@ -2861,16 +2870,16 @@ async function markLatestStates() {
             if (marked.has(state)) continue;
             const color = rainbow[iState];
             markState(state, color);
-            console.log("call markstate", i, state, color);
+            // console.log("call markstate", i, state, color);
             iState++;
             marked.add(state);
         }
     }
     /**
-                 * 
-                 * @param {string} state 
-                 * @param {string} color 
-                 */
+     * 
+     * @param {string} state 
+     * @param {string} color 
+     */
     function markState(state, color) {
         const strMarkState = `state ${state} : { background-color: ${color}; border-color: cyan; text-color: black; shape: ellipse; };`;
         const strReState = `state ${state}.*?\\};`;
@@ -3078,21 +3087,19 @@ function fsmEvent(event) {
     const eventName = event.action || event;
     const eventFrom = event.from;
     const eventTo = event.to;
-    console.log("fsmEvent", eventName, event);
+    // console.log("fsmEvent", eventName, event);
     const eltAction = mkElt("span", undefined, eventName);
     if (!eventTo) {
         eltAction.style.backgroundColor = "red";
         eltAction.style.color = "black";
         eltAction.style.padding = "4px";
-        eltAction.title = `Event ${eventName} had to event.to`;
+        eltAction.title = `Event ${eventName} had no event.to`;
     } else {
         eltAction.style.color = "green";
     }
     const msg = `${eventFrom},${eventName}=>${eventTo}`;
     logJssmEvent(msg);
-    if (eventTo) {
-        logJssmState(eventTo);
-    }
+    // if (eventTo) { logJssmState(eventTo); }
 }
 // window["fsmEvent"] = fsmEvent;
 

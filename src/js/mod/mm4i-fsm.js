@@ -22,7 +22,7 @@ Idle 'n_down' => n_Down;
 n_Down 'up' => n_Click;
 n_Click after 200 ms => Idle;
 n_Click 'n_down' => n_Dblclick;
-n_Dblclick 'up' => Idle;
+n_Dblclick after 1 ms => Idle;
 
 n_Down after 200 ms => n_Move;
 // n_Down 'move' => n_Move;
@@ -33,7 +33,10 @@ Idle 'c_down' => c_Down;
 c_Down 'up' => c_Click;
 c_Click after 200 ms => Idle;
 c_Click 'c_down' => c_Dblclick;
-c_Dblclick 'up' => Idle;
+c_Dblclick after 1 ms => Idle;
+// c_Dblclick after 0 ms => Idle; // does not work
+// c_Dblclick => Idle; // does not work
+// c_Dblclick 'up' => Idle; // does not work because of popup
 
 c_Down after 200 ms => c_Move;
 c_Move 'up' => Idle;
@@ -70,7 +73,9 @@ const arrEvents = [... new Set( fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => 
 export function isEvent(str) { return arrEvents.includes(str); }
 export function checkIsEvent(str) { if (!isEvent(str)) throw Error(`Unknown fsm event: ${str}`); }
 
-const arrStates = [... new Set( fsmDeclaration.matchAll(/=> ([^']*?);/g).map(m => m[1]) ) ].sort();
+// const arrStates = [... new Set( fsmDeclaration.matchAll(/(?:=>|ms)\s+([^']*?);/g).map(m => m[1]) ) ].sort();
+const arrStates = [... new Set( fsmDeclaration.matchAll(/=>\s+(\S+?)\s*;/g))].map(m => m[1]).sort();
+
 export function isState(str) { return arrStates.includes(str); }
 export function checkIsState(str) { if (!isState(str)) throw Error(`Unknown fsm state: ${str}`); }
 
@@ -95,11 +100,9 @@ export function getPointerType(evt) {
 
 export function setupFsmListeners(eltFsm) {
     eltFsm.addEventListener("pointerdown", evt => {
-        console.log("fsm, pointerdown", evt);
+        console.log("eltFsm, pointerdown", evt);
         const target = evt.target;
-        // console.log("pointerdown", target);
         if (!eltFsm.contains(target)) return;
-        // let action = "c_down";
         let actionWhere = "c";
         if (target.tagName == "JMNODE") {
             // action = "n_down";
@@ -112,6 +115,7 @@ export function setupFsmListeners(eltFsm) {
         // eventDownHandler(evt, action);
     });
     eltFsm.addEventListener("pointerup", evt => {
+        console.log("eltFsm, pointerup", evt);
         const target = evt.target;
         // console.log("pointerup", target);
         if (!eltFsm.contains(target)) return;
@@ -131,7 +135,7 @@ export function setupFsmListeners(eltFsm) {
         // actionWithErrorCheck(action);
     });
     function actionWithErrorCheck(action) {
-        console.log("%cactionWithErrorCheck", "background:red;padding:2px",action);
+        // console.log("%cactionWithErrorCheck", "background:red;padding:2px",action);
         checkIsEvent(action);
         const state = fsm.state();
         const res = fsm.action(action);
