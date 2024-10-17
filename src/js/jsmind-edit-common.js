@@ -116,7 +116,7 @@ class PointHandle {
         this.#eltPointHandle.style.pointerEvents = "none"; // FIX-ME: why???
     }
     get element() { return this.#eltPointHandle; }
-    savePosBounded = (evt) => {
+    OLDsavePosBounded = (evt) => {
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
@@ -131,19 +131,19 @@ class PointHandle {
         if (!jmnodeDragged) return;
         if (jmnodeDragged.getAttribute("nodeid") == "root") return;
 
-        evt.preventDefault();
+        // evt.preventDefault();
         // evt.stopPropagation();
         // evt.stopImmediatePropagation();
 
         if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
         const pointerId = evt.pointerId;
-        // this.#pointerType = evt.pointerType;
         this.#pointerType = modFsm.getPointerType(evt);
-        if (evt.pointerType == "touch") { this.#diffPointHandle = 60; }
+        this.#pointerType = "touch";
+        if (this.#pointerType == "touch") { this.#diffPointHandle = 60; }
 
+        /*
+        // FIX-ME:
         showDebugCapture("start capture");
-
-        // jmnodeDragged.style.touchAction = "none";
         console.log("jmnodeDragged.setPointerCapture");
         jmnodeDragged.setPointerCapture(pointerId);
         if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger; // eslint-disable-line no-debugger
@@ -151,12 +151,13 @@ class PointHandle {
             showDebugCapture("lost capture");
             this.#myState = "idle";
         });
+        */
 
 
         if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
 
-        const clientX = evt.clientX;
-        const clientY = evt.clientY;
+        const clientX = evtPointerLast.clientX;
+        const clientY = evtPointerLast.clientY;
         posPointHandle = {
             start: {
                 clientX,
@@ -166,12 +167,7 @@ class PointHandle {
             },
             current: {}
         };
-        savePointerPos(evt);
-        // const elt = document.elementFromPoint(clientX, clientY);
-        ///// This error happens, but it is ok
-        // if (elt != target) throw Error("elt != target");
-        // console.log("INIT", { elt, posPointHandle });
-        // this.element = target;
+        // savePointerPos(evt);
         eltJmnodeFrom = jmnodeDragged;
         this.#state = "init";
 
@@ -181,13 +177,13 @@ class PointHandle {
         this.#eltPointHandle.style.left = `${clientX - PointHandle.sizePointHandle / 2}px`;
         this.#eltPointHandle.style.top = `${clientY - PointHandle.sizePointHandle / 2}px`;
 
-        this.#jmnodesPointHandle.addEventListener("pointermove", this.savePosBounded);
+        // this.#jmnodesPointHandle.addEventListener("pointermove", this.savePosBounded);
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
         if (!this.#eltPointHandle.parentElement) return;
         // console.log("teardownPointHandle");
-        this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
+        // this.#jmnodesPointHandle.removeEventListener("pointermove", this.savePosBounded);
         this.#eltPointHandle?.remove();
         this.#state = "idle";
         if (eltJmnodeFrom) {
@@ -207,13 +203,13 @@ class PointHandle {
         if (!elt) throw Error("Could not find <jmnodes>");
         this.#jmnodesPointHandle = elt;
         const THIS = this;
-        this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
-        this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
+        // this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
+        // this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
     }
     async teardownPointHandle() {
         const THIS = this;
-        this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle.bind(THIS));
-        this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
+        // this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle.bind(THIS));
+        // this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
         this.teardownPointHandleAndAct();
         modJsmindDraggable.setPointerDiff(0, 0);
     }
@@ -480,6 +476,7 @@ function savePointerPos(evt) {
 
 }
 window.addEventListener("pointermove", savePointerPos);
+window.addEventListener("pointerdown", savePointerPos);
 
 
 
@@ -1229,16 +1226,9 @@ export async function pageSetup() {
     // modFsm.setActionDownHandler(actionDownHandler);
     // modFsm.setActionUpHandler(actionUpHandler);
 
-    class MouseFollower {
-        #funFollow
-        constructor(funFollow) {
-            this.#funFollow = funFollow;
-        }
-        start() {
 
-        }
 
-    }
+    ////// FSL hooks
     function hookSetupPointHandle() {
         // setTimeout(() => {
         pointHandle.setupPointHandle();
@@ -1249,17 +1239,15 @@ export async function pageSetup() {
 
     let funStopScroll;
     modFsm.fsm.post_hook_entry("c_Move", () => {
-        // /const isMouseEvent 
-        // grabbing
-        console.log("entry c_Move");
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
         funStopScroll = startGrabScroll(jsmindInner);
     });
-    modFsm.fsm.hook_exit("c_Move", () => {
-        console.log("exit c_Move");
-        funStopScroll();
-    });
+    modFsm.fsm.hook_exit("c_Move", () => { funStopScroll(); });
+
+    modFsm.fsm.post_hook_entry("c_Dblclick", () => { dialogEditMindmap(); });
+    // modFsm.fsm.post_hook_entry("n_Dblclick", () => { dialogEditNode(); });
+    // editnodedialog
 
     modFsm.setupFsmListeners(eltFsm);
 
@@ -1680,6 +1668,10 @@ export async function pageSetup() {
         divMenu.style.opacity = 1;
     }
 
+    async function dialogEditMindmap() {
+        const rend = await modCustRend.getOurCustomRenderer();
+        await rend.editMindmapDialog();
+    }
 
     async function mkPageMenu() {
         let toJmDisplayed;
@@ -1738,10 +1730,6 @@ export async function pageSetup() {
         const liEditMindmap = mkMenuItem("Edit Mindmap", dialogEditMindmap);
         // const idScreenMirrorPoint = "jsmindtest-screen-mirror-point";
         // const idScreenMirrorColor = "jsmindtest-screen-mirror-color";
-        async function dialogEditMindmap() {
-            const rend = await modCustRend.getOurCustomRenderer();
-            await rend.editMindmapDialog();
-        }
 
 
         async function dialogDragAccessibility() {

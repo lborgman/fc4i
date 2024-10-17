@@ -18,26 +18,18 @@ flow: down;
 
 // arrange [Green, Yellow];
 
-// Idle 'up' => Idle;
-
-
-// Idle 'n_move' => Idle;
-// Idle 'c_move' => Idle;
-
 Idle 'n_down' => n_Down;
-
 n_Down 'up' => n_Click;
 n_Click after 200 ms => Idle;
 n_Click 'n_down' => n_Dblclick;
 n_Dblclick 'up' => Idle;
 
-n_Down 'move' => n_Move;
+n_Down after 200 ms => n_Move;
+// n_Down 'move' => n_Move;
 n_Move 'up' => Idle;
 
 
-
 Idle 'c_down' => c_Down;
-
 c_Down 'up' => c_Click;
 c_Click after 200 ms => Idle;
 c_Click 'c_down' => c_Dblclick;
@@ -139,6 +131,7 @@ export function setupFsmListeners(eltFsm) {
         // actionWithErrorCheck(action);
     });
     function actionWithErrorCheck(action) {
+        console.log("%cactionWithErrorCheck", "background:red;padding:2px",action);
         checkIsEvent(action);
         const state = fsm.state();
         const res = fsm.action(action);
