@@ -104,15 +104,12 @@ export function setupFsmListeners(eltFsm) {
         const target = evt.target;
         if (!eltFsm.contains(target)) return;
         let actionWhere = "c";
-        if (target.tagName == "JMNODE") {
-            // action = "n_down";
-            actionWhere = "n";
-        }
-        const pointerType = getPointerType(evt);
+        const eltJmnode = target.closest("jmnode");
+        if (eltJmnode) { actionWhere = "n"; }
         // FIX-ME: mouse/pen or touch??
+        // const pointerType = getPointerType(evt);
         const action = `${actionWhere}_down`;
-        actionWithErrorCheck(action);
-        // eventDownHandler(evt, action);
+        actionWithErrorCheck(action, eltJmnode);
     });
     eltFsm.addEventListener("pointerup", evt => {
         console.log("eltFsm, pointerup", evt);
@@ -134,11 +131,11 @@ export function setupFsmListeners(eltFsm) {
         return;
         // actionWithErrorCheck(action);
     });
-    function actionWithErrorCheck(action) {
+    function actionWithErrorCheck(action, eltJmnode) {
         // console.log("%cactionWithErrorCheck", "background:red;padding:2px",action);
         checkIsEvent(action);
         const state = fsm.state();
-        const res = fsm.action(action);
+        const res = fsm.action(action, eltJmnode);
         if (!res) {
             const msg = `State: ${state}, fsm.action(${action}) returned ${res}`
             throw Error(msg);

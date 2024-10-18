@@ -1252,10 +1252,11 @@ export async function pageSetup() {
     // modFsm.fsm.post_hook_entry("n_Dblclick", () => { dialogEditNode(); });
     // editnodedialog
     // renderer =
-    modFsm.fsm.post_hook_entry("n_Dblclick", () => {
-        const renderer = getOurCustomRenderer();
-        debugger;
-        // dialogEditNode();
+    modFsm.fsm.post_hook_entry("n_Dblclick", async (data) => {
+        // console.log({data});
+        const eltJmnode = data.data;
+        const renderer = await modCustRend.getOurCustomRenderer();
+        renderer.editNodeDialog(eltJmnode);
     });
 
     modFsm.setupFsmListeners(eltFsm);
