@@ -1179,8 +1179,9 @@ export async function pageSetup() {
     modFsm.fsm.hook_exit("c_Move", () => { funStopScroll(); });
 
     modFsm.fsm.post_hook_entry("c_Dblclick", () => { dialogEditMindmap(); });
-    modFsm.fsm.post_hook_entry("n_Dblclick", async (data) => {
-        const eltJmnode = data.data;
+    modFsm.fsm.post_hook_entry("n_Dblclick", async (hookData) => {
+        // const eltJmnode = hookData.data;
+        const { eltJmnode } = hookData.data;
         const renderer = await modCustRend.getOurCustomRenderer();
         renderer.editNodeDialog(eltJmnode);
     });
