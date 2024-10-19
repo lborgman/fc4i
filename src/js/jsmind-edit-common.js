@@ -122,39 +122,17 @@ class PointHandle {
         evt.stopImmediatePropagation();
         savePointerPos.bind(this)(evt);
     }
-    initializePointHandle = (evt) => {
-        if (!(evt instanceof PointerEvent)) throw Error("Expeced PointerEvent");
-        if (!evt.target) return;
-        const target = evt.target;
-        if (!(target instanceof HTMLElement)) throw Error("target is not HTMLElement");
-        const jmnodeDragged = target.closest("jmnode");
+    initializePointHandle = (eltJmnode, isTouch) => {
+        const jmnodeDragged = eltJmnode;
         if (!jmnodeDragged) return;
         if (jmnodeDragged.getAttribute("nodeid") == "root") return;
 
-        // evt.preventDefault();
-        // evt.stopPropagation();
-        // evt.stopImmediatePropagation();
-
-        if (!evt.pointerId) debugger; // eslint-disable-line no-debugger
-        const pointerId = evt.pointerId;
-        this.#pointerType = modFsm.getPointerType(evt);
-        this.#pointerType = "touch";
-        if (this.#pointerType == "touch") { this.#diffPointHandle = 60; }
-
-        /*
-        // FIX-ME:
-        showDebugCapture("start capture");
-        console.log("jmnodeDragged.setPointerCapture");
-        jmnodeDragged.setPointerCapture(pointerId);
-        if (!jmnodeDragged.hasPointerCapture(pointerId)) debugger; // eslint-disable-line no-debugger
-        jmnodeDragged.addEventListener("lostpointercapture", () => {
-            showDebugCapture("lost capture");
-            this.#myState = "idle";
-        });
-        */
-
+        if (isTouch) { this.#diffPointHandle = 60; } else { this.#diffPointHandle = 0; }
 
         if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
+        this.#state = "init";
+        // this.#eltPointHandle.style.left = `${evtPointerLast.clientX - PointHandle.sizePointHandle / 2}px`;
+        // this.#eltPointHandle.style.top = `${evtPointerLast.clientY - PointHandle.sizePointHandle / 2}px`;
 
         const clientX = evtPointerLast.clientX;
         const clientY = evtPointerLast.clientY;
@@ -163,21 +141,16 @@ class PointHandle {
                 clientX,
                 clientY,
                 jmnodeDragged,
-                // evtId: evt.pointerId
             },
             current: {}
         };
-        // savePointerPos(evt);
         eltJmnodeFrom = jmnodeDragged;
-        this.#state = "init";
 
         this.#jmnodesPointHandle.appendChild(this.#eltPointHandle);
-        // document.body.appendChild(this.#eltPointHandle);
 
         this.#eltPointHandle.style.left = `${clientX - PointHandle.sizePointHandle / 2}px`;
         this.#eltPointHandle.style.top = `${clientY - PointHandle.sizePointHandle / 2}px`;
 
-        // this.#jmnodesPointHandle.addEventListener("pointermove", this.savePosBounded);
         requestCheckPointerHandleMove();
     }
     teardownPointHandleAndAct() {
@@ -202,12 +175,12 @@ class PointHandle {
         const elt = document.body.querySelector("jmnodes");
         if (!elt) throw Error("Could not find <jmnodes>");
         this.#jmnodesPointHandle = elt;
-        const THIS = this;
+        // const THIS = this;
         // this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
         // this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
     }
-    async teardownPointHandle() {
-        const THIS = this;
+    teardownPointHandle() {
+        // const THIS = this;
         // this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle.bind(THIS));
         // this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
         this.teardownPointHandleAndAct();
@@ -230,8 +203,7 @@ class PointHandle {
             // const diffPH = PointHandle.diffPointHandle;
             const diffPH = this.#diffPointHandle;
             const diffPH2 = diffPH * diffPH;
-            const diffOk = !(diff2 < diffPH2);
-            // console.log("check dist", diffX, diffY, diff2, "<=>", diffPH2);
+            const diffOk = diff2 >= diffPH2;
             if (!diffOk) {
                 return;
             }
@@ -243,41 +215,6 @@ class PointHandle {
             return;
         }
         movePointHandle();
-
-        // I don't think checking inside is needed any more??
-        /*
-        const dOutside = 10;
-        const startX = posPointHandle.start.screenX;
-        const startY = posPointHandle.start.screenY;
-        const dLeft = posPointHandle.dLeft;
-        const dRight = posPointHandle.dRight;
-        const dTop = posPointHandle.dTop;
-        const dBottom = posPointHandle.dBottom;
-        const leftInside = startX - evtPointerLast.screenX < dRight + dOutside;
-        const rightInside = evtPointerLast.screenX - startX < dLeft + dOutside;
-        const topInside = startY - evtPointerLast.screenY < dBottom + dOutside;
-        const bottomInside = evtPointerLast.screenY - startY < dTop + dOutside;
-        const isInside = leftInside && rightInside && topInside && bottomInside;
-        if (isInside) {
-            // console.log({ isInside, leftInside, rightInside, topInside, bottomInside });
-            return;
-        }
-        */
-
-        /*
-        if (!this.#eltPointHandle.classList.contains("active")) {
-            this.#eltPointHandle.classList.add("active");
-            console.log("added active to pph");
-            posPointHandle.diffX = posPointHandle.diffX || diffX;
-            posPointHandle.diffY = posPointHandle.diffY || diffY;
-            const newDiffX = posPointHandle.diffX - PointHandle.sizePointHandle / 2;
-            const newDiffY = posPointHandle.diffY - PointHandle.sizePointHandle / 2;
-            modJsmindDraggable.setPointerDiff(newDiffX, newDiffY);
-            modJsmindDraggable.nextHereIamMeansStart();
-        } else {
-            movePointHandle();
-        }
-        */
     }
 
 }
@@ -511,7 +448,7 @@ let eltOverJmnode;
 let movePointHandleProblem = false;
 function movePointHandle() {
     if (movePointHandleProblem) return;
-    if (!posPointHandle.diffX) return;
+    // if (!posPointHandle.diffX) return;
     const clientX = evtPointerLast.clientX;
     const clientY = evtPointerLast.clientY;
     if (!clientX) return;
@@ -1198,7 +1135,9 @@ export async function pageSetup() {
     const nowBefore = Date.now();
     jmDisplayed = await displayMindMap(mind, usedOptJmDisplay);
 
-    // modFsm
+
+
+    ////// modFsm
     const modFsm = await importFc4i("mm4i-fsm");
     window["fsm"] = modFsm.fsm;
     modFsm.fsm.hook_any_action(fsmEvent);
@@ -1209,35 +1148,19 @@ export async function pageSetup() {
     if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
     const eltFsm = eltJsMindContainer.querySelector(".jsmind-inner");
     if (!eltFsm) throw Error("Could not find .jsmind-inner");
-    /*
-    function actionDownHandler(evt, action) {
-        console.log("eventDownHandler", evt, action);
-        // move
-        switch (action) {
-            case "n_down":
-                pointHandle.setupPointHandle();
-                break;
-            default:
-                throw Error(`Can't handle fsm action ${action}`);
-        }
-    }
-    function actionUpHandler(evt) {
-        console.log("eventUpHandler", evt);
-        pointHandle.teardownPointHandle();
-    }
-    */
-    // modFsm.setActionDownHandler(actionDownHandler);
-    // modFsm.setActionUpHandler(actionUpHandler);
-
 
 
     ////// FSL hooks
-    function hookSetupPointHandle() {
+    function hookStartMovePointHandle(eltJmnode) {
         // setTimeout(() => {
-        pointHandle.setupPointHandle();
+        // pointHandle.setupPointHandle();
+        pointHandle.initializePointHandle(eltJmnode);
         // });
     }
-    modFsm.fsm.post_hook_entry("n_Move", () => hookSetupPointHandle());
+    modFsm.fsm.post_hook_entry("n_Move", (data) =>{
+        const eltJmnode = data.data;
+        hookStartMovePointHandle(eltJmnode);
+    });
     modFsm.fsm.hook_exit("n_Move", () => pointHandle.teardownPointHandle());
 
     let funStopScroll;
@@ -1249,11 +1172,7 @@ export async function pageSetup() {
     modFsm.fsm.hook_exit("c_Move", () => { funStopScroll(); });
 
     modFsm.fsm.post_hook_entry("c_Dblclick", () => { dialogEditMindmap(); });
-    // modFsm.fsm.post_hook_entry("n_Dblclick", () => { dialogEditNode(); });
-    // editnodedialog
-    // renderer =
     modFsm.fsm.post_hook_entry("n_Dblclick", async (data) => {
-        // console.log({data});
         const eltJmnode = data.data;
         const renderer = await modCustRend.getOurCustomRenderer();
         renderer.editNodeDialog(eltJmnode);
