@@ -69,12 +69,12 @@ state c_Zoom       : { background-color: lightgray; };
 // oxc, Property 'map' does not exist on type 'RegexpStringIterator<RegExpExecArray>'. ts(2339)
 // fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]);
 
-const arrEvents = [... new Set( fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]) ) ].sort();
+const arrEvents = [... new Set(fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]))].sort();
 export function isEvent(str) { return arrEvents.includes(str); }
 export function checkIsEvent(str) { if (!isEvent(str)) throw Error(`Unknown fsm event: ${str}`); }
 
 // const arrStates = [... new Set( fsmDeclaration.matchAll(/(?:=>|ms)\s+([^']*?);/g).map(m => m[1]) ) ].sort();
-const arrStates = [... new Set( fsmDeclaration.matchAll(/=>\s+(\S+?)\s*;/g))].map(m => m[1]).sort();
+const arrStates = [... new Set(fsmDeclaration.matchAll(/=>\s+(\S+?)\s*;/g))].map(m => m[1]).sort();
 
 export function isState(str) { return arrStates.includes(str); }
 export function checkIsState(str) { if (!isState(str)) throw Error(`Unknown fsm state: ${str}`); }
@@ -107,38 +107,25 @@ export function setupFsmListeners(eltFsm) {
         const eltJmnode = target.closest("jmnode");
         if (eltJmnode) { actionWhere = "n"; }
         // FIX-ME: mouse/pen or touch??
-        // const pointerType = getPointerType(evt);
+        const pointerType = getPointerType(evt);
         const action = `${actionWhere}_down`;
-        actionWithErrorCheck(action, eltJmnode);
+        actionWithErrorCheck(action, { eltJmnode, pointerType });
     });
     eltFsm.addEventListener("pointerup", evt => {
         console.log("eltFsm, pointerup", evt);
         const target = evt.target;
-        // console.log("pointerup", target);
         if (!eltFsm.contains(target)) return;
         const action = "up";
         actionWithErrorCheck(action);
-        // eventUpHandler(evt);
     });
-    eltFsm.addEventListener("NOpointermove", evt => {
-        const target = evt.target;
-        // console.log("pointermove", target);
-        if (!eltFsm.contains(target)) return;
-        let action;
-        if (target == eltFsm) { action = "c_move"; }
-        if (target.tagName == "JMNODE") { action = "n_move"; }
-        if (!action) { return; }
-        return;
-        // actionWithErrorCheck(action);
-    });
-    function actionWithErrorCheck(action, eltJmnode) {
-        // console.log("%cactionWithErrorCheck", "background:red;padding:2px",action);
+    function actionWithErrorCheck(action, data) {
         checkIsEvent(action);
         const state = fsm.state();
-        const res = fsm.action(action, eltJmnode);
+        const res = fsm.action(action, data);
         if (!res) {
             const msg = `State: ${state}, fsm.action(${action}) returned ${res}`
-            throw Error(msg);
+            console.error(msg);
+            // throw Error(msg);
         }
     }
 }

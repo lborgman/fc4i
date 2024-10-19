@@ -122,12 +122,19 @@ class PointHandle {
         evt.stopImmediatePropagation();
         savePointerPos.bind(this)(evt);
     }
-    initializePointHandle = (eltJmnode, isTouch) => {
+    initializePointHandle = (eltJmnode, pointerType) => {
         const jmnodeDragged = eltJmnode;
         if (!jmnodeDragged) return;
         if (jmnodeDragged.getAttribute("nodeid") == "root") return;
 
-        if (isTouch) { this.#diffPointHandle = 60; } else { this.#diffPointHandle = 0; }
+        // if (isTouch) { this.#diffPointHandle = 60; } else { this.#diffPointHandle = 0; }
+        switch (pointerType) {
+            case "mouse":
+                this.#diffPointHandle = 0;
+                break;
+            default:
+                this.#diffPointHandle = 60;
+        }
 
         if (!pointHandle.isState("idle")) throw Error(`Expected state "idle" but it was ${this.#state}`);
         this.#state = "init";
@@ -1151,15 +1158,15 @@ export async function pageSetup() {
 
 
     ////// FSL hooks
-    function hookStartMovePointHandle(eltJmnode) {
+    function hookStartMovePointHandle(hookData) {
         // setTimeout(() => {
         // pointHandle.setupPointHandle();
-        pointHandle.initializePointHandle(eltJmnode);
+        const { eltJmnode, pointerType } = hookData.data;
+        pointHandle.initializePointHandle(eltJmnode, pointerType);
         // });
     }
-    modFsm.fsm.post_hook_entry("n_Move", (data) =>{
-        const eltJmnode = data.data;
-        hookStartMovePointHandle(eltJmnode);
+    modFsm.fsm.post_hook_entry("n_Move", (hookData) => {
+        hookStartMovePointHandle(hookData);
     });
     modFsm.fsm.hook_exit("n_Move", () => pointHandle.teardownPointHandle());
 
