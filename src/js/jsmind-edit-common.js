@@ -406,14 +406,10 @@ const evtPointerLast = {};
  */
 function savePointerPos(evt) {
     if (!(evt instanceof PointerEvent)) throw Error("Expeced PointerEvent");
-    evt.preventDefault();
-    evt.stopPropagation();
-    evt.stopImmediatePropagation();
+    // evt.preventDefault();
+    // evt.stopPropagation();
+    // evt.stopImmediatePropagation();
 
-    // const clientX = evt.clientX;
-    // const clientY = evt.clientY;
-    // const target = evt.target;
-    // evtPointerLast = { clientX, clientY, target };
     evtPointerLast.clientX = evt.clientX;
     evtPointerLast.clientY = evt.clientY;
     evtPointerLast.target = evt.target;
