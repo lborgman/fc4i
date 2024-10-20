@@ -1171,7 +1171,7 @@ export async function pageSetup() {
         const { eltJmnode, pointerType } = hookData.data;
         if (eltJmnode) throw Error("eltJmnode in c_Move");
         funStopScroll = undefined;
-        return; // FIX-ME:
+        // return; // FIX-ME:
         if (pointerType != "mouse") return;
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
