@@ -74,6 +74,10 @@ jmexpander {
     min-width: 420px;
 }
 
+.jmnode-overflow {
+    overflow: hidden;
+}
+
 .NOjmnode-overflow-hidden jmnode {
     white-space: nowrap;
     overflow: hidden;
