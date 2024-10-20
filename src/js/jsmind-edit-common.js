@@ -131,6 +131,7 @@ class PointHandle {
         switch (pointerType) {
             case "mouse":
                 this.#diffPointHandle = 0;
+                this.#diffPointHandle = 80; // FIX-ME:
                 break;
             default:
                 this.#diffPointHandle = 60;
