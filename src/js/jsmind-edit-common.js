@@ -1167,12 +1167,17 @@ export async function pageSetup() {
     modFsm.fsm.hook_exit("n_Move", () => pointHandle.teardownPointHandle());
 
     let funStopScroll;
-    modFsm.fsm.post_hook_entry("c_Move", () => {
+    modFsm.fsm.post_hook_entry("c_Move", (hookData) => {
+        const { eltJmnode, pointerType } = hookData.data;
+        if (eltJmnode) throw Error("eltJmnode in c_Move");
+        funStopScroll = undefined;
+        return; // FIX-ME:
+        if (pointerType != "mouse") return;
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
         funStopScroll = startGrabScroll(jsmindInner);
     });
-    modFsm.fsm.hook_exit("c_Move", () => { funStopScroll(); });
+    modFsm.fsm.hook_exit("c_Move", () => { if (funStopScroll) funStopScroll(); });
 
     modFsm.fsm.post_hook_entry("c_Dblclick", () => { dialogEditMindmap(); });
     modFsm.fsm.post_hook_entry("n_Dblclick", async (hookData) => {
