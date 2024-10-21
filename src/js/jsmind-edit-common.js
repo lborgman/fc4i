@@ -2079,9 +2079,7 @@ function hasTouchEvents() {
     try {
         document.createEvent("TouchEvent");
         hasTouch = true;
-    } catch (err) {
-        console.log("no TouchEvent", err);
-    }
+    } catch { }
     return hasTouch;
 
 }
@@ -2215,10 +2213,7 @@ export function getMatchesInCssRules(re) {
         let cssRules;
         try {
             cssRules = sheet.cssRules;
-        } catch (err) {
-            // console.log(err.name, sheet.href, err.message);
-            // console.log(err.name, sheet.href);
-        }
+        } catch { }
         if (!cssRules) continue;
         for (let cssRule of cssRules) {
             if (!(cssRule instanceof CSSStyleRule)) { continue; }
@@ -2466,7 +2461,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
 
         const eltMm = mkElt("div", undefined, [eltA, btnDelete]);
         const li = modMdc.mkMDCmenuItem(eltMm);
-        li.addEventListener("click", evt => {
+        li.addEventListener("click", () => {
             closeDialog();
         });
         return li;
@@ -2474,7 +2469,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
     const arrLiMenu = await Promise.all(arrPromLiMenu);
     if (showNew) {
         const liNew = modMdc.mkMDCmenuItem("New mindmap");
-        liNew.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        liNew.addEventListener("click", errorHandlerAsyncEvent(async () => {
             await modMMhelpers.createAndShowNewMindmap(linkMindmapsPage);
         }));
         // arrLiMenu.push(liNew);
@@ -2482,7 +2477,7 @@ export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, pr
         // function mkMDCfab(eltIcon, title, mini, extendTitle)
         const eltIcon = modMdc.mkMDCicon("add");
         const btnFab = modMdc.mkMDCfab(eltIcon, "Create new mindmap", true);
-        btnFab.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        btnFab.addEventListener("click", errorHandlerAsyncEvent(async () => {
             // await createAndShowNewMindmapFc4i();
             await modMMhelpers.createAndShowNewMindmap(linkMindmapsPage);
         }));
@@ -2699,20 +2694,20 @@ function testCmOnScreen() {
 
 let eltBottomDebug;
 let eltDebugState;
-let eltDebugCapture;
+// let eltDebugCapture;
 let eltDebugJssmAction;
 let eltDebugJssmState;
 let eltReqFrame;
 function getBottomDebug() {
     if (eltBottomDebug) return eltBottomDebug;
     eltDebugState = mkElt("div"); eltDebugState.style.color = "gray";
-    eltDebugCapture = mkElt("div"); eltDebugCapture.style.color = "wheat";
-    eltReqFrame = mkElt("div"); eltReqFrame.style.color = "ligh skyblue";
+    // eltDebugCapture = mkElt("div"); eltDebugCapture.style.color = "wheat";
+    eltReqFrame = mkElt("div"); eltReqFrame.style.color = "light skyblue";
     eltDebugJssmAction = mkElt("div"); eltDebugJssmAction.style.color = "red";
     eltDebugJssmState = mkElt("div"); eltDebugJssmState.style.color = "orange";
     eltBottomDebug = mkElt("div", undefined, [
         eltDebugState,
-        eltDebugCapture,
+        // eltDebugCapture,
         eltReqFrame,
         eltDebugJssmAction,
         eltDebugJssmState,
@@ -2728,18 +2723,20 @@ function getBottomDebug() {
                 background: black;
                 bottom: 0;
                 display: grid;
-                grid-template-columns: 50px 1fr 1fr 1fr 1fr;
+                grid-template-columns: 50px 1fr 1fr 1fr;
                 cursor: default;
                 pointer-events: all;
             `;
     document.body.appendChild(eltBottomDebug);
 
 }
+/*
 function getEltDebugCapture() {
     if (eltDebugCapture) return eltDebugCapture;
     getBottomDebug();
     return eltDebugCapture;
 }
+*/
 function getEltDebugState() {
     if (eltDebugState) return eltDebugState;
     getBottomDebug();
@@ -2758,9 +2755,11 @@ function getEltDebugJssmAction() {
 }
 
 
+/*
 function showDebugCapture(msg) {
     (getEltDebugCapture()).textContent = msg;
 }
+*/
 function showDebugState(msg) {
     (getEltDebugState()).textContent = msg;
 }
