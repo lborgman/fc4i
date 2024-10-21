@@ -580,14 +580,11 @@ function whenDragPauses() {
         if (nodeBelow) markAsLowerChild(nodeBelow, true);
     }
 }
-let diffClientX = 0;
-let diffClientY = 0;
-const useClientX = evt => evt.clientX + diffClientX;
-const useClientY = evt => evt.clientY + diffClientY;
-export function setPointerDiff(newDiffClientX, newDiffClientY) {
-    diffClientX = newDiffClientX;
-    diffClientY = newDiffClientY;
-}
+// let diffClientX = 0;
+// let diffClientY = 0;
+// const useClientX = evt => evt.clientX + diffClientX;
+// const useClientY = evt => evt.clientY + diffClientY;
+// export function setPointerDiff(newDiffClientX, newDiffClientY) { diffClientX = newDiffClientX; diffClientY = newDiffClientY; }
 /*
 const trackPointerFun = evt => {
     const samePoint = (colClientX == useClientX(evt) || colClientY == useClientY(evt));

@@ -2259,7 +2259,7 @@ export class CustomRenderer4jsMind {
             return divBorderStyle.querySelector("[name=borderstyle]:checked").value;
         }
 
-        function getCtrlValBorderColor(val) {
+        function getCtrlValBorderColor() {
             return inpBorderColor.value;
         }
 
@@ -2407,6 +2407,7 @@ export function addJmnodeBgAndText(eltJmnode) {
 }
 
 
+/*
 function fixLeftRightChildren(eltJmnode) {
     return;
     const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
@@ -2432,6 +2433,7 @@ function fixLeftRightChildren(eltJmnode) {
         if (node.expanded) eltJmnode.classList.add("is-expanded");
     }
 }
+*/
 
 function getJsmindTheme(eltJmnodes) {
     checkTagName(eltJmnodes, "JMNODES");
@@ -2559,6 +2561,7 @@ export function applyMindmapGlobals(eltJmnodes, mindmapGlobals) {
 // https://stackoverflow.com/questions/9014804/javascript-validate-css
 function css_sanitize(css) {
     const iframe = document.createElement("iframe");
+    // iframe.setAttribute("sandbox", "sandbox");
     iframe.style.display = "none";
     iframe.style.width = "10px"; //make small in case display:none fails
     iframe.style.height = "10px";
@@ -2566,8 +2569,7 @@ function css_sanitize(css) {
     const style = iframe.contentDocument.createElement('style');
     style.innerHTML = css;
     iframe.contentDocument.head.appendChild(style);
-    const sheet = style.sheet,
-        result = Array.from(style.sheet.cssRules).map(rule => rule.cssText || '').join('\n');
+    const result = Array.from(style.sheet.cssRules).map(rule => rule.cssText || '').join('\n');
     iframe.remove();
     return result;
 }

@@ -192,7 +192,7 @@ class PointHandle {
         // this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle.bind(THIS));
         // this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
         this.teardownPointHandleAndAct();
-        modJsmindDraggable.setPointerDiff(0, 0);
+        // modJsmindDraggable.setPointerDiff(0, 0);
     }
     checkPointHandleDistance() {
         // if (!evtPointerLast) return; // FIX-ME
@@ -217,7 +217,7 @@ class PointHandle {
             }
             posPointHandle.diffX = diffX;
             posPointHandle.diffY = diffY;
-            modJsmindDraggable.setPointerDiff(diffX, diffY);
+            // modJsmindDraggable.setPointerDiff(diffX, diffY);
             modJsmindDraggable.nextHereIamMeansStart(eltJmnodeFrom);
             this.#state = "move";
             return;
