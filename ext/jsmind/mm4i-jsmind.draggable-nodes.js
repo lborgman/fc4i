@@ -1071,34 +1071,4 @@ export function setPointerDiff(newDiffClientX, newDiffClientY) {
     diffClientX = newDiffClientX;
     diffClientY = newDiffClientY;
 }
-const trackPointerFun = evt => {
-    const samePoint = (colClientX == useClientX(evt) || colClientY == useClientY(evt));
-    if (samePoint) return;
-    colClientX = useClientX(evt);
-    colClientY = useClientY(evt);
-    dragPauseTimer.restart();
-}
-export function startTrackingPointer() {
-    const jmns = document.querySelector("jmnodes");
-    jmns.addEventListener("NOpointermove", trackPointerFun);
-}
-export function stopTrackingPointer() {
-    dragPauseTimer.stop();
-    const jmns = document.querySelector("jmnodes");
-    jmns.removeEventListener("NOpointermove", trackPointerFun);
-}
 
-// FIX-ME: jmnodes
-export function OLDstartTrackingDrag() {
-    // console.warn("startTrackingDrag");
-    const jmns = document.querySelector("jmnodes");
-    // jmns.addEventListener("OLDdrag", trackPointerFun);
-    jmns.addEventListener("OLDdrag", trackPointerFun);
-}
-export function OLDstopTrackingDrag() {
-    // console.warn("stopTrackingDrag");
-    dragPauseTimer.stop();
-    const jmns = document.querySelector("jmnodes");
-    // jmns.removeEventListener("OLDdrag", trackPointerFun);
-    jmns.removeEventListener("OLDdrag", trackPointerFun);
-}

@@ -5,181 +5,14 @@
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
  * 
- * @copyright 2024 lennart.borgman@gmail.com
  */
-/*
- This is initially a copy from Chrome dev tools source 230406. 
- Just surrounded by (() => {...})()
- https://github.com/hizzgdev/jsmind/
-*/
 
 const version = "0.1.000";
 console.log(`here is mm4i-jsmind.draggable-nodes.js, module ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
-// ChatGPT: Not bad, but it checks for below...
-function isPointAboveLine1(pointA, pointB, pointC) {
-    const [xA, yA] = pointA;
-    const [xB, yB] = pointB;
-    const [xC, yC] = pointC;
-    const slope = (yB - yA) / (xB - xA);
-    const yIntercept = yA - slope * xA;
-    const yOnLine = slope * xC + yIntercept;
-    return yC < yOnLine;
-}
 
-function isAboveLine2(x1, y1, x2, y2, x3, y3) {
-    // Calculate the slope of the line
-    let slope = (y2 - y1) / (x2 - x1);
 
-    // Calculate the y-intercept of the line
-    let yIntercept = y1 - slope * x1;
-
-    // Calculate the y-coordinate of the third point on the line
-    let yOnLine = slope * x3 + yIntercept;
-
-    // Compare the y-coordinate of the third point with the y-coordinate on the line
-    if (y3 < yOnLine) {
-        return true; // The third point is above the line
-    } else {
-        return false; // The third point is below or on the line
-    }
-}
-
-function isAboveLine3(x1, y1, x2, y2, x3, y3) {
-    // Calculate the slope of the line
-    const slope = (y2 - y1) / (x2 - x1);
-
-    // Calculate the y-intercept of the line
-    const yIntercept = y1 - slope * x1;
-
-    // Calculate the y-coordinate of the point on the line
-    const yOnLine = slope * x3 + yIntercept;
-
-    // Compare the y-coordinate of the point with the y-coordinate of the point on the line
-    return y3 < yOnLine;
-}
-
-// My own:
-function dist2BcrBcr(bcr1, bcr2) {
-    // This is not the distance of course, but it compares in the same way as the distance.
-    const x1 = (bcr1.left + bcr1.right) / 2;
-    const y1 = (bcr1.bottom + bcr1.top) / 2;
-    const x2 = (bcr2.left + bcr2.right) / 2;
-    const y2 = (bcr2.bottom + bcr2.top) / 2;
-    return (x1 - x2) ** 2 + (y1 - y2) ** 2;
-}
-function dist2BcrPoint(bcr1, x2, y2) {
-    // This is not the distance of course, but it compares in the same way as the distance.
-    const x1 = (bcr1.left + bcr1.right) / 2;
-    const y1 = (bcr1.bottom + bcr1.top) / 2;
-    return (x1 - x2) ** 2 + (y1 - y2) ** 2;
-}
-
-function getArrNodesAndPos(eltJmnodes, eltDragged) {
-    const arrNodesAndPos = [...eltJmnodes.querySelectorAll("jmnode")]
-        .filter(n => {
-            if (n.style.zIndex) return false; // Filter shadow node
-            if (eltDragged === n) return false;
-            return true;
-        })
-        .map(n => {
-            return {
-                eltJmnode: n,
-                id: getNodeIdFromDOMelt(n),
-                bcr: n.getBoundingClientRect()
-            }
-        });
-    return arrNodesAndPos;
-}
-
-class DrawSvgLine {
-    // https://stackoverflow.com/a/62475281/324691
-    constructor(clientX, clientY, lineAttributes, onContainer, onTopOfChilds) {
-        if (lineAttributes) {
-            if ("object" !== typeof lineAttributes) throw Error("typeof lineAttributes is not object");
-            if (Array.isArray(lineAttributes)) throw Error("lineAttributes is array");
-        }
-        const colorStroke = lineAttributes?.color || "red";
-        const widthStroke = lineAttributes?.width || 10;
-        onContainer = onContainer || document.documentElement;
-        this.bcrContainer = onContainer.getBoundingClientRect();
-        const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgElement.setAttribute("style", "position: absolute;");
-        svgElement.setAttribute("height", "1000");
-        svgElement.setAttribute("width", "1000");
-        if (onTopOfChilds) {
-            onContainer.appendChild(svgElement);
-        } else {
-            onContainer.insertBefore(svgElement, onContainer.firstElementChild);
-        }
-        this.svgElement = svgElement;
-        this.drawing = false;
-        const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        newLine.setAttribute("stroke", colorStroke);
-        newLine.setAttribute("stroke-width", widthStroke);
-        newLine.setAttribute("stroke-linecap", "round");
-
-        const bcrContainer = onContainer.getBoundingClientRect();
-        const absX = clientX - bcrContainer.left;
-        const absY = clientY - bcrContainer.top;
-        newLine.setAttribute("x1", absX);
-        newLine.setAttribute("y1", absY);
-        newLine.setAttribute("x2", absX);
-        newLine.setAttribute("y2", absY);
-
-        this.svgElement.appendChild(newLine);
-        this.newLine = newLine;
-        this.drawing = true;
-    }
-    moveFreeEnd(cX, cY) {
-        if (this.drawing) {
-            this.freeX = cX;
-            this.freeY = cY;
-            const scrolledX = cX - this.bcrContainer.left;
-            const scrolledY = cY - this.bcrContainer.top;
-            this.newLine.setAttribute("x2", scrolledX);
-            this.newLine.setAttribute("y2", scrolledY);
-        }
-    }
-    getFreeX() { return this.freeX; }
-    getFreeY() { return this.freeY; }
-    removeLine() {
-        this.drawing = false;
-        // this.newLine.remove();
-        this.svgElement.remove();
-    }
-
-}
-
-export function testSvgLine() {
-
-    let ourDrawLine;
-
-    function onMouseDown(evt) {
-        const eltJmnodes = document.querySelector("jmnodes");
-        const lineAttr = { color: "rgba(255, 0, 0, 0.5" };
-        ourDrawLine = new DrawSvgLine(evt.clientX, evt.clientY, lineAttr, eltJmnodes);
-    }
-
-    function onMouseMove(evt) {
-        ourDrawLine?.moveFreeEnd(evt.clientX, evt.clientY);
-    }
-
-    function onMouseUp(event) {
-        ourDrawLine.removeLine();
-        ourDrawLine = undefined;
-    }
-
-    function setup() {
-        document.addEventListener("mousemove", onMouseMove);
-        document.addEventListener("mousedown", onMouseDown);
-        document.addEventListener("mouseup", onMouseUp);
-    }
-
-    // window.onload = () => setup();
-    setup();
-}
 
 
 ///////////////////////////////////////////////
@@ -347,31 +180,6 @@ function markDragNode(jmnode, how, on) {
     if (markNames.indexOf(how) == -1) throw Error(`Don't know how to mark as ${how}`);
     const cssClass = `jsmind-drag-${how}`;
 
-    /*
-    switch (how) {
-        case "dragged":
-            cssClass = "jsmind-drag-dragged";
-            break;
-        case "target":
-            cssClass = "jsmind-drag-target";
-            break;
-        case "tparent":
-            cssClass = "jsmind-drag-tparent";
-            break;
-        // case "old-near-child": cssClass = "jsmind-drag-near-child"; break;
-        case "upper-child":
-            cssClass = "jsmind-drag-upper-child";
-            break;
-        case "lower-child":
-            cssClass = "jsmind-drag-lower-child";
-            break;
-        case "dropped-at":
-            cssClass = "jsmind-drag-dropped-at";
-            break;
-        default:
-            throw Error(`Don't know how to mark as ${how}`);
-    }
-    */
     if (on) {
         jmnode.classList.add(cssClass);
     } else {
@@ -780,6 +588,7 @@ export function setPointerDiff(newDiffClientX, newDiffClientY) {
     diffClientX = newDiffClientX;
     diffClientY = newDiffClientY;
 }
+/*
 const trackPointerFun = evt => {
     const samePoint = (colClientX == useClientX(evt) || colClientY == useClientY(evt));
     if (samePoint) return;
@@ -787,3 +596,4 @@ const trackPointerFun = evt => {
     colClientY = useClientY(evt);
     dragPauseTimer.restart();
 }
+*/

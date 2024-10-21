@@ -153,7 +153,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         isImporting[idOrLink] = false;
         return mod;
     }
-    window.importFc4i = importFc4i;
+    window["importFc4i"] = importFc4i;
 
     /*
     const makeAbsLink = (relLink) => {

@@ -1692,9 +1692,11 @@ export async function pageSetup() {
                 const addZoom = () => {
                     console.log("***** addZoom");
                     const jmnodes = document.querySelector("jmnodes");
+                    if (!jmnodes) throw Error("Could not find <jmnodes>");
                     // const options = { }
                     // const pz = new PinchZoom(jmnodes, options);
                     const pz = new modPZ.default(jmnodes.parentElement);
+                    console.log({ pz });
                 }
                 // setTimeout(addZoom, 1000);
                 addZoom();
@@ -1873,11 +1875,6 @@ export async function pageSetup() {
 
 
 
-    function OLDaddGrabAndScroll2jsmind() {
-        const jmnodes = getJmnodesFromJm(jmDisplayed);
-        const jsmindInner = jmnodes.closest(".jsmind-inner");
-        addGrabAndScroll(jsmindInner, jmnodes);
-    }
 
     function startGrabScroll(ele) {
         let isScrolling = true;
