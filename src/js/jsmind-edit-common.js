@@ -28,7 +28,7 @@ class PointHandle {
 
     static myStates = ["idle", "init", "dist", "move"];
     #myState;
-    #pointerType;
+    // #pointerType;
     #diffPointHandle = 1;
 
     /** @type {HTMLElement} */ #eltPointHandle;
@@ -433,12 +433,14 @@ function requestCheckPointerHandleMove() {
     requestAnimationFrame(requestCheckPointerHandleMove);
 }
 let eltJmnodeFrom;
+/*
 function jmnodeFromPoint(cX, cY) {
     // console.log({ cX, cY });
     const eltsHere = document.elementsFromPoint(cX, cY);
     const eltJmnode = eltsHere.filter(e => { return e.tagName == "JMNODE"; })[0];
     return eltJmnode
 }
+*/
 let eltOverJmnode;
 let movePointHandleProblem = false;
 function movePointHandle() {
@@ -1525,15 +1527,13 @@ export async function pageSetup() {
         };
     });
 
+    /*
     function displayContextMenuOnContainer(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-
-        // FIX-ME: move
-        // document.querySelectorAll("jmnode").forEach(n => n.draggable = true);
-
         displayContextMenu(jsMindContainer, evt.clientX, evt.clientY);
     }
+    */
 
     let msDelayContextMenu = 0;
     jsMindContainer.addEventListener("NOtouchmove", evt => {
@@ -1842,13 +1842,16 @@ export async function pageSetup() {
     }
 
 
+    /*
     function onMousemoveJmnode(evt) {
         if (evt.target.nodeName !== "JMNODE") return;
         console.log("ddrag", { evt });
     }
+    */
 
     jmDisplayed.select_node(jmDisplayed.get_root());
 
+    /*
     function rectDist(br1, br2) {
         const brLeft = br1.left < br2.left ? br1 : br2;
         const brRight = br1.right > br2.right ? br1 : br2;
@@ -1863,6 +1866,7 @@ export async function pageSetup() {
         const h = brTop.bottom - brBottom.top;
         return Math.sqrt(h * h + w * w);
     }
+    */
 
 
 
@@ -1899,10 +1903,11 @@ export async function pageSetup() {
             isScrolling = false;
         }
     }
+    /*
     function OLDaddGrabAndScroll(ele, mousedownTargets) {
         // https://htmldom.dev/drag-to-scroll/ <- spam now
         // https://phuoc.ng/collection/html-dom/drag-to-scroll/
-        /* .container { cursor: grab; overflow: auto; } */
+        // .container { cursor: grab; overflow: auto; } 
         const posScrollData = {};
         const posPointerData = {};
         let isGrabMoving = false;
@@ -1925,7 +1930,6 @@ export async function pageSetup() {
             evt.preventDefault();
             // evt.stopPropagation();
             console.log("grabDownHandler", { grabUpHandler, grabMoveHandler });
-            /*
             posScrollData = {
                 // The current scroll
                 left: ele.scrollLeft,
@@ -1934,7 +1938,6 @@ export async function pageSetup() {
                 x: evt.clientX,
                 y: evt.clientY,
             };
-            */
             posScrollData.left = ele.scrollLeft;
             posScrollData.top = ele.scrollTop;
             posScrollData.clientX = evt.clientX;
@@ -1999,6 +2002,7 @@ export async function pageSetup() {
         showDraggable();
 
     }
+    */
 
     // if (!hasTouchEvents()) addGrabAndScroll2jsmind();
 
@@ -2075,8 +2079,9 @@ function hasTouchEvents() {
     try {
         document.createEvent("TouchEvent");
         hasTouch = true;
-    } catch (e) { }
-    // console.warn({ hasTouch })
+    } catch (err) {
+        console.log("no TouchEvent", err);
+    }
     return hasTouch;
 
 }
@@ -2099,6 +2104,7 @@ function getJmnodesFromJm(jmDisplayed) {
 }
 
 
+/*
 export async function fixJmnodeProblem(eltJmnode) {
     console.warn("fixJmnodeProblem", eltJmnode);
     return;
@@ -2130,6 +2136,8 @@ export async function fixJmnodeProblem(eltJmnode) {
         }
     }
 }
+*/
+
 function isVeryOldCustomFormat(eltJmnode) {
     const child1 = eltJmnode.firstElementChild;
     if (!child1) return false;
@@ -2867,7 +2875,7 @@ async function logJssmState(state) {
     // const modFsm = await importFc4i("mm4i-fsm");
     addStackLogFsm(state);
     modFsm.checkIsState(state)
-    showDebugJssmState(state);
+    showDebugJssmState();
 }
 
 /**
