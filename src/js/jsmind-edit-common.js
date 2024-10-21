@@ -2240,6 +2240,7 @@ export function getMatchesInCssRules(re) {
 }
 
 // chatGPT
+/*
 function getRectangleInEllipse(w, h) {
     const a = w / 2;
     const b = h / 2;
@@ -2255,7 +2256,7 @@ function getRectangleInEllipse(w, h) {
         height: y
     };
 }
-
+*/
 
 //////////////////////
 // Accesibility color contrast
@@ -2294,11 +2295,13 @@ I know this could be more compact, but I think this is easier to read/explain.
 
 
 
+/*
 function getJmnodesIn(idContainer) {
     const eltContainer = document.getElementById(idContainer)
     const j = eltContainer?.querySelector("jmnodes");
     return j;
 }
+*/
 // function getJmnodesMain() { return getJmnodesIn(idContainer); }
 
 
@@ -2331,27 +2334,9 @@ function addDebugLog(msg) {
 
 export function addScrollIntoViewOnSelect() {
     const jmDisp = jmDisplayed;
-    jmDisp.add_event_listener(function (t, d) {
-        // console.log({ t, d });
+    jmDisp.add_event_listener(function (t) {
         if (t !== jsMind.event_type.select) return;
-        // const id = d.node;
-        // const n = jmDisp.get_node(id);
         scrollSelectedNodeIntoView();
-        return;
-        const n = jmDisp.get_selected_node();
-        scrollNodeIntoView(n);
-        return;
-        // const elt = n._data.view.element;
-        const elt = jsMind.my_get_DOM_element_from_node(n);
-
-        // FIX-ME: test .scrollIntoView - problem with vertical
-        // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-        const scrollOpt = {
-            behavior: "smooth",
-            block: "nearest"
-        };
-        // console.log({scrollOpt})
-        elt.scrollIntoView(scrollOpt);
     });
 }
 function scrollSelectedNodeIntoView() {
