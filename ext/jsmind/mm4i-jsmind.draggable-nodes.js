@@ -308,20 +308,6 @@ export async function setupNewDragging() {
     // let eltDragged;
 
     // let childDragLine;
-    // eltJmnodes.addEventListener("OLDdragstart", evt => {}
-    eltJmnodes.addEventListener("NOpointerdown", evt => {
-        eltDragged = evt.target;
-        // FIX-ME: What is happening here???
-        if (!eltDragged) return;
-        markAsDragged(eltDragged, true);
-        eltTarget = undefined;
-        eltTParent = undefined;
-        childDragLine = undefined;
-        // console.log("eltTarget=u dragstart")
-        // start
-        startTrackingDrag();
-    });
-    // eltJmnodes.addEventListener("OLDdragend", evt => {}
     eltJmnodes.addEventListener("NOpointerup", evt => {
         // console.log("OLDdragend", { eltDragged }, eltDragged.getAttribute("nodeid"), { eltTarget }, eltTarget?.getAttribute("nodeid"));
         stopTrackingDrag();

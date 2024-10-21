@@ -307,26 +307,16 @@ export async function setupNewDragging() {
     // FIX-ME: make local again
     // let eltDragged;
 
-    // let childDragLine;
-    // eltJmnodes.addEventListener("OLDdragstart", evt => {}
-    eltJmnodes.addEventListener("NOpointerdown", evt => {
-        eltDragged = evt.target;
-        // FIX-ME: What is happening here???
-        if (!eltDragged) return;
-        markAsDragged(eltDragged, true);
-        eltTarget = undefined;
-        eltTParent = undefined;
-        childDragLine = undefined;
-        // console.log("eltTarget=u dragstart")
-        // start
-        startTrackingDrag();
-    });
 
 
 
 
 }
 
+export function setJmnodeDragged(jmnode) {
+    eltDragged = jmnode;
+    markDragNode(jmnode, "dragged", true);
+}
 function markAsDragged(jmnode, on) {
     if (on) unmarkDragged();
     markDragNode(jmnode, "dragged", on);
@@ -555,25 +545,16 @@ export function nextHereIamMeansStart(eltFrom) {
     colClientX = undefined;
     colClientY = undefined;
     dragPauseTimer.stop();
-    // eltDragged = evt.target;
     eltDragged = eltFrom;
-    markAsDragged(eltDragged, true);
+    // debugger;
+    // markAsDragged(eltDragged, true);
     eltTarget = undefined;
     eltTParent = undefined;
-    // childDragLine = undefined;
     instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
-    instScrollAtDragBorder.checkPoint(cX, cY);
-    if (!eltDragged) {
-        // FIX-ME: elementsFromPoint?
-        const elt = document.elementFromPoint(cX, cY);
-        eltDragged = elt.closest("jmnode");
-        if (!eltDragged) { debugger; }
-        markAsDragged(eltDragged, true);
-        return;
-    }
     if (colClientX == cX && colClientY == cY) return;
+    instScrollAtDragBorder.checkPoint(cX, cY);
     colClientX = cX;
     colClientY = cY;
     dragPauseTimer.restart();

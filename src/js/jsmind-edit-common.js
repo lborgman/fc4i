@@ -1159,6 +1159,8 @@ export async function pageSetup() {
         // setTimeout(() => {
         // pointHandle.setupPointHandle();
         const { eltJmnode, pointerType } = hookData.data;
+        // debugger;
+        modJsmindDraggable.setJmnodeDragged(eltJmnode);
         pointHandle.initializePointHandle(eltJmnode, pointerType);
         // });
     }
