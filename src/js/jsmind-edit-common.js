@@ -19,18 +19,9 @@ if (!jsMind) { throw Error("jsMind is not setup"); }
 const modMMhelpers = await importFc4i("mindmap-helpers");
 const modMdc = await importFc4i("util-mdc");
 const modTools = await importFc4i("toolsJs");
-// modFsm =
 const modFsm = await importFc4i("mm4i-fsm");
+window["fsm"] = modFsm.fsm;
 
-// FIX-ME: import from modFsm??
-function NOTgetPointerType(evt) {
-    if (["mouse", "touch", "pen"].indexOf(evt.pointerType) == -1) {
-        const msg = `ERROR: Unknown pointerType: "${evt.pointerType}"`;
-        alert(msg);
-        debugger;
-    }
-    return evt.pointerType;
-}
 class PointHandle {
     static sizePointHandle = 20;
     // static diffPointHandle = 60;
@@ -1142,8 +1133,8 @@ export async function pageSetup() {
 
 
     ////// modFsm
-    const modFsm = await importFc4i("mm4i-fsm");
-    window["fsm"] = modFsm.fsm;
+    // const modFsm = await importFc4i("mm4i-fsm");
+    // window["fsm"] = modFsm.fsm;
     modFsm.fsm.hook_any_action(fsmEvent);
     modFsm.fsm.hook_any_transition(() => {
         logJssmState(modFsm.fsm.state())
@@ -2785,7 +2776,7 @@ const rainbow = ["red", "orange", "yellow", "greenyellow", "aqua", "indigo", "vi
 let eltSmallGraph;
 let markedDecl;
 async function markLatestStates() {
-    const modFsm = await importFc4i("mm4i-fsm");
+    // const modFsm = await importFc4i("mm4i-fsm");
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
     markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'");
@@ -2873,7 +2864,7 @@ function addStackLogFsm(eventOrState) {
  * @param {string} state 
  */
 async function logJssmState(state) {
-    const modFsm = await importFc4i("mm4i-fsm");
+    // const modFsm = await importFc4i("mm4i-fsm");
     addStackLogFsm(state);
     modFsm.checkIsState(state)
     showDebugJssmState(state);
@@ -2881,10 +2872,10 @@ async function logJssmState(state) {
 
 /**
  * 
- * @param {string} event 
+ * @param {string} eventMsg 
  */
 async function logJssmEvent(eventMsg) {
-    const modFsm = await importFc4i("mm4i-fsm");
+    // const modFsm = await importFc4i("mm4i-fsm");
     // const eventName = typeof event == "string" ? event : event.textContent;
     const re = new RegExp(/,(.*)=>/);
     addStackLogFsm(eventMsg);
@@ -2895,7 +2886,7 @@ async function logJssmEvent(eventMsg) {
     showDebugJssmAction(eventName);
 }
 async function showDebugJssmState() {
-    const modFsm = await importFc4i("mm4i-fsm");
+    // const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
 
     updateSmallGraph();
@@ -3010,9 +3001,10 @@ modFsm.setupFsmListeners(eltFsm);
 
 /**
  * 
- * @param {string} event 
+ * @param {object} event 
  */
 function fsmEvent(event) {
+    console.log("fsmEvent event", event);
     const eventName = event.action || event;
     const eventFrom = event.from;
     const eventTo = event.to;
@@ -3033,7 +3025,7 @@ function fsmEvent(event) {
 // window["fsmEvent"] = fsmEvent;
 
 setTimeout(async () => {
-    const modFsm = await importFc4i("mm4i-fsm");
+    // const modFsm = await importFc4i("mm4i-fsm");
     // window.fsm = modFsm.fsm;
     // const modJsEditCommon = await importFc4i("jsmind-edit-common");
     // const eltAction = mkElt("span", undefined, "(action)");
