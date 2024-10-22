@@ -30,10 +30,12 @@ function getNodeIdFromDOMelt(elt) {
 
 ////// Triangle area (chatGPT)
 
-function triangleAreaSigned(x1, y1, x2, y2, x3, y3, log) {
+/*
+function triangleAreaSigned(x1, y1, x2, y2, x3, y3) {
     const area1 = (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
     return area1;
 }
+
 function thirdAbove(bcr1, bcr2, dragPos) {
     function xyBcr(bcr) {
         const x = (bcr.left + bcr.right) / 2;
@@ -67,7 +69,6 @@ function triangleArea(x1, y1, x2, y2, x3, y3, log) {
     const area = 0.5 * Math.abs(area1);
     return area;
 }
-/*
 triangleArea(0, 0, 1, 0, 1, 1, "right, up"); // 1
 triangleArea(0, 0, 1, 0, 0, 1, "right, left+up"); // 1
 triangleArea(0, 0, 1, 0, 1, -1, "right, down"); // -1
@@ -116,12 +117,12 @@ export class TimeoutTimer {
 let ourJm;
 let eltDragged;
 let eltTarget;
-let eltTParent;
+// let eltTParent;
 let childDragLine;
 // const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
 let instScrollAtDragBorder;
 export async function setupNewDragging() {
-    ourJm = await new Promise((resolve, reject) => {
+    ourJm = await new Promise((resolve) => {
         const draggablePlugin = new jsMind.plugin('draggable_nodes', function (thisIsOurJm) {
             resolve(thisIsOurJm);
         });
@@ -263,7 +264,7 @@ class ScrollAtDragBorder {
         styleR.left = `${bcr.left + bcr.width - this.bw - scrollbarW}px`
         styleR.left = `${this.limits.right}px`
     }
-    checkPoint(cx, cy) {
+    checkPoint(cx) {
         const oldCx = this.cx;
         const outsideRight = cx > this.limits.right;
         const outsideLeft = cx < this.limits.left;
@@ -271,33 +272,15 @@ class ScrollAtDragBorder {
         this.cx = cx;
         const scrollSpeed = 150;
         if (outsideLeft) {
-            // console.log("outside left");
             this.scroller.startX(-scrollSpeed);
             if (oldCx) { if (cx > oldCx) this.scroller.stopX(); }
         }
         if (outsideRight) {
-            // console.log("outside right");
             this.scroller.startX(scrollSpeed);
             if (oldCx) { if (cx < oldCx) this.scroller.stopX(); }
         }
     }
-    stopScrolling() {
-        this.scroller.stopX();
-    }
-    startScroller() {
-        this.elt2move.addEventListener("OLDdragstart", evt => {
-            this.showVisuals();
-        });
-        this.elt2move.addEventListener("OLDdrag", evt => {
-            // console.log("scroller drag");
-            this.checkPoint(evt.clientX, evt.clientY);
-            // this.checkPoint(useClientX(evt), useClientY(evt));
-        });
-        this.elt2move.addEventListener("OLDdragend", evt => {
-            this.hideVisuals();
-            this.stopScrolling();
-        });
-    }
+    stopScrolling() { this.scroller.stopX(); }
     showScroller() { this.showVisuals(); }
     hideScroller() { this.hideVisuals(); }
     checkScroll(cX, cY) { this.checkPoint(cX, cY); }
@@ -357,7 +340,7 @@ export function nextHereIamMeansStart(eltFrom) {
     // debugger;
     // markAsDragged(eltDragged, true);
     eltTarget = undefined;
-    eltTParent = undefined;
+    // eltTParent = undefined;
     instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
@@ -474,8 +457,8 @@ function whenDragPauses() {
     // let entryOverUpper;
     arrCol.forEach(entry => {
         // if (entryOver) return;
-        const entryTop = entry.bcr.top;
-        const entryBottom = entry.bcr.bottom;
+        // const entryTop = entry.bcr.top;
+        // const entryBottom = entry.bcr.bottom;
 
 
         /*
