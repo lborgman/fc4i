@@ -1601,7 +1601,6 @@
         }
         expand_node(node) {
             node.expanded = true;
-            node._data.view.element.classList.add("is-expanded");
             this.part_layout(node);
             this.set_visible(node.children, true);
             this.jm.invoke_event_handle(EventType.show, {
@@ -1612,7 +1611,6 @@
         }
         collapse_node(node) {
             node.expanded = false;
-            node._data.view.element.classList.remove("is-expanded");
             this.part_layout(node);
             this.set_visible(node.children, false);
             this.jm.invoke_event_handle(EventType.show, {
@@ -2107,118 +2105,67 @@
          * 
          * @param {Object} node 
          */
-        /*
         ORIGinit_nodes_size(node) {
             var view_data = node._data.view;
             view_data.width = view_data.element.clientWidth;
             view_data.height = view_data.element.clientHeight;
         }
-        */
         /**
          * 
          * @param {Object} node 
          * @returns {Promise}
          */
-        async init_nodes_size(node) {
+        init_nodes_size(node) {
             const view_data = node._data.view;
             const eltJmnode = view_data.element;
+            const eltText = eltJmnode.querySelector(".jmnode-text");
             if (!eltJmnode) throw Error("eltJmnode is null");
-            if (!eltJmnode.isConnected) throw Error(`eltJmnode.isConnected is ${eltJmnode.isConnected}`);
-            function checkBcr(bcrResolved, elt) {
-                if (elt.tagName != "JMNODE") throw Error("Not jmnode");
-                const txt2 = elt.textContent;
-                console.log("Start CHECK", txt2);
-                function checkAfter(ms) {
-                    setTimeout(() => {
-                        const bcrjAtCheck = elt.getBoundingClientRect();
-                        const ok = bcrResolved.width == bcrjAtCheck.width && bcrResolved.height == bcrjAtCheck.height;
-                        const css = ok ? "background:green;" : "background:red;";
-                        console.log(`%cCHECK!!! ${ms}ms ${ok}, ${txt2}`, css, txt2, { bcrjAtCheck, bcrResolved });
-                    }, ms);
-                }
-                let ms = 10;
-                while (ms < 20) {
-                    console.log(`Start CHECK ${ms}ms, ${txt2}`);
-                    checkAfter(ms);
-                    ms *= 4;
-                }
-            }
-
-            eltJmnode.style.transition = "none";
-            const resolvedBcr = await makePromCopilot(eltJmnode);
-            eltJmnode.style.transition = null;
-
-            view_data.width = resolvedBcr.width;
-            view_data.height = resolvedBcr.height;
-            if (node.topic) {
-                const bcrAfter = eltJmnode.getBoundingClientRect();
-                console.log(node.topic, { bcrAfter });
-                checkBcr(resolvedBcr, eltJmnode);
-            }
-            return;
-
-            function makePromCopilot(eltCopilot) {
-                if (eltCopilot.tagName != "JMNODE") throw Error("eltCopilot not jmnode");
-                return new Promise((resolve, reject) => {
-                    function callback(eltCopilotCallback) {
-                        if (eltCopilotCallback.tagName != "JMNODE") throw Error("eltCopilotcallback not jmnode");
-                        const delay = window.delayResolve;
-                        setTimeout(() => {
-                            const bcr = eltCopilotCallback.getBoundingClientRect();
-                            const txt = eltCopilotCallback.textContent;
-                            const w = bcr.width;
-                            const h = bcr.height;
-                            console.log(`RESOLVE Copilot, ${delay}, ${txt}`, { w, h });
-                            resolve(bcr);
-                        }, delay);
+            let tempW;
+            let tempH;
+            let tempWtext;
+            let tempHtext;
+            let nEq;
+            const startTime = Date.now();
+            const msMaxWait = 1000;
+            return new Promise((resolve, reject) => {
+                const getWH = () => {
+                    const W = eltJmnode.clientWidth;
+                    if (W) {
+                        const H = eltJmnode.clientHeight;
+                        const Wtext = eltText.clientWidth;
+                        const Htext = eltText.clientHeight;
+                        if (W == tempW && H == tempH
+                            &&
+                            Wtext == tempWtext && Htext == tempHtext
+                        ) {
+                            nEq++;
+                            if (nEq > 100) {
+                                view_data.width = W;
+                                view_data.height = H;
+                                console.log("init_nodes_size", tempW, tempH, view_data);
+                                resolve(true);
+                                return;
+                            }
+                        } else {
+                            tempW = W;
+                            tempH = H;
+                            tempWtext = Wtext;
+                            tempHtext = Htext;
+                            nEq = 0;
+                        }
                     }
-                    getElementSizeAfterRenderCopilot2(eltCopilot, callback);
-                });
-                function getElementSizeAfterRenderCopilot2(element, callback) {
-                    // const element = document.querySelector(selector);
-
-                    if (!element) {
-                        console.error('Element not found');
+                    if ((Date.now() - startTime) > msMaxWait) {
+                        reject("init_node_size: Too long time");
                         return;
                     }
-
-                    let resizeObserver;
-                    const mutationObserver = new MutationObserver(() => {
-                        if (resizeObserver) {
-                            resizeObserver.disconnect();
-                        }
-
-                        resizeObserver = new ResizeObserver(entries => {
-                            for (let entry of entries) {
-                                const rect = entry.contentRect;
-                                if (rect.width && rect.height) {
-                                    callback(eltCopilot);
-                                    resizeObserver.disconnect(); // Stop observing once we get the final size
-                                    mutationObserver.disconnect(); // Stop observing mutations
-                                }
-                            }
-                        });
-
-                        resizeObserver.observe(element);
-                    });
-
-                    mutationObserver.observe(document.body, { childList: true, subtree: true });
-
-                    // Initial check in case the element is already rendered
-                    requestAnimationFrame(() => {
-                        const rect = element.getBoundingClientRect();
-                        if (rect.width && rect.height) {
-                            callback(element);
-                            mutationObserver.disconnect();
-                        }
-                    });
-                }
-            }
+                    requestAnimationFrame(getWH);
+                };
+                getWH();
+            });
         }
 
 
         /* See init_node_size */
-        /*
         ORIGinit_nodes() {
             var nodes = this.jm.mind.nodes;
             var doc_frag = $.d.createDocumentFragment();
@@ -2233,9 +2180,7 @@
                 }
             });
         }
-        */
         init_nodes() {
-            console.log(">>>>>> init_nodes");
             const nodes = this.jm.mind.nodes;
             const doc_frag = $.d.createDocumentFragment();
             for (const nodeid in nodes) {
@@ -2257,14 +2202,10 @@
 
 
         add_node(node) {
-            console.trace(">>>>>> add_node");
             this.create_node_element(node, this.e_nodes);
-            let prom;
             this.run_in_c11y_mode_if_needed(() => {
-                // this.init_nodes_size(node);
-                prom = this.init_nodes_size(node);
+                this.init_nodes_size(node);
             });
-            return prom;
         }
         run_in_c11y_mode_if_needed(func) {
             if (!!this.container.offsetParent) {
@@ -3102,11 +3043,6 @@
      *   https://github.com/hizzgdev/jsmind/
      */
 
-    if (document.readyState == "loading") {
-        throw Error("document not completely loaded");
-        // const modTools = await importFc4i("toolsJs");
-        // await modTools.promiseDOMready();
-    }
 
     console.log(`Here is jsmind-mm4i, module, ${__version__}`);
     class jsMind {
@@ -3123,56 +3059,6 @@
             jsMind.current = this;
             this.options = merge_option(options);
             logger.level(LogLevel[this.options.log_level]);
-
-            // Check options names, see file 2.options.md
-            const topLevelOptions = [
-                "container",
-                "editable",
-                "theme",
-                "mode",
-                "support_html",
-                "view",
-                "layout",
-                "shortcut",
-                "log_level", // not mentioned!
-                "default_event_handle", // not mentioned!
-                "plugin", // not mentioned!
-            ];
-            const ourOptions = this.options;
-            Object.keys(ourOptions).forEach(opt => {
-                if (topLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
-            });
-            const viewOptions = options.view;
-            if (viewOptions) {
-                const viewLevelOptions = [
-                    "engine",
-                    "hmargin",
-                    "vmargin",
-                    "line_width",
-                    "line_color",
-                    "line_style",
-                    "custom_line_render",
-                    "draggable",
-                    "hide_scrollbars_when_draggable",
-                    "node_overflow",
-                ];
-                Object.keys(viewOptions).forEach(opt => {
-                    if (viewLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
-                });
-            }
-            const layoutOptions = options.layout;
-            if (layoutOptions) {
-                const layoutLevelOptions = [
-                    "hspace",
-                    "vspace",
-                    "pspace",
-                    "cousin_space",
-                ];
-                Object.keys(layoutOptions).forEach(opt => {
-                    if (layoutLevelOptions.indexOf(opt) == -1) throw Error(`Unknown jsmind option: "${opt}`);
-                });
-            }
-
             this.version = __version__;
             this.initialized = false;
             this.mind = null;
@@ -3262,7 +3148,10 @@
             }
         }
         _event_bind() {
-            return; // FIX-ME:
+            this.view.add_event(this, 'mousedown', this.mousedown_handle);
+            this.view.add_event(this, 'click', this.click_handle);
+            this.view.add_event(this, 'dblclick', this.dblclick_handle);
+            this.view.add_event(this, 'mousewheel', this.mousewheel_handle, true);
         }
         mousedown_handle(e) {
             if (!this.options.default_event_handle['enable_mousedown_handle']) {
@@ -3458,7 +3347,7 @@
             }
             return this.mind.get_node(node);
         }
-        async add_node(parent_node, node_id, topic, data, direction) {
+        add_node(parent_node, node_id, topic, data, direction) {
             if (this.get_editable()) {
                 var the_parent_node = this.get_node(parent_node);
                 var dir = Direction.of(direction);
@@ -3466,8 +3355,8 @@
                     dir = this.layout.calculate_next_child_direction(the_parent_node);
                 }
                 var node = this.mind.add_node(the_parent_node, node_id, topic, data, dir);
-                if (node) {
-                    await this.view.add_node(node);
+                if (!!node) {
+                    this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
                     this.view.reset_node_custom_style(node);

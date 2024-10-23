@@ -7,8 +7,8 @@
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jsMind = factory());
+        typeof define === 'function' && define.amd ? define(factory) :
+            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jsMind = factory());
 })(this, (function () { 'use strict';
 
     /**
@@ -58,21 +58,21 @@
     let logger =
         typeof console === 'undefined'
             ? {
-                  level: _noop,
-                  log: _noop,
-                  debug: _noop,
-                  info: _noop,
-                  warn: _noop,
-                  error: _noop,
-              }
+                level: _noop,
+                log: _noop,
+                debug: _noop,
+                info: _noop,
+                warn: _noop,
+                error: _noop,
+            }
             : {
-                  level: setup_logger_level,
-                  log: console.log,
-                  debug: console.debug,
-                  info: console.info,
-                  warn: console.warn,
-                  error: console.error,
-              };
+                level: setup_logger_level,
+                log: console.log,
+                debug: console.debug,
+                info: console.info,
+                warn: console.warn,
+                error: console.error,
+            };
 
     function setup_logger_level(log_level) {
         if (log_level > LogLevel.debug) {
@@ -1826,21 +1826,21 @@
             path.setAttribute(
                 'd',
                 'M ' +
-                    x1 +
-                    ' ' +
-                    y1 +
-                    ' C ' +
-                    (x1 + ((x2 - x1) * 2) / 3) +
-                    ' ' +
-                    y1 +
-                    ', ' +
-                    x1 +
-                    ' ' +
-                    y2 +
-                    ', ' +
-                    x2 +
-                    ' ' +
-                    y2
+                x1 +
+                ' ' +
+                y1 +
+                ' C ' +
+                (x1 + ((x2 - x1) * 2) / 3) +
+                ' ' +
+                y1 +
+                ', ' +
+                x1 +
+                ' ' +
+                y2 +
+                ', ' +
+                x2 +
+                ' ' +
+                y2
             );
         }
         _line_to(path, x1, y1, x2, y2) {
@@ -1929,6 +1929,9 @@
     function init_graph(view, engine) {
         return engine.toLowerCase() === 'svg' ? new SvgGraph(view) : new CanvasGraph(view);
     }
+
+    window.useRejection = false;
+    window.delayResolve = 20;
 
     /**
      * @license BSD
@@ -2213,6 +2216,93 @@
                         }
                     });
                 }
+
+                function getElementSizeAfterRenderCopilot1(element, callback) {
+                    // const element = document.querySelector(selector);
+
+                    function checkSize() {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.width && rect.height) {
+                            callback(rect);
+                        } else {
+                            requestAnimationFrame(checkSize);
+                        }
+                    }
+
+                    const observer = new MutationObserver((mutations, obs) => {
+                        requestAnimationFrame(() => {
+                            checkSize();
+                            obs.disconnect();
+                        });
+                    });
+
+                    observer.observe(document.body, { childList: true, subtree: true });
+
+                    // Initial check in case the element is already rendered
+                    // requestAnimationFrame(checkSize);
+                }
+            }
+
+            return makePromReqFAR();
+            function makePromReqFAR() {
+                return new Promise((resolve, reject) => {
+                    const getWH = () => {
+                        nEq++;
+                        nEqMax = Math.max(nEq, nEqMax);
+                        if (0 !== nEq % 300) { requestAnimationFrame(getWH); return; }
+                        bcr = eltJmnode.getBoundingClientRect();
+                        // W = eltJmnode.clientWidth;
+                        // H = eltJmnode.clientHeight;
+                        W = bcr.width;
+                        H = bcr.height;
+                        const bcrText = eltText.getBoundingClientRect();
+                        // Wtext = eltText.clientWidth;
+                        // Htext = eltText.clientHeight;
+                        Wtext = bcrText.width;
+                        Htext = bcrText.height;
+                        if (W == tempW && H == tempH
+                            &&
+                            Wtext == tempWtext && Htext == tempHtext
+                        ) {
+                            // if (0 === nEq % 300) {
+                            if (txt.length > 15) {
+                                console.log(txt, bcr, { W, H, Wtext, Htext });
+                            }
+                            // }
+                            if (nEq > 200) {
+                                view_data.width = W;
+                                view_data.height = H;
+                                bcr = eltJmnode.getBoundingClientRect();
+                                checkBcr(bcr, eltJmnode);
+                                console.log(`RESOLVE init_nodes_size ${nEq}/${nEqMax}`, eltJmnode, bcr, { W, tempW }, { H, tempH }, view_data);
+                                resolve(true);
+                                return;
+                            }
+                        } else {
+                            tempW = W;
+                            tempH = H;
+                            tempWtext = Wtext;
+                            tempHtext = Htext;
+                            nEq = 0;
+                        }
+
+                        const msWaited = Date.now() - startTime;
+                        if (msWaited > msMaxWait) {
+                            console.error(`fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`,
+                                bcr,
+                                { W, tempW }, { H, tempH }, { Wtext, tempWtext }, { Htext, tempHtext });
+                            if (window.useRejection) {
+                                reject(`REJECTION: fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
+                            } else {
+                                throw Error(`Error: fc4i temp init_nodes_size: Too long time, ${msWaited}>${msMaxWait}, ${nEq}/${nEqMax}`);
+                            }
+
+                            return;
+                        }
+                        requestAnimationFrame(getWH);
+                    };
+                    getWH();
+                });
             }
         }
 
@@ -3263,6 +3353,10 @@
         }
         _event_bind() {
             return; // FIX-ME:
+            this.view.add_event(this, 'mousedown', this.mousedown_handle);
+            this.view.add_event(this, 'click', this.click_handle);
+            this.view.add_event(this, 'dblclick', this.dblclick_handle);
+            this.view.add_event(this, 'mousewheel', this.mousewheel_handle, true);
         }
         mousedown_handle(e) {
             if (!this.options.default_event_handle['enable_mousedown_handle']) {

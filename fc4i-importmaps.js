@@ -43,6 +43,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         // "jsmind": "https://cdn.jsdelivr.net/npm/jsmind@0.8.5/es6/jsmind.js",
 
         // "jsmind": "./ext/jsmind/es6/jsmind-mm4i.js",
+        // "jsmind": "./ext/jsmind/testing/OKjsmind-mm4i.js",
         "jsmind": "./ext/jsmind/testing/jsmind-mm4i.js",
 
         "jsmind-edit-common": "./src/js/jsmind-edit-common.js",

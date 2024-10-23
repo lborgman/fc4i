@@ -311,9 +311,9 @@
     <!-- Mirror must be display:block for rendering -->
     <!-- <div id="jsmind-draggable-container4mirror" style="left: -1000px;"></div> -->
 
-    <script>
+    <script type="module">
         console.log("here is mm4i.html");
-        (async () => {
+        // (async () => {
             const modMdc = await importFc4i("util-mdc");
             const modJsMind = await importFc4i("jsmind");
             const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
@@ -322,7 +322,7 @@
             modJsEditCommon.pageSetup();
             const aboutLink = makeAbsLink("./about");
             modJsEditCommon.addToPageMenu("About", aboutLink);
-        })();
+        // })();
     </script>
 </body>
 
