@@ -2391,8 +2391,8 @@ export class CustomRenderer4jsMind {
         }
     }
 }
-const cr4j = new CustomRenderer4jsMind();
-console.log({ cr4j });
+// const cr4j = new CustomRenderer4jsMind();
+// console.log({ cr4j });
 
 export function addJmnodeBgAndText(eltJmnode) {
     console.warn("Add bg and text called");
@@ -2469,7 +2469,7 @@ export async function getOurCustomRenderer() {
     return theCustomRenderer;
 }
 async function createOurCustomRenderer() {
-    console.warn("createOurCustomRenderer");
+    // console.warn("createOurCustomRenderer");
     theCustomRenderer = new CustomRenderer4jsMind();
     return theCustomRenderer;
 }

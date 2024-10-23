@@ -28,7 +28,7 @@
      *
      */
 
-    const __version__ = '0.8.502';
+    const __version__ = '0.8.504';
     const __author__ = 'hizzgdev@163.com';
 
     if (typeof String.prototype.startsWith != 'function') {
@@ -2118,17 +2118,6 @@
         /**
          * 
          * @param {Object} node 
-         */
-        /*
-        ORIGinit_nodes_size(node) {
-            var view_data = node._data.view;
-            view_data.width = view_data.element.clientWidth;
-            view_data.height = view_data.element.clientHeight;
-        }
-        */
-        /**
-         * 
-         * @param {Object} node 
          * @returns {Promise}
          */
         async init_nodes_size(node) {
@@ -2136,25 +2125,6 @@
             const eltJmnode = view_data.element;
             if (!eltJmnode) throw Error("eltJmnode is null");
             if (!eltJmnode.isConnected) throw Error(`eltJmnode.isConnected is ${eltJmnode.isConnected}`);
-            function checkBcr(bcrResolved, elt) {
-                if (elt.tagName != "JMNODE") throw Error("Not jmnode");
-                const txt2 = elt.textContent;
-                console.log("Start CHECK", txt2);
-                function checkAfter(ms) {
-                    setTimeout(() => {
-                        const bcrjAtCheck = elt.getBoundingClientRect();
-                        const ok = bcrResolved.width == bcrjAtCheck.width && bcrResolved.height == bcrjAtCheck.height;
-                        const css = ok ? "background:green;" : "background:red;";
-                        console.log(`%cCHECK!!! ${ms}ms ${ok}, ${txt2}`, css, txt2, { bcrjAtCheck, bcrResolved });
-                    }, ms);
-                }
-                let ms = 10;
-                while (ms < 20) {
-                    console.log(`Start CHECK ${ms}ms, ${txt2}`);
-                    checkAfter(ms);
-                    ms *= 4;
-                }
-            }
 
             eltJmnode.style.transition = "none";
             const resolvedBcr = await makePromCopilot(eltJmnode);
@@ -2162,11 +2132,7 @@
 
             view_data.width = resolvedBcr.width;
             view_data.height = resolvedBcr.height;
-            if (node.topic) {
-                const bcrAfter = eltJmnode.getBoundingClientRect();
-                console.log(node.topic, { bcrAfter });
-                checkBcr(resolvedBcr, eltJmnode);
-            }
+            if (node.topic) ;
             return;
 
             /**
@@ -2182,10 +2148,10 @@
                         const delay = 0; // window.delayResolve;
                         setTimeout(() => {
                             const bcr = eltCopilotCallback.getBoundingClientRect();
-                            const txt = eltCopilotCallback.textContent;
-                            const w = bcr.width;
-                            const h = bcr.height;
-                            console.log(`RESOLVE Copilot, ${delay}, ${txt}`, { w, h });
+                            eltCopilotCallback.textContent;
+                            bcr.width;
+                            bcr.height;
+                            // console.log(`RESOLVE Copilot, ${delay}, ${txt}`, { w, h });
                             resolve(bcr);
                         }, delay);
                     }
@@ -2382,7 +2348,7 @@
         }
         */
         init_nodes() {
-            console.log(">>>>>> init_nodes");
+            // console.log(">>>>>> init_nodes");
             const nodes = this.jm.mind.nodes;
             const doc_frag = $.d.createDocumentFragment();
             for (const nodeid in nodes) {
@@ -2394,7 +2360,7 @@
             this.run_in_c11y_mode_if_needed(() => {
                 for (const nodeid in nodes) {
                     const prom = this.init_nodes_size(nodes[nodeid]);
-                    console.log({ prom });
+                    // console.log({ prom });
                     arrProms.push(prom);
                 }
             });
@@ -2462,7 +2428,7 @@
             view_data.element = d;
         }
         create_node_element(node, parent_node) {
-            console.warn("create_node_element", node, parent_node);
+            // console.warn("create_node_element", node, parent_node);
             var view_data = null;
             if ('view' in node._data) {
                 view_data = node._data.view;
@@ -3261,7 +3227,7 @@
         // await modTools.promiseDOMready();
     }
 
-    console.log(`Here is jsmind-mm4i, module, ${__version__}`);
+    console.log(`Here is jsmind-mm4i.js, ${__version__}`);
     class jsMind {
         static mind = Mind;
         static node = Node;

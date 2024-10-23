@@ -218,8 +218,8 @@ class PointHandle {
 
 }
 const pointHandle = new PointHandle();
-console.log({ pointHandle })
-console.log(pointHandle.element);
+// console.log({ pointHandle })
+// console.log(pointHandle.element);
 window["ourPointHandle"] = pointHandle; // FIX-ME:
 // debugger;
 
@@ -757,7 +757,7 @@ export async function addToPageMenu(lbl, what) {
     } else {
         liMenuItem = mkMenuItemA(lbl, what);
     }
-    console.warn(liMenuItem);
+    // console.warn(liMenuItem);
     extraPageMenuItems.push(liMenuItem);
 }
 
@@ -1090,7 +1090,7 @@ export async function pageSetup() {
         }
         return;
     }
-    console.log({ mind });
+    // console.log({ mind });
 
     // const modJmDrag = await getDraggableNodes();
     modJsmindDraggable = await getDraggableNodes();
@@ -1113,7 +1113,7 @@ export async function pageSetup() {
                 throw Error(`Can't get mindmapGlobals when mind format is ${format}`);
         }
         const globals = root_node.mindmapGlobals;
-        console.log({ root_node, globals });
+        // console.log({ root_node, globals });
         return globals;
     }
     const usedOptJmDisplay = JSON.parse(JSON.stringify(defaultOptJmDisplay));
@@ -2848,7 +2848,7 @@ window["showStackLogFsm"] = () => { console.log("showStackLogFsm", stackLogFsm);
 function addStackLogFsm(eventOrState) {
     stackLogFsm.unshift(eventOrState);
     stackLogFsm.length = Math.min(8, stackLogFsm.length);
-    console.warn("addStackLogFsm", eventOrState, stackLogFsm);
+    // console.warn("addStackLogFsm", eventOrState, stackLogFsm);
 }
 
 /**

@@ -4,7 +4,7 @@ console.log(`here is mm4i-fsm.js, module,${MM4I_FSM_VER}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
 const modJssm = await importFc4i("jssm");
-console.log({ modJssm });
+// console.log({ modJssm });
 
 export const fsmDeclaration = `
 machine_name     : "mm4i <user@example.com>";
