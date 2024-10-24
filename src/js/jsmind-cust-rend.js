@@ -2336,7 +2336,7 @@ export class CustomRenderer4jsMind {
                 this.THEjmDisplayed.set_node_background_image(node_ID_copied, undefined, currTemp.width, currTemp.height);
                 delete currTemp.width;
                 delete currTemp.height;
-                await modJsEditCommon.fixJmnodeProblem(eltJmnode);
+                // await modJsEditCommon.fixJmnodeProblem(eltJmnode);
                 modJsEditCommon.applyNodeShapeEtc(node_copied, eltJmnode);
                 setTimeout(() => { modMMhelpers.DBrequestSaveThisMindmap(this.THEjmDisplayed); }, 2000);
 

@@ -1763,11 +1763,10 @@ export async function pageSetup() {
                 }
                 jm.select_node(new_node);
                 // setTimeout(() => { newNode._data.view.element.draggable = true; }, 1000);
-                setTimeout(() => {
-                    // jsMind.my_get_DOM_element_from_node(new_node).draggable = true;
-                    const eltJmnode = jsMind.my_get_DOM_element_from_node(new_node);
-                    fixJmnodeProblem(eltJmnode);
-                }, 1000);
+                // setTimeout(() => {
+                    // const eltJmnode = jsMind.my_get_DOM_element_from_node(new_node);
+                    // fixJmnodeProblem(eltJmnode);
+                // }, 1000);
             }
         }
 

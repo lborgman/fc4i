@@ -28,7 +28,7 @@
      *
      */
 
-    const __version__ = '0.8.504';
+    const __version__ = '0.8.506';
     const __author__ = 'hizzgdev@163.com';
 
     if (typeof String.prototype.startsWith != 'function') {
@@ -1726,7 +1726,7 @@
             // var layout_data = null;
             while (i--) {
                 node = nodes[i];
-                layout_data = node._data.layout;
+                // layout_data = node._data.layout;
                 if (node.expanded) {
                     this.set_visible(node.children, visible);
                 } else {
