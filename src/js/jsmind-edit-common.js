@@ -502,7 +502,7 @@ function getposPointHandle() {
 
 export const arrShapeClasses = getMatchesInCssRules(/\.(jsmind-shape-[^.:#\s]*)/);
 export function clearShapes(eltShape) {
-    if (!jsMind.mm4iSupported) return;
+    // if (!jsMind.mm4iSupported) return;
     eltShape.parentElement.classList.remove("bg-transparent");
     if (eltShape.tagName != "DIV" || !eltShape.classList.contains("jmnode-bg")) {
         throw Error('Not <jmnode><div class="jmnode-bg"');

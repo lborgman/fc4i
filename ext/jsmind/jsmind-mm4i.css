@@ -52,8 +52,20 @@ jmnodes {
 jmnode {
     position: absolute;
     cursor: default;
-    nomax-width: 400px;
+    /* max-width: 400px; */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px #666;
+    font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
+
+jmnode>.jmnode-bg {
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+}
+
+
 
 jmexpander {
     position: absolute;
@@ -88,14 +100,12 @@ div.jmnode-overflow-cont {
     overflow: hidden;
 }
 
+
+
 /* default theme */
-jmnode {
-    padding: 10px;
+jmnode>.jmnode-bg {
     background-color: #fff;
     color: #333;
-    border-radius: 5px;
-    box-shadow: 1px 1px 1px #666;
-    font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
 
 jmnode:hover {
@@ -109,6 +119,8 @@ jmnode.selected {
     color: #fff;
     box-shadow: 2px 2px 8px #000;
 }
+
+
 
 jmnode.root {
     font-size: 24px;
@@ -354,13 +366,18 @@ jmnodes.theme-asphalt jmexpander {}
 
 jmnodes.theme-asphalt jmexpander:hover {}
 
+
+
 /* orange theme */
-jmnodes.theme-orange jmnode {
+jmnodes.theme-orange jmnode>.jmnode-bg {
     background-color: #f1c40f;
+}
+
+jmnodes.theme-orange jmnode>.jmnode-text {
     color: #fff;
 }
 
-jmnodes.theme-orange jmnode:hover {
+jmnodes.theme-orange jmnode:hover>.jmnode-bg {
     background-color: #f39c12;
 }
 
@@ -374,6 +391,8 @@ jmnodes.theme-orange jmnode.root {}
 jmnodes.theme-orange jmexpander {}
 
 jmnodes.theme-orange jmexpander:hover {}
+
+
 
 /* pumpkin theme */
 jmnodes.theme-pumpkin jmnode {
@@ -504,7 +523,7 @@ jmnodes jmnode .jmnode-bg {
 }
 
 jmnodes jmnode .jmnode-bg:not([class*='jsmind-shape-']) {
-    background-color: transparent;
+    NObackground-color: transparent;
 }
 
 /* .jsmind_container jmnodes jmnode .jmnode-text { */

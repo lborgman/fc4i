@@ -226,52 +226,52 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
     box-shadow: none;
 }
 
-.jsmind-shape-ellipse {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse {
     border-radius: 50%;
 }
 
-.jsmind-shape-ellipse>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse>* {
     padding: 15%;
 }
 
-.jsmind-shape-ellipse .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
 
 
 
-.jsmind-shape-ellipse-B {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-B {
     border-bottom-left-radius: 50%;
     border-bottom-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-B>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-B>* {
     padding-bottom: 15%;
     padding-left: 15%;
     padding-right: 15%;
 }
 
-.jsmind-shape-ellipse-B .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-B .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
 
 
 
-.jsmind-shape-ellipse-T {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-T {
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-T>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-T>* {
     padding-top: 15%;
     padding-left: 15%;
     padding-right: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-T .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-T .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -279,19 +279,19 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-ellipse-L {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-L {
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
 }
 
-.jsmind-shape-ellipse-L>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-L>* {
     padding-top: 15%;
     padding-left: 15%;
     padding-bottom: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-T .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-T .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -299,35 +299,35 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-ellipse-R {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-R {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-R>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-R>* {
     padding-top: 15%;
     padding-right: 15%;
     padding-bottom: 15%;
 }
 
-.jsmind-shape-ellipse-T .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-T .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
 
 
 
-.jsmind-shape-ellipse-TL {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TL {
     border-top-left-radius: 50%;
 }
 
-.jsmind-shape-ellipse-TL>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TL>* {
     padding-top: 15%;
     padding-left: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-TL .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TL .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -335,17 +335,17 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-ellipse-TR {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TR {
     border-top-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-TR>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TR>* {
     padding-top: 15%;
     padding-right: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-TR .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-TR .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -353,33 +353,33 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-ellipse-BR {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BR {
     border-bottom-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-BR>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BR>* {
     padding-bottom: 15%;
     padding-right: 15%;
 }
 
-.jsmind-shape-ellipse-BR .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BR .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
 
 
 
-.jsmind-shape-ellipse-BL {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BL {
     border-bottom-left-radius: 50%;
 }
 
-.jsmind-shape-ellipse-BL>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BL>* {
     padding-bottom: 15%;
     padding-left: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-BL .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-BL .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -387,33 +387,33 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-ellipse-DTL {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTL {
     border-top-left-radius: 50%;
     border-bottom-right-radius: 50%;
 }
 
-.jsmind-shape-ellipse-DTL>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTL>* {
     padding: 15%;
 }
 
-.jsmind-shape-ellipse-DTL .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTL .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
 
 
 
-.jsmind-shape-ellipse-DTR {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTR {
     border-top-right-radius: 50%;
     border-bottom-left-radius: 50%;
 }
 
-.jsmind-shape-ellipse-DTR>* {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTR>* {
     padding: 15%;
 }
 
 /*
-.jsmind-shape-ellipse-DTR .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-ellipse-DTR .jsmind-renderer-img {
     bottom: 7%;
     right: 7%;
 }
@@ -442,159 +442,159 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 /**** clip-path ***/
 /* FIX-ME: Only polygon() seems to be useable yet. I do not think path() supports % at the moment. */
-.jsmind-shape-clip-star5 {
+jmnode>div.jmnode-bg.jsmind-shape-clip-star5 {
     clip-path: polygon(50% 2.45%, 61.8% 26.84%, 100% 26.84%, 87.85% 63.06%, 96.01% 97.55%, 50% 90.35%, 3.99% 97.55%, 12.15% 63.06%, 0% 26.84%, 38.2% 26.84%);
 }
 
-.jsmind-shape-clip-star5>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-star5>*:first-child {
     padding: 12%;
     padding-bottom: 7%;
     padding-top: 25%;
 }
 
-.jsmind-shape-clip-star5 .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-star5 .jsmind-renderer-img {
     bottom: 3%;
     right: 8%;
 }
 
 
 
-.jsmind-shape-clip-skew-right {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-right {
     clip-path: polygon(15% 0, 100% 0%, 85% 100%, 0% 100%);
 }
 
-.jsmind-shape-clip-skew-right>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-right>*:first-child {
     padding: 0%;
     padding-left: 15%;
     padding-right: 15%;
 }
 
-.jsmind-shape-clip-skew-right .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-right .jsmind-renderer-img {
     bottom: 0%;
     right: 8%;
 }
 
 
 
-.jsmind-shape-clip-skew-left {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-left {
     clip-path: polygon(0 0, 85% 0, 100% 100%, 15% 100%);
 }
 
-.jsmind-shape-clip-skew-left>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-left>*:first-child {
     padding: 0%;
     padding-left: 15%;
     padding-right: 15%;
 }
 
-.jsmind-shape-clip-skew-left .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-skew-left .jsmind-renderer-img {
     bottom: 0%;
     right: 0%;
 }
 
 
 
-.jsmind-shape-clip-pentagon {
+jmnode>div.jmnode-bg.jsmind-shape-clip-pentagon {
     clip-path: polygon(50% 2.45%, 100% 38.77%, 80.9% 97.55%, 19.1% 97.55%, 0% 38.77%);
 }
 
-.jsmind-shape-clip-pentagon>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-pentagon>*:first-child {
     padding: 20%;
     padding-bottom: 7%;
 }
 
-.jsmind-shape-clip-pentagon .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-pentagon .jsmind-renderer-img {
     bottom: 10%;
     right: 20%;
 }
 
 
 
-.jsmind-shape-clip-hexagon {
+jmnode>div.jmnode-bg.jsmind-shape-clip-hexagon {
     clip-path: polygon(100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%, 25% 6.7%, 75% 6.7%);
 }
 
-.jsmind-shape-clip-hexagon>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-hexagon>*:first-child {
     padding: 10% 20%;
 }
 
-.jsmind-shape-clip-hexagon .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-hexagon .jsmind-renderer-img {
     bottom: 10%;
     right: 20%;
 }
 
 
-.jsmind-shape-clip-octagon {
+jmnode>div.jmnode-bg.jsmind-shape-clip-octagon {
     clip-path: polygon(70.71% 100%, 100% 70.71%, 100% 29.29%, 70.71% 0%, 29.29% 0%, 0% 29.29%, 0% 70.71%, 29.29% 100%);
 }
 
-.jsmind-shape-clip-octagon>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-octagon>*:first-child {
     padding: 12%;
 }
 
-.jsmind-shape-clip-octagon .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-octagon .jsmind-renderer-img {
     bottom: 10%;
     right: 20%;
 }
 
 
 
-.jsmind-shape-clip-diamond {
+jmnode>div.jmnode-bg.jsmind-shape-clip-diamond {
     clip-path: polygon(50% 0%, 90% 50%, 50% 100%, 10% 50%);
 }
 
-.jsmind-shape-clip-diamond>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-diamond>*:first-child {
     padding: 25%;
 }
 
-.jsmind-shape-clip-diamond .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-diamond .jsmind-renderer-img {
     bottom: 15%;
     right: 25%;
 }
 
 
 
-.jsmind-shape-clip-triangel {
+jmnode>div.jmnode-bg.jsmind-shape-clip-triangel {
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
-.jsmind-shape-clip-triangel>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-triangel>*:first-child {
     padding: 25%;
     padding-top: 0%;
 }
 
-.jsmind-shape-clip-triangel .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-triangel .jsmind-renderer-img {
     bottom: 10%;
     right: 35%;
 }
 
 
-.jsmind-shape-clip-arrow-left {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-left {
     clip-path: polygon(0% 50%, 50% 0%, 50% 25%, 100% 25%, 100% 75%, 50% 75%, 50% 100%);
 }
 
-.jsmind-shape-clip-arrow-left>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-left>*:first-child {
     padding: 22%;
     padding-left: 25%;
 }
 
-.jsmind-shape-clip-arrow-left .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-left .jsmind-renderer-img {
     bottom: 20%;
     right: 0%;
 }
 
 
 
-.jsmind-shape-clip-arrow-right {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-right {
     clip-path: polygon(50% 25%, 50% 0%, 100% 50%, 50% 100%, 50% 75%, 0% 75%, 0% 25%);
 }
 
-.jsmind-shape-clip-arrow-right>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-right>*:first-child {
     padding: 22%;
     padding-right: 25%;
     padding-left: 0%;
 }
 
-.jsmind-shape-clip-arrow-right .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-arrow-right .jsmind-renderer-img {
     bottom: 30%;
     right: 5%;
 }
@@ -602,80 +602,80 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-clip-point-left {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-left {
     clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
 }
 
-.jsmind-shape-clip-point-left>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-left>*:first-child {
     padding-left: 23%;
 }
 
-.jsmind-shape-clip-point-left .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-left .jsmind-renderer-img {
     bottom: 0%;
     right: 0%;
 }
 
 
 
-.jsmind-shape-clip-point-right {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-right {
     clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
 }
 
-.jsmind-shape-clip-point-right>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-right>*:first-child {
     padding-right: 25%;
 }
 
-.jsmind-shape-clip-point-right .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-right .jsmind-renderer-img {
     bottom: 30%;
     right: 0%;
 }
 
 
 
-.jsmind-shape-clip-point-up {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-up {
     clip-path: polygon(48% 1%, 99% 49%, 100% 100%, 0 100%, 0% 50%);
 }
 
-.jsmind-shape-clip-point-up>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-up>*:first-child {
     padding-top: 32%;
     padding-left: 10%;
     padding-right: 10%;
 }
 
-.jsmind-shape-clip-point-up .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-point-up .jsmind-renderer-img {
     bottom: 0%;
     right: 0%;
 }
 
 
 
-.jsmind-shape-clip-trapezoid-up {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-up {
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
-.jsmind-shape-clip-trapezoid-up>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-up>*:first-child {
     padding-top: 20%;
     padding-left: 14%;
     padding-right: 14%;
 }
 
-.jsmind-shape-clip-trapezoid-up .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-up .jsmind-renderer-img {
     bottom: 0%;
     right: 0%;
 }
 
 
-.jsmind-shape-clip-trapezoid-down {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-down {
     clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
 }
 
-.jsmind-shape-clip-trapezoid-down>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-down>*:first-child {
     padding-bottom: 20%;
     padding-left: 14%;
     padding-right: 14%;
 }
 
-.jsmind-shape-clip-trapezoid-down .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-trapezoid-down .jsmind-renderer-img {
     bottom: 0%;
     right: 10%;
 }
@@ -685,16 +685,16 @@ div.jsmind-inner>jmnodes>jmnode.bg-transparent {
 
 
 
-.jsmind-shape-clip-speechbubble {
+jmnode>div.jmnode-bg.jsmind-shape-clip-speechbubble {
     clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 80%, 95% 85%, 85% 85%, 84.5% 100%, 64% 85%, 5% 85%, 0% 80%, 0% 5%);
 }
 
-.jsmind-shape-clip-speechbubble>*:first-child {
+jmnode>div.jmnode-bg.jsmind-shape-clip-speechbubble>*:first-child {
     padding: 2%;
     padding-bottom: 15%;
 }
 
-.jsmind-shape-clip-speechbubble .jsmind-renderer-img {
+jmnode>div.jmnode-bg.jsmind-shape-clip-speechbubble .jsmind-renderer-img {
     bottom: 10%;
     right: 0%;
 }
