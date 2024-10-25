@@ -521,21 +521,7 @@ export function applyNodeShapeEtc(node, eltJmnode) {
 }
 export async function applyShapeEtc(shapeEtc, eltJmnode) {
     const eltShape = eltJmnode.querySelector(".jmnode-bg");
-    if (!eltShape) {
-        throw Error("eltShape is null, no .jmnode-bg found");
-        /*
-        if (eltJmnode.childElementCount > 1) {
-            // FIX-ME: just delete this???
-            console.error("old custom format 2");
-            let htmlRendererImg = mkElt("div", { class: "jsmind-render-img" });
-            const OLDhtmlRendererImg = eltJmnode.lastElementChild;
-            OLDhtmlRendererImg.remove();
-            const customData = htmlTopic.dataset.jsmindCustom;
-            delete htmlTopic.dataset.jsmindCustom;
-            htmlRendererImg.dataset.jsmindCustom = customData;
-        }
-        */
-    }
+    if (!eltShape) { throw Error("eltShape is null, no .jmnode-bg found"); }
 
     clearShapes(eltShape);
     const shape = shapeEtc.shape;
@@ -663,31 +649,6 @@ export function basicInit4jsmind() {
     }
 
 
-    // await thePromiseDOMready;
-    /*
-    async function startDraggable() {
-        modJsmindDraggable = await getDraggableNodes();
-        // console.log({ modJsmindDraggable });
-    }
-    errorHandlerAsyncEvent(startDraggable());
-    */
-
-    /*
-    async function addDragDropTouch() {
-        if (!confirm("Load DragDropTouch.js?")) return;
-        // const elt = mkElt("script", { src: "/ext/DragDropTouch.js" });
-        // document.head.appendChild(elt);
-        const ddtLink = "https://drag-drop-touch-js.github.io/dragdroptouch/dist/drag-drop-touch.esm.min.js";
-        const modDDT = await import(ddtLink);
-        modDDT.enableDragDropTouch();
-        debugger;
-    }
-    if (hasTouchEvents()) {
-        addDragDropTouch();
-    }
-    // } else { addDragDropTouch();
-    */
-
 }
 
 let funMindmapsDialog;
@@ -791,23 +752,8 @@ export async function pageSetup() {
 
     const idDivHits = "jsmind-div-hits";
 
-    /*
-    let h2cCanvas;
-    let promH2cCanvas;
-    // const heightDivH2c = 300;
-    // const widthDivH2c = 200;
-    const mirrorVals = {
-        // clientXthrottle4mirror;
-        // clientYthrottle4mirror;
-        heightDivH2c: 300,
-        widthDivH2c: 200,
-    }
-    */
-
     const defaultOptJmDisplay = {
-        // container: 'jsmind_container',
         container: idDivJmnodesMain,
-        // theme: 'orange',
         editable: true,
         view: {
             // draggable: true,
@@ -836,15 +782,6 @@ export async function pageSetup() {
             }
         },
     };
-    /*
-    const strOptionsJmDisplay = JSON.stringify(defaultOptJmDisplay);
-    const optionsJmMirror = JSON.parse(strOptionsJmDisplay);
-    // FIX-ME: We can't use mirror.
-    // optionsJmMirror.container = idDivJmnodesMirror;
-    optionsJmMirror.container = "this-id-does-not-exist";
-    delete optionsJmMirror.shortcut;
-    */
-
 
     // Use this??? copy canvas https://jsfiddle.net/lborgman/5L1bfhow/3/
 
@@ -1071,13 +1008,6 @@ export async function pageSetup() {
     if (typeof mindmapKey === "string" && mindmapKey.length === 0) {
         throw Error("Parameter mindmapname should have a value (key/name of a mindmap)");
     }
-    /*
-    const createMindmap = new URLSearchParams(location.search).get("createmindmap");
-    if (typeof createMindmap === "string" && createMindmap.length > 0) {
-        throw Error("Parameter createmindmap does not take a value");
-    }
-    const create = ((createMindmap != null) || (mindmapKey == null));
-    */
     let mind;
     if (mindmapKey) {
         mind = await modMMhelpers.getMindmap(mindmapKey);
@@ -1090,9 +1020,7 @@ export async function pageSetup() {
         }
         return;
     }
-    // console.log({ mind });
 
-    // const modJmDrag = await getDraggableNodes();
     modJsmindDraggable = await getDraggableNodes();
     modJsmindDraggable.setupNewDragging();
 
@@ -1398,27 +1326,13 @@ export async function pageSetup() {
             case "move_node":
                 {
                     console.warn("move_node event");
-                    /*
-                    function walkMoved(id_moved) {
-                        // FIX-ME: class left, etc
-                        console.log({ id_moved });
-                        const moved_node = jmDisplayed.get_node(id_moved);
-                        moved_node.children.forEach(child => {
-                            walkMoved(child.id);
-                        });
-                    }
-                    */
                     const id_moved = operation_node_id;
                     const moved_node = jmDisplayed.get_node(id_moved);
                     const eltJmnode = jsMind.my_get_DOM_element_from_node(moved_node);
                     const isPlainNode = eltJmnode.childElementCount == 0;
-                    // modCustRend.addJmnodeBgAndText(eltJmnode);
                     if (!isPlainNode) {
                         (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
                     }
-                    // const before_id = datadata[1];
-                    // const parent_id = datadata[2];
-                    // jmMirrored?.move_node(id_moved, before_id, parent_id);
                     break;
                 }
             case "remove_node":
@@ -1433,18 +1347,6 @@ export async function pageSetup() {
     }
 
 
-
-    /*
-    setTimeout(() => {
-        // [...document.getElementsByTagName("jmnode")].forEach(eltJmnode => { });
-        const jmData = jmDisplayed.get_data("node_array");
-        jmData.data.forEach(entry => {
-            const node = jmDisplayed.get_node(entry.id);
-            const eltJmnode = jsMind.my_get_DOM_element_from_node(node);
-            // applyNodeShapeEtc(node, eltJmnode);
-        });
-    }, 500);
-    */
 
     jsMindContainer.appendChild(divDebugLog);
 
@@ -1527,13 +1429,6 @@ export async function pageSetup() {
         };
     });
 
-    /*
-    function displayContextMenuOnContainer(evt) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        displayContextMenu(jsMindContainer, evt.clientX, evt.clientY);
-    }
-    */
 
     let msDelayContextMenu = 0;
     jsMindContainer.addEventListener("NOtouchmove", evt => {
@@ -1841,31 +1736,8 @@ export async function pageSetup() {
     }
 
 
-    /*
-    function onMousemoveJmnode(evt) {
-        if (evt.target.nodeName !== "JMNODE") return;
-        console.log("ddrag", { evt });
-    }
-    */
 
     jmDisplayed.select_node(jmDisplayed.get_root());
-
-    /*
-    function rectDist(br1, br2) {
-        const brLeft = br1.left < br2.left ? br1 : br2;
-        const brRight = br1.right > br2.right ? br1 : br2;
-        const overLapHor = brLeft.right > brRight.left;
-        const brTop = br1.top < br2.top ? br1 : br2;
-        const brBottom = br1.bottom > br2.bottom ? br1 : br2;
-        const overLapVer = brTop.bottom > brBottom.top;
-        if (overLapHor && overLapVer) return 0;
-        if (overLapHor) { return brTop.bottom - brBottom.top; }
-        if (overLapVer) { return brRight.left - brLeft.right; }
-        const w = brLeft.right - brRight.left;
-        const h = brTop.bottom - brBottom.top;
-        return Math.sqrt(h * h + w * w);
-    }
-    */
 
 
 
@@ -1902,154 +1774,14 @@ export async function pageSetup() {
             isScrolling = false;
         }
     }
-    /*
-    function OLDaddGrabAndScroll(ele, mousedownTargets) {
-        // https://htmldom.dev/drag-to-scroll/ <- spam now
-        // https://phuoc.ng/collection/html-dom/drag-to-scroll/
-        // .container { cursor: grab; overflow: auto; } 
-        const posScrollData = {};
-        const posPointerData = {};
-        let isGrabMoving = false;
-
-        const isMousedownTarget = (targ) => {
-            if (Array.isArray(mousedownTargets)) {
-                return mousedownTargets.includes(targ);
-            } else {
-                return targ === mousedownTargets;
-            }
-            return false;
-        }
-        const mouseDownHandler = (evt) => {
-            return;
-            // console.log("ele mousedown");
-            if (!isMousedownTarget(evt.target)) {
-                // console.log("not mousedown target");
-                return;
-            }
-            evt.preventDefault();
-            // evt.stopPropagation();
-            console.log("grabDownHandler", { grabUpHandler, grabMoveHandler });
-            posScrollData = {
-                // The current scroll
-                left: ele.scrollLeft,
-                top: ele.scrollTop,
-                // Get the current mouse position
-                x: evt.clientX,
-                y: evt.clientY,
-            };
-            posScrollData.left = ele.scrollLeft;
-            posScrollData.top = ele.scrollTop;
-            posScrollData.clientX = evt.clientX;
-            posScrollData.clientY = evt.clientY;
-
-            posPointerData.clientX = evt.clientX;
-            posPointerData.clientY = evt.clientY;
-            // Change the cursor and prevent user from selecting the text
-            ele.style.cursor = "grabbing";
-
-            ele.addEventListener('mousemove', grabMoveHandler);
-            ele.addEventListener('mouseup', grabUpHandler);
-            // ele.addEventListener('pointerup', mouseUpHandler);
-            ele.addEventListener("mouseleave", grabUpHandler);
-
-            isGrabMoving = true;
-            requestGrabMove();
-        };
-        const grabMoveHandler = (evt) => {
-            console.log("grabMoveHandler");
-            posPointerData.clientX = evt.clientX;
-            posPointerData.clientY = evt.clientY;
-        }
-        const requestGrabMove = () => {
-            if (!isGrabMoving) return;
-            // console.log("requestGrabMove");
-            const dx = posPointerData.clientX - posScrollData.clientX;
-            const dy = posPointerData.clientY - posScrollData.clientY;
-            if (isNaN(dx)) debugger;
-            if (isNaN(dy)) debugger;
-
-            // Scroll the element
-            ele.scrollTop = posScrollData.top - dy;
-            ele.scrollLeft = posScrollData.left - dx;
-
-            requestAnimationFrame(requestGrabMove);
-        };
-        const grabUpHandler = (evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            console.log("grabUpHandler");
-            isGrabMoving = false;
-
-            ele.removeEventListener('mousemove', grabMoveHandler);
-            ele.removeEventListener('mouseup', grabUpHandler);
-
-            // ele.style.cursor = 'grab';
-            ele.style.removeProperty('cursor');
-            // console.log("mouseUpHandler", ele.style.cursor);
-            ele.style.removeProperty('user-select');
-        };
-
-        const showDraggable = () => {
-            // Change the cursor and prevent user from selecting the text
-            ele.style.cursor = 'grab';
-            // console.log("showDraggable", ele.style.cursor);
-            ele.style.userSelect = 'none';
-        };
-        // ele.addEventListener("mousedown", mouseDownHandler);
-        ele.addEventListener("pointerdown", mouseDownHandler);
-        // ele.addEventListener("dragstart", mouseUpHandler);
-        showDraggable();
-
-    }
-    */
-
-    // if (!hasTouchEvents()) addGrabAndScroll2jsmind();
 
 
 
-    /*
     // https://javascript.info/bezier-curve
-        For 4 control points:
-        P = (1−t)3P1 + 3(1−t)2tP2 +3(1−t)t2P3 + t3P4
-    function makePoint(x, y) { return { x, y } }
-    function isPoint(xy) {
-        return !isNaN(xy.x) && !isNaN(xy.y);
-    }
-    function bezier(t, p1, p2, p3, p4) {
-        check01(t);
-        function check01(what, v) {
-            if (v < 0) throw Error(`${what} < 0 (${v})`);
-            if (v > 1) throw Error(`${what} > 1 (${v})`);
-        }
-
-    }
-    */
 
 
     async function convertPlainJmnode2ProviderLink(eltJmnode, jmOwner, objCustomCopied) {
-        // console.log("convertDOMnodeTo...", eltJmnode, objCustomCopied);
         if (eltJmnode.tagName != "JMNODE") throw Error("Not <jmnode>");
-        /*
-        const lastElementChild = eltJmnode.lastElementChild;
-        if (lastElementChild) {
-            if (lastElementChild.classList.contains("jsmind-custom")) {
-                alert("Already provider link, not handled yet");
-                return;
-            }
-        }
-        function isCustomJmnode(eltJmnode) {
-            if (eltJmnode.tagName != "JMNODE") throw Error("Not <jmnode>");
-            const eltLast = eltJmnode.lastElementChild;
-            if (eltLast?.classList.contains("jsmind-custom")) return true;
-            return false;
-        }
-
-        if (isCustomJmnode(eltJmnode)) {
-            alert("Already provider link, not handled yet");
-            return;
-        }
-        if (eltJmnode.childElementCount == 3) { debugger;}
-        */
 
         const provider = objCustomCopied.provider;
         if (!(await getCustomRenderer()).getProviderNames().includes(provider)) throw Error(`Provider ${provider} is unknown`);
@@ -2101,65 +1833,6 @@ function getJmnodesFromJm(jmDisplayed) {
 }
 
 
-/*
-export async function fixJmnodeProblem(eltJmnode) {
-    console.warn("fixJmnodeProblem", eltJmnode);
-    return;
-    const customRenderer = await modCustRend.getOurCustomRenderer();
-    // customRenderer.fixLeftRightChildren(eltJmnode);
-    return;
-
-    const isPlainNode = eltJmnode.childElementCount == 0;
-    const isNewCustomFormat = eltJmnode.childElementCount == 1;
-    const eltRendererImg = eltJmnode.lastElementChild;
-    const eltTopic = eltJmnode.firstElementChild;
-
-    const { eltTxt, eltBg } = modCustRend.addJmnodeBgAndText(eltJmnode);
-
-    if (isPlainNode) {
-        const txt = eltJmnode.textContent;
-        const f1 = eltJmnode.firstChild;
-        if (f1.nodeName != "#text") throw Error(`First child not #text: ${f1.nodeName}`);
-        f1.remove();
-        eltTxt.textContent = txt;
-    } else {
-        // Custom node
-        if (!isNewCustomFormat) {
-            console.log("old custom format 3");
-            eltTopic.remove();
-            const customData = eltTopic.dataset.jsmindCustom;
-            // delete htmlTopic.dataset.jsmindCustom;
-            eltRendererImg.dataset.jsmindCustom = customData;
-        }
-    }
-}
-*/
-
-function isVeryOldCustomFormat(eltJmnode) {
-    const child1 = eltJmnode.firstElementChild;
-    if (!child1) return false;
-    if (child1.classList.contains("fc4i")) {
-        console.log("Old custom format", { eltJmnode });
-        // https://www.encodedna.com/javascript/override-important-style-property-in-javascript.htm
-        // eltJmnode.style.border = "10px double red !important";
-        setTimeout(() => {
-            eltJmnode.style.setProperty("border", "10px double red", "important");
-            eltJmnode.style.setProperty("background-color", "black", "important");
-            eltJmnode.style.setProperty("color", "white", "important");
-            clearShapes(eltJmnode);
-            const eltDelete = mkElt("div", undefined, "Delete!");
-            eltDelete.style.position = "absolute";
-            eltDelete.style.bottom = 0;
-            eltDelete.style.right = 0;
-            eltDelete.style.setProperty("background-color", "red", "important");
-            eltDelete.style.zIndex = 1000;
-            eltJmnode.appendChild(eltDelete);
-        }, 1000);
-        return true;
-    }
-}
-/* function fixOldCustomAndUpdate(eltJmnode) { } */
-
 function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
     setTimeout(() => {
         console.log("fixJmnodesProblem (in setTimeout fun)");
@@ -2167,7 +1840,7 @@ function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
         const eltJmnodes = getJmnodesFromJm(jmDisplayed);
         // [...document.getElementsByTagName("jmnode")].forEach(eltJmnode => 
         [...eltJmnodes.getElementsByTagName("jmnode")].forEach(async eltJmnode => {
-            if (isVeryOldCustomFormat(eltJmnode)) return;
+            // if (isVeryOldCustomFormat(eltJmnode)) return;
             // await fixJmnodeProblem(eltJmnode); // FIX-ME: Remove when this is fixed in jsmind
             // fixOldCustomAndUpdate(eltJmnode);
             const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
@@ -2233,24 +1906,6 @@ export function getMatchesInCssRules(re) {
     return [...selectors];
 }
 
-// chatGPT
-/*
-function getRectangleInEllipse(w, h) {
-    const a = w / 2;
-    const b = h / 2;
-    const r_ellipse = a / b;
-
-    const r = r_ellipse;
-
-    const x = (r * a * b) / Math.sqrt((r * r * a * a) + (b * b));
-    const y = x / r;
-
-    return {
-        width: x,
-        height: y
-    };
-}
-*/
 
 //////////////////////
 // Accesibility color contrast
@@ -2285,22 +1940,6 @@ I know this could be more compact, but I think this is easier to read/explain.
     const cBrightness = ((hRed * 299) + (hGreen * 587) + (hBlue * 114)) / 1000;
     if (cBrightness > threshold) { return "#000000"; } else { return "#ffffff"; }
 }
-
-
-
-
-/*
-function getJmnodesIn(idContainer) {
-    const eltContainer = document.getElementById(idContainer)
-    const j = eltContainer?.querySelector("jmnodes");
-    return j;
-}
-*/
-// function getJmnodesMain() { return getJmnodesIn(idContainer); }
-
-
-
-
 
 
 
@@ -2357,21 +1996,6 @@ function scrollNodeIntoView(node) {
 
 }
 
-/*
-function mkEltLinkMindmapA(urlPath, topic, mkey, mhits, provider) {
-    const url = new URL(urlPath, location);
-    url.searchParams.set("mindmap", mkey);
-    if (mhits) {
-        url.searchParams.set("provider", provider);
-        const hits = mhits.map(h => h.id);
-        console.log({ hits })
-        url.searchParams.set("nodehits", hits);
-    }
-    const eltA = mkElt("a", undefined, topic);
-    eltA.href = url;
-    return eltA;
-}
-*/
 
 export async function dialogMindMaps(linkMindmapsPage, info, arrMindmapsHits, provider) {
     const toLink = typeof linkMindmapsPage;
@@ -2668,7 +2292,7 @@ function testCmOnScreen() {
         left: 0;
         display: inline-block;
         padding: 4px;
-        background: yellow;
+        background-color: yellow;
         color: black;
         z-index: 9999;
     `;
@@ -2719,7 +2343,7 @@ function getBottomDebug() {
                 left: 0px;
                 height: 30px;
                 padding: 4px;
-                background: black;
+                background-color: black;
                 bottom: 0;
                 display: grid;
                 grid-template-columns: 50px 1fr 1fr 1fr;
@@ -2729,13 +2353,6 @@ function getBottomDebug() {
     document.body.appendChild(eltBottomDebug);
 
 }
-/*
-function getEltDebugCapture() {
-    if (eltDebugCapture) return eltDebugCapture;
-    getBottomDebug();
-    return eltDebugCapture;
-}
-*/
 function getEltDebugState() {
     if (eltDebugState) return eltDebugState;
     getBottomDebug();
@@ -2754,11 +2371,6 @@ function getEltDebugJssmAction() {
 }
 
 
-/*
-function showDebugCapture(msg) {
-    (getEltDebugCapture()).textContent = msg;
-}
-*/
 function showDebugState(msg) {
     (getEltDebugState()).textContent = msg;
 }
