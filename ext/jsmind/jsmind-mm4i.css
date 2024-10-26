@@ -519,7 +519,7 @@ jmnodes jmnode .jmnode-bg {
 
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: green;
+    /* background-color: green; */
 }
 
 jmnodes jmnode .jmnode-bg:not([class*='jsmind-shape-']) {

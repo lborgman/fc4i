@@ -28,7 +28,7 @@
      *
      */
 
-    const __version__ = '0.8.506';
+    const __version__ = '0.8.508';
     const __author__ = 'hizzgdev@163.com';
 
     if (typeof String.prototype.startsWith != 'function') {
@@ -2807,10 +2807,12 @@
         }
         _reset_node_custom_style(node_element, node_data) {
             if ('background-color' in node_data) {
-                node_element.style.backgroundColor = node_data['background-color'];
+                console.error("background-color can not be used");
+                // node_element.style.backgroundColor = node_data['background-color'];
             }
             if ('foreground-color' in node_data) {
-                node_element.style.color = node_data['foreground-color'];
+                console.error("foreground-color can not be used");
+                // node_element.style.color = node_data['foreground-color'];
             }
             if ('width' in node_data) {
                 node_element.style.width = node_data['width'] + 'px';
@@ -2819,15 +2821,20 @@
                 node_element.style.height = node_data['height'] + 'px';
             }
             if ('font-size' in node_data) {
-                node_element.style.fontSize = node_data['font-size'] + 'px';
+                console.error("font-size can not be used");
+                // node_element.style.fontSize = node_data['font-size'] + 'px';
             }
             if ('font-weight' in node_data) {
-                node_element.style.fontWeight = node_data['font-weight'];
+                console.error("font-weight can not be used");
+                // node_element.style.fontWeight = node_data['font-weight'];
             }
             if ('font-style' in node_data) {
-                node_element.style.fontStyle = node_data['font-style'];
+                console.error("font-style can not be used");
+                // node_element.style.fontStyle = node_data['font-style'];
             }
             if ('background-image' in node_data) {
+                console.error("background-image can not be used");
+                /*
                 var backgroundImage = node_data['background-image'];
                 if (backgroundImage.startsWith('data') && node_data['width'] && node_data['height']) {
                     var img = new Image();
@@ -2860,6 +2867,7 @@
                     node_element.style.transform =
                         'rotate(' + node_data['background-rotation'] + 'deg)';
                 }
+                */
             }
         }
         restore_selected_node_custom_style(node) {

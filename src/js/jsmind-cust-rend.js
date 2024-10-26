@@ -770,6 +770,7 @@ export class CustomRenderer4jsMind {
         initialTempData.topic = node_copied.topic;
         const eltCopiedText = eltCopied.querySelector(".jmnode-text"); // FIX-ME:
 
+        /*
         const fgColor = node_copied_data["foreground-color"];
         const bgColor = node_copied_data["background-color"];
         if (fgColor) {
@@ -780,6 +781,7 @@ export class CustomRenderer4jsMind {
             initialTempData.bgColor = bgColor;
             eltCopied.style.backgroundColor = bgColor;
         }
+        */
 
         initialShapeEtc.temp = initialTempData;
         console.log({ copiedShapeEtc, node_copied_data, initialTempData });
@@ -993,6 +995,7 @@ export class CustomRenderer4jsMind {
         }
 
         const jmnodesShapes = mkElt("jmnodes");
+        jmnodesShapes.classList.add(themeCls); // FIX-ME: might not fit background here
         jmnodesShapes.addEventListener("change", evt => {
             console.log({ evt });
             const target = evt.target;
