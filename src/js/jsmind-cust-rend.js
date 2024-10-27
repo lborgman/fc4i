@@ -1696,10 +1696,16 @@ export class CustomRenderer4jsMind {
                         const eltImg = await modImages.mkImageCardFromBigImage(blob, maxBlobSize);
                         // modImages.addFunOnRemoveImageCard(eltImg, removeBg);
                         // toDiv.appendChild(eltImg);
+
                         const bg = eltCopied.firstElementChild;
-                        const ub =eltImg.dataset.urlBlob;
-                        bg.style.backgroundImage = `url("${ub}")`;
+                        if (!bg.classList.contains("jmnode-bg")) throw Error(`Not .jmnode-bg`);
+                        const urlBlob = eltImg.dataset.urlBlob;
+                        bg.style.backgroundImage = `url("${urlBlob}")`;
+                        // const r = await fetch(urlBlob);
+                        // const blob = await r.blob();
+                        currentShapeEtc.imageBg = { url: urlBlob, blob };
                     }
+                    applyToCopied();
                 }
             } else {
                 // Should be an error object

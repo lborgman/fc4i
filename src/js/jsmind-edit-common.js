@@ -572,6 +572,18 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
         const modCustRend = await importFc4i("jsmind-cust-rend");
         modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
     }
+    const OLDimageBlob = shapeEtc.imageBlob;
+    console.log({ OLDimageBlob });
+    const imageBg = shapeEtc.imageBg;
+    if (imageBg) {
+        let objectUrl
+        const blob = shapeEtc.imageBg.blob;
+        if (blob) { objectUrl = URL.createObjectURL(blob); }
+        const url = objectUrl || shapeEtc.imageBg.url;
+        if (!url) throw Error(`urlImage is ${url}`);
+        eltShape.style.backgroundImage = `url("${url}")`;
+        if (objectUrl) { setTimeout(() => URL.revokeObjectURL(objectUrl), 1000); }
+    }
 
     // const clsIconButton = "icon-button-40";
     const clsIconButton = "icon-button-30";
@@ -1659,8 +1671,8 @@ export async function pageSetup() {
                 jm.select_node(new_node);
                 // setTimeout(() => { newNode._data.view.element.draggable = true; }, 1000);
                 // setTimeout(() => {
-                    // const eltJmnode = jsMind.my_get_DOM_element_from_node(new_node);
-                    // fixJmnodeProblem(eltJmnode);
+                // const eltJmnode = jsMind.my_get_DOM_element_from_node(new_node);
+                // fixJmnodeProblem(eltJmnode);
                 // }, 1000);
             }
         }
