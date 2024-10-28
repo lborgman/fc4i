@@ -556,6 +556,7 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     } else {
         eltShape.style.border = null;
     }
+
     const shadow = shapeEtc.shadow;
     if (shadow && shadow.blur > 0) {
         const x = shadow.offX || 0;
@@ -567,22 +568,23 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
         // const s = shadow.spread;
         // eltJmnode.style.filter = `drop-shadow(${x}px ${y}px ${b}px ${s}px ${c})`;
     }
-    const bgCssText = shapeEtc.background?.CSS;
-    if (bgCssText) {
-        const modCustRend = await importFc4i("jsmind-cust-rend");
-        modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
-    }
-    const OLDimageBlob = shapeEtc.imageBlob;
-    console.log({ OLDimageBlob });
-    const imageBg = shapeEtc.imageBg;
-    if (imageBg) {
-        let objectUrl
-        const blob = shapeEtc.imageBg.blob;
-        if (blob) { objectUrl = URL.createObjectURL(blob); }
-        const url = objectUrl || shapeEtc.imageBg.url;
-        if (!url) throw Error(`urlImage is ${url}`);
-        eltShape.style.backgroundImage = `url("${url}")`;
-        if (objectUrl) { setTimeout(() => URL.revokeObjectURL(objectUrl), 1000); }
+
+    if (shapeEtc.background) {
+        const bgCssText = shapeEtc.background?.CSS;
+        if (bgCssText) {
+            const modCustRend = await importFc4i("jsmind-cust-rend");
+            modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
+        }
+        let objectUrl;
+        const blob = shapeEtc.background.blob;
+        if (blob) {
+            objectUrl = URL.createObjectURL(blob);
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        }
+        const url = objectUrl || shapeEtc.background.url;
+        if (url) {
+            eltShape.style.backgroundImage = `url("${url}")`;
+        }
     }
 
     // const clsIconButton = "icon-button-40";
@@ -591,9 +593,6 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     const oldAimg = eltJmnode.querySelector(`.jsmind-renderer-img`);
     oldAimg?.remove();
     const oldBtn = eltJmnode.querySelector(`.${clsIconButton}`);
-    if (oldBtn && oldAimg) {
-        console.warn({ oldBtn, oldAimg });
-    }
     oldBtn?.remove();
 
     const nodeLink = shapeEtc.nodeLink;

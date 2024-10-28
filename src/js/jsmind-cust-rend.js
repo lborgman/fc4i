@@ -1708,7 +1708,9 @@ export class CustomRenderer4jsMind {
                         // const urlBlob = eltImg.dataset.urlBlob;
                         const urlBlob = URL.createObjectURL(blobOut);
                         // bg.style.backgroundImage = `url("${urlBlob}")`;
-                        currentShapeEtc.imageBg = { url: urlBlob, blob: blobOut };
+                        const objBackground = currentShapeEtc.background || {};
+                        objBackground.url = urlBlob; // This is for somethingToSave()
+                        objBackground.blob = blobOut;
                     }
                     applyToCopied();
                 }
