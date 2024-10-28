@@ -1693,17 +1693,22 @@ export class CustomRenderer4jsMind {
                     const maxBlobSize = 20 * 1000;
                     // FIX-ME: only one
                     for (const blob of resultImageBlobs) {
-                        const eltImg = await modImages.mkImageCardFromBigImage(blob, maxBlobSize);
-                        // modImages.addFunOnRemoveImageCard(eltImg, removeBg);
-                        // toDiv.appendChild(eltImg);
+                        // const eltImg = await modImages.mkImageCardFromBigImage(blob, maxBlobSize);
+                        const {
+                            blobOut,
+                            shrinked,
+                            msElapsed,
+                            typeIn,
+                            typeOut,
+                            quality
+                        } = await modImages.shrinkImgBlobToSizes(blob, maxBlobSize);
 
-                        const bg = eltCopied.firstElementChild;
-                        if (!bg.classList.contains("jmnode-bg")) throw Error(`Not .jmnode-bg`);
-                        const urlBlob = eltImg.dataset.urlBlob;
-                        bg.style.backgroundImage = `url("${urlBlob}")`;
-                        // const r = await fetch(urlBlob);
-                        // const blob = await r.blob();
-                        currentShapeEtc.imageBg = { url: urlBlob, blob };
+                        // const bg = eltCopied.firstElementChild;
+                        // if (!bg.classList.contains("jmnode-bg")) throw Error(`Not .jmnode-bg`);
+                        // const urlBlob = eltImg.dataset.urlBlob;
+                        const urlBlob = URL.createObjectURL(blobOut);
+                        // bg.style.backgroundImage = `url("${urlBlob}")`;
+                        currentShapeEtc.imageBg = { url: urlBlob, blob: blobOut };
                     }
                     applyToCopied();
                 }
