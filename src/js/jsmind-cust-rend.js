@@ -764,6 +764,10 @@ export class CustomRenderer4jsMind {
         const copiedShapeEtc = node_copied_data.shapeEtc;
 
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
+        // Image blob was erased, get it back:
+        const blob = copiedShapeEtc.background.blob;
+        if (!(blob instanceof Blob)) throw Error("Not blob");
+        initialShapeEtc.background.blob = blob;
 
         initialTempData.height = node_copied_data.height;
         initialTempData.width = node_copied_data.width;
@@ -787,6 +791,11 @@ export class CustomRenderer4jsMind {
         console.log({ copiedShapeEtc, node_copied_data, initialTempData });
 
         const currentShapeEtc = JSON.parse(JSON.stringify(initialShapeEtc));
+        // Image blob was erased, get it back:
+        const currBlob = initialShapeEtc.background.blob;
+        if (!(currBlob instanceof Blob)) throw Error("Not blob");
+        currentShapeEtc.background.blob = currBlob;
+
         const currentTempData = currentShapeEtc.temp; // For things outside of .shapeEtc
 
         /* 
@@ -1201,6 +1210,11 @@ export class CustomRenderer4jsMind {
             }
             const inp = eltChoice.querySelector("input[name=bg-choice]");
             inp.disabled = !enabled;
+            if (enabled) {
+                inp.classList.remove("bg-choice-needs-value");
+            } else {
+                inp.classList.add("bg-choice-needs-value");
+            }
         }
         const mkBgChoice = (id, label, eltDetails) => {
             const inpRadio = mkElt("input", { type: "radio", id, name: "bg-choice" });
