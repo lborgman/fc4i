@@ -1210,7 +1210,7 @@ export async function pageSetup() {
     // let ourCustomRenderer4mirror;
 
     // FIX-ME: remove when this is fixed in jsmind.
-    fixProblemsAndUpdateCustomAndShapes(jmDisplayed);
+    updateCustomAndShapes(jmDisplayed);
 
     async function setNodeHitsFromArray(arrIdHits, hitType) {
         const eltJmnodes = getJmnodesFromJm(jmDisplayed);
@@ -1844,16 +1844,12 @@ function getJmnodesFromJm(jmDisplayed) {
 }
 
 
-function fixProblemsAndUpdateCustomAndShapes(jmDisplayed) {
+function updateCustomAndShapes(jmDisplayed) {
     setTimeout(() => {
-        console.log("fixJmnodesProblem (in setTimeout fun)");
-        addDebugLog("fixJmnodesProblem (in setTimeout fun)");
+        console.log("updateCustomAndShapes (in setTimeout fun)");
+        addDebugLog("updateCustomAndShapes (in setTimeout fun)");
         const eltJmnodes = getJmnodesFromJm(jmDisplayed);
-        // [...document.getElementsByTagName("jmnode")].forEach(eltJmnode => 
         [...eltJmnodes.getElementsByTagName("jmnode")].forEach(async eltJmnode => {
-            // if (isVeryOldCustomFormat(eltJmnode)) return;
-            // await fixJmnodeProblem(eltJmnode); // FIX-ME: Remove when this is fixed in jsmind
-            // fixOldCustomAndUpdate(eltJmnode);
             const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
             if (node_id == 21) console.warn("node_id 21");
             const node = jmDisplayed.get_node(node_id);

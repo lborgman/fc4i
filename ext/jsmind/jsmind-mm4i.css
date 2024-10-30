@@ -489,6 +489,10 @@ jmnodes jmnode {
     width: max-content;
 }
 
+jmnodes jmnode.root {
+    max-height: 150px;
+}
+
 jmnodes jmnode.text-overflow div.jmnode-text {
     NObackground-color: cyan;
 }
@@ -581,10 +585,13 @@ jmnodes jmnode .jmnode-text {
 }
 
 .jsmind_container jmnodes jmnode.root div.jmnode-text {
-    text-decoration: wavy underline;
-    text-underline-position: under;
-    line-height: 2;
+    /* text-decoration: wavy underline; */
+    /* text-underline-position: under; */
+    /* line-height: 2; */
     /* for the wavy to be visible */
+    border-bottom: 14px double white;
+    margin-bottom: 4px;
+    font-size: 32px;
 }
 
 /* https://css-tricks.com/almanac/properties/t/touch-action/ */

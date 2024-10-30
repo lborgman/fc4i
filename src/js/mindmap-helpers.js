@@ -40,7 +40,14 @@ export async function createAndShowNewMindmap(linkMindmapsPage) {
     if (!jsMindMap) return;
     const keyName = jsMindMap.meta.name;
     console.log({ jsMindMap, keyName });
-    // const dbMindmaps = await getDbMindmaps();
+
+    const root = jsMindMap.data[0];
+    // root.data = {};
+    // root.data.shapeEtc = {};
+    // root.data.shapeEtc.shape = "jsmind-shape-ellipse";
+    root.shapeEtc = {};
+    root.shapeEtc.shape = "jsmind-shape-ellipse";
+
     const dbMindmaps = await importFc4i("db-mindmaps");
     await dbMindmaps.DBsetMindmap(keyName, jsMindMap);
     showMindmap(keyName);

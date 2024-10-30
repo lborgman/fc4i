@@ -28,7 +28,7 @@
      *
      */
 
-    const __version__ = '0.8.508';
+    const __version__ = '0.8.509';
     const __author__ = 'hizzgdev@163.com';
 
     if (typeof String.prototype.startsWith != 'function') {
@@ -2443,7 +2443,7 @@
             const dOverF = $.c('div');
             dOverF.classList.add("jmnode-overflow");
             d.appendChild(dOverF);
-            const dTxt = $.c("div");
+            const dTxt = node.isRoot ? $.c("h1") : $.c("div"); // Get <h1> font
             dTxt.classList.add("jmnode-text");
             dOverF.appendChild(dTxt);
             if (node.isroot) {

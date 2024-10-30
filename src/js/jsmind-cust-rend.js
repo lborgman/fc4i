@@ -719,7 +719,7 @@ export class CustomRenderer4jsMind {
 
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
         // Image blob was erased, get it back:
-        const blob = copiedShapeEtc.background.blob;
+        const blob = copiedShapeEtc.background?.blob;
         if (blob) {
             if (!(blob instanceof Blob)) throw Error("Not blob");
             initialShapeEtc.background.blob = blob;
@@ -736,7 +736,7 @@ export class CustomRenderer4jsMind {
 
         const currentShapeEtc = JSON.parse(JSON.stringify(initialShapeEtc));
         // Image blob was erased, get it back:
-        const currBlob = initialShapeEtc.background.blob;
+        const currBlob = initialShapeEtc.background?.blob;
         if (currBlob) {
             if (!(currBlob instanceof Blob)) throw Error("Not blob");
             currentShapeEtc.background.blob = currBlob;
