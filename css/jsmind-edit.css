@@ -800,3 +800,9 @@ jmnode.low-theme-contrast::after {
     left: 0;
     bottom: 0;
 }
+
+/*
+*/
+div.bg-choice.bg-choice-needs-value {
+    background-color: red !important;
+}

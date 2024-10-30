@@ -692,14 +692,15 @@ export class CustomRenderer4jsMind {
     async editNodeDialog(eltJmnode) {
         const modJsEditCommon = await importFc4i("jsmind-edit-common");
         const modIsDisplayed = await importFc4i("is-displayed");
+        const clipImage = {};
 
         function somethingToSave() {
             return JSON.stringify(initialShapeEtc) != JSON.stringify(currentShapeEtc);
         }
 
         // updateCopiesSizes()
-        const onAnyCtrlChange = debounce(applyToCopied);
-        function applyToCopied() {
+        const onAnyCtrlChange = debounce(applyCurrentToCopied);
+        function applyCurrentToCopied() {
             const changed = somethingToSave();
             console.warn("applyToCopied", changed);
             requestSetStateBtnSave();
@@ -766,8 +767,10 @@ export class CustomRenderer4jsMind {
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
         // Image blob was erased, get it back:
         const blob = copiedShapeEtc.background.blob;
-        if (!(blob instanceof Blob)) throw Error("Not blob");
-        initialShapeEtc.background.blob = blob;
+        if (blob) {
+            if (!(blob instanceof Blob)) throw Error("Not blob");
+            initialShapeEtc.background.blob = blob;
+        }
 
         initialTempData.height = node_copied_data.height;
         initialTempData.width = node_copied_data.width;
@@ -793,8 +796,10 @@ export class CustomRenderer4jsMind {
         const currentShapeEtc = JSON.parse(JSON.stringify(initialShapeEtc));
         // Image blob was erased, get it back:
         const currBlob = initialShapeEtc.background.blob;
-        if (!(currBlob instanceof Blob)) throw Error("Not blob");
-        currentShapeEtc.background.blob = currBlob;
+        if (currBlob) {
+            if (!(currBlob instanceof Blob)) throw Error("Not blob");
+            currentShapeEtc.background.blob = currBlob;
+        }
 
         const currentTempData = currentShapeEtc.temp; // For things outside of .shapeEtc
 
@@ -1142,11 +1147,9 @@ export class CustomRenderer4jsMind {
         // let bgColorChanged;
         // let fgColorChanged;
         inpBgColor.addEventListener("input", evt => {
-            // currentShapeEtc.bgColor = inpBgColor.value;
             currentShapeEtc.temp.bgColor = inpBgColor.value;
-            // somethingtosave
             onAnyCtrlChange();
-            eltCopied.style.backgroundColor = inpBgColor.value;
+            // eltCopied.style.backgroundColor = inpBgColor.value;
             checkColorContrast();
         });
         inpFgColor.addEventListener("input", evt => {
@@ -1176,22 +1179,27 @@ export class CustomRenderer4jsMind {
         ].join("; ");
 
 
-        /*
-        function tempApplyBgToCopied() {
-            const cssBgVal = getBgCssValueFromElts();
-            console.log("old tempApplyBgToCopied", cssBgVal);
-            applyJmnodeBgCssValue(eltCopied, cssBgVal);
-        }
-        */
-        // const debounceTempApplyBgToCopied = debounce(tempApplyBgToCopied, 2000);
-        async function newTempApplyBgToCopied() {
+        async function ApplyCurrentBgToCopied() {
             const cssBgVal = await getBgCssValueFromElts();
-            // const strCss = typeof cssBgVal == "string" ? cssBgVal : JSON.stringify(cssBgVal).slice(1, -1);
-            if (typeof cssBgVal != "string") throw Error("cssBgVal not string");
-            setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
-            applyToCopied();
+            if (undefined != cssBgVal) {
+                const bg = currentShapeEtc.background;
+                if (typeof cssBgVal == "string") {
+                    if (bg) {
+                        delete bg.url;
+                        delete bg.blob;
+                    }
+                    setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
+                } else {
+                    bg.CSS = "";
+                    bg.url = clipImage.url;
+                    bg.blob = clipImage.blob;
+                    console.error("Not implemented yet");
+                    debugger;
+                }
+                applyCurrentToCopied();
+            }
         }
-        const debounceTempApplyBgToCopied = debounce(newTempApplyBgToCopied, 2000);
+        const debounceApplyCurrentBgToCopied = debounce(ApplyCurrentBgToCopied, 2000);
 
 
         function setBgChoiceThis(eltChoice) {
@@ -1201,24 +1209,23 @@ export class CustomRenderer4jsMind {
                 throw Error(`Can't choose disabled ${val}`);
             }
             inp.checked = true;
-            debounceTempApplyBgToCopied();
+            debounceApplyCurrentBgToCopied();
         }
-        function setBgChoiceEnabled(eltChoice, enabled) {
+        function setBgChoiceValid(eltChoice, valid) {
             if (!eltChoice.classList.contains("bg-choice")) {
                 console.log("Not bg-choice: ", eltChoice);
                 throw Error("eltChoice is not bg-choice")
             }
-            const inp = eltChoice.querySelector("input[name=bg-choice]");
-            inp.disabled = !enabled;
-            if (enabled) {
-                inp.classList.remove("bg-choice-needs-value");
+            // const inp = eltChoice.querySelector("input[name=bg-choice]");
+            if (valid) {
+                eltChoice.classList.remove("bg-choice-needs-value");
             } else {
-                inp.classList.add("bg-choice-needs-value");
+                eltChoice.classList.add("bg-choice-needs-value");
             }
         }
         const mkBgChoice = (id, label, eltDetails) => {
             const inpRadio = mkElt("input", { type: "radio", id, name: "bg-choice" });
-            inpRadio.disabled = true;
+            // inpRadio.disabled = true;
             inpRadio.style.gridArea = "r";
             inpRadio.style.marginRight = "10px";
 
@@ -1250,7 +1257,7 @@ export class CustomRenderer4jsMind {
         }
 
         const bgChoiceNone = mkBgChoice("bg-choice-none", "No special");
-        setBgChoiceEnabled(bgChoiceNone, true);
+        setBgChoiceValid(bgChoiceNone, true);
         const radChoiceNone = bgChoiceNone.querySelector("#bg-choice-none");
         // radChoiceLink = divChoices.querySelector("#bg-choice-link");
 
@@ -1282,8 +1289,8 @@ export class CustomRenderer4jsMind {
                 "background-image": `url(${src})`,
             };
             applyBgCssValue(divImgPreview, cssBgValue);
-            radChoiceLink.disabled = false;
-            debounceTempApplyBgToCopied();
+            // radChoiceLink.disabled = false;
+            debounceApplyCurrentBgToCopied();
         };
         imgPreview.onerror = (evt) => {
             const src = imgPreview.src;
@@ -1299,16 +1306,16 @@ export class CustomRenderer4jsMind {
             applyBgCssValue(divImgPreview, cssBgValue);
             modMdc.setValidityMDC(inpImageUrl, "Not an image");
             badImgLinkUrl();
-            debounceTempApplyBgToCopied();
+            debounceApplyCurrentBgToCopied();
         };
         function badImgLinkUrl() {
-            radChoiceLink.disabled = true;
+            // radChoiceLink.disabled = true;
             radChoiceNone.checked = true;
         }
         const checkImageUrl = async () => {
             console.log("checkImageUrl");
             // FIX-ME: debounce
-            radChoiceLink.disabled = true;
+            // radChoiceLink.disabled = true;
             // const targ = evt.target;
             const maybeUrl = inpImageUrl.value.trim();
             console.log({ maybeUrl });
@@ -1322,7 +1329,7 @@ export class CustomRenderer4jsMind {
             const isValid = modTools.isValidUrl(maybeUrl);
             if (true == isValid) {
                 radChoiceLink.checked = true;
-                radChoiceLink.disabled = false;
+                // radChoiceLink.disabled = false;
                 modMdc.setValidityMDC(inpImageUrl, "");
                 imgPreview.src = maybeUrl;
             } else {
@@ -1355,15 +1362,23 @@ export class CustomRenderer4jsMind {
             mkElt("div", undefined, divImgPreview)
         ]);
 
+        const divClipboardImage = mkElt("div");
+        divClipboardImage.style = `
+            width: 100px;
+            aspect-ratio: 1 / 1;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            background-color: black;
+        `;
         const btnClipboard = modMdc.mkMDCbutton("Clipboard", "raised");
         btnClipboard.addEventListener("click", errorHandlerAsyncEvent(async evt => {
-            const added = await addBgFromClipboard();
-            // if (added) btnAddBg.remove();
-            // if (added) btnAddBg.style.display = "none";
+            const added = await getBgFromClipboard(divClipboardImage);
         }));
         const divClipboard = mkElt("div", undefined, [
             "An image from the clipboard.",
-            btnClipboard
+            btnClipboard,
+            divClipboardImage
         ]);
 
 
@@ -1398,7 +1413,7 @@ export class CustomRenderer4jsMind {
             divBgColor
         ]);
         const bgChoiceColor = mkBgChoice("bg-choice-color", "Color", detBgColor);
-        setBgChoiceEnabled(bgChoiceColor, true);
+        setBgChoiceValid(bgChoiceColor, true);
 
 
         function tellPatternValid(msg) {
@@ -1449,7 +1464,7 @@ export class CustomRenderer4jsMind {
             if (patternValid === true) {
                 modMdc.setValidityMDC(taImgPattern, "");
                 tellPatternValid("Valid");
-                setBgChoiceEnabled(divThisChoice, true);
+                setBgChoiceValid(divThisChoice, true);
                 setBgChoiceThis(divThisChoice);
                 for (const prop in cssKeyVal) {
                     const val = cssKeyVal[prop];
@@ -1463,7 +1478,7 @@ export class CustomRenderer4jsMind {
                 // console.log("Not valid css:", patternValid);
                 modMdc.setValidityMDC(taImgPattern, patternValid);
                 tellPatternValid("Not valid: " + patternValid);
-                setBgChoiceEnabled(divThisChoice, false);
+                setBgChoiceValid(divThisChoice, false);
                 setBgChoiceThis(bgChoiceNone);
                 divImgPatternPreview.style.background = "gray";
                 divImagePattern.style.outline = "2px dotted red";
@@ -1541,13 +1556,20 @@ export class CustomRenderer4jsMind {
             // Try a timeout here:
             setTimeout(async () => {
                 console.log("in timeout");
-                const checked = await getBgCssValueElt();
-                console.log({ checked });
-                debounceTempApplyBgToCopied();
+                const valBg = await getBgCssValueFromElts();
+                console.log({ valBg });
+                const valid = (undefined != valBg);
+                const inpChecked = await getBgCssCheckedInp();
+                console.log({ inpChecked });
+                const eltChecked = inpChecked.closest("div.bg-choice")
+                setBgChoiceValid(eltChecked, valid);
+                if (valid) {
+                    debounceApplyCurrentBgToCopied();
+                }
             }, 100);
         }));
 
-        async function getBgCssValueElt() {
+        async function getBgCssCheckedInp() {
             // console.trace("getBgCssValueElt");
             let msWaited = 0;
             const msStep = 200;
@@ -1561,31 +1583,38 @@ export class CustomRenderer4jsMind {
             return elt;
         }
         async function getBgCssValueFromElts() {
-            const elt = await getBgCssValueElt();
+            const elt = await getBgCssCheckedInp();
             const id = elt.id;
             console.log("getBgCssValue", elt, id);
             switch (id) {
                 case "bg-choice-none":
-                    // return {};
                     return "";
                 case "bg-choice-color":
-                    // return { "background-color": inpBgColor.value };
-                    return `background-color: ${inpBgColor.value}`;
+                    {
+                        const val = inpBgColor.value.trim();
+                        if (0 == val.length) return;
+                        return `background-color: ${val}`;
+                    }
                 case "bg-choice-link":
-                    const valLink = inpImageUrl.value.trim();
-                    // return { "background-image": `url(${valLink})` };
-                    return `background-image: url(${valLink})`;
+                    {
+                        const val = inpImageUrl.value.trim();
+                        if (0 == val.length) return;
+                        return `background-image: url(${val})`;
+                    }
                 case "bg-choice-pattern":
-                    // return objCssPattern;
-                    return taImgPattern.value;
-                    break;
+                    {
+                        const val = taImgPattern.value.trim();
+                        if (0 == val.length) return;
+                        return val;
+                    }
+                case "bg-choice-clipboard":
+                    if (!clipImage.blob) return;
+                    return clipImage;
                 default:
                     throw Error(`Unknown bg-choice: ${id}`);
             }
         }
 
-        // getBgCssValueFromElts();
-        // debounceTempApplyBgToCopied();
         const divCurrentBg = mkElt("div", undefined);
 
         const divBackground = mkElt("div", { style: styleColors }, [
@@ -1670,16 +1699,11 @@ export class CustomRenderer4jsMind {
         let blobBg;
         const btnChangeBg = modMdc.mkMDCbutton("Change", "raised");
         btnChangeBg.addEventListener("click", errorHandlerAsyncEvent(async evt => {
-            // const added = await addBgFromClipboard();
-            // if (added) btnAddBg.remove();
-            // if (added) btnAddBg.style.display = "none";
             await dlgBgImage();
         }));
         async function dlgBgImage() {
-            const eltInfoAdd = mkElt("p", undefined,
-                `You can add a background image either as a link 
-                or as an image from cliboard.`);
-            const btnLink = modMdc.mkMDCbutton("Link", "raised");
+            // const eltInfoAdd = mkElt("p", undefined, `You can add a background image either as a link or as an image from cliboard.`);
+            // const btnLink = modMdc.mkMDCbutton("Link", "raised");
 
             const body = mkElt("div", { id: "dlg-body-node-background" }, [
                 mkElt("h2", undefined, "Node background"),
@@ -1687,9 +1711,9 @@ export class CustomRenderer4jsMind {
                 divCurrentBg,
                 divBgChoices
             ]);
-            const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
+            // const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
         }
-        async function addBgFromClipboard() {
+        async function getBgFromClipboard(toDiv) {
             const modImages = await importFc4i("images");
             const clipboardAccessOk = await modImages.isClipboardPermissionStateOk();
             if (clipboardAccessOk == false) {
@@ -1702,31 +1726,29 @@ export class CustomRenderer4jsMind {
                     modImages.alertNoImagesFound();
                     return false;
                 } else {
-                    console.log(eltCopied); debugger;
-                    // const toDiv = divCurrentImage;
+                    console.log(eltCopied);
                     const maxBlobSize = 20 * 1000;
                     // FIX-ME: only one
-                    for (const blob of resultImageBlobs) {
-                        // const eltImg = await modImages.mkImageCardFromBigImage(blob, maxBlobSize);
+                    for (const blobIn of resultImageBlobs) {
                         const {
-                            blobOut,
-                            shrinked,
-                            msElapsed,
-                            typeIn,
-                            typeOut,
-                            quality
-                        } = await modImages.shrinkImgBlobToSizes(blob, maxBlobSize);
+                            blobOut, // shrinked, msElapsed, typeIn, typeOut, quality
+                        } = await modImages.shrinkImgBlobToSizes(blobIn, maxBlobSize);
 
-                        // const bg = eltCopied.firstElementChild;
-                        // if (!bg.classList.contains("jmnode-bg")) throw Error(`Not .jmnode-bg`);
-                        // const urlBlob = eltImg.dataset.urlBlob;
-                        const urlBlob = URL.createObjectURL(blobOut);
+                        const blob = blobOut;
+                        const url = URL.createObjectURL(blob);
                         // bg.style.backgroundImage = `url("${urlBlob}")`;
+                        clipImage.url = url;
+                        clipImage.blob = blob;
                         const objBackground = currentShapeEtc.background || {};
-                        objBackground.url = urlBlob; // This is for somethingToSave()
-                        objBackground.blob = blobOut;
+                        objBackground.url = clipImage.url; // This is for somethingToSave()
+                        objBackground.blob = clipImage.blob;
+                        toDiv.style.backgroundImage = `url("${url}")`;
+                        toDiv.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest"
+                        });
                     }
-                    applyToCopied();
+                    // applyToCopied();
                 }
             } else {
                 // Should be an error object
