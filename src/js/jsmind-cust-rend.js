@@ -6,13 +6,6 @@ const modTools = await importFc4i("toolsJs");
 const debounce = modTools.debounce;
 const wait4mutations = modTools.wait4mutations;
 
-// FIX-ME: Why is this called in share.html?
-/*
-if (typeof jsMind != "undefined" && !jsMind.mm4iSupported) {
-    // throw Error("This version of jsMind does not support mm4i");
-    // console.error("This version of jsMind does not support mm4i");
-}
-*/
 
 // FIX-ME: clean up
 const modMMhelpers = await importFc4i("mindmap-helpers");
@@ -239,32 +232,15 @@ export class CustomRenderer4jsMind {
             const divBg = eltJmnode.querySelector(".jmnode-bg");
             divBg.style.backgroundImage = backgroundImage;
         }
-        /*
-        if (jmOwner) {
-            htmlTopic.addEventListener("click", evt => {
-                // console.log("clicked", eltJmnode);
-                // This did not work: eltJmnode.click(evt);
-                const node_id = getNodeIdFromDOMelt(eltJmnode);
-                this.THEjmDisplayed.select_node(node_id);
-            });
-        }
-        */
     }
-    // async updatePlainLink(node, eltJmnode) { debugger;}
 
-    async editMindmapDialog(eltJmnode) {
+    async editMindmapDialog() {
         const modJsEditCommon = await importFc4i("jsmind-edit-common");
         const modIsDisplayed = await importFc4i("is-displayed");
         // theme
         const rend = await getOurCustomRenderer();
-        // const jmD = rend.getJm();
-        // const root_node = jmD.get_root();
-        // const eltRoot = jsMind.my_get_DOM_element_from_node(root_node);
         const eltRoot = rend.getEltRoot();
         const eltJmnodes = eltRoot.closest("jmnodes");
-
-        // const themeClass = getThemeClass(eltJmnodes);
-        // console.log({ themeClass });
 
         const idThemeChoices = "theme-choices";
         const divThemeChoices = mkElt("div", { id: idThemeChoices });
@@ -371,14 +347,6 @@ export class CustomRenderer4jsMind {
         const inpUseBgMm = modMdc.mkMDCcheckboxInput();
         const chkUseBgMm = await modMdc.mkMDCcheckboxElt(inpUseBgMm, "Set background color");
         console.log({ oldGlobals });
-        /*
-        fixMdcChkLabelVerticalPos(inpUseBgMm);
-        function fixMdcChkLabelVerticalPos(inpCheckbox) {
-            const lblUseBgMm = inpCheckbox.closest("label");
-            console.log({ lblUseBgMm });
-            lblUseBgMm.classList.add("mdc-chkbox-label-helper");
-        }
-        */
 
         const inpBgMmColor = mkElt("input", { type: "color" });
         let sliBgMmOpacity;
@@ -714,29 +682,14 @@ export class CustomRenderer4jsMind {
         };
         const ctrlsSliders = {}
 
-        // const eltJmnodes = eltJmnode.closest("jmnodes");
         const eltCopied = eltJmnode.cloneNode(true);
-        /*
-            FIX-ME:
-            If aPlainLink is not removed then div.jmnode-bg will
-            be shown 10px to high (10px is jmnode padding).
-            This is a chromium bug, but I am not able to pin it down
-            right now because of problems with Chrome Dev Tools
-            (2023-11-15). One of the bugs I just saw in CDT was 
-            fixed today in
-            
-              Chrome, Version 119.0.6045.160 (Official Build) (64-bit)
-
-            Waiting to see if this bug is also fixed soon!
-        */
         const aPlainLink = eltCopied.querySelector("a.jsmind-plain-link");
         aPlainLink?.remove();
 
-        // eltCopied.style.outline = "1px dotted white";
         eltCopied.style.outline = "1px dotted rgba(255,255,255,0.2)";
-        const bcrOrig = eltJmnode.getBoundingClientRect();
         eltCopied.style.top = 0;
         eltCopied.style.left = 0;
+        const bcrOrig = eltJmnode.getBoundingClientRect();
         eltCopied.classList.remove("selected");
         eltCopied.classList.remove("jsmind-hit");
         eltCopied.classList.remove("left-side");
@@ -777,18 +730,6 @@ export class CustomRenderer4jsMind {
         initialTempData.topic = node_copied.topic;
         const eltCopiedText = eltCopied.querySelector(".jmnode-text"); // FIX-ME:
 
-        /*
-        const fgColor = node_copied_data["foreground-color"];
-        const bgColor = node_copied_data["background-color"];
-        if (fgColor) {
-            initialTempData.fgColor = fgColor;
-            eltCopied.style.color = fgColor;
-        }
-        if (bgColor) {
-            initialTempData.bgColor = bgColor;
-            eltCopied.style.backgroundColor = bgColor;
-        }
-        */
 
         initialShapeEtc.temp = initialTempData;
         console.log({ copiedShapeEtc, node_copied_data, initialTempData });
@@ -1047,9 +988,6 @@ export class CustomRenderer4jsMind {
 
         /*
         const arrCopiedChildren = [...eltCopied.querySelectorAll("jmnode>[class|=jsmind-custom-image]")];
-        const numCopiedChildren = arrCopiedChildren.length;
-        const divChildCoundInfo = mkElt("div", undefined, `Node internal child cound: ${numCopiedChildren}`);
-        divShapes.appendChild(divChildCoundInfo);
         */
 
 
@@ -1225,35 +1163,18 @@ export class CustomRenderer4jsMind {
         }
         const mkBgChoice = (id, label, eltDetails) => {
             const inpRadio = mkElt("input", { type: "radio", id, name: "bg-choice" });
-            // inpRadio.disabled = true;
             inpRadio.style.gridArea = "r";
             inpRadio.style.marginRight = "10px";
 
-            /*
-            // FIX-ME: some chrome bug with grid-area here???
-            const mdcRadio = modMdc.mkMDCradioElt(inpRadio);
-            // mdcRadio.style.gridArea = "r";
-            // inpRadio.style.gridArea = "unset";
-            const wrpRadio = mkElt("div", undefined, mdcRadio);
-            wrpRadio.style.display = "inline-block";
-            wrpRadio.style.gridArea = "r";
-            */
-
-
             const lbl = mkElt("label", { for: id }, label);
             lbl.style.gridArea = "l";
-            // const container = mkElt("div", { class: "mdc-card bg-choice" }, [inpRadio, lbl, eltDetails]);
             const container = mkElt("div", { class: "mdc-card bg-choice" }, [inpRadio, lbl]);
             if (eltDetails) {
                 container.appendChild(eltDetails);
                 eltDetails.style.gridArea = "d";
             }
-            // const container = mkElt("div", { class: "mdc-card bg-choice" }, [mdcRadio, lbl, eltDetails]);
-            // const container = mkElt("div", { class: "mdc-card bg-choice" }, [wrpRadio, lbl, eltDetails]);
 
             return container;
-            // const lbl = mkElt("label", { for: id }, eltDetails);
-            // return mkElt("div", undefined, [inpRadio, lbl]);
         }
 
         const bgChoiceNone = mkBgChoice("bg-choice-none", "No special");
@@ -1422,21 +1343,6 @@ export class CustomRenderer4jsMind {
         }
         let patternValid;
 
-        // FIX-ME: Make a better formatting, keeping comments!
-        /*
-        function formatCssDecls(strCss) {
-        }
-        function OLDformatCssDecls(strCss) {
-            const objCss = cssTxt2keyVal(strCss);
-            if (typeof objCss == "string") throw Error(objCss);
-            let str = "";
-            for (const prop in objCss) {
-                const val = objCss[prop];
-                if (str.length > 0) str += "\n";
-                str += `${prop}: ${val};`;
-            }
-        }
-        */
         function setBgPatternPreview() {
             const cssKeyVal = cssTxt2keyVal(taImgPattern.value);
             console.log({ cssKeyVal });
@@ -1638,21 +1544,13 @@ export class CustomRenderer4jsMind {
         taTopic.addEventListener("input", evt => {
             onTaTopicInput();
         });
-        // const copiedWasCustom = eltCopied.lastElementChild.dataset.jsmindCustom != undefined;
         const initialCustomTopic = currentShapeEtc.nodeCustom;
         const copiedWasCustom = initialCustomTopic != undefined;
-        // const initTopic = copiedWasCustom ? "" : initialTempData.topic;
         const initTopic = initialTempData.topic;
-        // const initCustomTopic = eltCopied.lastElementChild.dataset.jsmindCustom;
 
         const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
         modMdc.mkMDCtextareaGrow(tafTopic);
 
-        /*
-            iframe preview can not be used because of frame-ancestors CSP
-            const iframePreview = mkElt("iframe");
-            const divIframe = mkElt("div", undefined, iframePreview);
-        */
 
         const aLinkPreview = mkElt("a");
         const divLinkPreview = mkElt("div", undefined, ["Link: ", aLinkPreview]);
@@ -2413,18 +2311,6 @@ export class CustomRenderer4jsMind {
 
         }
     }
-    /*
-    jmnodeDblclick = (evt) => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        evt.stopImmediatePropagation();
-        const target = evt.target;
-        let eltJmnode = target;
-        const tn = target.tagName;
-        if (tn !== "JMNODE") { eltJmnode = target.closest("jmnode"); }
-        this.editNodeDialog(eltJmnode);
-    }
-    */
     mindmapDblclick = (evt) => {
         const target = evt.target;
         let eltJmnode;
@@ -2459,33 +2345,6 @@ export function addJmnodeBgAndText(eltJmnode) {
 }
 
 
-/*
-function fixLeftRightChildren(eltJmnode) {
-    return;
-    const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
-    // FIX-ME: root
-    if (node_id == "root") return;
-    console.log("old eltJmnode.draggable", eltJmnode.draggable);
-    eltJmnode.draggable = true;
-
-    const node = theCustomRenderer.THEjmDisplayed.get_node(node_id)
-    const isLeft = node.direction == -1;
-    if (!isLeft && node.direction != 1) throw Error(`isLeft but node.direction==${node.direction}`);
-    const hasChildren = node.children.length > 0;
-    eltJmnode.classList.remove("is-left");
-    eltJmnode.classList.remove("is-right");
-    eltJmnode.classList.remove("has-children");
-    if (hasChildren) {
-        // eltJmnode.classList.add("has-children");
-        if (isLeft) {
-            // eltJmnode.classList.add("is-left");
-        } else {
-            // eltJmnode.classList.add("is-right");
-        }
-        if (node.expanded) eltJmnode.classList.add("is-expanded");
-    }
-}
-*/
 
 function getJsmindTheme(eltJmnodes) {
     checkTagName(eltJmnodes, "JMNODES");
@@ -2564,18 +2423,8 @@ function applyBgCssValue(elt, bgCssValues) {
         bgStyle[prop] = val;
     }
 }
-/*
-function applyBgCssText(elt, bgCssText) {
-    const bgCssValues = cssTxt2keyVal(bgCssText);
-    console.log({ bgCssValues });
-    if (typeof bgCssValues == "string") { throw Error(bgCssValues); }
-    applyBgCssValue(elt, bgCssValues);
-}
-*/
 export function applyJmnodeBgCssText(jmnode, bgCssText) {
     const bgCssValues = cssTxt2keyVal(bgCssText);
-    // console.log({ bgCssValues });
-    // if (typeof bgCssValues == "string") { throw Error(bgCssValues); }
     applyJmnodeBgCssValue(jmnode, bgCssValues);
 }
 function applyJmnodeBgCssValue(jmnode, bgCssValues) {
