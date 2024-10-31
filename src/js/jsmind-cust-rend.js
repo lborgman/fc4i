@@ -1993,23 +1993,32 @@ export class CustomRenderer4jsMind {
         if (tabRecs.length != contentElts.childElementCount) throw Error("Tab bar setup number mismatch");
         const onActivateMore = (idx) => {
             // console.log("onActivateMore", idx);
+            const tabName = tabRecs[idx];
+            const checkTabname = (wantName) => {
+                if (tabName != wantName ) throw Error(`Got tab ${tabName}, want ${wantName}`);
+            }
             switch (idx) {
                 case 0:
+                    checkTabname("Content");
                     break;
                 case 1:
+                    checkTabname("Shapes");
                     break;
                 case 2:
+                    checkTabname("Border");
                     activateBorderTab();
                     break;
                 case 3:
+                    checkTabname("Shadow");
                     activateShadowTab();
                     break;
                 case 4:
+                    checkTabname("Background");
                     activateBackgroundTab();
                     break;
-                case 5:
-                    activateThemesTab();
-                    break;
+                // case 5:
+                    // activateThemesTab();
+                    // break;
                 default:
                     throw Error(`There is no tab at idx=${idx} `);
             }
