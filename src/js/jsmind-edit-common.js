@@ -456,7 +456,8 @@ function movePointHandle() {
         sp.left = `${left}px`;
         const top = clientY + posPointHandle.diffY - PointHandle.sizePointHandle / 2;
         sp.top = `${top}px`;
-        modJsmindDraggable.hiHereIam(left, top);
+        // modJsmindDraggable.hiHereIam(left, top);
+        modJsmindDraggable.hiHereIam(clientX, clientY); // use event point
     } catch (err) {
         console.error("movePointHandle", err);
         movePointHandleProblem = true;
