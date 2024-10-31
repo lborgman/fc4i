@@ -1025,7 +1025,8 @@ export class CustomRenderer4jsMind {
             const radioVal = shapeClass || "default";
             const inpRadio = mkElt("input", { type: "radio", name: "shape", value: radioVal });
             if (shapeClass) { inpRadio.dataset.shape = shapeClass; }
-            const eltLabel = mkElt("label", undefined, [inpRadio, eltCopy4shape])
+            const eltLabel = mkElt("label", undefined, [inpRadio, eltCopy4shape]);
+            eltLabel.style.display = "block";
             return eltLabel;
         }
         let computedStyleCopied;
@@ -1043,7 +1044,7 @@ export class CustomRenderer4jsMind {
                 sc.width = bcrCopied.width * scaleCopies;
                 sc.height = bcrCopied.height * scaleCopies + 30;
                 // sc.marginLeft = 10;
-                sc.overflow = "clip";
+                // sc.overflow = "clip";
                 jmnodesShapes.appendChild(clipping);
             }
             appendAlt(mkShapeAlt());
@@ -1071,7 +1072,9 @@ export class CustomRenderer4jsMind {
                 ss.width = eltCopied.style.width;
             }
             jmnodesShapes.parentElement.querySelectorAll("jmnodes>div")
-                .forEach(clipping => { updateSize(clipping) });
+                .forEach(clipping => {
+                    updateSize(clipping);
+                });
         }
 
 
@@ -1995,7 +1998,7 @@ export class CustomRenderer4jsMind {
             // console.log("onActivateMore", idx);
             const tabName = tabRecs[idx];
             const checkTabname = (wantName) => {
-                if (tabName != wantName ) throw Error(`Got tab ${tabName}, want ${wantName}`);
+                if (tabName != wantName) throw Error(`Got tab ${tabName}, want ${wantName}`);
             }
             switch (idx) {
                 case 0:
@@ -2017,8 +2020,8 @@ export class CustomRenderer4jsMind {
                     activateBackgroundTab();
                     break;
                 // case 5:
-                    // activateThemesTab();
-                    // break;
+                // activateThemesTab();
+                // break;
                 default:
                     throw Error(`There is no tab at idx=${idx} `);
             }
