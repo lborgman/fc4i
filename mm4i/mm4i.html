@@ -248,6 +248,7 @@
     </style>
     <link id="jsmind-my-colors" rel="stylesheet" href="./css/var-colors.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
 
     <!-- <script src="./src/js/fc4i-importmaps.js"></script> -->
 
@@ -313,14 +314,14 @@
     <script type="module">
         console.log("here is mm4i.html");
         // (async () => {
-            const modMdc = await importFc4i("util-mdc");
-            const modJsMind = await importFc4i("jsmind");
-            const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
-            const modJsEditCommon = await importFc4i("jsmind-edit-common");
-            modJsEditCommon.basicInit4jsmind();
-            modJsEditCommon.pageSetup();
-            const aboutLink = makeAbsLink("./about");
-            modJsEditCommon.addToPageMenu("About", aboutLink);
+        const modMdc = await importFc4i("util-mdc");
+        const modJsMind = await importFc4i("jsmind");
+        const modEditFc4iMM = await importFc4i("jsmind-edit-spec-fc4i");
+        const modJsEditCommon = await importFc4i("jsmind-edit-common");
+        modJsEditCommon.basicInit4jsmind();
+        modJsEditCommon.pageSetup();
+        const aboutLink = makeAbsLink("./about");
+        modJsEditCommon.addToPageMenu("About", aboutLink);
         // })();
     </script>
 </body>

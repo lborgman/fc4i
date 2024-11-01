@@ -949,6 +949,42 @@ export class CustomRenderer4jsMind {
             setupBackgroundTab();
         }
 
+        const taTopic = modMdc.mkMDCtextFieldTextarea(undefined, 8, 50);
+        taTopic.classList.add("jsmind-ednode-topic");
+        taTopic.style.resize = "vertical";
+        function onTaTopicInput() {
+            currentShapeEtc.temp.topic = taTopic.value;
+            eltCopiedText.textContent = taTopic.value;
+        }
+        taTopic.addEventListener("input", evt => {
+            onTaTopicInput();
+        });
+        const initialCustomTopic = currentShapeEtc.nodeCustom;
+        const copiedWasCustom = initialCustomTopic != undefined;
+        const initTopic = initialTempData.topic;
+
+        const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
+        modMdc.mkMDCtextareaGrow(tafTopic);
+
+        // modMdc.mkMDC
+
+        const taNotes = mkElt("textarea", undefined, "# My notes");
+
+        const divNotesTab = mkElt("div", undefined, [
+            tafTopic,
+            taNotes,
+        ]);
+
+        async function activateNotesTab() {
+            const modEasyMDE = await import(
+                "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"
+            );
+            console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
+            const easyMDE = new EasyMDE({ element: taNotes, status: false });
+            window.easyMDE = easyMDE;
+            // debugger;
+        }
+
         const jmnodesShapes = mkElt("jmnodes");
         jmnodesShapes.classList.add(themeCls); // FIX-ME: might not fit background here
         jmnodesShapes.addEventListener("change", evt => {
@@ -1537,22 +1573,6 @@ export class CustomRenderer4jsMind {
 
 
 
-        const taTopic = modMdc.mkMDCtextFieldTextarea(undefined, 8, 50);
-        taTopic.classList.add("jsmind-ednode-topic");
-        taTopic.style.resize = "vertical";
-        function onTaTopicInput() {
-            currentShapeEtc.temp.topic = taTopic.value;
-            eltCopiedText.textContent = taTopic.value;
-        }
-        taTopic.addEventListener("input", evt => {
-            onTaTopicInput();
-        });
-        const initialCustomTopic = currentShapeEtc.nodeCustom;
-        const copiedWasCustom = initialCustomTopic != undefined;
-        const initTopic = initialTempData.topic;
-
-        const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
-        modMdc.mkMDCtextareaGrow(tafTopic);
 
 
         const aLinkPreview = mkElt("a");
@@ -1690,7 +1710,8 @@ export class CustomRenderer4jsMind {
         const detBasicNodeChoices =
             mkElt("div", undefined, [
                 mkElt("b", undefined, "Node basics"),
-                tafTopic, tfLink,
+                // tafTopic, 
+                tfLink,
                 // divLinkPreview
             ]);
         detBasicNodeChoices.style = `
@@ -1988,11 +2009,10 @@ export class CustomRenderer4jsMind {
         }
 
 
-
         // console.log("setting up tabs bar", eltCopied);
         // mkMdcTabBarSimple(tabsRecs, contentElts, moreOnActivate) 
-        const tabRecs = ["Content", "Shapes", "Border", "Shadow", "Background"];
-        const contentElts = mkElt("div", undefined, [divContent, divShapes, divBorder, divShadow, divBackground]);
+        const tabRecs = ["Notes", "Content", "Shapes", "Border", "Shadow", "Background"];
+        const contentElts = mkElt("div", undefined, [divNotesTab, divContent, divShapes, divBorder, divShadow, divBackground]);
         if (tabRecs.length != contentElts.childElementCount) throw Error("Tab bar setup number mismatch");
         const onActivateMore = (idx) => {
             // console.log("onActivateMore", idx);
@@ -2002,20 +2022,24 @@ export class CustomRenderer4jsMind {
             }
             switch (idx) {
                 case 0:
-                    checkTabname("Content");
+                    checkTabname("Notes");
+                    activateNotesTab();
                     break;
                 case 1:
-                    checkTabname("Shapes");
+                    checkTabname("Content");
                     break;
                 case 2:
+                    checkTabname("Shapes");
+                    break;
+                case 3:
                     checkTabname("Border");
                     activateBorderTab();
                     break;
-                case 3:
+                case 4:
                     checkTabname("Shadow");
                     activateShadowTab();
                     break;
-                case 4:
+                case 5:
                     checkTabname("Background");
                     activateBackgroundTab();
                     break;
