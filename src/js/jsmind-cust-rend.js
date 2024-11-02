@@ -980,9 +980,38 @@ export class CustomRenderer4jsMind {
                 "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"
             );
             console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
-            const easyMDE = new EasyMDE({ element: taNotes, status: false });
+            const easyMDE = new EasyMDE({
+                element: taNotes,
+                status: false,
+                // toolbar: [],
+            });
+            easyMDE.togglePreview();
+            const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
+            const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
+            const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
+            eltToolbar.style.display = "none";
+            const btnEdit = modMdc.mkMDCiconButton("edit");
+            btnEdit.style = `
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                border-radius: 50%;
+                color: green;
+                background: color-mix(in srgb, var(--mdc-theme-primary) 30%, #ffffff);
+            `;
+            eltContainer.style.position = "relative";
+            eltContainer.appendChild(btnEdit);
+            btnEdit.addEventListener("click", evt => {
+                evt.preventDefault();
+                eltToolbar.style.display = "";
+                eltToolbar.scrollIntoView();
+                btnEdit.remove();
+                easyMDE.togglePreview();
+            })
+
             window.easyMDE = easyMDE;
             // debugger;
+            // temp2.closest("div").querySelector(".CodeMirror .editor-preview")
         }
 
         const jmnodesShapes = mkElt("jmnodes");
