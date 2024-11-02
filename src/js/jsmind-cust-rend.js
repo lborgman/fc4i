@@ -966,14 +966,28 @@ export class CustomRenderer4jsMind {
         const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
         modMdc.mkMDCtextareaGrow(tafTopic);
 
+        const inpTopic = modMdc.mkMDCtextFieldInput("inp-node-topic", "text");
+        inpTopic.value = initTopic;
+        const tfTopic = modMdc.mkMDCtextFieldOutlined("Displayed Topic", inpTopic);
+        function onInpTopicInput() {
+            currentShapeEtc.temp.topic = inpTopic.value;
+            eltCopiedText.textContent = inpTopic.value;
+        }
+        inpTopic.addEventListener("input", evt => {
+            onInpTopicInput();
+        });
+
+
         // modMdc.mkMDC
 
         const taNotes = mkElt("textarea", undefined, "# My notes");
 
         const divNotesTab = mkElt("div", undefined, [
-            tafTopic,
+            // tafTopic,
+            tfTopic,
             taNotes,
         ]);
+        divNotesTab.style.gap = "30px";
 
         async function activateNotesTab() {
             const modEasyMDE = await import(
@@ -1895,12 +1909,14 @@ export class CustomRenderer4jsMind {
                     divImage.appendChild(divBgImage);
                 }
             } else {
+                /*
                 setTimeout(() => {
                     const divTitle = document.getElementById("ednode-cust-title");
                     divTitle.textContent = "(No custom item selected.)";
                     const divImage = document.getElementById("ednode-cust-image");
                     divImage.textContent = "";
-                }, 1000);
+                }, 1000); 
+                */
             }
         }
 
@@ -2040,8 +2056,13 @@ export class CustomRenderer4jsMind {
 
         // console.log("setting up tabs bar", eltCopied);
         // mkMdcTabBarSimple(tabsRecs, contentElts, moreOnActivate) 
-        const tabRecs = ["Notes", "Content", "Shapes", "Border", "Shadow", "Background"];
-        const contentElts = mkElt("div", undefined, [divNotesTab, divContent, divShapes, divBorder, divShadow, divBackground]);
+        const tabRecs = ["Notes",
+            // "Content",
+            "Shapes", "Border", "Shadow", "Background"];
+        const contentElts = mkElt("div", undefined,
+            [divNotesTab,
+                // divContent,
+                divShapes, divBorder, divShadow, divBackground]);
         if (tabRecs.length != contentElts.childElementCount) throw Error("Tab bar setup number mismatch");
         const onActivateMore = (idx) => {
             // console.log("onActivateMore", idx);
@@ -2054,21 +2075,23 @@ export class CustomRenderer4jsMind {
                     checkTabname("Notes");
                     activateNotesTab();
                     break;
+                    /*
                 case 1:
                     checkTabname("Content");
                     break;
-                case 2:
+                    */
+                case 1:
                     checkTabname("Shapes");
                     break;
-                case 3:
+                case 2:
                     checkTabname("Border");
                     activateBorderTab();
                     break;
-                case 4:
+                case 3:
                     checkTabname("Shadow");
                     activateShadowTab();
                     break;
-                case 5:
+                case 4:
                     checkTabname("Background");
                     activateBackgroundTab();
                     break;
