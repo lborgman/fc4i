@@ -18,7 +18,6 @@ if (document.currentScript) throw Error("import .currentScript"); // is module
 ///////////////////////////////////////////////
 // Utility functions. FIX-ME: Should be in jsmind core
 
-// function getDOMeltFromNode(node) { return node._data.view.element; }
 function getDOMeltFromNode(node) { return jsMind.my_get_DOM_element_from_node(node); }
 function getNodeIdFromDOMelt(elt) {
     const tn = elt.tagName;
@@ -28,98 +27,12 @@ function getNodeIdFromDOMelt(elt) {
     return id;
 }
 
-////// Triangle area (chatGPT)
 
-/*
-function triangleAreaSigned(x1, y1, x2, y2, x3, y3) {
-    const area1 = (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
-    return area1;
-}
 
-function thirdAbove(bcr1, bcr2, dragPos) {
-    function xyBcr(bcr) {
-        const x = (bcr.left + bcr.right) / 2;
-        const y = (bcr.top + bcr.bottom) / 2;
-        return [x, y];
-    }
-    function moveToCenter(x, y) {
-        const X = x - x1;
-        const Y = y - y1;
-        return [X, Y];
-    }
-    const [x1, y1] = xyBcr(bcr1);
-    const [x2, y2] = xyBcr(bcr2);
-    // const [x3, y3] = xyBcr(bcr3);
-    const [x3, y3] = [dragPos.clientX, dragPos.clientY];
-    const [X2, Y2] = moveToCenter(x2, y2);
-    const [X3, Y3] = moveToCenter(x3, y3);
-
-    // const area1 = triangleAreaSigned(x1, y1, x2, y2, x3, y3, log);
-    const area0 = triangleAreaSigned(0, 0, X2, Y2, X3, Y3);
-    const right = x2 > x1;
-    const neg = area0 < 0;
-    const above = (right === neg) ? 1 : -1;
-    return { above, right, neg, area0, bcr1, bcr2, dragPos };
-}
-
-function triangleArea(x1, y1, x2, y2, x3, y3, log) {
-    const above = thirdAbove(x1, y1, x2, y2, x3, y3, log);
-    const area1 = triangleAreaSigned(x1, y1, x2, y2, x3, y3, log);
-    console.log({ area1, above }, log);
-    const area = 0.5 * Math.abs(area1);
-    return area;
-}
-triangleArea(0, 0, 1, 0, 1, 1, "right, up"); // 1
-triangleArea(0, 0, 1, 0, 0, 1, "right, left+up"); // 1
-triangleArea(0, 0, 1, 0, 1, -1, "right, down"); // -1
-triangleArea(0, 0, 1, 0, 0, -1, "right, left+down"); // -1
-
-triangleArea(1, 0, 0, 0, 1, -1, "left, right+down"); // 1
-triangleArea(1, 0, 0, 0, 0, -1, "left, down"); // 1
-triangleArea(1, 0, 0, 0, 1, 1, "left, right+up"); // -1
-triangleArea(1, 0, 0, 0, 0, 1, "left, up"); // -1
-*/
-
-// Example usage:
-// const area = calculateTriangleArea(0,0, 3,0, 0,4); // Triangle with vertices at (0,0), (3,0), and (0,4)
-// console.log(area); // Output: 6
-
-// let badSorted;
-
-export class TimeoutTimer {
-    #debugging;
-    constructor(msTimeout, funTimeout, debug) {
-        this.msTimeout = msTimeout;
-        this.funTimeout = funTimeout;
-        this.tmr = undefined;
-        this.#debugging = !!debug;
-    }
-    stop() {
-        if (this.#debugging) console.log("to stop");
-        clearTimeout(this.tmr);
-        this.tmr = undefined;
-    }
-    restart() {
-        this.stop();
-        if (this.#debugging) console.log("to restart", this.funTimeout, this.msTimeout);
-        const ourFun = () => {
-            this.tmr = undefined;
-            this.funTimeout();
-        }
-        this.tmr = setTimeout(ourFun, this.msTimeout);
-    }
-    get active() {
-        return this.tmr !== undefined;
-    }
-}
-
-// setupNewDragging();
 let ourJm;
 let eltDragged;
 let eltTarget;
-// let eltTParent;
 let childDragLine;
-// const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
 let instScrollAtDragBorder;
 export async function setupNewDragging() {
     ourJm = await new Promise((resolve) => {
@@ -323,8 +236,8 @@ function getNodesInColumn(arrBcr, clientX, nodeDragged) {
 let colClientX, colClientY;
 let nodeAbove, nodeBelow, nodeParent;
 let oldElementAtPoint;
-// let oldJmnodeAtPoint; // this is eltTarget!
-const dragPauseTimer = new TimeoutTimer(500, whenDragPauses);
+const modTools = await importFc4i("toolsJs");
+const dragPauseTimer = new modTools.TimeoutTimer(500, whenDragPauses);
 
 /**
  * 
@@ -337,10 +250,7 @@ export function nextHereIamMeansStart(eltFrom) {
     colClientY = undefined;
     dragPauseTimer.stop();
     eltDragged = eltFrom;
-    // debugger;
-    // markAsDragged(eltDragged, true);
     eltTarget = undefined;
-    // eltTParent = undefined;
     instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
@@ -563,17 +473,3 @@ function whenDragPauses() {
         if (nodeBelow) markAsLowerChild(nodeBelow, true);
     }
 }
-// let diffClientX = 0;
-// let diffClientY = 0;
-// const useClientX = evt => evt.clientX + diffClientX;
-// const useClientY = evt => evt.clientY + diffClientY;
-// export function setPointerDiff(newDiffClientX, newDiffClientY) { diffClientX = newDiffClientX; diffClientY = newDiffClientY; }
-/*
-const trackPointerFun = evt => {
-    const samePoint = (colClientX == useClientX(evt) || colClientY == useClientY(evt));
-    if (samePoint) return;
-    colClientX = useClientX(evt);
-    colClientY = useClientY(evt);
-    dragPauseTimer.restart();
-}
-*/

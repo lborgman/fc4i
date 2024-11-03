@@ -1180,3 +1180,30 @@ async function showInfoPermissions(txtWhich) {
     const modMdc = await importFc4i("util-mdc");
     modMdc.mkMDCdialogAlert(body);
 }
+
+export class TimeoutTimer {
+    #debugging;
+    constructor(msTimeout, funTimeout, debug) {
+        this.msTimeout = msTimeout;
+        this.funTimeout = funTimeout;
+        this.tmr = undefined;
+        this.#debugging = !!debug;
+    }
+    stop() {
+        if (this.#debugging) console.log("to stop");
+        clearTimeout(this.tmr);
+        this.tmr = undefined;
+    }
+    restart() {
+        this.stop();
+        if (this.#debugging) console.log("to restart", this.funTimeout, this.msTimeout);
+        const ourFun = () => {
+            this.tmr = undefined;
+            this.funTimeout();
+        }
+        this.tmr = setTimeout(ourFun, this.msTimeout);
+    }
+    get active() {
+        return this.tmr !== undefined;
+    }
+}
