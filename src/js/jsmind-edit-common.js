@@ -227,9 +227,6 @@ window["ourPointHandle"] = pointHandle; // FIX-ME:
 
 const divJsmindSearch = mkElt("div", { id: "jsmind-search-div" });
 
-async function getDraggableNodes() {
-    return await importFc4i("mm4i-jsmind.draggable-nodes");
-}
 
 let theCustomRenderer;
 /*
@@ -458,6 +455,7 @@ function movePointHandle() {
         sp.top = `${top}px`;
         // modJsmindDraggable.hiHereIam(left, top);
         modJsmindDraggable.hiHereIam(clientX, clientY); // use event point
+        // scrollatdragborder
     } catch (err) {
         console.error("movePointHandle", err);
         movePointHandleProblem = true;
@@ -1033,7 +1031,7 @@ export async function pageSetup() {
         return;
     }
 
-    modJsmindDraggable = await getDraggableNodes();
+    modJsmindDraggable = await importFc4i("mm4i-jsmind.drag-node");
     modJsmindDraggable.setupNewDragging();
 
     function getMindmapGlobals0(mind) {
@@ -1601,29 +1599,8 @@ export async function pageSetup() {
             });
         liTestPinchZoom.classList.add("test-item");
 
-        const liTestDragBetween = mkMenuItem("draggable-nodes.js - test move between",
-            async () => {
-                const m = await getDraggableNodes();
-                m.startTrackingPointer()
-            });
-        liTestDragBetween.classList.add("test-item");
 
-        const liTestTabindex = mkMenuItem("Test tabindex=1",
-            () => {
-                document.querySelectorAll("jmnode").forEach(jmn => {
-                    jmn.setAttribute("tabindex", "1");
-                })
-            }
-        );
-        liTestTabindex.classList.add("test-item");
 
-        const liTestSvgDrawLine = mkMenuItem("Test svg draw line",
-            async () => {
-                const modJsmindDraggable = await getDraggableNodes();
-                modJsmindDraggable.testSvgLine();
-            }
-        );
-        liTestSvgDrawLine.classList.add("test-item");
 
         const liAddChild = mkMenuItem("Add child node", () => addNode("child"));
         markIfNoSelected(liAddChild);
