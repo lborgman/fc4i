@@ -55,6 +55,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "mm4i-jsmind.drag-node": "./ext/jsmind/testing/mm4i-jsmind.drag-node.js",
         // "mm4i-jsmind.draggable-nodes": "./ext/jsmind/testing/jsmind.draggable-node-TEMP.js",
         "sharing-params": "./src/js/mod/sharing-params.js",
+        "scroll-help": "./src/js/scroll-help.js",
         "toolsJs": "./src/js/tools.js",
         "util-mdc": "./src/js/mod/util-mdc.js",
 
