@@ -1008,7 +1008,7 @@ export class CustomRenderer4jsMind {
                 status: false,
                 // toolbar: [],
             });
-            const valNotes = initNotes != undefined ? initNotes : "# Enter your notes here";
+            const valNotes = initNotes ? initNotes : "# My Notes";
             easyMDE.value(valNotes);
             easyMDE.togglePreview();
             const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
