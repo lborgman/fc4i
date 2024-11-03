@@ -666,7 +666,7 @@ export class CustomRenderer4jsMind {
             return JSON.stringify(initialShapeEtc) != JSON.stringify(currentShapeEtc);
         }
 
-        // updateCopiesSizes()
+        // updateCopiesSizes():
         const onAnyCtrlChange = debounce(applyCurrentToCopied);
         function applyCurrentToCopied() {
             const changed = somethingToSave();
@@ -674,6 +674,12 @@ export class CustomRenderer4jsMind {
             requestSetStateBtnSave();
             requestUpdateCopiesSizes();
             modJsEditCommon.applyShapeEtc(currentShapeEtc, eltCopied);
+        }
+        function saveEmdChanges() {
+            currentShapeEtc.notes = easyMDE.value();
+            const changed = somethingToSave();
+            console.warn("saveEmdChanges", changed);
+            requestSetStateBtnSave();
         }
 
         const onCtrlsGrpChg = {
@@ -962,9 +968,11 @@ export class CustomRenderer4jsMind {
         const initialCustomTopic = currentShapeEtc.nodeCustom;
         const copiedWasCustom = initialCustomTopic != undefined;
         const initTopic = initialTempData.topic;
+        // const initNotes = initialTempData.notes;
+        const initNotes = initialShapeEtc.notes;
 
-        const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
-        modMdc.mkMDCtextareaGrow(tafTopic);
+        // const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
+        // modMdc.mkMDCtextareaGrow(tafTopic);
 
         const inpTopic = modMdc.mkMDCtextFieldInput("inp-node-topic", "text");
         inpTopic.value = initTopic;
@@ -980,7 +988,8 @@ export class CustomRenderer4jsMind {
 
         // modMdc.mkMDC
 
-        const taNotes = mkElt("textarea", undefined, "# My notes");
+        // const taNotes = mkElt("textarea", undefined, "# My notes");
+        const taNotes = mkElt("textarea");
 
         const divNotesTab = mkElt("div", undefined, [
             // tafTopic,
@@ -999,6 +1008,8 @@ export class CustomRenderer4jsMind {
                 status: false,
                 // toolbar: [],
             });
+            const valNotes = initNotes != undefined ? initNotes : "# Enter your notes here";
+            easyMDE.value(valNotes);
             easyMDE.togglePreview();
             const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
             const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
@@ -1022,10 +1033,8 @@ export class CustomRenderer4jsMind {
                 btnEdit.remove();
                 easyMDE.togglePreview();
             })
-
+            easyMDE.codemirror.on("changes", () => { saveEmdChanges(); })
             window.easyMDE = easyMDE;
-            // debugger;
-            // temp2.closest("div").querySelector(".CodeMirror .editor-preview")
         }
 
         const jmnodesShapes = mkElt("jmnodes");
@@ -2075,11 +2084,11 @@ export class CustomRenderer4jsMind {
                     checkTabname("Notes");
                     activateNotesTab();
                     break;
-                    /*
-                case 1:
-                    checkTabname("Content");
-                    break;
-                    */
+                /*
+            case 1:
+                checkTabname("Content");
+                break;
+                */
                 case 1:
                     checkTabname("Shapes");
                     break;
@@ -2105,11 +2114,20 @@ export class CustomRenderer4jsMind {
 
 
         contentElts.classList.add("tab-elts");
+        function inTextareaEasyMDE(elt) {
+            if (elt.tagName != "TEXTAREA") return false;
+            if (!elt.closest("div.EasyMDEContainer")) return false;
+            return true;
+        }
         contentElts.addEventListener("change", evt => {
+            // taNotes
+            if (inTextareaEasyMDE(evt.target)) return;
             console.log("contentElts change", evt.target);
             onAnyCtrlChange(); // throttle
         });
         contentElts.addEventListener("input", evt => {
+            // taNotes
+            if (inTextareaEasyMDE(evt.target)) return;
             console.log("contentElts input", evt.target);
             onAnyCtrlChange(); // throttle
         });
