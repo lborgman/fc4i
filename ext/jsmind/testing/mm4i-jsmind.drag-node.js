@@ -8,7 +8,7 @@
  */
 
 const version = "0.1.000";
-console.log(`here is mm4i-jsmind.draggable-nodes.js, module ${version}`);
+console.log(`here is mm4i-jsmind.drag-node.js, module ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
 
