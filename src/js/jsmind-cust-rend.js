@@ -676,7 +676,7 @@ export class CustomRenderer4jsMind {
             modJsEditCommon.applyShapeEtc(currentShapeEtc, eltCopied);
         }
         function saveEmdChanges() {
-            currentShapeEtc.notes = easyMDE.value();
+            currentShapeEtc.notes = easyMDE.value().trimEnd();
             const changed = somethingToSave();
             console.warn("saveEmdChanges", changed);
             requestSetStateBtnSave();

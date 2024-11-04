@@ -1108,7 +1108,7 @@ export async function pageSetup() {
     let funStopScroll;
     modFsm.fsm.post_hook_entry("c_Move", (hookData) => {
         const { eltJmnode, pointerType } = hookData.data;
-        if (eltJmnode) throw Error("eltJmnode in c_Move");
+        if (eltJmnode && (!eltJmnode.classList.contains("root"))) throw Error("eltJmnode in c_Move");
         funStopScroll = undefined;
         // return; // FIX-ME:
         if (pointerType != "mouse") return;

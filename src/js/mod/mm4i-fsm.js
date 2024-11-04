@@ -105,7 +105,7 @@ export function setupFsmListeners(eltFsm) {
         if (!eltFsm.contains(target)) return;
         let actionWhere = "c";
         const eltJmnode = target.closest("jmnode");
-        if (eltJmnode) { actionWhere = "n"; }
+        if (eltJmnode && (!eltJmnode.classList.contains("root"))) { actionWhere = "n"; }
         // FIX-ME: mouse/pen or touch??
         const pointerType = getPointerType(evt);
         const action = `${actionWhere}_down`;
