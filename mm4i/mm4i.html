@@ -205,6 +205,30 @@
             --shside: 20px;
         }
 
+        jmnodes>jmnode[nodeid=root].jsmind-drag-target.jsmind-drag-root-leftside::before {
+            content: "";
+            height: 100%;
+            background-color: red;
+            position: absolute;
+            left: -20px;
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+
+        jmnodes>jmnode[nodeid=root].jsmind-drag-target.jsmind-drag-root-rightside::after {
+            content: "";
+            height: 100%;
+            background-color: red;
+            position: absolute;
+            right: -20px;
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+
         jmnodes>jmnode.jsmind-drag-target {
             outline: 5px dotted red !important;
             box-shadow: 0 var(--shup) var(--shsize) var(--shsize) red !important;

@@ -126,6 +126,32 @@ jmnode.root {
     font-size: 24px;
 }
 
+/*
+jmnode.root:hover::before {
+    content: "";
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    left: -20px;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    width: 20px;
+    height: 20px;
+}
+
+jmnode.root:hover::after {
+    content: "";
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    right: -20px;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    width: 20px;
+    height: 20px;
+}
+*/
+
 jmexpander {
     border-color: gray;
 }
