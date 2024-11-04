@@ -33,7 +33,7 @@ let ourJm;
 let eltDragged;
 let eltTarget;
 let childDragLine;
-let instScrollAtDragBorder;
+// let instScrollAtDragBorder;
 export async function setupNewDragging() {
     ourJm = await new Promise((resolve) => {
         const draggablePlugin = new jsMind.plugin('draggable_nodes', function (thisIsOurJm) {
@@ -42,15 +42,16 @@ export async function setupNewDragging() {
         jsMind.register_plugin(draggablePlugin);
     });
 
-    const root_node = ourJm.get_root();
-    const eltRoot = getDOMeltFromNode(root_node);
+    // const root_node = ourJm.get_root();
+    // const eltRoot = getDOMeltFromNode(root_node);
 
-    const eltJmnodes = eltRoot.closest("jmnodes");
+    // const eltJmnodes = eltRoot.closest("jmnodes");
 
     // const instScrollAtDragBorder = new ScrollAtDragBorder(eltJmnodes, 60);
     // instScrollAtDragBorder.startScroller();
-    const modScrollHelp = await importFc4i("scroll-help");
-    instScrollAtDragBorder = new modScrollHelp.ScrollAtDragBorder(eltJmnodes, 60);
+
+    // const modScrollHelp = await importFc4i("scroll-help");
+    // instScrollAtDragBorder = new modScrollHelp.ScrollAtDragBorder(eltJmnodes, 60);
 
     // FIX-ME: make local again
     // let eltDragged;
@@ -156,11 +157,11 @@ export function nextHereIamMeansStart(eltFrom) {
     dragPauseTimer.stop();
     eltDragged = eltFrom;
     eltTarget = undefined;
-    instScrollAtDragBorder.showScroller();
+    // instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
     if (colClientX == cX && colClientY == cY) return;
-    instScrollAtDragBorder.checkPoint(cX, cY);
+    // instScrollAtDragBorder.checkPoint(cX, cY);
     colClientX = cX;
     colClientY = cY;
     dragPauseTimer.restart();
@@ -174,7 +175,7 @@ function unmarkDragged() { if (eltDragged) markAsDragged(eltDragged, false); }
 
 export function stopNow() {
     dragPauseTimer.stop();
-    instScrollAtDragBorder.hideScroller();
+    // instScrollAtDragBorder.hideScroller();
     childDragLine?.removeLine();
     childDragLine = undefined;
     if (eltDragged) markAsDragged(eltDragged, false);

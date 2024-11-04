@@ -22,6 +22,7 @@ const modTools = await importFc4i("toolsJs");
 const modFsm = await importFc4i("mm4i-fsm");
 window["fsm"] = modFsm.fsm;
 
+let instScrollAtDragBorder;
 class PointHandle {
     static sizePointHandle = 20;
     // static diffPointHandle = 60;
@@ -166,6 +167,7 @@ class PointHandle {
         }
         // console.log("teardwon...", { eltJmnodeFrom });
         modJsmindDraggable.stopNow();
+        instScrollAtDragBorder.hideScroller();
         // evtPointerLast = undefined; // FIX-ME
     }
     setupPointHandle() {
@@ -211,6 +213,7 @@ class PointHandle {
             // modJsmindDraggable.setPointerDiff(diffX, diffY);
             modJsmindDraggable.nextHereIamMeansStart(eltJmnodeFrom);
             this.#state = "move";
+            instScrollAtDragBorder.showScroller();
             return;
         }
         movePointHandle();
@@ -453,8 +456,9 @@ function movePointHandle() {
         sp.left = `${left}px`;
         const top = clientY + posPointHandle.diffY - PointHandle.sizePointHandle / 2;
         sp.top = `${top}px`;
-        // modJsmindDraggable.hiHereIam(left, top);
-        modJsmindDraggable.hiHereIam(clientX, clientY); // use event point
+        modJsmindDraggable.hiHereIam(left, top);
+        // modJsmindDraggable.hiHereIam(clientX, clientY); // use event point
+        instScrollAtDragBorder.checkPoint(clientX, clientY)
         // scrollatdragborder
     } catch (err) {
         console.error("movePointHandle", err);
@@ -1034,6 +1038,7 @@ export async function pageSetup() {
     modJsmindDraggable = await importFc4i("mm4i-jsmind.drag-node");
     modJsmindDraggable.setupNewDragging();
 
+
     function getMindmapGlobals0(mind) {
         const format = mind.format;
         let root_node;
@@ -1135,6 +1140,10 @@ export async function pageSetup() {
     // Double click on Windows and Android
     jmDisplayed.disable_event_handle("dblclick");
     const eltJmnodes = getJmnodesFromJm(jmDisplayed);
+
+    const modScrollHelp = await importFc4i("scroll-help");
+    instScrollAtDragBorder = new modScrollHelp.ScrollAtDragBorder(eltJmnodes, 60);
+
     // Windows
     eltJmnodes.addEventListener("dblclick", evt => {
         // FIX-ME: there is no .eventType - is this a bug?
