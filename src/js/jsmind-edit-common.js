@@ -1402,6 +1402,14 @@ export async function pageSetup() {
         const target = evt.target;
         if (!(target instanceof HTMLElement)) throw Error("target is not HTMLElement");
         if (!target) return;
+        const eltExpander = target.closest("jmexpander");
+        if (!eltExpander) return;
+        const strNodeId = eltExpander.getAttribute("nodeid");
+        if (null == strNodeId) throw Error("jmexpander attribute nodeid is null");
+        const nodeId = parseInt(strNodeId);
+        jmDisplayed.toggle_node(nodeId);
+        return;
+
         const eltJmnode = target.closest("jmnode");
         if (!eltJmnode) return;
         const node_id = getNodeIdFromDOMelt(eltJmnode);
@@ -2605,6 +2613,19 @@ function fsmEvent(event) {
     const eventName = event.action || event;
     const eventFrom = event.from;
     const eventTo = event.to;
+    console.log({eventTo});
+
+    // FIX-ME: move to fsm hook
+    switch (eventTo) {
+        case "n_Click":
+            {
+                const jmnode = event.data.eltJmnode;
+                const node_id = getNodeIdFromDOMelt(jmnode);
+                jmDisplayed.select_node(node_id);
+            }
+            break;
+    }
+
     // console.log("fsmEvent", eventName, event);
     const eltAction = mkElt("span", undefined, eventName);
     if (!eventTo) {

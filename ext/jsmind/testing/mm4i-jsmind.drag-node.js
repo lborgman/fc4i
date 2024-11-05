@@ -31,7 +31,7 @@ function getNodeIdFromDOMelt(elt) {
 
 let ourJm;
 let eltDragged;
-let eltTarget;
+let jmnodeTarget;
 let childDragLine;
 // let instScrollAtDragBorder;
 export async function setupNewDragging() {
@@ -156,7 +156,7 @@ export function nextHereIamMeansStart(eltFrom) {
     colClientY = undefined;
     dragPauseTimer.stop();
     eltDragged = eltFrom;
-    eltTarget = undefined;
+    jmnodeTarget = undefined;
     // instScrollAtDragBorder.showScroller();
 }
 export function hiHereIam(cX, cY) {
@@ -170,7 +170,7 @@ export function hiHereIam(cX, cY) {
 function unmarkTParent() { if (nodeParent) markAsTParent(nodeParent, false); }
 function unmarkUpperChild() { if (nodeAbove) markAsUpperChild(nodeAbove, false); }
 function unmarkLowerChild() { if (nodeBelow) markAsLowerChild(nodeBelow, false); }
-function unmarkTarget() { if (eltTarget) markAsTarget(eltTarget, false); }
+function unmarkTarget() { if (jmnodeTarget) markAsTarget(jmnodeTarget, false); }
 function unmarkDragged() { if (eltDragged) markAsDragged(eltDragged, false); }
 
 export function stopNow() {
@@ -181,7 +181,7 @@ export function stopNow() {
     if (eltDragged) markAsDragged(eltDragged, false);
     informDragStatus();
 
-    if (!nodeParent && !eltTarget) return;
+    if (!nodeParent && !jmnodeTarget) return;
 
     const idDragged = getNodeIdFromDOMelt(eltDragged);
     const root_node = ourJm.get_root();
@@ -195,9 +195,9 @@ export function stopNow() {
     const direction = rootMiddleX < colClientX ? jsMind.direction.right : jsMind.direction.left;
     // console.log({ direction });
 
-    if (eltTarget) {
-        markAsTarget(eltTarget, false);
-        const id_target = getNodeIdFromDOMelt(eltTarget);
+    if (jmnodeTarget) {
+        markAsTarget(jmnodeTarget, false);
+        const id_target = getNodeIdFromDOMelt(jmnodeTarget);
         ourJm.move_node(idDragged, "_last_", id_target, direction);
         setTimeout(unMarkAll, 2000);
         return;
@@ -226,36 +226,67 @@ export function stopNow() {
 
 
 function whenDragPauses() {
+    function markRootSide(entry) {
+        const tn = entry.tagName;
+        if (tn != "JMNODE") throw Error(`Expected <jmnode>, got ${tn}`);
+        if (!entry.classList.contains("root")) throw Error("not jmnode.root");
+        const eltRoot = entry;
+        const bcr = eltRoot.getBoundingClientRect();
+        const middleX = (bcr.left + bcr.right) / 2;
+        // pointermove
+        if (colClientX == undefined) throw Error("colClientX == undefined");
+        if (colClientX < middleX) {
+            console.log("left side", colClientX, middleX);
+            eltRoot.classList.add("jsmind-drag-root-leftside");
+            eltRoot.classList.remove("jsmind-drag-root-rightside");
+        } else {
+            console.log("right side", colClientX, middleX);
+            eltRoot.classList.remove("jsmind-drag-root-leftside");
+            eltRoot.classList.add("jsmind-drag-root-rightside");
+        }
+    }
+
     // hiHereIam
-    childDragLine?.moveFreeEnd(colClientX, colClientY);
+    // childDragLine?.moveFreeEnd(colClientX, colClientY);
     const newElementAtPoint = document.elementFromPoint(colClientX, colClientY);
+    console.log({ newElementAtPoint });
     if (!newElementAtPoint) return; // FIX-ME: clear up here, or?
     if (newElementAtPoint != oldElementAtPoint) {
         oldElementAtPoint = newElementAtPoint;
-        const newEltTarget = newElementAtPoint.closest("jmnode");
-        if (newEltTarget != eltTarget) {
+        const newJmnodeTarget = newElementAtPoint.closest("jmnode");
+        console.log({ newJmnodeTarget });
+        if (newJmnodeTarget != jmnodeTarget) {
             unmarkTarget();
-            eltTarget = newEltTarget;
-            if (eltTarget) {
+            jmnodeTarget = newJmnodeTarget;
+            if (jmnodeTarget) {
                 // handle enter
-                markAsTarget(eltTarget, true);
-                if (nodeAbove) {
-                    markAsUpperChild(nodeAbove, false);
-                    nodeAbove = undefined;
-                }
-                if (nodeBelow) {
-                    markAsLowerChild(nodeBelow, false);
-                    nodeBelow = undefined;
-                }
-                if (nodeParent) {
-                    markAsTParent(nodeParent, false);
-                    nodeParent = undefined;
+                markAsTarget(jmnodeTarget, true);
+                const isRoot = jmnodeTarget.classList.contains("root");
+                if (isRoot) {
+                    // markRootSide(jmnodeTarget);
+                } else {
+                    if (nodeAbove) {
+                        markAsUpperChild(nodeAbove, false);
+                        nodeAbove = undefined;
+                    }
+                    if (nodeBelow) {
+                        markAsLowerChild(nodeBelow, false);
+                        nodeBelow = undefined;
+                    }
+                    if (nodeParent) {
+                        markAsTParent(nodeParent, false);
+                        nodeParent = undefined;
+                    }
                 }
             }
         }
-        if (eltTarget) return;
     }
-    // console.log("*** whenDragPauses");
+    if (jmnodeTarget) {
+        if (jmnodeTarget.classList.contains("root")) {
+            markRootSide(jmnodeTarget);
+        }
+        return;
+    }
     const oldNodeParent = nodeParent;
     const oldNodeAbove = nodeAbove;
     const oldNodeBelow = nodeBelow;
@@ -266,26 +297,13 @@ function whenDragPauses() {
     let entryAbove, entryBelow;
     const arrNodesBcr = getAllNodesAndBcr();
     const arrCol = getNodesInColumn(arrNodesBcr, colClientX, eltDragged);
-    // console.log({ arrCol });
     const getY = (entry) => (entry.bcr.top + entry.bcr.bottom) / 2;
     nodeAbove = undefined; nodeBelow = undefined;
-    // let entryOverLower;
-    // let entryOverUpper;
+    if (arrCol.length == 1) {
+        const elt0 = arrCol[0].eltNode;
+        if (elt0.classList.contains("root")) return;
+    }
     arrCol.forEach(entry => {
-        // if (entryOver) return;
-        // const entryTop = entry.bcr.top;
-        // const entryBottom = entry.bcr.bottom;
-
-
-        /*
-        const entryMiddle = (entryTop - entryBottom) / 2;
-        if (entryTop > colClientY && colClientY > entryMiddle) {
-            entryOverUpper = entry;
-        }
-        if (entryBottom < colClientY && colClientY < entryMiddle) {
-            entryOverLower = entry;
-        }
-        */
         if (entry.id != "root") {
             const entryY = getY(entry);
             if (entryY <= colClientY) {
@@ -295,14 +313,8 @@ function whenDragPauses() {
                 if (!entryBelow || entryY < getY(entryBelow)) entryBelow = entry;
             }
         } else {
-            const middleX = (entry.bcr.left + entry.bcr.right) / 2;
-            if (colClientX < middleX) {
-                entry.eltNode.classList.add("jsmind-drag-root-leftside");
-                entry.eltNode.classList.remove("jsmind-drag-root-rightside");
-            } else {
-                entry.eltNode.classList.remove("jsmind-drag-root-leftside");
-                entry.eltNode.classList.add("jsmind-drag-root-rightside");
-            }
+            // markRootSide(entry);
+            throw Error("jmnode.root should not be handled here");
         }
     });
     // console.log(arrCol, { entryAbove, entryBelow, nodeParent });
