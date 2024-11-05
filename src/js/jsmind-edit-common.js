@@ -1077,6 +1077,7 @@ export async function pageSetup() {
 
 
 
+
     ////// modFsm
     // const modFsm = await importFc4i("mm4i-fsm");
     // window["fsm"] = modFsm.fsm;
@@ -2592,17 +2593,6 @@ export function showDebugJssmAction(msg) {
     updateSmallGraph();
 }
 
-/*
-const modFsm = await importFc4i("mm4i-fsm");
-window.fsm = modFsm.fsm;
-modFsm.fsm.hook_any_action(fsmEvent);
-const eltJsMindContainer = document.getElementById("jsmind_container");
-if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
-const eltFsm = eltJsMindContainer.querySelector(".jsmind_inner");
-if (!eltFsm) throw Error("Could not find .jsmind_inner");
-modFsm.setupFsmListeners(eltFsm);
-// jsmind
-*/
 
 /**
  * 
@@ -2618,6 +2608,7 @@ function fsmEvent(event) {
     // FIX-ME: move to fsm hook
     switch (eventTo) {
         case "n_Click":
+        case "nr_Click":
             {
                 const jmnode = event.data.eltJmnode;
                 const node_id = getNodeIdFromDOMelt(jmnode);

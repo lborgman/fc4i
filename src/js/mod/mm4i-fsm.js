@@ -24,6 +24,12 @@ n_Click after 200 ms => Idle;
 n_Click 'n_down' => n_Dblclick;
 n_Dblclick after 1 ms => Idle;
 
+Idle 'nr_down' => nr_Down;
+nr_Down 'up' => nr_Click;
+nr_Click after 200 ms => Idle;
+nr_Click 'nr_down' => n_Dblclick;
+nr_Down after 200 ms => c_Move;
+
 n_Down after 200 ms => n_Move;
 // n_Down 'move' => n_Move;
 n_Move 'up' => Idle;
@@ -55,6 +61,7 @@ state Idle    : { shape: octagon; background-color: lightgray; };
 state n_Down     : { corners: rounded; background-color: wheat; };
 state n_Move     : { corners: rounded; background-color: wheat; };
 state n_Click    : { corners: rounded; background-color: wheat; };
+state nr_Click    : { corners: rounded; background-color: wheat; };
 state n_Dblclick : { corners: rounded; background-color: wheat; };
 
 state c_Down     : { background-color: lightgray; };
@@ -106,7 +113,10 @@ export function setupFsmListeners(eltFsm) {
         let actionWhere = "c";
         const eltJmnode = target.closest("jmnode");
         // if (eltJmnode && (!eltJmnode.classList.contains("root"))) { actionWhere = "n"; }
-        if (eltJmnode ) { actionWhere = "n"; }
+        if (eltJmnode ) {
+            actionWhere = "n";
+            if (eltJmnode.classList.contains("root")) actionWhere = "nr";
+        }
         // FIX-ME: mouse/pen or touch??
         const pointerType = getPointerType(evt);
         const action = `${actionWhere}_down`;
