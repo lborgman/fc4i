@@ -46,7 +46,8 @@ c_Dblclick after 1 ms => Idle;
 
 c_Down after 200 ms => c_Move;
 c_Move 'up' => Idle;
-c_Down 'c_down' => c_Zoom;
+// c_Down 'c_down' => c_Zoom;
+c_Down 'start2' => c_Zoom;
 c_Zoom 'up' => Idle;
 
 
@@ -78,7 +79,11 @@ state c_Zoom       : { background-color: lightgray; };
 
 const arrEvents = [... new Set(fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]))].sort();
 export function isEvent(str) { return arrEvents.includes(str); }
-export function checkIsEvent(str) { if (!isEvent(str)) throw Error(`Unknown fsm event: ${str}`); }
+export function checkIsEvent(str) {
+    if (!isEvent(str)) {
+        const state = fsm.state();
+        throw Error(`Unknown fsm event: ${str}, state: ${state}`); }
+    }
 
 // const arrStates = [... new Set( fsmDeclaration.matchAll(/(?:=>|ms)\s+([^']*?);/g).map(m => m[1]) ) ].sort();
 const arrStates = [... new Set(fsmDeclaration.matchAll(/=>\s+(\S+?)\s*;/g))].map(m => m[1]).sort();
@@ -106,6 +111,22 @@ export function getPointerType(evt) {
 }
 
 export function setupFsmListeners(eltFsm) {
+    eltFsm.addEventListener("touchstart", evt => {
+        const touches = evt.touches;
+        const changedTouches = evt.changedTouches;
+        const len = touches.length;
+        if (len == 1) {
+            console.log("eltFsm, touchstart", len, evt);
+            return;
+        }
+        console.log("eltFsm, touchstart", len, evt, "touches:", touches, "changed:", changedTouches);
+        actionWithErrorCheck("start2", evt);
+    });
+    eltFsm.addEventListener("touchend", evt => {
+        const touches = evt.touches;
+        const changedTouches = evt.changedTouches;
+        console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
+    });
     eltFsm.addEventListener("pointerdown", evt => {
         console.log("eltFsm, pointerdown", evt);
         const target = evt.target;
@@ -113,7 +134,7 @@ export function setupFsmListeners(eltFsm) {
         let actionWhere = "c";
         const eltJmnode = target.closest("jmnode");
         // if (eltJmnode && (!eltJmnode.classList.contains("root"))) { actionWhere = "n"; }
-        if (eltJmnode ) {
+        if (eltJmnode) {
             actionWhere = "n";
             if (eltJmnode.classList.contains("root")) actionWhere = "nr";
         }

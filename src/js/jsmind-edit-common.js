@@ -176,16 +176,9 @@ class PointHandle {
         const elt = document.body.querySelector("jmnodes");
         if (!elt) throw Error("Could not find <jmnodes>");
         this.#jmnodesPointHandle = elt;
-        // const THIS = this;
-        // this.#jmnodesPointHandle.addEventListener("pointerdown", this.initializePointHandle.bind(THIS));
-        // this.#jmnodesPointHandle.addEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
     }
     teardownPointHandle() {
-        // const THIS = this;
-        // this.#jmnodesPointHandle?.removeEventListener("pointerdown", this.initializePointHandle.bind(THIS));
-        // this.#jmnodesPointHandle?.removeEventListener("pointerup", this.teardownPointHandleAndAct.bind(THIS));
         this.teardownPointHandleAndAct();
-        // modJsmindDraggable.setPointerDiff(0, 0);
     }
     checkPointHandleDistance() {
         // if (!evtPointerLast) return; // FIX-ME
