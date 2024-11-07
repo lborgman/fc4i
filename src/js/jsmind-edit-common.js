@@ -2441,7 +2441,6 @@ async function updateSmallGraph() {
     svg.setAttribute("width", newW);
     svg.setAttribute("height", newH);
     eltSmallGraph.appendChild(svg);
-    // svg.title = "Toggle small/big graph"; // FIX-ME: This does not work
 }
 
 
@@ -2484,8 +2483,25 @@ async function logJssmEvent(eventMsg) {
     modFsm.checkIsEvent(eventName);
     showDebugJssmAction(eventName);
 }
+
+
+let isSmallGraph = true;
+const widthSmall = "50vw";
+function setSmallGraph() {
+    isSmallGraph = true;
+    eltSmallGraph.style.width = widthSmall;
+    updateSmallGraph();
+}
+function setBigGraph() {
+    isSmallGraph = false;
+    const maxW = window.innerWidth - 10;
+    const maxH = window.innerHeight - 35 - 5;
+    const maxWH = Math.min(maxW, maxH);
+    eltSmallGraph.style.width = `${maxWH}px`;
+    updateSmallGraph();
+}
+
 async function showDebugJssmState() {
-    // const modFsm = await importFc4i("mm4i-fsm");
     const currState = modFsm.fsm.state();
 
     updateSmallGraph();
@@ -2505,10 +2521,14 @@ async function showDebugJssmState() {
         eltSmallGraph = eltSmallGraph || mkEltSmallGraph();
 
         if (eltSmallGraph.parentElement) {
-            eltSmallGraph.remove();
+            if (!isSmallGraph) {
+                eltSmallGraph.remove();
+            } else {
+                setBigGraph();
+            }
         } else {
             document.body.appendChild(eltSmallGraph);
-            updateSmallGraph();
+            setSmallGraph();
         }
         return;
 
@@ -2531,26 +2551,10 @@ async function showDebugJssmState() {
                 justify-content: flex-end;
                 flex-wrap: wrap;
 
-                pointer-events: all;
+                pointer-events: none;
                 cursor: pointer;
             `;
-            let isSmall = true;
-            const widthSmall = "50vw";
             elt.style.width = widthSmall;
-            elt.addEventListener("click", evt => {
-                evt.stopImmediatePropagation();
-                isSmall = !isSmall;
-                if (isSmall) {
-                    elt.style.width = widthSmall;
-                } else {
-                    const maxW = window.innerWidth - 10;
-                    const maxH = window.innerHeight - 35 - 5;
-                    const maxWH = Math.min(maxW, maxH);
-                    elt.style.width = `${maxWH}px`;
-                }
-                updateSmallGraph();
-                console.log("toggle smallGraph", isSmall);
-            })
             return elt;
         }
 
@@ -2559,6 +2563,7 @@ async function showDebugJssmState() {
         openExternalViz();
 
         function openExternalViz() {
+
             const urlDotsViz = "http://localhost:8080/viz-dots-fsl.html";
             const url = new URL(urlDotsViz);
 
@@ -2596,7 +2601,7 @@ function fsmEvent(event) {
     const eventName = event.action || event;
     const eventFrom = event.from;
     const eventTo = event.to;
-    console.log({eventTo});
+    console.log({ eventTo });
 
     // FIX-ME: move to fsm hook
     switch (eventTo) {
