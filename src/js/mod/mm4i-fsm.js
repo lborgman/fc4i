@@ -128,6 +128,7 @@ export function setupFsmListeners(eltFsm) {
         console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
     });
     eltFsm.addEventListener("pointerdown", evt => {
+        evt.preventDefault();
         console.log("eltFsm, pointerdown", evt);
         const target = evt.target;
         if (!eltFsm.contains(target)) return;
