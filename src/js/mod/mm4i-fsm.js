@@ -130,6 +130,7 @@ export function setupFsmListeners(eltFsm) {
     eltFsm.addEventListener("pointerdown", evt => {
         evt.preventDefault();
         evt.stopImmediatePropagation();
+        evt.stopPropagation();
         console.log("eltFsm, pointerdown", evt);
         const target = evt.target;
         if (!eltFsm.contains(target)) return;
