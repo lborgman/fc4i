@@ -1104,7 +1104,7 @@ export async function pageSetup() {
         if (eltJmnode && (!eltJmnode.classList.contains("root"))) throw Error("eltJmnode in c_Move");
         funStopScroll = undefined;
         // return; // FIX-ME:
-        if (pointerType != "mouse") return;
+        // if (pointerType != "mouse") return; // FIX-ME: implemnt my on scroll
         const jmnodes = getJmnodesFromJm(jmDisplayed);
         const jsmindInner = jmnodes.closest(".jsmind-inner");
         funStopScroll = startGrabScroll(jsmindInner);
