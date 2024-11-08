@@ -1072,11 +1072,10 @@ export async function pageSetup() {
 
 
     ////// modFsm
-    // const modFsm = await importFc4i("mm4i-fsm");
-    // window["fsm"] = modFsm.fsm;
     modFsm.fsm.hook_any_action(fsmEvent);
-    modFsm.fsm.hook_any_transition(() => {
-        logJssmState(modFsm.fsm.state())
+    modFsm.fsm.hook_any_transition((...args) => {
+        const newState = args[0].to;
+        logJssmState(newState);
     });
     const eltJsMindContainer = document.getElementById("jsmind_container");
     if (!eltJsMindContainer) throw Error("Could not find #jsmind_container");
@@ -2375,11 +2374,9 @@ const rainbow = ["red", "orange", "yellow", "greenyellow", "aqua", "indigo", "vi
 let eltSmallGraph;
 let markedDecl;
 async function markLatestStates() {
-    // const modFsm = await importFc4i("mm4i-fsm");
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
-    markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'");
-    // console.log("markLatestStates", stackLogFsm);
+    markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'"); // FIX-ME:
     let iState = 0;
     const marked = new Set();
     for (let i = 0, len = stackLogFsm.length; i < len; i++) {
@@ -2462,10 +2459,9 @@ function addStackLogFsm(eventOrState) {
  * @param {string} state 
  */
 async function logJssmState(state) {
-    // const modFsm = await importFc4i("mm4i-fsm");
     addStackLogFsm(state);
     modFsm.checkIsState(state)
-    showDebugJssmState();
+    showDebugJssmState(state);
 }
 
 /**
@@ -2473,8 +2469,6 @@ async function logJssmState(state) {
  * @param {string} eventMsg 
  */
 async function logJssmEvent(eventMsg) {
-    // const modFsm = await importFc4i("mm4i-fsm");
-    // const eventName = typeof event == "string" ? event : event.textContent;
     const re = new RegExp(/,(.*)=>/);
     addStackLogFsm(eventMsg);
     const res = re.exec(eventMsg);
@@ -2501,8 +2495,7 @@ function setBigGraph() {
     updateSmallGraph();
 }
 
-async function showDebugJssmState() {
-    const currState = modFsm.fsm.state();
+async function showDebugJssmState(currState) {
 
     updateSmallGraph();
 
@@ -2615,29 +2608,11 @@ function fsmEvent(event) {
             break;
     }
 
-    // console.log("fsmEvent", eventName, event);
-    const eltAction = mkElt("span", undefined, eventName);
-    if (!eventTo) {
-        eltAction.style.backgroundColor = "red";
-        eltAction.style.color = "black";
-        eltAction.style.padding = "4px";
-        eltAction.title = `Event ${eventName} had no event.to`;
-    } else {
-        eltAction.style.color = "green";
-    }
     const msg = `${eventFrom},${eventName}=>${eventTo}`;
     logJssmEvent(msg);
-    // if (eventTo) { logJssmState(eventTo); }
 }
-// window["fsmEvent"] = fsmEvent;
 
 setTimeout(async () => {
-    // const modFsm = await importFc4i("mm4i-fsm");
-    // window.fsm = modFsm.fsm;
-    // const modJsEditCommon = await importFc4i("jsmind-edit-common");
-    // const eltAction = mkElt("span", undefined, "(action)");
-    // eltAction.style.color = "gray";
-    // logJssmEvent(eltAction);
     logJssmState(modFsm.fsm.state());
 }, 1000);
 
