@@ -2433,7 +2433,8 @@ async function updateSmallGraph() {
     const maxSvgHW = Math.max(svgH, svgW);
     const ratW = svgW / maxSvgHW;
     const ratH = svgH / maxSvgHW;
-    const newH = Math.floor(ch * ratH);
+    // const newH = Math.floor(ch * ratH);
+    const newH = Math.floor(cw * ratH);
     const newW = Math.floor(cw * ratW);
     svg.setAttribute("width", newW);
     svg.setAttribute("height", newH);
@@ -2529,23 +2530,16 @@ async function showDebugJssmState(currState) {
         function mkEltSmallGraph() {
             const elt = mkElt("div")
             elt.style = `
-                aspect-ratio: 1 / 1;
                 width: 50vw;
-
-                border: 1px solid red;
-
                 position: fixed;
                 right: 5px;
                 bottom: 35px;
                 z-index: 100;
 
-                display: flex;
-                align-content: flex-end;
-                justify-content: flex-end;
-                flex-wrap: wrap;
-
                 pointer-events: none;
-                cursor: pointer;
+                NOcursor: pointer;
+
+                outline: 1px solid red;
             `;
             elt.style.width = widthSmall;
             return elt;
