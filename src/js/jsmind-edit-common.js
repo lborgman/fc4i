@@ -2376,7 +2376,7 @@ let markedDecl;
 async function markLatestStates() {
     const decl = modFsm.fsmDeclaration;
     markedDecl = decl;
-    markedDecl = markedDecl.replaceAll(/after 200 ms/g, "'200ms'"); // FIX-ME:
+    markedDecl = markedDecl.replaceAll(/after (\d+) ms/g, "'$1ms'"); // FIX-ME:
     let iState = 0;
     const marked = new Set();
     for (let i = 0, len = stackLogFsm.length; i < len; i++) {
