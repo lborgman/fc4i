@@ -111,7 +111,7 @@ export function getPointerType(evt) {
 }
 
 export function setupFsmListeners(eltFsm) {
-    eltFsm.addEventListener("touchstart", evt => {
+    eltFsm.addEventListener("NOtouchstart", evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
         const len = touches.length;
@@ -122,11 +122,12 @@ export function setupFsmListeners(eltFsm) {
         console.log("eltFsm, touchstart", len, evt, "touches:", touches, "changed:", changedTouches);
         actionWithErrorCheck("start2", evt);
     });
-    eltFsm.addEventListener("touchend", evt => {
+    eltFsm.addEventListener("NOtouchend", evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
         console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
     });
+
     eltFsm.addEventListener("pointerdown", evt => {
         evt.preventDefault();
         evt.stopImmediatePropagation();
