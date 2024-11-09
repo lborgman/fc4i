@@ -128,7 +128,7 @@ export function setupFsmListeners(eltFsm) {
         // console.log({ PinchZoom });
         // debugger;
         const eltJmnodes = document.querySelector("jmnodes");
-        pinZoom = pinZoom || new modZoom.default(eltJmnodes);
+        pinZoom = pinZoom || new modZoom.default(eltFsm);
         pinZoom.enable();
     });
     eltFsm.addEventListener("touchend", evt => {
