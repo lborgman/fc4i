@@ -82,8 +82,9 @@ export function isEvent(str) { return arrEvents.includes(str); }
 export function checkIsEvent(str) {
     if (!isEvent(str)) {
         const state = fsm.state();
-        throw Error(`Unknown fsm event: ${str}, state: ${state}`); }
+        throw Error(`Unknown fsm event: ${str}, state: ${state}`);
     }
+}
 
 // const arrStates = [... new Set( fsmDeclaration.matchAll(/(?:=>|ms)\s+([^']*?);/g).map(m => m[1]) ) ].sort();
 const arrStates = [... new Set(fsmDeclaration.matchAll(/=>\s+(\S+?)\s*;/g))].map(m => m[1]).sort();
@@ -111,7 +112,8 @@ export function getPointerType(evt) {
 }
 
 export function setupFsmListeners(eltFsm) {
-    eltFsm.addEventListener("NOtouchstart", evt => {
+        let pinZoom ;
+    eltFsm.addEventListener("touchstart", async evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
         const len = touches.length;
@@ -121,11 +123,19 @@ export function setupFsmListeners(eltFsm) {
         }
         console.log("eltFsm, touchstart", len, evt, "touches:", touches, "changed:", changedTouches);
         actionWithErrorCheck("start2", evt);
+        const modZoom = await importFc4i("zoom");
+        console.log({ modZoom });
+        // console.log({ PinchZoom });
+        // debugger;
+        const eltJmnodes = document.querySelector("jmnodes");
+        pinZoom = pinZoom || new modZoom.default(eltJmnodes);
+        pinZoom.enable();
     });
-    eltFsm.addEventListener("NOtouchend", evt => {
+    eltFsm.addEventListener("touchend", evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
         console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
+        pinZoom.disable();
     });
 
     eltFsm.addEventListener("pointerdown", evt => {

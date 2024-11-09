@@ -66,6 +66,8 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "mm4i-fsm": "./src/js/mod/mm4i-fsm.js",
         // "viz-js": "https://cdn.jsdelivr.net/npm/viz-js@latest/dist/jssm.es6.mjs",
         "viz-js": "./ext/viz-js/viz-standalone.mjs",
+        // "zoom": "https://cdn.jsdelivr.net/npm/pinch-zoom-js@latest/dist/jssm.es6.mjs",
+        "zoom": "https://unpkg.com/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js",
     };
     /*
         It looks like you can't reliable use importmap this way:
