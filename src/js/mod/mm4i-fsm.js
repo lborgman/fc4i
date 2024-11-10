@@ -48,7 +48,9 @@ c_Down after 500 ms => c_Move;
 c_Move 'up' => Idle;
 // c_Down 'c_down' => c_Zoom;
 c_Down 'start2' => c_Zoom;
-c_Zoom 'up' => Idle;
+// c_Zoom 'up' => Idle;
+c_Zoom 'end2' => Idle;
+Idle 'end2' => Idle;
 
 
 // [Red Yellow Green] ~> Off;
@@ -123,19 +125,17 @@ export function setupFsmListeners(eltFsm) {
         }
         console.log("eltFsm, touchstart", len, evt, "touches:", touches, "changed:", changedTouches);
         actionWithErrorCheck("start2", evt);
-        const modZoom = await importFc4i("zoom");
-        console.log({ modZoom });
-        // console.log({ PinchZoom });
-        // debugger;
-        const eltJmnodes = document.querySelector("jmnodes");
-        pinZoom = pinZoom || new modZoom.default(eltFsm);
-        pinZoom.enable();
+        // const modZoom = await importFc4i("zoom");
+        // console.log({ modZoom });
+        // pinZoom = pinZoom || new modZoom.default(eltFsm);
+        // pinZoom.enable();
     });
     eltFsm.addEventListener("touchend", evt => {
-        const touches = evt.touches;
-        const changedTouches = evt.changedTouches;
-        console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
-        pinZoom.disable();
+        // const touches = evt.touches;
+        // const changedTouches = evt.changedTouches;
+        // console.log("eltFsm, touchend", evt, "touches:", touches, "changed:", changedTouches);
+        // pinZoom.disable();
+        actionWithErrorCheck("end2", evt);
     });
 
     eltFsm.addEventListener("pointerdown", evt => {
