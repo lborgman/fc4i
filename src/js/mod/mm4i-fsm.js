@@ -114,7 +114,7 @@ export function getPointerType(evt) {
 }
 
 export function setupFsmListeners(eltFsm) {
-    let pinZoom;
+    return; // FIX-ME:
     eltFsm.addEventListener("touchstart", async evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
