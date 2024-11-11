@@ -58,23 +58,27 @@ export function pinchZoom(element) {
 
             // Safari provides event.scale as two fingers move on the screen
             // For other browsers just calculate the scale manually
-            let scale;
-            if (event.scale) {
-                scale = event.scale;
-            } else {
+            // let scale;
+            // if (event.scale) {
+                // scale = event.scale;
+            // } else {
                 const deltaDistance = distance(event);
-                scale = deltaDistance / start.distance;
-            }
-            elementScale = Math.min(Math.max(1, scale), 4);
+                const scale = deltaDistance / start.distance;
+            // }
+            // elementScale = Math.min(Math.max(1, scale), 4);
+            const minScale = 0.5;
+            const maxScale = 4;
+            elementScale = Math.min(Math.max(minScale, scale), maxScale);
 
             // Calculate how much the fingers have moved on the X and Y axis
             const deltaX = (((event.touches[0].pageX + event.touches[1].pageX) / 2) - start.x) * 2; // x2 for accelarated movement
             const deltaY = (((event.touches[0].pageY + event.touches[1].pageY) / 2) - start.y) * 2; // x2 for accelarated movement
 
+            // FIX-ME: keep element inside some boundaries
+
             // Transform the image to make it grow and move with fingers
             const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${elementScale})`;
             element.style.transform = transform;
-            element.style.WebkitTransform = transform;
             element.style.zIndex = "9999";
         }
     });
@@ -83,7 +87,6 @@ export function pinchZoom(element) {
         // console.log('touchend', event);
         // Reset image to it's original format
         element.style.transform = "";
-        element.style.WebkitTransform = "";
         element.style.zIndex = "";
     });
 }
