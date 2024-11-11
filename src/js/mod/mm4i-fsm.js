@@ -113,8 +113,12 @@ export function getPointerType(evt) {
     return pointerType;
 }
 
-export function setupFsmListeners(eltFsm) {
+export async function setupFsmListeners(eltFsm) {
+    const modZoom = await importFc4i("zoom");
+    modZoom.pinchZoom(eltFsm);
     return; // FIX-ME:
+
+
     eltFsm.addEventListener("touchstart", async evt => {
         const touches = evt.touches;
         const changedTouches = evt.changedTouches;
