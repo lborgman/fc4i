@@ -115,7 +115,9 @@ export function getPointerType(evt) {
 
 export async function setupFsmListeners(eltFsm) {
     const modZoom = await importFc4i("zoom");
-    modZoom.pinchZoom(eltFsm);
+    const elementEtc = {}
+    elementEtc.element = eltFsm;
+    modZoom.pinchZoom(elementEtc);
     return; // FIX-ME:
 
 

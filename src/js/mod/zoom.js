@@ -33,8 +33,10 @@ const distance = (event) => {
     return Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
 };
 
-export function pinchZoom(element) {
-    let elementScale = 1;
+export function pinchZoom(elementEtc) {
+    const element = elementEtc.element;
+    // let elementScale = element.scale || 1;
+    element.scale = element.scale || 1;
 
     let start = {};
 
@@ -68,7 +70,7 @@ export function pinchZoom(element) {
             // elementScale = Math.min(Math.max(1, scale), 4);
             const minScale = 0.5;
             const maxScale = 4;
-            elementScale = Math.min(Math.max(minScale, scale), maxScale);
+            element.scale = Math.min(Math.max(minScale, scale), maxScale);
 
             // Calculate how much the fingers have moved on the X and Y axis
             const deltaX = (((event.touches[0].pageX + event.touches[1].pageX) / 2) - start.x) * 2; // x2 for accelarated movement
@@ -77,17 +79,19 @@ export function pinchZoom(element) {
             // FIX-ME: keep element inside some boundaries
 
             // Transform the image to make it grow and move with fingers
-            const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${elementScale})`;
+            const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${element.scale})`;
             element.style.transform = transform;
             element.style.zIndex = "9999";
         }
     });
 
+    /*
     element.addEventListener('touchend', (event) => {
         // console.log('touchend', event);
         // Reset image to it's original format
         element.style.transform = "";
         element.style.zIndex = "";
     });
+    */
 }
 
