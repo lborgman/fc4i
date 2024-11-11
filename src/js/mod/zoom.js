@@ -33,10 +33,21 @@ const distance = (event) => {
     return Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
 };
 
+export function getScale(elt) {
+    const style = getComputedStyle(elt);
+    const transform = style.transform;
+    if (transform === "none") return 1;
+    const matrix = new DOMMatrixReadOnly(transform);
+    console.log({ matrix });
+    if (matrix.m22 != 1) throw Error(`matrix.m22 == ${matrix.m22}`);
+    if (matrix.m33 != 1) throw Error(`matrix.m33 == ${matrix.m33}`);
+    if (matrix.m44 != 1) throw Error(`matrix.m44 == ${matrix.m44}`);
+    return matrix.m11;
+}
+
 export function pinchZoom(elementEtc) {
     const element = elementEtc.element;
-    // let elementScale = element.scale || 1;
-    element.scale = element.scale || 1;
+    const scaleI = element.scale || 1;
 
     let start = {};
 
@@ -58,19 +69,11 @@ export function pinchZoom(elementEtc) {
         if (event.touches.length === 2) {
             event.preventDefault(); // Prevent page scroll
 
-            // Safari provides event.scale as two fingers move on the screen
-            // For other browsers just calculate the scale manually
-            // let scale;
-            // if (event.scale) {
-                // scale = event.scale;
-            // } else {
-                const deltaDistance = distance(event);
-                const scale = deltaDistance / start.distance;
-            // }
-            // elementScale = Math.min(Math.max(1, scale), 4);
+            const deltaDistance = distance(event);
+            const scaleD = deltaDistance / start.distance;
             const minScale = 0.5;
             const maxScale = 4;
-            element.scale = Math.min(Math.max(minScale, scale), maxScale);
+            const scaleB = Math.min(Math.max(minScale, scaleD * scaleI), maxScale);
 
             // Calculate how much the fingers have moved on the X and Y axis
             const deltaX = (((event.touches[0].pageX + event.touches[1].pageX) / 2) - start.x) * 2; // x2 for accelarated movement
@@ -79,7 +82,7 @@ export function pinchZoom(elementEtc) {
             // FIX-ME: keep element inside some boundaries
 
             // Transform the image to make it grow and move with fingers
-            const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${element.scale})`;
+            const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scaleB})`;
             element.style.transform = transform;
             element.style.zIndex = "9999";
         }
