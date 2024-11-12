@@ -33,20 +33,27 @@ const distance = (event) => {
     return Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
 };
 
-export function getScale(elt) {
+export function getCssTransforms(elt) {
     const style = getComputedStyle(elt);
     const transform = style.transform;
-    if (transform === "none") return 1;
+    if (transform === "none") return;
     const matrix = new DOMMatrixReadOnly(transform);
     console.log({ matrix });
     if (matrix.m22 != 1) throw Error(`matrix.m22 == ${matrix.m22}`);
     if (matrix.m33 != 1) throw Error(`matrix.m33 == ${matrix.m33}`);
     if (matrix.m44 != 1) throw Error(`matrix.m44 == ${matrix.m44}`);
-    return matrix.m11;
+    const scale = matrix.m11;
+    const x = matrix.m41;
+    const y = matrix.m42;
+    return { scale, x, y}
 }
 
 export function pinchZoom(element) {
-    const scaleI = getScale(element);
+    const transforms = getCssTransforms(element);
+    const scaleI = transforms?.scale || 1;
+    const xI = transforms?.x || 0;
+    const yI = transforms?.y || 0;
+
 
     let start = {};
 
@@ -75,13 +82,15 @@ export function pinchZoom(element) {
             const scaleB = Math.min(Math.max(minScale, scaleD * scaleI), maxScale);
 
             // Calculate how much the fingers have moved on the X and Y axis
-            const deltaX = (((event.touches[0].pageX + event.touches[1].pageX) / 2) - start.x) * 2; // x2 for accelarated movement
-            const deltaY = (((event.touches[0].pageY + event.touches[1].pageY) / 2) - start.y) * 2; // x2 for accelarated movement
+            const xD = (((event.touches[0].pageX + event.touches[1].pageX) / 2) - start.x) * 2; // x2 for accelarated movement
+            const yD = (((event.touches[0].pageY + event.touches[1].pageY) / 2) - start.y) * 2; // x2 for accelarated movement
 
+            const xB = xD + xI;
+            const yB = yD + yI;
             // FIX-ME: keep element inside some boundaries
 
             // Transform the image to make it grow and move with fingers
-            const transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scaleB})`;
+            const transform = `translate3d(${xB}px, ${yB}px, 0) scale(${scaleB})`;
             element.style.transform = transform;
             element.style.zIndex = "9999";
         }
