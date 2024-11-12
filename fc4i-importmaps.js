@@ -88,7 +88,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
      * @param {string} idOrLink 
      * @returns 
      */
-    const importFc4i = async (idOrLink) => {
+    async function importFc4i (idOrLink) {
         if (idOrLink.startsWith("https://")) {
             return await import(idOrLink);
         }
@@ -98,6 +98,8 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         }
         const getStackTrace = function () {
             var obj = {};
+            // https://v8.dev/docs/stack-trace-api
+            // @ts-ignore
             Error.captureStackTrace(obj, getStackTrace);
             const s = obj.stack;
             return s.split(/\n\s*/);
@@ -143,7 +145,8 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         if (idOrLink.startsWith(".")) {
             // FIX-ME: why is this necessary when using <base ...>? file issue?
             // return await import(makeAbsLink(idOrLink));
-            ourImportLink = makeAbsLink(idOrLink);
+            throw Error(`Start with . not tested: ${idOrLink}`);
+            // ourImportLink = makeAbsLink(idOrLink);
         }
         if (!ourImportLink) {
             const relUrl = relImports[idOrLink];

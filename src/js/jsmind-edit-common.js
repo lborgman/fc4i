@@ -1401,52 +1401,6 @@ export async function pageSetup() {
         if (null == strNodeId) throw Error("jmexpander attribute nodeid is null");
         const nodeId = parseInt(strNodeId);
         jmDisplayed.toggle_node(nodeId);
-        return;
-
-        const eltJmnode = target.closest("jmnode");
-        if (!eltJmnode) return;
-        const node_id = getNodeIdFromDOMelt(eltJmnode);
-        jmDisplayed.select_node(node_id);
-        const bcr = eltJmnode.getBoundingClientRect();
-        // const bcrLeft = bcr.left;
-        // const bcrRight = bcr.right;
-        const bcrWidth = bcr.width;
-        // const evtSX = evt.screenX;
-        // const evtCX = evt.clientX;
-        const evtOX = evt.offsetX;
-        // const isOutsideS = (evtSX < bcrLeft) || (evtSX > bcrRight);
-        // const isOutsideC = (evtCX < bcrLeft) || (evtCX > bcrRight);
-        const isOutsideO = (evtOX < 0) || (evtOX > bcrWidth);
-        // console.log({ isOutsideS, isOutsideO, isOutsideC, evtSX, evtOX, evtCX, bcrLeft, bcrRight, bcrWidth, target, eltJmnode });
-        if (isOutsideO) {
-            const node_id = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
-            jmDisplayed.toggle_node(node_id);
-            // eltJmnode.classList.toggle("is-expanded");
-            (async () => {
-                // modMMhelpers.DBrequestSaveThisMindmap((await getCustomRenderer()).THEjmDisplayed);
-                const renderer = await getCustomRenderer();
-                modMMhelpers.DBrequestSaveThisMindmap(renderer.THEjmDisplayed);
-            })();
-        }
-        if (target.dataset.jsmindCustom) {
-            setTimeout(async () => {
-                // const eltCustom = eltJmnode.querySelector(".jsmind-custom");
-                // const eltCustom = eltJmnode.querySelector(".jsmind-custom-image");
-                const eltCustom = target;
-                const strCustom = eltCustom.dataset.jsmindCustom;
-                if (!strCustom) { throw Error("Not custom"); }
-                const objCustom = JSON.parse(strCustom);
-                const prov = objCustom.provider;
-                const go = await modMdc.mkMDCdialogConfirm(`Show entry in ${prov}?`);
-                console.log({ go });
-                if (!go) return;
-                // showKeyInFc4i(objCustom.key);
-                debugger; // eslint-disable-line no-debugger
-                const render = await modCustRend.getOurCustomRenderer();
-                // if (!render instanceof CustomRenderer4jsMind) throw Error(`Not a custom renderer`);
-                render.showCustomRec(objCustom.key, objCustom.provider);
-            }, 100);
-        };
     });
 
 

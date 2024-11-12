@@ -79,7 +79,8 @@ state c_Zoom       : { background-color: lightgray; };
 // oxc, Property 'map' does not exist on type 'RegexpStringIterator<RegExpExecArray>'. ts(2339)
 // fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]);
 
-const arrEvents = [... new Set(fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]))].sort();
+// const arrEvents = [... new Set(fsmDeclaration.matchAll(/'([^']*?)'/g).map(m => m[1]))].sort();
+const arrEvents = [... new Set(fsmDeclaration.matchAll(/'([^']*?)'/g))].map(m => m[1]).sort();
 export function isEvent(str) { return arrEvents.includes(str); }
 export function checkIsEvent(str) {
     if (!isEvent(str)) {
