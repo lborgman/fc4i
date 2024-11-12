@@ -45,9 +45,8 @@ export function getScale(elt) {
     return matrix.m11;
 }
 
-export function pinchZoom(elementEtc) {
-    const element = elementEtc.element;
-    const scaleI = element.scale || 1;
+export function pinchZoom(element) {
+    const scaleI = getScale(element);
 
     let start = {};
 
