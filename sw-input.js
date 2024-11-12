@@ -1,5 +1,5 @@
 //========== Specific ====================================================
-const SW_VERSION = "0.4.1978";
+const SW_VERSION = "0.4.1991";
 
 
 // https://www.npmjs.com/package/workbox-sw
@@ -232,7 +232,7 @@ const adjustTmrAutoCheck = async () => {
 }
 const restartAutoCheck = (() => {
     let tmr;
-    const delayMs = 2000; // FIXME:
+    // const delayMs = 2000; // FIXME:
     return (clientPort) => {
         // console.log("%crestartCheckAutoCheck", logColors, { clientPort });
         logConsole("restartCheckAutoCheck", { clientPort });
@@ -282,7 +282,7 @@ self.addEventListener("message", errorHandlerAsyncEvent(async evt => {
                 msKeepalive = Math.max(msKeepalive, 1000);
                 const msNowStart = Date.now();
                 console.log("%cTEST_TIMER", "color:red", { seconds, msKeepalive });
-                const wasRunning = !tmrKeepalive;
+                // const wasRunning = !tmrKeepalive;
                 clearInterval(tmrKeepalive);
                 tmrKeepalive = undefined;
                 const sendKeepalive = (val) => {

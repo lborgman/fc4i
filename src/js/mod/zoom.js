@@ -27,23 +27,25 @@ const distance = (event) => {
 export function getCssTransforms(elt) {
     const style = getComputedStyle(elt);
     const transform = style.transform;
-    if (transform === "none") return;
-    const matrix = new DOMMatrixReadOnly(transform);
-    console.log({ matrix });
-    if (matrix.m22 != 1) throw Error(`matrix.m22 == ${matrix.m22}`);
-    if (matrix.m33 != 1) throw Error(`matrix.m33 == ${matrix.m33}`);
-    if (matrix.m44 != 1) throw Error(`matrix.m44 == ${matrix.m44}`);
-    const scale = matrix.m11;
-    const x = matrix.m41;
-    const y = matrix.m42;
-    return { scale, x, y}
+    let x = 0, y = 0, scale = 1;
+    if (transform !== "none") {
+        const matrix = new DOMMatrixReadOnly(transform);
+        console.log({ matrix });
+        // if (matrix.m22 != 1) throw Error(`matrix.m22 == ${matrix.m22}`);
+        // if (matrix.m33 != 1) throw Error(`matrix.m33 == ${matrix.m33}`);
+        // if (matrix.m44 != 1) throw Error(`matrix.m44 == ${matrix.m44}`);
+        scale = matrix.m11;
+        x = matrix.m41;
+        y = matrix.m42;
+    }
+    return { scale, x, y }
 }
 
 export function pinchZoom(element) {
     const transforms = getCssTransforms(element);
-    const scaleI = transforms?.scale || 1;
-    const xI = transforms?.x || 0;
-    const yI = transforms?.y || 0;
+    const scaleI = transforms.scale;
+    const xI = transforms.x;
+    const yI = transforms.y;
 
 
     let start = {};
@@ -97,3 +99,79 @@ export function pinchZoom(element) {
     */
 }
 
+/**
+ * 
+ * @param {HTMLElement} elt 
+ * @param {number} amount 
+ */
+function changeScale(elt, amount) {
+    const transforms = getCssTransforms(elt);
+    const scale = transforms.scale * amount;
+    // const x = transforms.x;
+    // const y = transforms.y;
+    // elt.style.transform = `translate(${x}, ${y}) scale(${scale})`;
+    elt.style.transform = `scale(${scale})`;
+}
+
+/**
+ * 
+ * @param {HTMLElement} elt 
+ * @param {string} inOrOut 
+ * @returns 
+ */
+function mkZoomButton(elt, inOrOut) {
+    let dir = inOrOut;
+    let amount = 1.2;
+    switch (inOrOut) {
+        case "-":
+            amount = 1 / amount;
+            break;
+        case "+":
+            break;
+        default:
+            throw Error(`Bad parameter inOrOut: ${inOrOut}`);
+    }
+    const btn = document.createElement("button");
+    btn.textContent = dir;
+    btn.title = `Zoom ${dir}`;
+    // @ts-ignore
+    btn.style = `
+        aspect-ratio: 1 / 1;
+        width: 32px;
+    `;
+    btn.addEventListener("click", () => {
+        console.log("btn ", dir, amount);
+        changeScale(elt, amount);
+    });
+    return btn;
+}
+
+/**
+ * 
+ * @param {HTMLElement} elt 
+ * @param {string} horOrVer 
+ * @returns 
+ */
+export function mkZoomButtons(elt, horOrVer) {
+    console.log({ elt, horOrVer });
+    if (!(elt instanceof HTMLElement)) throw Error("elt is not HTMLElement");
+    const tofHorOrVer = typeof horOrVer;
+    if ("string" != tofHorOrVer) throw Error(`Expected string, got ${tofHorOrVer}`);
+
+    const btnPlus = mkZoomButton(elt, "+");
+    const btnMinus = mkZoomButton(elt, "-");
+    const cont = document.createElement("div");
+    cont.appendChild(btnPlus);
+    cont.appendChild(btnMinus);
+    // @ts-ignore
+    cont.style = `
+        position: fixed;
+        top: 0px;
+        left: 200px;
+        display: flex;
+        gap: 10px;
+        background: red;
+        z-index: 9999;
+    `;
+    return cont;
+}

@@ -169,8 +169,12 @@ export class CustomRenderer4jsMind {
             eltJmnode.appendChild(eltA3);
         }
     }
-    async updateJmnodeFromCustom(eltJmnode, jmOwner) {
+
+
+    // async updateJmnodeFromCustom(eltJmnode, jmOwner) {
+    async updateJmnodeFromCustom() {
         // debugger; // eslint-disable-line no-debugger
+        /*
         return;
         async function fixRenderImg(eltDiv) {
             return;
@@ -232,6 +236,7 @@ export class CustomRenderer4jsMind {
             const divBg = eltJmnode.querySelector(".jmnode-bg");
             divBg.style.backgroundImage = backgroundImage;
         }
+        */
     }
 
     async editMindmapDialog() {
@@ -371,12 +376,12 @@ export class CustomRenderer4jsMind {
                 divBgCtrls.style.opacity = 1;
             }
         }
-        inpUseBgMm.addEventListener("change", evt => {
+        inpUseBgMm.addEventListener("change", () => {
             console.log("inpUseBg", inpUseBgMm.checked);
             setBgMmDisabled(!inpUseBgMm.checked);
             funDebounceSomethingToSaveMm();
         });
-        inpBgMmColor.addEventListener("change", evt => {
+        inpBgMmColor.addEventListener("change", () => {
             if (!inpUseBgMm.checked) return;
             funDebounceSomethingToSaveMm();
         })
@@ -423,10 +428,10 @@ export class CustomRenderer4jsMind {
         const defaultLineW = jmOpt.view.line_width;
         const defaultLineC = jmOpt.view.line_color;
         const inpChkChangeLines = modMdc.mkMDCcheckboxInput();
-        inpChkChangeLines.addEventListener("input", evt => {
+        inpChkChangeLines.addEventListener("input", () => {
             disableCardLine(!inpChkChangeLines.checked);
         });
-        inpChkChangeLines.addEventListener("change", evt => {
+        inpChkChangeLines.addEventListener("change", () => {
             // console.log("chk line change"); debugger; // eslint-disable-line no-debugger
         });
         const lblChkLines = await modMdc.mkMDCcheckboxElt(inpChkChangeLines, "Change color and width");
@@ -474,7 +479,7 @@ export class CustomRenderer4jsMind {
             }
         }
         // .mindmapGlobals
-        inpLineColor.addEventListener("input", evt => {
+        inpLineColor.addEventListener("input", () => {
             divPreviewLine.style.backgroundColor = inpLineColor.value;
             funDebounceSomethingToSaveMm();
         })
@@ -549,7 +554,7 @@ export class CustomRenderer4jsMind {
             const currentLineValues = getLineValues();
             return JSON.stringify(initialLineValues) != JSON.stringify(currentLineValues);
         }
-        btnSaveMm.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        btnSaveMm.addEventListener("click", errorHandlerAsyncEvent(async () => {
             // const saveGlobals = { themeCls: selectedThemeCls, }
             // const r = await getOurCustomRenderer();
             // rend.setMindmapGlobals(saveGlobals);
@@ -641,7 +646,7 @@ export class CustomRenderer4jsMind {
         function funDebounceSomethingToSaveMm() { debounceSomethingToSaveMm(); }
 
 
-        return await new Promise((resolve, reject) => {
+        return await new Promise((resolve) => {
             dlg.dom.addEventListener("MDCDialog:closed", errorHandlerAsyncEvent(async evt => {
                 const action = evt.detail.action;
                 switch (action) {
@@ -838,7 +843,7 @@ export class CustomRenderer4jsMind {
             mkAltBorderStyle("dashed"),
             mkAltBorderStyle("double"),
         ]);
-        divBorderStyle.addEventListener("change", evt => {
+        divBorderStyle.addEventListener("change", () => {
             const borderStyle = getCtrlValBorderStyle()
             console.log({ borderStyle });
             currentShapeEtc.border = currentShapeEtc.border || {};
@@ -962,7 +967,7 @@ export class CustomRenderer4jsMind {
             currentShapeEtc.temp.topic = taTopic.value;
             eltCopiedText.textContent = taTopic.value;
         }
-        taTopic.addEventListener("input", evt => {
+        taTopic.addEventListener("input", () => {
             onTaTopicInput();
         });
         const initialCustomTopic = currentShapeEtc.nodeCustom;
@@ -981,7 +986,7 @@ export class CustomRenderer4jsMind {
             currentShapeEtc.temp.topic = inpTopic.value;
             eltCopiedText.textContent = inpTopic.value;
         }
-        inpTopic.addEventListener("input", evt => {
+        inpTopic.addEventListener("input", () => {
             onInpTopicInput();
         });
 
@@ -1089,7 +1094,7 @@ export class CustomRenderer4jsMind {
         const divShapeBg = mkElt("div", undefined, chkShapeBg);
         divShapeBg.style.marginBottom = "10px";
         divShapes.appendChild(divShapeBg);
-        inpChkShapeBg.addEventListener("input", evt => {
+        inpChkShapeBg.addEventListener("input", () => {
             console.log("inpChkShapgeBg input", inpChkShapeBg.checked);
             currentShapeEtc.shapeBoxBg = inpChkShapeBg.checked;
         })
@@ -1175,13 +1180,13 @@ export class CustomRenderer4jsMind {
         });
         // let bgColorChanged;
         // let fgColorChanged;
-        inpBgColor.addEventListener("input", evt => {
+        inpBgColor.addEventListener("input", () => {
             currentShapeEtc.temp.bgColor = inpBgColor.value;
             onAnyCtrlChange();
             // eltCopied.style.backgroundColor = inpBgColor.value;
             checkColorContrast();
         });
-        inpFgColor.addEventListener("input", evt => {
+        inpFgColor.addEventListener("input", () => {
             // currentShapeEtc.fgColor = inpFgColor.value;
             currentShapeEtc.temp.fgColor = inpFgColor.value;
             onAnyCtrlChange();
@@ -1223,7 +1228,7 @@ export class CustomRenderer4jsMind {
                     bg.url = clipImage.url;
                     bg.blob = clipImage.blob;
                     console.error("Not implemented yet");
-                    debugger;
+                    debugger; // eslint-disable-line no-debugger
                 }
                 applyCurrentToCopied();
             }
@@ -1355,13 +1360,13 @@ export class CustomRenderer4jsMind {
             }
         }
         const debounceCheckImageUrl = debounce(checkImageUrl, 1500);
-        inpImageUrl.addEventListener("input", async evt => {
+        inpImageUrl.addEventListener("input", async () => {
             debounceCheckImageUrl();
         });
         const btnNote = modMdc.mkMDCiconButton("info", "Test info");
         btnNote.style.verticalAlign = "top";
         btnNote.style.marginTop = "-10px";
-        btnNote.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        btnNote.addEventListener("click", errorHandlerAsyncEvent(async () => {
             modMdc.mkMDCdialogAlert(
                 `This might not work because using the image is prevented.
                 If however you can see the image below it does work.`,
@@ -1384,8 +1389,9 @@ export class CustomRenderer4jsMind {
             background-color: black;
         `;
         const btnClipboard = modMdc.mkMDCbutton("Clipboard", "raised");
-        btnClipboard.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        btnClipboard.addEventListener("click", errorHandlerAsyncEvent(async () => {
             const added = await getBgFromClipboard(divClipboardImage);
+            console.log({ added });
         }));
         const divClipboard = mkElt("div", undefined, [
             "An image from the clipboard.",
@@ -1482,10 +1488,10 @@ export class CustomRenderer4jsMind {
             }
         }
         const debounceSetBgPatternPreview = debounce(setBgPatternPreview, 1000);
-        taImgPattern.addEventListener("input", evt => {
+        taImgPattern.addEventListener("input", () => {
             debounceSetBgPatternPreview();
         });
-        taImgPattern.addEventListener("change", evt => {
+        taImgPattern.addEventListener("change", () => {
             debounceSetBgPatternPreview();
         });
         const divPattern = mkElt("div", undefined, [
@@ -1505,7 +1511,7 @@ export class CustomRenderer4jsMind {
             mkElt("summary", undefined, "Edit link"),
             divLink
         ]);
-        detLink.addEventListener("toggle", evt => {
+        detLink.addEventListener("toggle", () => {
             setTimeout(() => {
                 console.log("detLink.open", detLink.open);
                 if (detLink.open) {
@@ -1521,7 +1527,7 @@ export class CustomRenderer4jsMind {
             mkElt("summary", undefined, "Set up pattern"),
             divPattern
         ]);
-        detPattern.addEventListener("toggle", evt => {
+        detPattern.addEventListener("toggle", () => {
             // FIX-ME: The delay should perhaps not be needed.
             //   Take a look at this again when switching to MDC 3.
             setTimeout(() => {
@@ -1669,9 +1675,9 @@ export class CustomRenderer4jsMind {
         }, 100);
 
 
-        let blobBg;
+        // let blobBg;
         const btnChangeBg = modMdc.mkMDCbutton("Change", "raised");
-        btnChangeBg.addEventListener("click", errorHandlerAsyncEvent(async evt => {
+        btnChangeBg.addEventListener("click", errorHandlerAsyncEvent(async () => {
             await dlgBgImage();
         }));
         async function dlgBgImage() {
@@ -1779,7 +1785,7 @@ export class CustomRenderer4jsMind {
             await addBackupCustom(objCustom);
         }
         const btnSelectCustomItem = modMdc.mkMDCbutton("Select database item", "raised");
-        btnSelectCustomItem.addEventListener("click", async evt => {
+        btnSelectCustomItem.addEventListener("click", async () => {
             const objCustom = await modMMhelpers.pasteCustomClipDialog();
             console.log({ objCustom, eltCopied });
             if (!objCustom) return;
@@ -1835,7 +1841,7 @@ export class CustomRenderer4jsMind {
         }
         // const OLdivTopicChoiceCustom = mkTopicChoice("topic-choice-custom", "Custom linked node", divCustomContent);
         const chkLinkCustom = mkElt("input", { type: "checkbox" });
-        chkLinkCustom.addEventListener("change", evt => {
+        chkLinkCustom.addEventListener("change", () => {
             console.log("chkLinkCustom", chkLinkCustom.checked);
             if (chkLinkCustom.checked) {
                 divCustomContent.classList.remove("display-none");
@@ -1865,6 +1871,7 @@ export class CustomRenderer4jsMind {
         const divContent = mkElt("div", { id: "jsmind-ednode-content" }, [
             detBasicNodeChoices, detNodeChoiceCustom
         ]);
+        /*
         function OLDcheckTopicChoiceThis(eltChoice) {
             const inp = eltChoice.querySelector("input[name=topic-choice]");
             inp.checked = true;
@@ -1873,6 +1880,7 @@ export class CustomRenderer4jsMind {
             const inp = eltChoice.querySelector("input[name=topic-choice]");
             inp.disabled = !enabled;
         }
+        */
 
         async function addBackupCustom(objCustom) {
             const key = objCustom.key;
@@ -2010,13 +2018,13 @@ export class CustomRenderer4jsMind {
             const initHex6 = modJsEditCommon.to6HexColor(initColor);
             const inpColor = mkElt("input", { type: "color", value: initHex6 });
             // const funGrp = onCtrlsGrpChg[objShEtc.grpName];
-            inpColor.addEventListener("input", (evt) => {
+            inpColor.addEventListener("input", () => {
                 console.log("inpColor, input", inpColor.value);
                 setInShapeEtc(inpColor.value, objShEtc, currentShapeEtc);
                 // setBorderCopied();
                 // if (funGrp) funGrp();
             });
-            inpColor.addEventListener("change", (evt) => {
+            inpColor.addEventListener("change", () => {
                 console.log("inpColor, change", inpColor.value);
                 // setBorderCopied();
             });
@@ -2320,10 +2328,12 @@ export class CustomRenderer4jsMind {
         }
 
 
+        /*
         function getCtrlValShadowBlur() {
             const mdc = sliShadowBlur?.myMdc;
             return mdc?.getValue();
         }
+        */
         function onCtrlsChgShadow() {
             // const b = getCtrlValShadowBlur();
             const b = getFromShapeEtc("shadow.blur", currentShapeEtc) || 0;

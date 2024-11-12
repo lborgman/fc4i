@@ -17,7 +17,6 @@
 
 /*box-shadow:0 0 2px #000;*/
 .jsmind-inner {
-    moz-user-select: -moz-none;
     -moz-user-select: none;
     -o-user-select: none;
     -khtml-user-select: none;
@@ -189,11 +188,11 @@ jmnodes.theme-primary jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-primary jmnode.root {}
-
 jmnodes.theme-primary jmexpander {}
-
 jmnodes.theme-primary jmexpander:hover {}
+*/
 
 /* warning theme */
 jmnodes.theme-warning jmnode {
@@ -212,11 +211,11 @@ jmnodes.theme-warning jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-warning jmnode.root {}
-
 jmnodes.theme-warning jmexpander {}
-
 jmnodes.theme-warning jmexpander:hover {}
+*/
 
 /* danger theme */
 jmnodes.theme-danger jmnode {
@@ -235,11 +234,11 @@ jmnodes.theme-danger jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-danger jmnode.root {}
-
 jmnodes.theme-danger jmexpander {}
-
 jmnodes.theme-danger jmexpander:hover {}
+*/
 
 /* success theme */
 jmnodes.theme-success jmnode {
@@ -258,11 +257,11 @@ jmnodes.theme-success jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-success jmnode.root {}
-
 jmnodes.theme-success jmexpander {}
-
 jmnodes.theme-success jmexpander:hover {}
+*/
 
 /* info theme */
 jmnodes.theme-info jmnode {
@@ -281,11 +280,11 @@ jmnodes.theme-info jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-info jmnode.root {}
-
 jmnodes.theme-info jmexpander {}
-
 jmnodes.theme-info jmexpander:hover {}
+*/
 
 /* greensea theme */
 jmnodes.theme-greensea jmnode {
@@ -302,11 +301,11 @@ jmnodes.theme-greensea jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-greensea jmnode.root {}
-
 jmnodes.theme-greensea jmexpander {}
-
 jmnodes.theme-greensea jmexpander:hover {}
+*/
 
 /* nephrite theme */
 jmnodes.theme-nephrite jmnode {
@@ -323,11 +322,11 @@ jmnodes.theme-nephrite jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-nephrite jmnode.root {}
-
 jmnodes.theme-nephrite jmexpander {}
-
 jmnodes.theme-nephrite jmexpander:hover {}
+*/
 
 /* belizehole theme */
 jmnodes.theme-belizehole jmnode {
@@ -344,11 +343,11 @@ jmnodes.theme-belizehole jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-belizehole jmnode.root {}
-
 jmnodes.theme-belizehole jmexpander {}
-
 jmnodes.theme-belizehole jmexpander:hover {}
+*/
 
 /* wisteria theme */
 jmnodes.theme-wisteria jmnode {
@@ -365,11 +364,11 @@ jmnodes.theme-wisteria jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-wisteria jmnode.root {}
-
 jmnodes.theme-wisteria jmexpander {}
-
 jmnodes.theme-wisteria jmexpander:hover {}
+*/
 
 /* asphalt theme */
 jmnodes.theme-asphalt jmnode {
@@ -386,11 +385,11 @@ jmnodes.theme-asphalt jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-asphalt jmnode.root {}
-
 jmnodes.theme-asphalt jmexpander {}
-
 jmnodes.theme-asphalt jmexpander:hover {}
+*/
 
 
 
@@ -412,11 +411,11 @@ jmnodes.theme-orange jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-orange jmnode.root {}
-
 jmnodes.theme-orange jmexpander {}
-
 jmnodes.theme-orange jmexpander:hover {}
+*/
 
 
 
@@ -435,11 +434,11 @@ jmnodes.theme-pumpkin jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-pumpkin jmnode.root {}
-
 jmnodes.theme-pumpkin jmexpander {}
-
 jmnodes.theme-pumpkin jmexpander:hover {}
+*/
 
 /* pomegranate theme */
 jmnodes.theme-pomegranate jmnode {
@@ -456,11 +455,11 @@ jmnodes.theme-pomegranate jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-pomegranate jmnode.root {}
-
 jmnodes.theme-pomegranate jmexpander {}
-
 jmnodes.theme-pomegranate jmexpander:hover {}
+*/
 
 /* clouds theme */
 jmnodes.theme-clouds jmnode {
@@ -477,11 +476,11 @@ jmnodes.theme-clouds jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-clouds jmnode.root {}
-
 jmnodes.theme-clouds jmexpander {}
-
 jmnodes.theme-clouds jmexpander:hover {}
+*/
 
 /* asbestos theme */
 jmnodes.theme-asbestos jmnode {
@@ -498,11 +497,11 @@ jmnodes.theme-asbestos jmnode.selected {
     color: #fff;
 }
 
+/*
 jmnodes.theme-asbestos jmnode.root {}
-
 jmnodes.theme-asbestos jmexpander {}
-
 jmnodes.theme-asbestos jmexpander:hover {}
+*/
 
 /* From fc4i.css */
 jmnodes jmnode {
@@ -519,9 +518,11 @@ jmnodes jmnode.root {
     max-height: 150px;
 }
 
+/*
 jmnodes jmnode.text-overflow div.jmnode-text {
     NObackground-color: cyan;
 }
+*/
 
 jmnodes jmnode div.jmnode-overflow-indicator {
     position: absolute;
@@ -552,9 +553,11 @@ jmnodes jmnode .jmnode-bg {
     /* background-color: green; */
 }
 
+/*
 jmnodes jmnode .jmnode-bg:not([class*='jsmind-shape-']) {
     NObackground-color: transparent;
 }
+*/
 
 /* .jsmind_container jmnodes jmnode .jmnode-text { */
 jmnodes jmnode .jmnode-text {
@@ -604,11 +607,13 @@ jmnodes jmnode .jmnode-text {
 }
 
 /* .jsmind_container jmnodes jmnode[nodeid='root'] { */
+/*
 .jsmind_container jmnodes jmnode.root {
-    /* overflow: hidden; */
-    /* overflow: visible; */
-    /* for the wavy to be visible */
+    overflow: hidden;
+    overflow: visible;
+    for the wavy to be visible
 }
+*/
 
 .jsmind_container jmnodes jmnode.root div.jmnode-text {
     /* text-decoration: wavy underline; */

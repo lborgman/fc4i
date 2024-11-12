@@ -109,7 +109,7 @@ export function getPointerType(evt) {
     if (["mouse", "touch", "pen"].indexOf(pointerType) == -1) {
         const msg = `ERROR: Unknown pointerType: "${pointerType}"`;
         alert(msg);
-        debugger;
+        debugger; // eslint-disable-line no-debugger
     }
     return pointerType;
 }
@@ -117,6 +117,8 @@ export function getPointerType(evt) {
 export async function setupFsmListeners(eltFsm) {
     const modZoom = await importFc4i("zoom");
     modZoom.pinchZoom(eltFsm);
+    const zoomButtons = modZoom.mkZoomButtons(eltFsm, "horizontal");
+    document.body.appendChild(zoomButtons);
     return; // FIX-ME:
 
 
