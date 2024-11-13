@@ -119,7 +119,14 @@ export async function setupFsmListeners(eltFsm) {
     modZoom.pinchZoom(eltFsm);
     const zoomButtons = modZoom.mkZoomButtons(eltFsm, "horizontal");
     document.body.appendChild(zoomButtons);
-    return; // FIX-ME:
+
+    eltFsm.style.overflow = "hidden";
+    eltFsm.style.outline = "4px dotted red";
+    const eltJmnodes = eltFsm.querySelector("jmnodes");
+    const bcr = eltJmnodes.getBoundingClientRect();
+    eltFsm.style.width = `${bcr.width}px`;
+    eltFsm.style.height = `${bcr.height}px`;
+    // return; // FIX-ME:
 
 
     eltFsm.addEventListener("touchstart", async evt => {
