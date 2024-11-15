@@ -120,12 +120,108 @@ export async function setupFsmListeners(eltFsm) {
     const zoomButtons = modZoom.mkZoomButtons(eltFsm, "horizontal");
     document.body.appendChild(zoomButtons);
 
-    eltFsm.style.overflow = "hidden";
-    eltFsm.style.outline = "4px dotted red";
-    const eltJmnodes = eltFsm.querySelector("jmnodes");
-    const bcr = eltJmnodes.getBoundingClientRect();
-    eltFsm.style.width = `${bcr.width}px`;
-    eltFsm.style.height = `${bcr.height}px`;
+    let addDebugEtc;
+    addDebugEtc = true;
+    if (addDebugEtc) {
+        // https://www.magicpattern.design/tools/css-backgrounds
+        const applyCSS = (strCSS, toElement) => {
+            const rows = strCSS.split(/;\s*(?:$|\n)/)
+                .map(s => s.trim())
+                .filter(s => !s.startsWith("NO"))
+                .filter(s => s.length > 0)
+                .map(s => s + ";");
+            rows.forEach(row => {
+                const reRow = /(\S+)\s*:\s*(.*?)\s*;/;
+                const m = reRow.exec(row);
+                if (!m) throw Error(`No match: ${row}`);
+                const prop = m[1];
+                const val = m[2];
+                toElement.style[prop] = val;
+            });
+        }
+        const applyPattern = (strCssPattern, toElement) => {
+            toElement.backgroundColor = "";
+            applyCSS(strCssPattern, toElement);
+        }
+
+        // back #e5e5f7
+        let B = "#e5e5f7";
+        // front #444cf7
+        let F = "#444cf7";
+        B = "transparent";
+
+        F = "brown";
+        const bgBoxes = `
+background-color: ${B};
+opacity: 0.8;
+background-image:  linear-gradient(${F} 1px, transparent 1px), linear-gradient(to right, ${F} 1px, ${B} 1px);
+background-size: 20px 20px;
+        `;
+
+        F = "green";
+        const bgZigZag = `
+background-color: ${B};
+NOopacity: 0.8;
+background-image:  linear-gradient(135deg, ${F} 25%, transparent 25%), linear-gradient(225deg, ${F} 25%, transparent 25%), linear-gradient(45deg, ${F} 25%, transparent 25%), linear-gradient(315deg, ${F} 25%, ${B} 25%);
+background-position:  10px 0, 10px 0, 0 0, 0 0;
+background-size: 20px 20px;
+background-repeat: repeat;
+        `;
+
+        F = "darkseagreen";
+        const bgDiagonal = `
+background-color: ${B};
+NOopacity: 0.8;
+background: repeating-linear-gradient( 45deg, ${F}, ${F} 5px, ${B} 5px, ${B} 25px );
+        `;
+
+        F = "#4b0082"; // "indigo";
+        const bgIsometric = `
+background-color: ${B};
+NOopacity: 0.8;
+background-image:  linear-gradient(30deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(150deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(30deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(150deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(60deg, ${F}77 25%, transparent 25.5%, transparent 75%, ${F}77 75%, ${F}77), linear-gradient(60deg, ${F}77 25%, transparent 25.5%, transparent 75%, ${F}77 75%, ${F}77);
+background-size: 20px 35px;
+background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px;
+        `;
+
+        F = "red";
+        const bgPolka = `
+background-color: ${B};
+opacity: 0.8;
+background-image: radial-gradient(${F} 0.5px, ${B} 0.5px);
+background-size: 10px 10px;
+        `;
+
+        const inner = eltFsm;
+        if (!inner.classList.contains("jsmind-inner")) throw Error("not .jsmind-inner");
+        if (inner.tagName !== "DIV") throw Error("not DIV");
+
+        const container = inner.parentElement;
+        if (container.id != "jsmind_container") throw Error("not #jsmind_container");
+
+        const eltJmnodes = inner.querySelector("jmnodes");
+
+        applyPattern(bgBoxes, document.body);
+        applyPattern(bgDiagonal, container);
+        applyPattern(bgIsometric, inner);
+        // applyPattern(bgZigZag, eltJmnodes);
+        applyPattern(bgPolka, eltJmnodes);
+
+        container.style.outline = "4px dotted cadetblue";
+
+        const bcr = eltJmnodes.getBoundingClientRect();
+
+        inner.style.width = `${bcr.width}px`;
+        inner.style.height = `${bcr.height}px`;
+        inner.style.overflow = "hidden";
+        inner.style.outline = "4px dotted indigo";
+
+        const eltSvg = inner.querySelector("svg.jsmind");
+        eltSvg.style.outline = "4px dashed green";
+        eltJmnodes.style.outline = "4px dotted yellow";
+
+        // document.body.style.backgroundColor = "brown";
+    }
     // return; // FIX-ME:
 
 
