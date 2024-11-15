@@ -166,6 +166,7 @@ background-image:  linear-gradient(135deg, ${F} 25%, transparent 25%), linear-gr
 background-position:  10px 0, 10px 0, 0 0, 0 0;
 background-size: 20px 20px;
 background-repeat: repeat;
+outline: 4px dotted ${F};
         `;
 
         F = "darkseagreen";
@@ -173,6 +174,7 @@ background-repeat: repeat;
 background-color: ${B};
 NOopacity: 0.8;
 background: repeating-linear-gradient( 45deg, ${F}, ${F} 5px, ${B} 5px, ${B} 25px );
+outline: 4px dashed ${F};
         `;
 
         F = "#4b0082"; // "indigo";
@@ -182,6 +184,7 @@ NOopacity: 0.8;
 background-image:  linear-gradient(30deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(150deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(30deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(150deg, ${F} 12%, transparent 12.5%, transparent 87%, ${F} 87.5%, ${F}), linear-gradient(60deg, ${F}77 25%, transparent 25.5%, transparent 75%, ${F}77 75%, ${F}77), linear-gradient(60deg, ${F}77 25%, transparent 25.5%, transparent 75%, ${F}77 75%, ${F}77);
 background-size: 20px 35px;
 background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px;
+outline: 4px double ${F};
         `;
 
         F = "red";
@@ -190,6 +193,7 @@ background-color: ${B};
 opacity: 0.8;
 background-image: radial-gradient(${F} 0.5px, ${B} 0.5px);
 background-size: 10px 10px;
+outline: 4px groove ${F};
         `;
 
         const inner = eltFsm;
@@ -200,27 +204,21 @@ background-size: 10px 10px;
         if (container.id != "jsmind_container") throw Error("not #jsmind_container");
 
         const eltJmnodes = inner.querySelector("jmnodes");
+        const eltSvg = inner.querySelector("svg.jsmind");
 
         applyPattern(bgBoxes, document.body);
         applyPattern(bgDiagonal, container);
         applyPattern(bgIsometric, inner);
-        // applyPattern(bgZigZag, eltJmnodes);
         applyPattern(bgPolka, eltJmnodes);
+        applyPattern(bgZigZag, eltSvg);
 
-        container.style.outline = "4px dotted cadetblue";
 
         const bcr = eltJmnodes.getBoundingClientRect();
 
         inner.style.width = `${bcr.width}px`;
         inner.style.height = `${bcr.height}px`;
         inner.style.overflow = "hidden";
-        inner.style.outline = "4px dotted indigo";
 
-        const eltSvg = inner.querySelector("svg.jsmind");
-        eltSvg.style.outline = "4px dashed green";
-        eltJmnodes.style.outline = "4px dotted yellow";
-
-        // document.body.style.backgroundColor = "brown";
     }
     // return; // FIX-ME:
 
