@@ -106,11 +106,13 @@ export function pinchZoom(element) {
  */
 function changeScale(elt, amount) {
     const transforms = getCssTransforms(elt);
-    const scale = transforms.scale * amount;
+    let scale = transforms.scale * amount;
+    if (0.95 < scale && scale < 1.05) scale = 1;
     // const x = transforms.x;
     // const y = transforms.y;
     // elt.style.transform = `translate(${x}, ${y}) scale(${scale})`;
     elt.style.transform = `scale(${scale})`;
+    displayZoomed(scale);
 }
 
 /**
@@ -138,6 +140,8 @@ function mkZoomButton(elt, inOrOut) {
     btn.style = `
         aspect-ratio: 1 / 1;
         width: 32px;
+        background-color: transparent;
+        font-size: 24px;
     `;
     btn.addEventListener("click", () => {
         console.log("btn ", dir, amount);
@@ -145,6 +149,27 @@ function mkZoomButton(elt, inOrOut) {
     });
     return btn;
 }
+
+const idDisplayZoomed = "display-zoomed";
+function mkDisplayZoomed() {
+    const div = document.createElement("div");
+    div.textContent = "100%";
+    div.id = idDisplayZoomed;
+    // @ts-ignore
+    div.style = `
+        display: inline-flex;
+        align-items: center;
+        padding: 4px;
+    `;
+    return div;
+}
+function displayZoomed(scaled) {
+    const perc = Math.round(scaled * 100);
+    const elt = document.getElementById(idDisplayZoomed);
+    // @ts-ignore
+    elt.textContent = `${perc}%`;
+}
+
 
 /**
  * 
@@ -160,17 +185,18 @@ export function mkZoomButtons(elt, horOrVer) {
 
     const btnPlus = mkZoomButton(elt, "+");
     const btnMinus = mkZoomButton(elt, "-");
+    const eltZoomed = mkDisplayZoomed();
     const cont = document.createElement("div");
     cont.appendChild(btnPlus);
+    cont.appendChild(eltZoomed);
     cont.appendChild(btnMinus);
     // @ts-ignore
     cont.style = `
         position: fixed;
-        top: 0px;
-        left: 200px;
+        top: 8px;
+        left: 170px;
         display: flex;
-        gap: 10px;
-        background: red;
+        background: wheat;
         z-index: 9999;
     `;
     return cont;

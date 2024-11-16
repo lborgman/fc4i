@@ -159,12 +159,17 @@ background-size: 20px 20px;
         `;
 
         F = "green";
+        F = "#145A32";
+        F = "#784212";
+        F = "#AF601A";
+        F = "#B9770E";
+        F = "#CA6F1E";
         const bgZigZag = `
 background-color: ${B};
 NOopacity: 0.8;
 background-image:  linear-gradient(135deg, ${F} 25%, transparent 25%), linear-gradient(225deg, ${F} 25%, transparent 25%), linear-gradient(45deg, ${F} 25%, transparent 25%), linear-gradient(315deg, ${F} 25%, ${B} 25%);
 background-position:  10px 0, 10px 0, 0 0, 0 0;
-background-size: 20px 20px;
+background-size: 60px 60px;
 background-repeat: repeat;
 outline: 4px dotted ${F};
         `;
