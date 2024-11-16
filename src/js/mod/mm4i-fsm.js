@@ -3,6 +3,7 @@ const MM4I_FSM_VER = "0.0.3";
 console.log(`here is mm4i-fsm.js, module,${MM4I_FSM_VER}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
+const importFc4i = window["importFc4i"];
 const modJssm = await importFc4i("jssm");
 // console.log({ modJssm });
 
@@ -121,7 +122,9 @@ export async function setupFsmListeners(eltFsm) {
     document.body.appendChild(zoomButtons);
 
     let addDebugEtc;
+    addDebugEtc = false;
     addDebugEtc = true;
+    addDebugEtc = confirm("addDebugEtc");
     if (addDebugEtc) {
         // https://www.magicpattern.design/tools/css-backgrounds
         const applyCSS = (strCSS, toElement) => {
@@ -218,12 +221,12 @@ outline: 4px groove ${F};
         applyPattern(bgZigZag, eltSvg);
 
 
+        /*
         const bcr = eltJmnodes.getBoundingClientRect();
-
         inner.style.width = `${bcr.width}px`;
         inner.style.height = `${bcr.height}px`;
+        */
         inner.style.overflow = "hidden";
-
     }
     // return; // FIX-ME:
 

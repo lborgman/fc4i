@@ -4,6 +4,7 @@ const version = "0.1.000";
 console.log(`here is zoom.js, module, ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
+const importFc4i = window["importFc4i"];
 const modTools = await importFc4i("toolsJs");
 const debounceDisplayZoomed = modTools.debounce(displayZoomed);
 
