@@ -4,6 +4,9 @@ const version = "0.1.000";
 console.log(`here is zoom.js, module, ${version}`);
 if (document.currentScript) throw Error("import .currentScript"); // is module
 
+const modTools = await importFc4i("toolsJs");
+const debounceDisplayZoomed = modTools.debounce(displayZoomed);
+
 // const touchesPositions = undefined;
 
 export function start(evt) {
@@ -47,9 +50,7 @@ export function pinchZoom(element) {
     const xI = transforms.x;
     const yI = transforms.y;
 
-
     let start = {};
-
 
     element.addEventListener('touchstart', (event) => {
         // console.log('touchstart', event);
@@ -85,7 +86,8 @@ export function pinchZoom(element) {
             // Transform the image to make it grow and move with fingers
             const transform = `translate3d(${xB}px, ${yB}px, 0) scale(${scaleB})`;
             element.style.transform = transform;
-            element.style.zIndex = "9999";
+            // element.style.zIndex = "9999";
+            debounceDisplayZoomed(scaleB);
         }
     });
 
