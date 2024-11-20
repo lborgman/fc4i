@@ -1546,26 +1546,27 @@ export async function pageSetup() {
         }
 
         // https://www.npmjs.com/package/pinch-zoom-js
-        const liTestPinchZoom = mkMenuItem("test pinch-zoom a",
-            async () => {
-                const src = "https://unpkg.com/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js";
-                // const eltScript = mkElt("script", { src });
-                // document.body.appendChild(eltScript);
-                const modPZ = await import(src);
-                const addZoom = () => {
-                    console.log("***** addZoom");
-                    const jmnodes = document.querySelector("jmnodes");
-                    if (!jmnodes) throw Error("Could not find <jmnodes>");
-                    // const options = { }
-                    // const pz = new PinchZoom(jmnodes, options);
-                    const pz = new modPZ.default(jmnodes.parentElement);
-                    console.log({ pz });
-                }
-                // setTimeout(addZoom, 1000);
-                addZoom();
-            });
-        liTestPinchZoom.classList.add("test-item");
-
+        /*
+    const liTestPinchZoom = mkMenuItem("test pinch-zoom a",
+        async () => {
+            const src = "https://unpkg.com/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js";
+            // const eltScript = mkElt("script", { src });
+            // document.body.appendChild(eltScript);
+            const modPZ = await import(src);
+            const addZoom = () => {
+                console.log("***** addZoom");
+                const jmnodes = document.querySelector("jmnodes");
+                if (!jmnodes) throw Error("Could not find <jmnodes>");
+                // const options = { }
+                // const pz = new PinchZoom(jmnodes, options);
+                const pz = new modPZ.default(jmnodes.parentElement);
+                console.log({ pz });
+            }
+            // setTimeout(addZoom, 1000);
+            addZoom();
+        });
+    liTestPinchZoom.classList.add("test-item");
+        */
 
 
 
@@ -1653,7 +1654,7 @@ export async function pageSetup() {
             // liTestSvgDrawLine,
             // liTestTabindex,
             // liTestDragBetween,
-            liTestPinchZoom,
+            // liTestPinchZoom,
             // liTestPointHandle,
         ];
         const arrMenuAll = [...arrMenuEntries, ...extraPageMenuItems, ...arrMenuTestEntries];

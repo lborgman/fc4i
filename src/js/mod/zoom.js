@@ -46,10 +46,15 @@ export function getCssTransforms(elt) {
 }
 
 export function pinchZoom(element) {
-    const transforms = getCssTransforms(element);
-    const scaleI = transforms.scale;
-    const xI = transforms.x;
-    const yI = transforms.y;
+    let scaleI;
+    let xI;
+    let yI;
+    function getTransformsI() {
+        const transforms = getCssTransforms(element);
+        scaleI = transforms.scale;
+        xI = transforms.x;
+        yI = transforms.y;
+    }
 
     let start = {};
 
@@ -62,6 +67,8 @@ export function pinchZoom(element) {
             start.x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
             start.y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
             start.distance = distance(event);
+
+            getTransformsI();
         }
     });
 
