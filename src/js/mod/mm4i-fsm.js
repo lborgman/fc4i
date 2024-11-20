@@ -121,6 +121,58 @@ export async function setupFsmListeners(eltFsm) {
     const zoomButtons = modZoom.mkZoomButtons(eltFsm, "horizontal");
     document.body.appendChild(zoomButtons);
 
+    const eltInner = eltFsm;
+    if (!eltInner.classList.contains("jsmind-inner")) throw Error("not .jsmind-inner");
+    if (eltInner.tagName !== "DIV") throw Error("not DIV");
+
+    const eltContainer = eltInner.parentElement;
+    if (eltContainer.id != "jsmind_container") throw Error("not #jsmind_container");
+
+
+    // We need another layer to handle zoom/scroll:
+    const eltZoomScroll = document.createElement("div");
+    eltZoomScroll.classList.add("jsmind-zoom-scroll");
+    eltZoomScroll.style = `
+        position: relative;
+        outline: 4px dotted black;
+    `;
+    eltInner.remove();
+    eltZoomScroll.appendChild(eltInner);
+    eltContainer.appendChild(eltZoomScroll);
+
+
+
+    const eltJmnodes = eltInner.querySelector("jmnodes");
+    const eltSvg = eltInner.querySelector("svg.jsmind");
+
+    eltJmnodes.style.position = "static";
+    eltSvg.style.position = "static";
+    eltSvg.style.pointerEvents = "none";
+
+    function adjustToSvgSize() {
+        console.log({ eltContainer });
+        const svgBox = eltSvg.getBBox();
+        const W = svgBox.width;
+        const H = svgBox.height;
+        const x = svgBox.x;
+        const y = svgBox.y;
+        // eltSvg.setAttribute("width", W);
+        // eltSvg.setAttribute("height", H);
+        // eltSvg.setAttribute("x", x);
+        // eltSvg.setAttribute("y", y);
+        eltSvg.setAttribute("viewBox", `${x} ${y} ${W} ${H}`);
+
+        eltSvg.style.width = `${W}px`;
+        eltSvg.style.height = `${H}px`;
+        eltJmnodes.style.width = `${W}px`;
+        eltJmnodes.style.height = `${H}px`;
+        // eltInner.style.width = `${svgW}px`;
+        // eltInner.style.height = `${svgH}px`;
+    }
+    const testSizing = false; // confirm("adjustToSvgSize");
+    if (testSizing) { setTimeout(adjustToSvgSize, 1000); }
+
+
     let addDebugEtc;
     addDebugEtc = false;
     addDebugEtc = true;
@@ -204,29 +256,19 @@ background-size: 10px 10px;
 outline: 4px groove ${F};
         `;
 
-        const inner = eltFsm;
-        if (!inner.classList.contains("jsmind-inner")) throw Error("not .jsmind-inner");
-        if (inner.tagName !== "DIV") throw Error("not DIV");
-
-        const container = inner.parentElement;
-        if (container.id != "jsmind_container") throw Error("not #jsmind_container");
-
-        const eltJmnodes = inner.querySelector("jmnodes");
-        const eltSvg = inner.querySelector("svg.jsmind");
-
         applyPattern(bgBoxes, document.body);
-        applyPattern(bgDiagonal, container);
-        applyPattern(bgIsometric, inner);
+        applyPattern(bgDiagonal, eltContainer);
+        applyPattern(bgIsometric, eltInner);
         applyPattern(bgPolka, eltJmnodes);
         applyPattern(bgZigZag, eltSvg);
 
 
         /*
         const bcr = eltJmnodes.getBoundingClientRect();
-        inner.style.width = `${bcr.width}px`;
-        inner.style.height = `${bcr.height}px`;
+        eltInner.style.width = `${bcr.width}px`;
+        eltInner.style.height = `${bcr.height}px`;
         */
-        inner.style.overflow = "hidden";
+        // eltInner.style.overflow = "hidden";
     }
     // return; // FIX-ME:
 
