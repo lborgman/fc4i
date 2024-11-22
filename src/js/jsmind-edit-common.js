@@ -1303,58 +1303,47 @@ export async function pageSetup() {
         const datadata = data.data;
         const node_id = data.node;
         // console.log({ evt_type, type, datadata, data });
-        finnishAndMirrorOperationOnNode(evt_type, node_id, datadata);
+        checkOperationOnNode(evt_type, node_id, datadata);
         modMMhelpers.DBrequestSaveThisMindmap(jmDisplayed); // FIX-ME: delay
         // updateTheMirror();
     });
-    async function finnishAndMirrorOperationOnNode(operation_type, operation_node_id, datadata) {
-        console.log("finAndMirr", { operation_type, operation_node_id, jm_operation: jmDisplayed, datadata });
-        // if (!jmMirrored) return;
+    async function checkOperationOnNode(operation_type, operation_node_id, datadata) {
+        console.log("checkOpOnNode", { operation_type, operation_node_id, jm_operation: jmDisplayed, datadata });
         switch (operation_type) {
             case "add_node":
                 const id_added = operation_node_id;
                 const added_node = jmDisplayed.get_node(id_added);
                 console.log({ operation_type, id_added, added_node });
-                // const id_parent = datadata[0];
                 if (id_added != datadata[1]) throw Error(`id_added (${id_added}) != datadata[1] (${datadata[1]})`);
-                // const topic_added = datadata[2];
-                // jmMirrored?.add_node(id_parent, id_added, topic_added);
                 break;
             case "update_node":
                 {
                     const id_updated = operation_node_id;
                     const updated_node = jmDisplayed.get_node(id_updated);
                     console.log({ operation_type, id_updated, updated_node });
-                    // const [id, topic] = datadata
                     const eltJmnode = jsMind.my_get_DOM_element_from_node(updated_node);
-                    // const eltTxt = eltJmnode.lastElementChild;
                     const eltTxt = eltJmnode.querySelector(".jmnode-text");
                     if (!eltTxt.classList.contains("jmnode-text")) throw Error("Not .jmnode-text");
-                    const isPlainNode = eltTxt.childElementCount == 0;
-                    // modCustRend.addJmnodeBgAndText(eltJmnode);
-                    // const isCustomNode = topic.search(" data-jsmind-custom=") > 0;
-                    if (!isPlainNode) {
-                        (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
-                    }
+                    // const isPlainNode = eltTxt.childElementCount == 0;
+                    // if (!isPlainNode) {
+                    // (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
+                    // }
                 }
                 break;
             case "move_node":
                 {
-                    console.warn("move_node event");
                     const id_moved = operation_node_id;
                     const moved_node = jmDisplayed.get_node(id_moved);
                     const eltJmnode = jsMind.my_get_DOM_element_from_node(moved_node);
-                    const isPlainNode = eltJmnode.childElementCount == 0;
-                    if (!isPlainNode) {
-                        (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
-                    }
+                    // const isPlainNode = eltJmnode.childElementCount == 0;
+                    // if (!isPlainNode) {
+                    (await getCustomRenderer()).updateJmnodeFromCustom(eltJmnode);
+                    // }
                     break;
                 }
             case "remove_node":
-                // const id_removed = operation_node_id;
                 const id_removed = datadata[0];
                 console.log({ operation_type, id_removed, operation_node_id });
-                // jmMirrored?.remove_node(id_removed);
                 break;
             default:
                 console.warn(`unknown operation_type: ${operation_type}`);
@@ -2584,7 +2573,6 @@ function fsmEvent(event) {
     const eventName = event.action || event;
     const eventFrom = event.from;
     const eventTo = event.to;
-    console.log({ eventTo });
 
     // FIX-ME: move to fsm hook
     switch (eventTo) {

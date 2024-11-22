@@ -174,9 +174,9 @@ export async function setupFsmListeners(eltFsm) {
 
 
     let addDebugEtc;
-    addDebugEtc = false;
     addDebugEtc = true;
-    addDebugEtc = confirm("addDebugEtc");
+    addDebugEtc = false;
+    // addDebugEtc = confirm("addDebugEtc");
     if (addDebugEtc) {
         // https://www.magicpattern.design/tools/css-backgrounds
         const applyCSS = (strCSS, toElement) => {

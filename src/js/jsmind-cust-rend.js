@@ -173,6 +173,7 @@ export class CustomRenderer4jsMind {
 
     // async updateJmnodeFromCustom(eltJmnode, jmOwner) {
     async updateJmnodeFromCustom() {
+        console.error("updateJmnodeFromCustom is obsolete");
         // debugger; // eslint-disable-line no-debugger
         /*
         return;
@@ -667,14 +668,14 @@ export class CustomRenderer4jsMind {
         const modIsDisplayed = await importFc4i("is-displayed");
         const clipImage = {};
 
-        function somethingToSave() {
+        function somethingToSaveNode() {
             return JSON.stringify(initialShapeEtc) != JSON.stringify(currentShapeEtc);
         }
 
         // updateCopiesSizes():
-        const onAnyCtrlChange = debounce(applyCurrentToCopied);
+        const onAnyCtrlChangeNode = debounce(applyCurrentToCopied);
         function applyCurrentToCopied() {
-            const changed = somethingToSave();
+            const changed = somethingToSaveNode();
             console.warn("applyToCopied", changed);
             requestSetStateBtnSave();
             requestUpdateCopiesSizes();
@@ -682,7 +683,7 @@ export class CustomRenderer4jsMind {
         }
         function saveEmdChanges() {
             currentShapeEtc.notes = easyMDE.value().trimEnd();
-            const changed = somethingToSave();
+            const changed = somethingToSaveNode();
             console.warn("saveEmdChanges", changed);
             requestSetStateBtnSave();
         }
@@ -890,6 +891,7 @@ export class CustomRenderer4jsMind {
             if (backgroundTabIsSetup) return;
             console.log(divBgChoices);
             backgroundTabIsSetup = true;
+            console.log("setupBackgroundTab", { initialShapeEtc });
             const initBgCssText = initialShapeEtc.background?.CSS;
             console.log({ initBgCss: initBgCssText });
             let bgChoice = initBgCssText ? "bg-choice-pattern" : "bg-choice-none";
@@ -908,7 +910,7 @@ export class CustomRenderer4jsMind {
                             break;
                         case "background-image":
                             if (cssVal.startsWith("url")) {
-                                bgChoice = "bg-choice-link";
+                                bgChoice = "bg-choice-img-link";
                             }
                             break;
                         default:
@@ -936,7 +938,7 @@ export class CustomRenderer4jsMind {
                     inpBgColor.value = modJsEditCommon.standardizeColorTo6Hex(cssVal);
                     detBgColor.open = true;
                     break;
-                case "bg-choice-link":
+                case "bg-choice-img-link":
                     console.log({ detLink, divLink, tfImageUrl });
                     const funFocusLink = () => {
                         setTimeout(() => tfImageUrl.focus(), 500);
@@ -947,7 +949,7 @@ export class CustomRenderer4jsMind {
                     divImgPreview.style.backgroundImage = cssVal;
                     detLink.open = true;
                     break;
-                case "bg-choice-clipboard":
+                case "bg-choice-img-clipboard":
                     debugger; // eslint-disable-line no-debugger
                     break;
                 default:
@@ -1020,7 +1022,7 @@ export class CustomRenderer4jsMind {
             const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
             const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
             eltToolbar.style.display = "none";
-            const btnEdit = modMdc.mkMDCiconButton("edit");
+            const btnEdit = modMdc.mkMDCiconButton("edit", "Edit my notes");
             btnEdit.style = `
                 position: absolute;
                 right: 5px;
@@ -1182,14 +1184,14 @@ export class CustomRenderer4jsMind {
         // let fgColorChanged;
         inpBgColor.addEventListener("input", () => {
             currentShapeEtc.temp.bgColor = inpBgColor.value;
-            onAnyCtrlChange();
+            onAnyCtrlChangeNode();
             // eltCopied.style.backgroundColor = inpBgColor.value;
             checkColorContrast();
         });
         inpFgColor.addEventListener("input", () => {
             // currentShapeEtc.fgColor = inpFgColor.value;
             currentShapeEtc.temp.fgColor = inpFgColor.value;
-            onAnyCtrlChange();
+            onAnyCtrlChangeNode();
             eltCopied.style.color = inpFgColor.value;
             checkColorContrast();
         });
@@ -1245,7 +1247,7 @@ export class CustomRenderer4jsMind {
             inp.checked = true;
             debounceApplyCurrentBgToCopied();
         }
-        function setBgChoiceValid(eltChoice, valid) {
+        function setBgNodeChoiceValid(eltChoice, valid) {
             if (!eltChoice.classList.contains("bg-choice")) {
                 console.log("Not bg-choice: ", eltChoice);
                 throw Error("eltChoice is not bg-choice")
@@ -1274,9 +1276,9 @@ export class CustomRenderer4jsMind {
         }
 
         const bgChoiceNone = mkBgChoice("bg-choice-none", "No special");
-        setBgChoiceValid(bgChoiceNone, true);
+        setBgNodeChoiceValid(bgChoiceNone, true);
         const radChoiceNone = bgChoiceNone.querySelector("#bg-choice-none");
-        // radChoiceLink = divChoices.querySelector("#bg-choice-link");
+        // radChoiceLink = divChoices.querySelector("#bg-choice-img-link");
 
         const inpImageUrl = modMdc.mkMDCtextFieldInput(undefined, "url");
         const tfImageUrl = modMdc.mkMDCtextField("Image link", inpImageUrl);
@@ -1431,7 +1433,7 @@ export class CustomRenderer4jsMind {
             divBgColor
         ]);
         const bgChoiceColor = mkBgChoice("bg-choice-color", "Color", detBgColor);
-        setBgChoiceValid(bgChoiceColor, true);
+        setBgNodeChoiceValid(bgChoiceColor, true);
 
 
         function tellPatternValid(msg) {
@@ -1467,7 +1469,7 @@ export class CustomRenderer4jsMind {
             if (patternValid === true) {
                 modMdc.setValidityMDC(taImgPattern, "");
                 tellPatternValid("Valid");
-                setBgChoiceValid(divThisChoice, true);
+                setBgNodeChoiceValid(divThisChoice, true);
                 setBgChoiceThis(divThisChoice);
                 for (const prop in cssKeyVal) {
                     const val = cssKeyVal[prop];
@@ -1481,7 +1483,7 @@ export class CustomRenderer4jsMind {
                 // console.log("Not valid css:", patternValid);
                 modMdc.setValidityMDC(taImgPattern, patternValid);
                 tellPatternValid("Not valid: " + patternValid);
-                setBgChoiceValid(divThisChoice, false);
+                setBgNodeChoiceValid(divThisChoice, false);
                 setBgChoiceThis(bgChoiceNone);
                 divImgPatternPreview.style.background = "gray";
                 divImagePattern.style.outline = "2px dotted red";
@@ -1537,15 +1539,23 @@ export class CustomRenderer4jsMind {
             }, 1000);
         });
 
+        const bgChoiceImgLink = mkBgChoice("bg-choice-img-link", "Link image", detLink);
+        setBgNodeChoiceValid(bgChoiceImgLink, false);
+
+        const bgChoiceImgClipboard = mkBgChoice("bg-choice-img-clipboard", "Clipboard image", detClipboard);
+        setBgNodeChoiceValid(bgChoiceImgClipboard, false);
+
+        const bgChoicePattern = mkBgChoice("bg-choice-pattern", "Pattern", detPattern);
+        setBgNodeChoiceValid(bgChoicePattern, true);
 
         const divBgChoices = mkElt("div", { id: "bg-choices" }, [
             bgChoiceNone,
-            mkBgChoice("bg-choice-link", "Link image", detLink),
-            mkBgChoice("bg-choice-clipboard", "Clipboard image", detClipboard),
-            mkBgChoice("bg-choice-pattern", "Pattern", detPattern),
+            bgChoiceImgLink,
+            bgChoiceImgClipboard,
+            bgChoicePattern,
             bgChoiceColor
         ]);
-        radChoiceLink = divBgChoices.querySelector("#bg-choice-link");
+        radChoiceLink = divBgChoices.querySelector("#bg-choice-img-link");
         console.log({ radChoiceLink });
         setBgChoiceThis(bgChoiceNone);
         divBgChoices.addEventListener("input", errorHandlerAsyncEvent(async evt => {
@@ -1565,7 +1575,7 @@ export class CustomRenderer4jsMind {
                 const inpChecked = await getBgCssCheckedInp();
                 console.log({ inpChecked });
                 const eltChecked = inpChecked.closest("div.bg-choice")
-                setBgChoiceValid(eltChecked, valid);
+                setBgNodeChoiceValid(eltChecked, valid);
                 if (valid) {
                     debounceApplyCurrentBgToCopied();
                 }
@@ -1598,7 +1608,7 @@ export class CustomRenderer4jsMind {
                         if (0 == val.length) return;
                         return `background-color: ${val}`;
                     }
-                case "bg-choice-link":
+                case "bg-choice-img-link":
                     {
                         const val = inpImageUrl.value.trim();
                         if (0 == val.length) return;
@@ -1610,7 +1620,7 @@ export class CustomRenderer4jsMind {
                         if (0 == val.length) return;
                         return val;
                     }
-                case "bg-choice-clipboard":
+                case "bg-choice-img-clipboard":
                     if (!clipImage.blob) return;
                     return clipImage;
                 default:
@@ -1721,6 +1731,8 @@ export class CustomRenderer4jsMind {
                         const objBackground = currentShapeEtc.background || {};
                         objBackground.url = clipImage.url; // This is for somethingToSave()
                         objBackground.blob = clipImage.blob;
+                        // somethingToSaveNode();
+                        requestSetStateBtnSave();
                         toDiv.style.backgroundImage = `url("${url}")`;
                         toDiv.scrollIntoView({
                             behavior: "smooth",
@@ -1837,7 +1849,7 @@ export class CustomRenderer4jsMind {
             } else {
                 console.log("off")
             }
-            onAnyCtrlChange();
+            onAnyCtrlChangeNode();
         }
         // const OLdivTopicChoiceCustom = mkTopicChoice("topic-choice-custom", "Custom linked node", divCustomContent);
         const chkLinkCustom = mkElt("input", { type: "checkbox" });
@@ -1940,7 +1952,7 @@ export class CustomRenderer4jsMind {
         if (copiedWasCustom) {
             // detNodeChoiceCustom.dataset.jsmindCustom = initCustomTopic;
             setTimeout(() => { detNodeChoiceCustom.scrollIntoView(); }, 500);
-            onAnyCtrlChange();
+            onAnyCtrlChangeNode();
         }
         showCustomItem();
 
@@ -2043,7 +2055,7 @@ export class CustomRenderer4jsMind {
                 setInCurrent();
                 if (funChgThis) funChgThis();
                 const funGrp = onCtrlsGrpChg[objShEtc.grpName];
-                onAnyCtrlChange(); // throttle
+                onAnyCtrlChangeNode(); // throttle
             }
             function setInCurrent() {
                 const mdc = sli?.myMdc;
@@ -2131,13 +2143,13 @@ export class CustomRenderer4jsMind {
             // taNotes
             if (inTextareaEasyMDE(evt.target)) return;
             console.log("contentElts change", evt.target);
-            onAnyCtrlChange(); // throttle
+            onAnyCtrlChangeNode(); // throttle
         });
         contentElts.addEventListener("input", evt => {
             // taNotes
             if (inTextareaEasyMDE(evt.target)) return;
             console.log("contentElts input", evt.target);
-            onAnyCtrlChange(); // throttle
+            onAnyCtrlChangeNode(); // throttle
         });
 
         const tabBar = modMdc.mkMdcTabBarSimple(tabRecs, contentElts, onActivateMore);
@@ -2238,7 +2250,7 @@ export class CustomRenderer4jsMind {
                 currentTempData.height = newBcrC.height;
                 // FIX-ME: check somethingtosave
                 // somethingToSave();
-                onAnyCtrlChange();
+                onAnyCtrlChangeNode();
             }
         };
 
@@ -2362,7 +2374,7 @@ export class CustomRenderer4jsMind {
         function setStateBtnSave() {
             const btn = getBtnSave();
             if (!btn) return;
-            btn.disabled = !somethingToSave();
+            btn.disabled = !somethingToSaveNode();
         }
         const debounceStateBtnSave = debounce(setStateBtnSave, 300);
         function requestSetStateBtnSave() { debounceStateBtnSave(); }
@@ -2375,7 +2387,7 @@ export class CustomRenderer4jsMind {
         const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
         console.log({ save });
         if (save) {
-            if (!somethingToSave()) throw Error("Save button enabled but nothing to save?");
+            if (!somethingToSaveNode()) throw Error("Save button enabled but nothing to save?");
 
             // FIX-ME: temp
             const currTemp = currentShapeEtc.temp;
