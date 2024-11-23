@@ -517,6 +517,47 @@ export function applyNodeShapeEtc(node, eltJmnode) {
     if (!shapeEtc) return;
     applyShapeEtc(shapeEtc, eltJmnode);
 }
+const jmnodesBgNames = [
+    "bg-choice-none",
+    "bg-choice-pattern",
+    "bg-choice-color",
+    "bg-choice-img-link",
+    "bg-choice-img-clipboard",
+];
+export function isJmnodesBgName(bgName) { return jmnodesBgNames.includes(bgName); }
+// editNodeDialog
+export async function applyShapeEtcBg(bgName, bgValue, eltJmnode) {
+    if (!isJmnodesBgName(bgName)) throw Error(`Not a jmnodesBgName: ${bgName}`);
+    const eltBg = eltJmnode.querySelector(".jmnode-bg");
+    const modCustRend = await importFc4i("jsmind-cust-rend");
+    modCustRend.clearBgCssValue(eltBg);
+    switch (bgName) {
+        case "bg-choice-none":
+            break;
+        case "bg-choice-pattern":
+            const bgCssText = bgValue;
+            modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
+            break;
+        case "bg-choice-color":
+            const color = bgValue;
+            eltBg.style.backgroundColor = color;
+            break;
+        case "bg-choice-img-link":
+            const url = bgValue;
+            eltBg.style.backgroundImage = `url("${url}")`;
+            break;
+        case "bg-choice-img-clipboard":
+            let objectUrl;
+            const blob = bgValue;
+            objectUrl = URL.createObjectURL(blob);
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+            eltBg.style.backgroundImage = `url("${objectUrl}")`;
+            break;
+        default:
+            throw Error(`Not impl yet: ${bgName}`)
+    }
+
+}
 export async function applyShapeEtc(shapeEtc, eltJmnode) {
     const eltShape = eltJmnode.querySelector(".jmnode-bg");
     if (!eltShape) { throw Error("eltShape is null, no .jmnode-bg found"); }
@@ -568,20 +609,12 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     }
 
     if (shapeEtc.background) {
-        const bgCssText = shapeEtc.background?.CSS;
-        if (bgCssText) {
-            const modCustRend = await importFc4i("jsmind-cust-rend");
-            modCustRend.applyJmnodeBgCssText(eltJmnode, bgCssText);
-        }
-        let objectUrl;
-        const blob = shapeEtc.background.blob;
-        if (blob) {
-            objectUrl = URL.createObjectURL(blob);
-            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-        }
-        const url = objectUrl || shapeEtc.background.url;
-        if (url) {
-            eltShape.style.backgroundImage = `url("${url}")`;
+        const bgEntries = Object.entries(shapeEtc.background);
+        if (bgEntries.length > 1) throw Error(`bgEntries.length == ${bgEntries.length}`);
+        if (bgEntries.length == 1) {
+            const [bgName, bgValue] = bgEntries[0];
+            applyShapeEtcBg(bgName, bgValue, eltJmnode);
+            // bg-choice
         }
     }
 

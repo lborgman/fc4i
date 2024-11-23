@@ -1216,24 +1216,29 @@ export class CustomRenderer4jsMind {
 
 
         async function ApplyCurrentBgToCopied() {
-            const cssBgVal = await getBgCssValueFromElts();
-            if (undefined != cssBgVal) {
-                const bg = currentShapeEtc.background;
-                if (typeof cssBgVal == "string") {
-                    if (bg) {
-                        delete bg.url;
-                        delete bg.blob;
-                    }
-                    setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
-                } else {
-                    bg.CSS = "";
-                    bg.url = clipImage.url;
-                    bg.blob = clipImage.blob;
-                    console.error("Not implemented yet");
-                    debugger; // eslint-disable-line no-debugger
+            const kv = await getBgFromElts();
+            if (!kv) return;
+            const [bgName, bgValue] = kv;
+            // currentShapeEtc.background = currentShapeEtc.background || {};
+            currentShapeEtc.background = {};
+            const bg = currentShapeEtc.background;
+            bg[bgName] = bgValue;
+            /*
+            if (typeof cssBgVal == "string") {
+                if (bg) {
+                    delete bg.url;
+                    delete bg.blob;
                 }
-                applyCurrentToCopied();
+                setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
+            } else {
+                bg.CSS = "";
+                bg.url = clipImage.url;
+                bg.blob = clipImage.blob;
+                console.error("Not implemented yet");
+                debugger; // eslint-disable-line no-debugger
             }
+            */
+            applyCurrentToCopied();
         }
         const debounceApplyCurrentBgToCopied = debounce(ApplyCurrentBgToCopied, 2000);
 
@@ -1260,6 +1265,7 @@ export class CustomRenderer4jsMind {
             }
         }
         const mkBgChoice = (id, label, eltDetails) => {
+            if (!modJsEditCommon.isJmnodesBgName(id)) throw Error(`Not a jmnodesBgName: ${id}`);
             const inpRadio = mkElt("input", { type: "radio", id, name: "bg-choice" });
             inpRadio.style.gridArea = "r";
             inpRadio.style.marginRight = "10px";
@@ -1569,7 +1575,7 @@ export class CustomRenderer4jsMind {
             // Try a timeout here:
             setTimeout(async () => {
                 console.log("in timeout");
-                const valBg = await getBgCssValueFromElts();
+                const valBg = await getBgFromElts();
                 console.log({ valBg });
                 const valid = (undefined != valBg);
                 const inpChecked = await getBgCssCheckedInp();
@@ -1595,37 +1601,31 @@ export class CustomRenderer4jsMind {
             if (!elt) throw Error("Could not find input[name=bg-choice]:checked");
             return elt;
         }
-        async function getBgCssValueFromElts() {
+        async function getBgFromElts() {
+            if (!backgroundTabIsSetup) return;
             const elt = await getBgCssCheckedInp();
-            const id = elt.id;
-            console.log("getBgCssValue", elt, id);
-            switch (id) {
+            const bgName = elt.id;
+            let bgValue = undefined;
+            console.log("getBgCssValue", elt, bgName);
+            switch (bgName) {
                 case "bg-choice-none":
-                    return "";
+                    break;
                 case "bg-choice-color":
-                    {
-                        const val = inpBgColor.value.trim();
-                        if (0 == val.length) return;
-                        return `background-color: ${val}`;
-                    }
+                    bgValue = inpBgColor.value.trim();
+                    break;
                 case "bg-choice-img-link":
-                    {
-                        const val = inpImageUrl.value.trim();
-                        if (0 == val.length) return;
-                        return `background-image: url(${val})`;
-                    }
+                    bgValue = inpImageUrl.value.trim();
+                    break;
                 case "bg-choice-pattern":
-                    {
-                        const val = taImgPattern.value.trim();
-                        if (0 == val.length) return;
-                        return val;
-                    }
+                    bgValue = taImgPattern.value.trim();
+                    break;
                 case "bg-choice-img-clipboard":
                     if (!clipImage.blob) return;
                     return clipImage;
                 default:
-                    throw Error(`Unknown bg-choice: ${id}`);
+                    throw Error(`Unknown bg-choice: ${bgName}`);
             }
+            return [bgName, bgValue];
         }
 
         const divCurrentBg = mkElt("div", undefined);
@@ -2523,7 +2523,7 @@ export async function ourCustomRendererAddProvider(providerRec) {
     const custRend = await getOurCustomRenderer();
     custRend.addProvider(prov);
 }
-function clearBgCssValue(elt) {
+export function clearBgCssValue(elt) {
     const bgStyle = elt.style;
     for (const prop in bgStyle) {
         if (prop.startsWith("background")) {
