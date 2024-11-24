@@ -524,10 +524,45 @@ const jmnodesBgNames = [
     "bg-choice-img-link",
     "bg-choice-img-clipboard",
 ];
-export function isJmnodesBgName(bgName) { return jmnodesBgNames.includes(bgName); }
+export function checkJmnodesBgName(bgName) {
+    if (!jmnodesBgNames.includes(bgName)) throw Error(`Not a jmnodesBgName: ${bgName}`);
+}
+export function getJmnodeBgValue(shapeEtc) {
+    // Object.entries
+    const bgEntries = Object.entries(shapeEtc.background);
+    if (bgEntries.length != 1) {
+        throw Error(`bgKeys.length == ${bgEntries.length}, should be 1`);
+    }
+    const [bgName, bgValue] = bgEntries[0];
+    checkJmnodesBgName(bgName);
+    const tofVal = typeof bgValue;
+    let errMsg;
+    switch (bgName) {
+        case "bg-choice-none":
+            if (bgValue != undefined) errMsg = `${bgName} value != undefined`;
+            break;
+        case "bg-choice-img-clipboard":
+            debugger;
+            if (!(bgValue instanceof Blob)) {
+                errMsg = `${bgName} should be Blob`;
+            } else {
+                const bType = "image/webp"
+                if (bgValue.type != bType) errMsg = `${bgName} should be ${bType}`;
+            }
+            break;
+        default:
+            if ("string" != tofVal)
+                errMsg = `${bgName} should be "string", not ${tofVal}`;
+    }
+    if (errMsg) {
+        debugger;
+        throw Error(errMsg);
+    }
+    return { bgName, bgValue };
+}
 // editNodeDialog
 export async function applyShapeEtcBg(bgName, bgValue, eltJmnode) {
-    if (!isJmnodesBgName(bgName)) throw Error(`Not a jmnodesBgName: ${bgName}`);
+    checkJmnodesBgName(bgName);
     const eltBg = eltJmnode.querySelector(".jmnode-bg");
     const modCustRend = await importFc4i("jsmind-cust-rend");
     modCustRend.clearBgCssValue(eltBg);
@@ -609,13 +644,12 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     }
 
     if (shapeEtc.background) {
-        const bgEntries = Object.entries(shapeEtc.background);
-        if (bgEntries.length > 1) throw Error(`bgEntries.length == ${bgEntries.length}`);
-        if (bgEntries.length == 1) {
-            const [bgName, bgValue] = bgEntries[0];
-            applyShapeEtcBg(bgName, bgValue, eltJmnode);
-            // bg-choice
-        }
+        const bgObj = getJmnodeBgValue(shapeEtc);
+        // const bgEntries = Object.entries(shapeEtc.background);
+        // const [bgName, bgValue] = bgEntries[0];
+        applyShapeEtcBg(bgObj.bgName, bgObj.bgValue, eltJmnode);
+        // bg-choice
+        // }
     }
 
     // const clsIconButton = "icon-button-40";

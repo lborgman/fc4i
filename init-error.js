@@ -106,7 +106,9 @@ console.log(`here is init-error.js ${INIT_ERROR_VER}`);
         if (document.readyState != "loading") { doDisplay(evtError); return; }
         document.addEventListener("DOMContentLoaded", () => { doDisplay(evtError); });
     }
-    window.addEventListener("error", evt => { displayError(evt); });
+    window.addEventListener("error", evt => {
+        displayError(evt);
+    });
     window.addEventListener("unhandledrejection", evt => {
         console.log("in unhandledrejection", window.useRejection, evt);
         // displayError(evt);

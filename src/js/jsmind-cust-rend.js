@@ -731,10 +731,14 @@ export class CustomRenderer4jsMind {
 
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
         // Image blob was erased, get it back:
-        const blob = copiedShapeEtc.background?.blob;
-        if (blob) {
-            if (!(blob instanceof Blob)) throw Error("Not blob");
-            initialShapeEtc.background.blob = blob;
+        // if (copiedShapeEtc)
+        const bgObj = modJsEditCommon.getJmnodeBgValue(copiedShapeEtc);
+        console.log({bgObj});
+        debugger;
+        if (bgObj.bgName == "bg-choice-img-clipboard") {
+            // const blob = bgObj.bgValue;
+            // initialShapeEtc.background.blob = blob;
+            initialShapeEtc.background = bgObj;
         }
 
         initialTempData.height = node_copied_data.height;
@@ -892,32 +896,11 @@ export class CustomRenderer4jsMind {
             console.log(divBgChoices);
             backgroundTabIsSetup = true;
             console.log("setupBackgroundTab", { initialShapeEtc });
-            const initBgCssText = initialShapeEtc.background?.CSS;
-            console.log({ initBgCss: initBgCssText });
-            let bgChoice = initBgCssText ? "bg-choice-pattern" : "bg-choice-none";
-            let cssProp, cssVal;
-            if (initBgCssText?.indexOf("/*") == -1) {
-                const initBgCssValues = cssTxt2keyVal(initBgCssText);
-                const arrProp = Object.keys(initBgCssValues);
-                if (arrProp.length == 0) {
-                    bgChoice = "bg-choice-none";
-                } else if (arrProp.length == 1) {
-                    cssProp = arrProp[0];
-                    cssVal = initBgCssValues[cssProp];
-                    switch (cssProp) {
-                        case "background-color":
-                            bgChoice = "bg-choice-color";
-                            break;
-                        case "background-image":
-                            if (cssVal.startsWith("url")) {
-                                bgChoice = "bg-choice-img-link";
-                            }
-                            break;
-                        default:
-                            throw Error(`Unexpected css prop ${cssProp}`);
-                    }
-                }
-            }
+            // FIX-ME: better init of .background - but where???
+            const initBgObj = initialShapeEtc.background || { "bg-choice-none": undefined };
+            const entry0 = Object.entries(initBgObj)[0] || ["bg-choice-none", undefined];
+            const [bgChoice, bgVal] = entry0;
+            console.log({ bgChoice, bgVal });
             const rad = divBgChoices.querySelector(`#${bgChoice}`);
             rad.checked = true;
             switch (bgChoice) {
@@ -931,14 +914,15 @@ export class CustomRenderer4jsMind {
                         setTimeout(() => taImgPattern.focus(), 500);
                     };
                     document.addEventListener("scrollend", funFocusTa, { once: true });
-                    taImgPattern.value = initBgCssText;
+                    taImgPattern.value = bgVal;
                     detPattern.open = true;
                     break;
                 case "bg-choice-color":
-                    inpBgColor.value = modJsEditCommon.standardizeColorTo6Hex(cssVal);
+                    inpBgColor.value = modJsEditCommon.standardizeColorTo6Hex(bgVal);
                     detBgColor.open = true;
                     break;
                 case "bg-choice-img-link":
+                    debugger; // eslint-disable-line no-debugger
                     console.log({ detLink, divLink, tfImageUrl });
                     const funFocusLink = () => {
                         setTimeout(() => tfImageUrl.focus(), 500);
@@ -1400,6 +1384,8 @@ export class CustomRenderer4jsMind {
         btnClipboard.addEventListener("click", errorHandlerAsyncEvent(async () => {
             const added = await getBgFromClipboard(divClipboardImage);
             console.log({ added });
+            if (!added) return;
+            setBgNodeChoiceValid(bgChoiceImgClipboard, true);
         }));
         const divClipboard = mkElt("div", undefined, [
             "An image from the clipboard.",
@@ -1556,10 +1542,10 @@ export class CustomRenderer4jsMind {
 
         const divBgChoices = mkElt("div", { id: "bg-choices" }, [
             bgChoiceNone,
-            bgChoiceImgLink,
+            bgChoiceColor,
+            // bgChoiceImgLink,
             bgChoiceImgClipboard,
             bgChoicePattern,
-            bgChoiceColor
         ]);
         radChoiceLink = divBgChoices.querySelector("#bg-choice-img-link");
         console.log({ radChoiceLink });
@@ -1621,7 +1607,9 @@ export class CustomRenderer4jsMind {
                     break;
                 case "bg-choice-img-clipboard":
                     if (!clipImage.blob) return;
-                    return clipImage;
+                    // return clipImage;
+                    bgValue = clipImage.blob;
+                    break;
                 default:
                     throw Error(`Unknown bg-choice: ${bgName}`);
             }
