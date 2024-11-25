@@ -527,14 +527,25 @@ const jmnodesBgNames = [
 export function checkJmnodesBgName(bgName) {
     if (!jmnodesBgNames.includes(bgName)) throw Error(`Not a jmnodesBgName: ${bgName}`);
 }
-export function getJmnodeBgValue(shapeEtc) {
-    // Object.entries
-    const bgEntries = Object.entries(shapeEtc.background);
-    if (bgEntries.length != 1) {
-        throw Error(`bgKeys.length == ${bgEntries.length}, should be 1`);
+export function mkJmnodeBgObj(bgName, bgValue) {
+    const bgObj = {bgName, bgValue};
+    // bgObj[bgName] = bgValue;
+    checkJmnodeBgObj(bgObj);
+    return bgObj;
+}
+export function checkShapeEtcBgObj(shapeEtc) {
+    const bgObj = shapeEtc.background;
+    return checkJmnodeBgObj(bgObj);
+}
+export function checkJmnodeBgObj(bgObj) {
+    if (!bgObj) return;
+    const bgKeys = Object.keys(bgObj);
+    if (bgKeys.length != 2) {
+        throw Error(`bgKeys.length == ${bgKeys.length}, should be 2`);
     }
-    const [bgName, bgValue] = bgEntries[0];
+    const bgName = bgObj.bgName;
     checkJmnodesBgName(bgName);
+    const bgValue = bgObj.bgValue;
     const tofVal = typeof bgValue;
     let errMsg;
     switch (bgName) {
@@ -558,7 +569,12 @@ export function getJmnodeBgValue(shapeEtc) {
         debugger;
         throw Error(errMsg);
     }
-    return { bgName, bgValue };
+}
+export function getShapeEtcBgObj(shapeEtc) {
+    const bgObj = shapeEtc.background;
+    if (!bgObj) return;
+    checkJmnodeBgObj(bgObj);
+    return bgObj;
 }
 // editNodeDialog
 export async function applyShapeEtcBg(bgName, bgValue, eltJmnode) {
@@ -644,17 +660,15 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     }
 
     if (shapeEtc.background) {
-        const bgObj = getJmnodeBgValue(shapeEtc);
-        // const bgEntries = Object.entries(shapeEtc.background);
+        const bgObj = getShapeEtcBgObj(shapeEtc);
+        // const bgEntries = Object.entries(bgObj);
         // const [bgName, bgValue] = bgEntries[0];
+        // FIX-ME:
         applyShapeEtcBg(bgObj.bgName, bgObj.bgValue, eltJmnode);
-        // bg-choice
-        // }
     }
 
     // const clsIconButton = "icon-button-40";
     const clsIconButton = "icon-button-30";
-    // const oldBtn = eltJmnode.querySelector("a.jsmind-plain-link");
     const oldAimg = eltJmnode.querySelector(`.jsmind-renderer-img`);
     oldAimg?.remove();
     const oldBtn = eltJmnode.querySelector(`.${clsIconButton}`);

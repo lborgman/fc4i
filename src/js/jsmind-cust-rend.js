@@ -730,15 +730,10 @@ export class CustomRenderer4jsMind {
 
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
         // Image blob was erased, get it back:
-        // if (copiedShapeEtc)
-        const bgObj = modJsEditCommon.getJmnodeBgValue(copiedShapeEtc);
+        const bgObj = modJsEditCommon.getShapeEtcBgObj(copiedShapeEtc);
         console.log({ bgObj });
-        // debugger;
-        // if (bgObj.bgName == "bg-choice-img-clipboard") {
-        // const blob = bgObj.bgValue;
-        // initialShapeEtc.background.blob = blob;
         initialShapeEtc.background = bgObj;
-        // }
+        modJsEditCommon.checkShapeEtcBgObj(initialShapeEtc);
 
         initialTempData.height = node_copied_data.height;
         initialTempData.width = node_copied_data.width;
@@ -882,15 +877,14 @@ export class CustomRenderer4jsMind {
             backgroundTabIsSetup = true;
             console.log("setupBackgroundTab", { initialShapeEtc });
             // FIX-ME: better init of .background - but where???
-            const initBgObj = initialShapeEtc.background || { "bg-choice-none": undefined };
-            // const entry0 = Object.entries(initBgObj)[0] || ["bg-choice-none", undefined];
-            // const [bgChoice, bgVal] = entry0;
-            const bgChoice = initBgObj.bgName;
-            const bgVal = initBgObj.bgValue;
-            console.log({ bgChoice, bgVal });
-            const rad = divBgChoices.querySelector(`#${bgChoice}`);
+            modJsEditCommon.getShapeEtcBgObj(initialShapeEtc);
+            const initBgObj = initialShapeEtc.background;
+            const bgName = initBgObj? initBgObj.bgName : "bg-choice-none";
+            const bgVal = initBgObj? initBgObj.bgValue : undefined;
+            console.log({ bgName, bgVal });
+            const rad = divBgChoices.querySelector(`#${bgName}`);
             rad.checked = true;
-            switch (bgChoice) {
+            switch (bgName) {
                 case "bg-choice-none":
                     break;
                 case "bg-choice-pattern":
@@ -935,7 +929,7 @@ export class CustomRenderer4jsMind {
                     }
                     break;
                 default:
-                    throw Error(`Unknown bg choice: ${bgChoice}`);
+                    throw Error(`Unknown bg choice: ${bgName}`);
             }
             // setBgChoiceThis(bgChoice);
             setTimeout(() => rad.scrollIntoView(), 500);
@@ -1195,7 +1189,8 @@ export class CustomRenderer4jsMind {
             const bgObj = await getBgFromElts();
             if (!bgObj) return;
             currentShapeEtc.background = bgObj;
-            modJsEditCommon.checkJmnodesBgName(id);
+            modJsEditCommon.checkShapeEtcBgObj(currentShapeEtc);
+            // modJsEditCommon.checkJmnodesBgName(id);
             applyCurrentToCopied();
         }
         const debounceApplyCurrentBgToCopied = debounce(ApplyCurrentBgToCopied, 2000);
@@ -1589,9 +1584,8 @@ export class CustomRenderer4jsMind {
                 default:
                     throw Error(`Unknown bg-choice: ${bgName}`);
             }
-            // return [bgName, bgValue];
-            const bgObj = {}
-            bgObj[bgName] = bgValue;
+            const bgObj = modJsEditCommon.mkJmnodeBgObj(bgName, bgValue);
+            return bgObj;
         }
 
         const divCurrentBg = mkElt("div", undefined);
@@ -1688,10 +1682,9 @@ export class CustomRenderer4jsMind {
 
                         const blob = blobOut;
                         const url = URL.createObjectURL(blob);
-                        // bg.style.backgroundImage = `url("${urlBlob}")`;
                         clipImage.url = url;
                         clipImage.blob = blob;
-                        const objBackground = currentShapeEtc.background || {};
+                        const objBackground = currentShapeEtc.background;
                         objBackground.url = clipImage.url; // This is for somethingToSave()
                         objBackground.blob = clipImage.blob;
                         requestSetStateBtnSave();
