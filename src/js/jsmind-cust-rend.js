@@ -672,7 +672,6 @@ export class CustomRenderer4jsMind {
             return JSON.stringify(initialShapeEtc) != JSON.stringify(currentShapeEtc);
         }
 
-        // updateCopiesSizes():
         const onAnyCtrlChangeNode = debounce(applyCurrentToCopied);
         function applyCurrentToCopied() {
             const changed = somethingToSaveNode();
@@ -734,7 +733,7 @@ export class CustomRenderer4jsMind {
         // if (copiedShapeEtc)
         const bgObj = modJsEditCommon.getJmnodeBgValue(copiedShapeEtc);
         console.log({ bgObj });
-        debugger;
+        // debugger;
         // if (bgObj.bgName == "bg-choice-img-clipboard") {
         // const blob = bgObj.bgValue;
         // initialShapeEtc.background.blob = blob;
@@ -751,12 +750,6 @@ export class CustomRenderer4jsMind {
         console.log({ copiedShapeEtc, node_copied_data, initialTempData });
 
         const currentShapeEtc = JSON.parse(JSON.stringify(initialShapeEtc));
-        // Image blob was erased, get it back:
-        const currBlob = initialShapeEtc.background?.blob;
-        if (currBlob) {
-            if (!(currBlob instanceof Blob)) throw Error("Not blob");
-            currentShapeEtc.background.blob = currBlob;
-        }
 
         const currentTempData = currentShapeEtc.temp; // For things outside of .shapeEtc
 
@@ -807,14 +800,6 @@ export class CustomRenderer4jsMind {
             // FIX-ME: should not happen any more... soon
             debugger; // eslint-disable-line no-debugger
             return;
-            const w = currentShapeEtc.border.width;
-            if (w === 0) {
-                eltCopied.style.border = "none";
-            } else {
-                const bs = currentShapeEtc.border.style;
-                const bc = currentShapeEtc.border.color;
-                eltCopied.style.border = `${w}px ${bs} ${bc}`;
-            }
         }
 
         const divSliBorderWidth = mkElt("div", undefined, "Width: ");
@@ -972,11 +957,7 @@ export class CustomRenderer4jsMind {
         const initialCustomTopic = currentShapeEtc.nodeCustom;
         const copiedWasCustom = initialCustomTopic != undefined;
         const initTopic = initialTempData.topic;
-        // const initNotes = initialTempData.notes;
         const initNotes = initialShapeEtc.notes;
-
-        // const tafTopic = modMdc.mkMDCtextareaField("Topic", taTopic, initTopic);
-        // modMdc.mkMDCtextareaGrow(tafTopic);
 
         const inpTopic = modMdc.mkMDCtextFieldInput("inp-node-topic", "text");
         inpTopic.value = initTopic;
@@ -1182,11 +1163,9 @@ export class CustomRenderer4jsMind {
         inpBgColor.addEventListener("input", () => {
             currentShapeEtc.temp.bgColor = inpBgColor.value;
             onAnyCtrlChangeNode();
-            // eltCopied.style.backgroundColor = inpBgColor.value;
             checkColorContrast();
         });
         inpFgColor.addEventListener("input", () => {
-            // currentShapeEtc.fgColor = inpFgColor.value;
             currentShapeEtc.temp.fgColor = inpFgColor.value;
             onAnyCtrlChangeNode();
             eltCopied.style.color = inpFgColor.value;
@@ -1213,28 +1192,10 @@ export class CustomRenderer4jsMind {
 
 
         async function ApplyCurrentBgToCopied() {
-            const kv = await getBgFromElts();
-            if (!kv) return;
-            const [bgName, bgValue] = kv;
-            // currentShapeEtc.background = currentShapeEtc.background || {};
-            currentShapeEtc.background = {};
-            const bg = currentShapeEtc.background;
-            bg[bgName] = bgValue;
-            /*
-            if (typeof cssBgVal == "string") {
-                if (bg) {
-                    delete bg.url;
-                    delete bg.blob;
-                }
-                setInShapeEtc(cssBgVal, "background.CSS", currentShapeEtc);
-            } else {
-                bg.CSS = "";
-                bg.url = clipImage.url;
-                bg.blob = clipImage.blob;
-                console.error("Not implemented yet");
-                debugger; // eslint-disable-line no-debugger
-            }
-            */
+            const bgObj = await getBgFromElts();
+            if (!bgObj) return;
+            currentShapeEtc.background = bgObj;
+            modJsEditCommon.checkJmnodesBgName(id);
             applyCurrentToCopied();
         }
         const debounceApplyCurrentBgToCopied = debounce(ApplyCurrentBgToCopied, 2000);
@@ -1628,7 +1589,9 @@ export class CustomRenderer4jsMind {
                 default:
                     throw Error(`Unknown bg-choice: ${bgName}`);
             }
-            return [bgName, bgValue];
+            // return [bgName, bgValue];
+            const bgObj = {}
+            bgObj[bgName] = bgValue;
         }
 
         const divCurrentBg = mkElt("div", undefined);
@@ -1660,9 +1623,7 @@ export class CustomRenderer4jsMind {
                 modMdc.setValidityMDC(inpLink, "");
                 aLinkPreview.href = "";
                 aLinkPreview.textContent = "";
-                // currentShapeEtc.nodeLink = undefined;
                 delete currentShapeEtc.nodeLink;
-                // return;
             } else {
                 if (modTools.isValidUrl(maybeUrl) == true) {
                     console.log("inpLink", maybeUrl);
@@ -1671,7 +1632,6 @@ export class CustomRenderer4jsMind {
                     aLinkPreview.textContent = maybeUrl;
                     modMdc.setValidityMDC(inpLink, "");
                 } else {
-                    // currentShapeEtc.nodeLink = undefined; // FIX-ME: old url
                     delete currentShapeEtc.nodeLink;
                     aLinkPreview.href = "";
                     aLinkPreview.textContent = "";
@@ -1734,7 +1694,6 @@ export class CustomRenderer4jsMind {
                         const objBackground = currentShapeEtc.background || {};
                         objBackground.url = clipImage.url; // This is for somethingToSave()
                         objBackground.blob = clipImage.blob;
-                        // somethingToSaveNode();
                         requestSetStateBtnSave();
                         toDiv.style.backgroundImage = `url("${url}")`;
                         toDiv.scrollIntoView({
@@ -2036,8 +1995,6 @@ export class CustomRenderer4jsMind {
             inpColor.addEventListener("input", () => {
                 console.log("inpColor, input", inpColor.value);
                 setInShapeEtc(inpColor.value, objShEtc, currentShapeEtc);
-                // setBorderCopied();
-                // if (funGrp) funGrp();
             });
             inpColor.addEventListener("change", () => {
                 console.log("inpColor, change", inpColor.value);
