@@ -733,13 +733,13 @@ export class CustomRenderer4jsMind {
         // Image blob was erased, get it back:
         // if (copiedShapeEtc)
         const bgObj = modJsEditCommon.getJmnodeBgValue(copiedShapeEtc);
-        console.log({bgObj});
+        console.log({ bgObj });
         debugger;
-        if (bgObj.bgName == "bg-choice-img-clipboard") {
-            // const blob = bgObj.bgValue;
-            // initialShapeEtc.background.blob = blob;
-            initialShapeEtc.background = bgObj;
-        }
+        // if (bgObj.bgName == "bg-choice-img-clipboard") {
+        // const blob = bgObj.bgValue;
+        // initialShapeEtc.background.blob = blob;
+        initialShapeEtc.background = bgObj;
+        // }
 
         initialTempData.height = node_copied_data.height;
         initialTempData.width = node_copied_data.width;
@@ -898,8 +898,10 @@ export class CustomRenderer4jsMind {
             console.log("setupBackgroundTab", { initialShapeEtc });
             // FIX-ME: better init of .background - but where???
             const initBgObj = initialShapeEtc.background || { "bg-choice-none": undefined };
-            const entry0 = Object.entries(initBgObj)[0] || ["bg-choice-none", undefined];
-            const [bgChoice, bgVal] = entry0;
+            // const entry0 = Object.entries(initBgObj)[0] || ["bg-choice-none", undefined];
+            // const [bgChoice, bgVal] = entry0;
+            const bgChoice = initBgObj.bgName;
+            const bgVal = initBgObj.bgValue;
             console.log({ bgChoice, bgVal });
             const rad = divBgChoices.querySelector(`#${bgChoice}`);
             rad.checked = true;
@@ -934,7 +936,18 @@ export class CustomRenderer4jsMind {
                     detLink.open = true;
                     break;
                 case "bg-choice-img-clipboard":
-                    debugger; // eslint-disable-line no-debugger
+                    // clipImage
+                    {
+                        const blob = bgVal;
+                        const objectUrl = URL.createObjectURL(blob);
+                        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+                        const divClipboardImage = document.getElementById("div-clipboard-image");
+                        divClipboardImage.style.backgroundImage = `url("${objectUrl}")`;
+                        const d = rad.closest("div.bg-choice");
+                        setBgNodeChoiceValid(d, true);
+                        const det = d.querySelector("details")
+                        det.open = true;
+                    }
                     break;
                 default:
                     throw Error(`Unknown bg choice: ${bgChoice}`);
@@ -1249,7 +1262,8 @@ export class CustomRenderer4jsMind {
             }
         }
         const mkBgChoice = (id, label, eltDetails) => {
-            if (!modJsEditCommon.isJmnodesBgName(id)) throw Error(`Not a jmnodesBgName: ${id}`);
+            // if (!modJsEditCommon.isJmnodesBgName(id)) throw Error(`Not a jmnodesBgName: ${id}`);
+            modJsEditCommon.checkJmnodesBgName(id);
             const inpRadio = mkElt("input", { type: "radio", id, name: "bg-choice" });
             inpRadio.style.gridArea = "r";
             inpRadio.style.marginRight = "10px";
@@ -1372,6 +1386,7 @@ export class CustomRenderer4jsMind {
         ]);
 
         const divClipboardImage = mkElt("div");
+        divClipboardImage.id = "div-clipboard-image";
         divClipboardImage.style = `
             width: 100px;
             aspect-ratio: 1 / 1;

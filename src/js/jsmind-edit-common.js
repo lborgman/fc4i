@@ -542,7 +542,7 @@ export function getJmnodeBgValue(shapeEtc) {
             if (bgValue != undefined) errMsg = `${bgName} value != undefined`;
             break;
         case "bg-choice-img-clipboard":
-            debugger;
+            // debugger;
             if (!(bgValue instanceof Blob)) {
                 errMsg = `${bgName} should be Blob`;
             } else {
