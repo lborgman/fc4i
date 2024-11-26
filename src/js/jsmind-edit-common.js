@@ -673,6 +673,17 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
     const oldBtn = eltJmnode.querySelector(`.${clsIconButton}`);
     oldBtn?.remove();
 
+    const notes = shapeEtc.notes;
+    if (notes) {
+        const hasLinks = /(:\W|^)https:\/\//m.test(notes);
+        const icon = hasLinks ? "link": "edit";
+        const iconBtn = modMdc.mkMDCiconButton(icon, "Visit web page");
+        iconBtn.classList.add(clsIconButton);
+        const eltA3 = mkElt("a", { href: "https://svt.se" }, iconBtn);
+        eltA3.classList.add("jsmind-plain-link");
+        eltJmnode.appendChild(eltA3);
+    }
+
     const nodeLink = shapeEtc.nodeLink;
     const nodeCustom = shapeEtc.nodeCustom;
     let foundCustom = false;
