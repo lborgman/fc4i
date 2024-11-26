@@ -1673,15 +1673,20 @@ export async function pageSetup() {
             inpTopic.value = prefillTopic;
             const tfTopic = modMdc.mkMDCtextFieldOutlined("Topic", inpTopic);
 
-            // my notes
-            const taNotes = mkElt("textarea");
-            taNotes.placeholder = "My notes";
+            // const taNotes = mkElt("textarea");
+            const taNotes = modMdc.mkMDCtextFieldTextarea(undefined, 10, 10);
+            taNotes.placeholder = "Enter notes here";
+            const tafNotes = modMdc.mkMDCtextareaField("My Notes 🖉", taNotes);
 
             const body = mkElt("div", undefined, [
                 tfTopic,
-                taNotes
+                tafNotes
             ]);
-            // const save = await modMdc.mkMDCdialogConfirm(body, "add", "cancel");
+            body.style = `
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            `;
 
             const btnAddNode = modMdc.mkMDCdialogButton("Add", "add", true);
             const btnCancel = modMdc.mkMDCdialogButton("Cancel", "close");
@@ -1708,6 +1713,7 @@ export async function pageSetup() {
 
             // if (!save) return;
             const new_node_topic = inpTopic.value.trim();
+            const notes = taNotes.value.trim();
             let new_node;
             switch (rel) {
                 case "child":
@@ -1723,6 +1729,11 @@ export async function pageSetup() {
                         console.log(`brother .add_node(${mother_node.id}, ${new_node_id}, ${new_node_topic})`);
                     }
                     break;
+            }
+            if (notes.length > 0) {
+                debugger;
+                const se = { notes };
+                new_node.data.shapeEtc = se;
             }
             jm.select_node(new_node);
         }
