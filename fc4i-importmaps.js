@@ -60,6 +60,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
         "util-mdc": "./src/js/mod/util-mdc.js",
 
         // Tests:
+        "easymde": "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js",
         "pannellum2d": "./ext/pannellum/pannellum2d.js",
         "jssm": "https://cdn.jsdelivr.net/npm/jssm@latest/dist/jssm.es6.mjs",
         "jssm-viz": "./ext/jssm/jssm-viz.es6.js",
@@ -88,7 +89,7 @@ console.log(`here is fc4i-importmaps ${FC4I_IMPORTMAPS_VER}`);
      * @param {string} idOrLink 
      * @returns 
      */
-    async function importFc4i (idOrLink) {
+    async function importFc4i(idOrLink) {
         if (idOrLink.startsWith("https://")) {
             return await import(idOrLink);
         }

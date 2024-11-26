@@ -565,7 +565,7 @@ export function checkJmnodeBgObj(bgObj) {
                 errMsg = `${bgName} should be "string", not ${tofVal}`;
     }
     if (errMsg) {
-        debugger;
+        debugger; // eslint-disable-line no-debugger
         throw Error(errMsg);
     }
 }
@@ -1673,20 +1673,29 @@ export async function pageSetup() {
             inpTopic.value = prefillTopic;
             const tfTopic = modMdc.mkMDCtextFieldOutlined("Topic", inpTopic);
 
-            // const taNotes = mkElt("textarea");
-            const taNotes = modMdc.mkMDCtextFieldTextarea(undefined, 10, 10);
-            taNotes.placeholder = "Enter notes here";
-            const tafNotes = modMdc.mkMDCtextareaField("My Notes 🖉", taNotes);
-
+            const taNotes = mkElt("textarea");
+            // const taNotes = modMdc.mkMDCtextFieldTextarea(undefined, 10, 10);
+            taNotes.placeholder = "Enter preliminary notes here";
             const body = mkElt("div", undefined, [
                 tfTopic,
-                tafNotes
+                taNotes
             ]);
             body.style = `
                 display: flex;
                 flex-direction: column;
                 gap: 25px;
             `;
+
+            // # my notes
+            const modEasyMDE = await importFc4i("easymde");
+            console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
+            const easyMDE = new EasyMDE({
+                element: taNotes,
+                status: false,
+                // toolbar: [],
+            });
+
+
 
             const btnAddNode = modMdc.mkMDCdialogButton("Add", "add", true);
             const btnCancel = modMdc.mkMDCdialogButton("Cancel", "close");
@@ -1713,7 +1722,7 @@ export async function pageSetup() {
 
             // if (!save) return;
             const new_node_topic = inpTopic.value.trim();
-            const notes = taNotes.value.trim();
+            // const notes = taNotes.value.trim();
             let new_node;
             switch (rel) {
                 case "child":
@@ -1730,6 +1739,7 @@ export async function pageSetup() {
                     }
                     break;
             }
+            let notes = easyMDE.value().trimEnd();
             if (notes.length > 0) {
                 debugger;
                 const se = { notes };

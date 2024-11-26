@@ -980,9 +980,7 @@ export class CustomRenderer4jsMind {
         divNotesTab.style.gap = "30px";
 
         async function activateNotesTab() {
-            const modEasyMDE = await import(
-                "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"
-            );
+            const modEasyMDE = await importFc4i("easymde");
             console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
             const easyMDE = new EasyMDE({
                 element: taNotes,
