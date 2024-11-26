@@ -528,7 +528,7 @@ export function checkJmnodesBgName(bgName) {
     if (!jmnodesBgNames.includes(bgName)) throw Error(`Not a jmnodesBgName: ${bgName}`);
 }
 export function mkJmnodeBgObj(bgName, bgValue) {
-    const bgObj = {bgName, bgValue};
+    const bgObj = { bgName, bgValue };
     // bgObj[bgName] = bgValue;
     checkJmnodeBgObj(bgObj);
     return bgObj;
@@ -1648,11 +1648,12 @@ export async function pageSetup() {
 
         async function addNode(rel) {
             const selected_node = getSelected_node();
-            if (selected_node) {
-                // const jm = jsMind.current;
-                const jm = jmDisplayed;
-                const new_node_id = getNextNodeId();
-                let fromClipBoard;
+            if (!selected_node) { throw Error("No selected node"); }
+            const jm = jmDisplayed;
+            const new_node_id = getNextNodeId();
+            let fromClipBoard;
+            let fastTest = false;
+            if (fastTest) {
                 try {
                     fromClipBoard = await navigator.clipboard.readText();
                     if (fromClipBoard?.length > 0) {
@@ -1660,35 +1661,70 @@ export async function pageSetup() {
                             .trim()
                             // @ts-ignore
                             .replaceAll(/\s/g, "x")
-                            .slice(0, 100);
+                            .slice(0, 20);
                     }
                 } catch (err) {
                     console.warn(err);
                 }
-                const new_node_topic = fromClipBoard || `Node ${new_node_id}`;
-                let new_node;
-                switch (rel) {
-                    case "child":
-                        new_node = await jm.add_node(selected_node, new_node_id, new_node_topic);
-                        console.log(`child .add_node(${selected_node.id}, ${new_node_id}, ${new_node_topic})`);
-                        break;
-                    case "brother":
-                        const mother_node = selected_node.parent;
-                        if (!mother_node) {
-                            modMdc.mkMDCdialogAlert("This node can't have siblings");
-                        } else {
-                            new_node = await jm.add_node(mother_node, new_node_id, new_node_topic);
-                            console.log(`brother .add_node(${mother_node.id}, ${new_node_id}, ${new_node_topic})`);
-                        }
-                        break;
-                }
-                jm.select_node(new_node);
-                // setTimeout(() => { newNode._data.view.element.draggable = true; }, 1000);
-                // setTimeout(() => {
-                // const eltJmnode = jsMind.my_get_DOM_element_from_node(new_node);
-                // fixJmnodeProblem(eltJmnode);
-                // }, 1000);
             }
+            const prefillTopic = fastTest ? fromClipBoard || `Node ${new_node_id}` : "";
+
+            const inpTopic = modMdc.mkMDCtextFieldInput("inp-node-topic", "text");
+            inpTopic.value = prefillTopic;
+            const tfTopic = modMdc.mkMDCtextFieldOutlined("Topic", inpTopic);
+
+            // my notes
+            const taNotes = mkElt("textarea");
+            taNotes.placeholder = "My notes";
+
+            const body = mkElt("div", undefined, [
+                tfTopic,
+                taNotes
+            ]);
+            // const save = await modMdc.mkMDCdialogConfirm(body, "add", "cancel");
+
+            const btnAddNode = modMdc.mkMDCdialogButton("Add", "add", true);
+            const btnCancel = modMdc.mkMDCdialogButton("Cancel", "close");
+            const eltActions = modMdc.mkMDCdialogActions([btnAddNode, btnCancel]);
+
+            btnAddNode.disabled = true;
+            inpTopic.addEventListener("input", () => { btnAddNode.disabled = inpTopic.value.trim() == ""; });
+
+            const dlg = await modMdc.mkMDCdialog(body, eltActions);
+            // function closeDialog() { dlg.mdc.close(); }
+            const res = await new Promise((resolve, reject) => {
+                dlg.dom.addEventListener("MDCDialog:closed", errorHandlerAsyncEvent(async evt => {
+                    const action = evt.detail.action;
+                    const topic = inpTopic.value.trim();
+                    const result = topic.length > 0;
+                    console.log({ action, result });
+                    resolve(result);
+                }));
+            });
+            console.log({ res });
+            debugger;
+            if (!res) return;
+
+
+            // if (!save) return;
+            const new_node_topic = inpTopic.value.trim();
+            let new_node;
+            switch (rel) {
+                case "child":
+                    new_node = await jm.add_node(selected_node, new_node_id, new_node_topic);
+                    console.log(`child .add_node(${selected_node.id}, ${new_node_id}, ${new_node_topic})`);
+                    break;
+                case "brother":
+                    const mother_node = selected_node.parent;
+                    if (!mother_node) {
+                        modMdc.mkMDCdialogAlert("This node can't have siblings");
+                    } else {
+                        new_node = await jm.add_node(mother_node, new_node_id, new_node_topic);
+                        console.log(`brother .add_node(${mother_node.id}, ${new_node_id}, ${new_node_topic})`);
+                    }
+                    break;
+            }
+            jm.select_node(new_node);
         }
 
         const liDelete = mkMenuItem("Delete node", deleteNode);
@@ -1797,7 +1833,7 @@ export async function pageSetup() {
             const dy = evtPointerLast.clientY - posScrollData.clientY;
             if (isNaN(dx)) { isScrolling = false; return; }
             if (isNaN(dy)) { isScrolling = false; return; }
-
+ 
             ele.scrollTop = posScrollData.top - dy;
             const scrollLeft = posScrollData.left - dx;
             ele.scrollLeft = scrollLeft;
