@@ -729,9 +729,9 @@ export class CustomRenderer4jsMind {
         const copiedShapeEtc = node_copied_data.shapeEtc;
 
         const initialShapeEtc = JSON.parse(JSON.stringify(copiedShapeEtc));
-        // Image blob was erased, get it back:
+        // FIX-ME: Image blob was erased, get it back:
         const bgObj = modJsEditCommon.getShapeEtcBgObj(copiedShapeEtc);
-        console.log({ bgObj });
+        modJsEditCommon.checkJmnodeBgObj(bgObj);
         initialShapeEtc.background = bgObj;
         modJsEditCommon.checkShapeEtcBgObj(initialShapeEtc);
 
@@ -745,6 +745,8 @@ export class CustomRenderer4jsMind {
         console.log({ copiedShapeEtc, node_copied_data, initialTempData });
 
         const currentShapeEtc = JSON.parse(JSON.stringify(initialShapeEtc));
+        // blob was erased, get it back:
+        currentShapeEtc.background = initialShapeEtc.background;
 
         const currentTempData = currentShapeEtc.temp; // For things outside of .shapeEtc
 
@@ -871,16 +873,15 @@ export class CustomRenderer4jsMind {
         }
 
         let backgroundTabIsSetup = false;
-        function setupBackgroundTab() {
+        function setupJmnodeBgTab() {
             if (backgroundTabIsSetup) return;
             console.log(divBgChoices);
             backgroundTabIsSetup = true;
-            console.log("setupBackgroundTab", { initialShapeEtc });
-            // FIX-ME: better init of .background - but where???
+            console.log("setupJmnodeBgTab", { initialShapeEtc });
             modJsEditCommon.getShapeEtcBgObj(initialShapeEtc);
             const initBgObj = initialShapeEtc.background;
-            const bgName = initBgObj? initBgObj.bgName : "bg-choice-none";
-            const bgVal = initBgObj? initBgObj.bgValue : undefined;
+            const bgName = initBgObj ? initBgObj.bgName : "bg-choice-none";
+            const bgVal = initBgObj ? initBgObj.bgValue : undefined;
             console.log({ bgName, bgVal });
             const rad = divBgChoices.querySelector(`#${bgName}`);
             rad.checked = true;
@@ -918,6 +919,7 @@ export class CustomRenderer4jsMind {
                     // clipImage
                     {
                         const blob = bgVal;
+                        clipImage.blob = blob;
                         const objectUrl = URL.createObjectURL(blob);
                         setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
                         const divClipboardImage = document.getElementById("div-clipboard-image");
@@ -935,7 +937,7 @@ export class CustomRenderer4jsMind {
             setTimeout(() => rad.scrollIntoView(), 500);
         }
         function activateBackgroundTab() {
-            setupBackgroundTab();
+            setupJmnodeBgTab();
         }
 
         const taTopic = modMdc.mkMDCtextFieldTextarea(undefined, 8, 50);
@@ -1190,7 +1192,6 @@ export class CustomRenderer4jsMind {
             if (!bgObj) return;
             currentShapeEtc.background = bgObj;
             modJsEditCommon.checkShapeEtcBgObj(currentShapeEtc);
-            // modJsEditCommon.checkJmnodesBgName(id);
             applyCurrentToCopied();
         }
         const debounceApplyCurrentBgToCopied = debounce(ApplyCurrentBgToCopied, 2000);
@@ -1526,6 +1527,16 @@ export class CustomRenderer4jsMind {
             evt.stopImmediatePropagation();
             console.log("hej input");
             console.log(evt);
+            const target = evt.target;
+            if (target.name == "bg-choice") {
+                const bgName = target.id;
+                const currBgObj = modJsEditCommon.getShapeEtcBgObj(currentShapeEtc);
+                if (bgName != currBgObj.bgName) {
+                    // getBgFromElts
+                    const bgValue = getBgValueFromElt(bgName);
+                    currentShapeEtc.background = modJsEditCommon.mkJmnodeBgObj(bgName, bgValue)
+                }
+            }
             // FIX-ME: the above does not create an entry in console???
             // Tried reboot etc.
             // Suspect a chrome bug since there is another event handler here.
@@ -1558,14 +1569,11 @@ export class CustomRenderer4jsMind {
             if (!elt) throw Error("Could not find input[name=bg-choice]:checked");
             return elt;
         }
-        async function getBgFromElts() {
-            if (!backgroundTabIsSetup) return;
-            const elt = await getBgCssCheckedInp();
-            const bgName = elt.id;
-            let bgValue = undefined;
-            console.log("getBgCssValue", elt, bgName);
+        function getBgValueFromElt(bgName) {
+            let bgValue;
             switch (bgName) {
                 case "bg-choice-none":
+                    bgValue = "no value";
                     break;
                 case "bg-choice-color":
                     bgValue = inpBgColor.value.trim();
@@ -1584,6 +1592,15 @@ export class CustomRenderer4jsMind {
                 default:
                     throw Error(`Unknown bg-choice: ${bgName}`);
             }
+            return bgValue;
+        }
+        async function getBgFromElts() {
+            if (!backgroundTabIsSetup) return;
+            const elt = await getBgCssCheckedInp();
+            const bgName = elt.id;
+            let bgValue = undefined;
+            console.log("getBgCssValue", elt, bgName);
+            bgValue = getBgValueFromElt(bgName);
             const bgObj = modJsEditCommon.mkJmnodeBgObj(bgName, bgValue);
             return bgObj;
         }
@@ -1682,11 +1699,13 @@ export class CustomRenderer4jsMind {
 
                         const blob = blobOut;
                         const url = URL.createObjectURL(blob);
-                        clipImage.url = url;
+                        // clipImage.url = url;
                         clipImage.blob = blob;
-                        const objBackground = currentShapeEtc.background;
-                        objBackground.url = clipImage.url; // This is for somethingToSave()
-                        objBackground.blob = clipImage.blob;
+                        // const objBackground = currentShapeEtc.background;
+                        // objBackground.url = clipImage.url; // This is for somethingToSave()
+                        // objBackground.blob = clipImage.blob;
+                        currentShapeEtc.background =
+                            modJsEditCommon.mkJmnodeBgObj("bg-choice-img-clipboard", blob);
                         requestSetStateBtnSave();
                         toDiv.style.backgroundImage = `url("${url}")`;
                         toDiv.scrollIntoView({
@@ -2125,24 +2144,26 @@ export class CustomRenderer4jsMind {
             `height:${thumbSize}px`,
         ].join(";");
         const icon = modMdc.mkMDCicon("resize");
-        icon.style.fontSize = `${thumbSize}px`;
-        const thumb = mkElt("span", { style }, icon);
+        icon.style = `
+            fontSize: ${thumbSize}px;
+            width: ${thumbSize}px;
+            aspect-ratio: 1 / 1;
+        `;
+        const thumb = mkElt("span", undefined, icon);
         thumb.id = "jsmind-ednode-copied-resizer";
         thumb.title = "Resize";
-        // if (confirm("thumb absolute?")) thumb.style.position = "absolute";
-        thumb.style.position = "absolute";
-        // console.log({ thumb });
+        thumb.style = `
+            position: absolute;
+            visibility: hidden;
+            cursor: pointer;
+        `;
         divEdnodeCopied.appendChild(thumb);
         let bcrCd, bcrT;
         let newBcrC;
-        thumb.style.visibility = "hidden";
-        // thumb.style.display = "none";
-        // let bcrOrigDivCopied;
         function adjustDivCopiedHeight() {
             const bcrT = thumb.getBoundingClientRect();
             const bcrD = divEdnodeCopied.getBoundingClientRect();
             const newH = bcrT.bottom - bcrD.top + 20;
-            // grid-template-rows: 40% min-content 1fr;
             divEdnodeParts.style.gridTemplateRows = `${newH}px min-content 1fr`;
         }
         // throttle or debounce??
@@ -2154,7 +2175,6 @@ export class CustomRenderer4jsMind {
             // console.log({ resMu });
             bcrCd = eltCopied.getBoundingClientRect();
             bcrT = thumb.getBoundingClientRect();
-            // thumb.style.display = "block";
             if (thumb.style.position == "fixed") {
                 thumb.style.left = bcrCd.left + bcrCd.width - bcrT.width / 2 + "px";
                 thumb.style.top = bcrCd.top + bcrCd.height + - bcrT.height / 2 + "px";

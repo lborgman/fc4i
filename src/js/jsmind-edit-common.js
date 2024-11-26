@@ -550,7 +550,6 @@ export function checkJmnodeBgObj(bgObj) {
     let errMsg;
     switch (bgName) {
         case "bg-choice-none":
-            if (bgValue != undefined) errMsg = `${bgName} value != undefined`;
             break;
         case "bg-choice-img-clipboard":
             // debugger;
