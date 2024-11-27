@@ -56,6 +56,42 @@ export class providerDetails {
     get getRec() { return this.#getRec; }
     get getRecLink() { return this.#getRecLink; }
 }
+
+async function setupEasyMDE4Notes(taNotes, valNotes) {
+    const modEasyMDE = await importFc4i("easymde");
+    console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
+    const easyMDE = new EasyMDE({
+        element: taNotes,
+        status: false,
+        // toolbar: [],
+    });
+    easyMDE.value(valNotes);
+    easyMDE.togglePreview();
+    const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
+    const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
+    const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
+    eltToolbar.style.display = "none";
+    const btnEdit = modMdc.mkMDCiconButton("edit", "Edit my notes");
+    btnEdit.style = `
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border-radius: 50%;
+    color: green;
+    background: color-mix(in srgb, var(--mdc-theme-primary) 30%, #ffffff);
+`;
+    eltContainer.style.position = "relative";
+    eltContainer.appendChild(btnEdit);
+    btnEdit.addEventListener("click", evt => {
+        evt.preventDefault();
+        eltToolbar.style.display = "";
+        eltToolbar.scrollIntoView();
+        btnEdit.remove();
+        easyMDE.togglePreview();
+    });
+    return easyMDE;
+}
+
 export class CustomRenderer4jsMind {
     #providers = {};
     // constructor(THEjmDisplayed, linkRendererImg)
@@ -663,6 +699,7 @@ export class CustomRenderer4jsMind {
             }));
         });
     }
+
     async editNodeDialog(eltJmnode, scrollToNotes) {
         const modJsEditCommon = await importFc4i("jsmind-edit-common");
         const modIsDisplayed = await importFc4i("is-displayed");
@@ -982,38 +1019,8 @@ export class CustomRenderer4jsMind {
         divNotesTab.style.gap = "30px";
 
         async function activateNotesTab() {
-            const modEasyMDE = await importFc4i("easymde");
-            console.log({ modEasyMDE }); // EasyMDE is defined in global scope!
-            const easyMDE = new EasyMDE({
-                element: taNotes,
-                status: false,
-                // toolbar: [],
-            });
             const valNotes = initNotes ? initNotes : "# My Notes";
-            easyMDE.value(valNotes);
-            easyMDE.togglePreview();
-            const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
-            const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
-            const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
-            eltToolbar.style.display = "none";
-            const btnEdit = modMdc.mkMDCiconButton("edit", "Edit my notes");
-            btnEdit.style = `
-                position: absolute;
-                right: 5px;
-                top: 5px;
-                border-radius: 50%;
-                color: green;
-                background: color-mix(in srgb, var(--mdc-theme-primary) 30%, #ffffff);
-            `;
-            eltContainer.style.position = "relative";
-            eltContainer.appendChild(btnEdit);
-            btnEdit.addEventListener("click", evt => {
-                evt.preventDefault();
-                eltToolbar.style.display = "";
-                eltToolbar.scrollIntoView();
-                btnEdit.remove();
-                easyMDE.togglePreview();
-            })
+            const easyMDE = await setupEasyMDE4Notes(taNotes, valNotes);
             easyMDE.codemirror.on("changes", () => { saveEmdChanges(); })
             window.easyMDE = easyMDE;
         }
