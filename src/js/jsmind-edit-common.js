@@ -675,13 +675,38 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
 
     const notes = shapeEtc.notes;
     if (notes) {
-        const hasLinks = /(:\W|^)https:\/\//m.test(notes);
-        const icon = hasLinks ? "link": "edit";
-        const iconBtn = modMdc.mkMDCiconButton(icon, "Visit web page");
+        const reHttps = /(?:^|\W)(https:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()\[\]@:%_\+.~#?&\/=]*))(?:$|\s)/g;
+        const m = [...notes.matchAll(reHttps)];
+        m.forEach(m2 => {
+            const url = m2[1];
+            console.log(`In notes: ${url}`);
+        });
+        const hasLinks = m.length > 0;
+
+        const icon = hasLinks ? "link" : "edit";
+        const iconBtn = modMdc.mkMDCiconButton(icon, "Show notes");
         iconBtn.classList.add(clsIconButton);
-        const eltA3 = mkElt("a", { href: "https://svt.se" }, iconBtn);
-        eltA3.classList.add("jsmind-plain-link");
-        eltJmnode.appendChild(eltA3);
+        // const eltA3 = mkElt("a", { href: "https://svt.se" }, iconBtn);
+        // eltA3.classList.add("jsmind-plain-link");
+        // eltJmnode.appendChild(eltA3);
+
+        // iconBtn.classList.add("jsmind-plain-link");
+        // eltJmnode.appendChild(iconBtn);
+
+        const eltSpan = mkElt("span", undefined, iconBtn);
+        // eltSpan.classList.add("jsmind-plain-link");
+        eltSpan.classList.add("has-notes-mark");
+        eltJmnode.appendChild(eltSpan);
+
+        eltSpan.addEventListener("click", async evt => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            evt.stopImmediatePropagation();
+            console.log("clicked eltSpan");
+            const modCustRend = await importFc4i("jsmind-cust-rend");
+            const renderer = await modCustRend.getOurCustomRenderer();
+            renderer.editNodeDialog(eltJmnode, true);
+        });
     }
 
     const nodeLink = shapeEtc.nodeLink;

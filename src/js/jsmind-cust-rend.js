@@ -663,7 +663,7 @@ export class CustomRenderer4jsMind {
             }));
         });
     }
-    async editNodeDialog(eltJmnode) {
+    async editNodeDialog(eltJmnode, scrollToNotes) {
         const modJsEditCommon = await importFc4i("jsmind-edit-common");
         const modIsDisplayed = await importFc4i("is-displayed");
         const clipImage = {};
@@ -694,8 +694,10 @@ export class CustomRenderer4jsMind {
         const ctrlsSliders = {}
 
         const eltCopied = eltJmnode.cloneNode(true);
-        const aPlainLink = eltCopied.querySelector("a.jsmind-plain-link");
-        aPlainLink?.remove();
+        // const aPlainLink = eltCopied.querySelector("a.jsmind-plain-link");
+        // aPlainLink?.remove();
+        const spanNotes = eltCopied.querySelector("span.has-notes-mark");
+        spanNotes?.remove();
 
         eltCopied.style.outline = "1px dotted rgba(255,255,255,0.2)";
         eltCopied.style.top = 0;
@@ -2354,6 +2356,22 @@ export class CustomRenderer4jsMind {
         const debounceUpdateCopiesSizes = debounce(updateCopiesSizes, 300);
         function requestUpdateCopiesSizes() { debounceUpdateCopiesSizes(); }
 
+        if (scrollToNotes) {
+            setTimeout(() => {
+                if (!body.ownerDocument) {
+                    debugger;
+                    throw Error("body is not yet in document");
+                }
+                const divNotes = body.querySelector("div.EasyMDEContainer");
+                console.log({ divNotes });
+                if (!divNotes) {
+                    debugger;
+                    throw Error("Could not find notes");
+                }
+                const opt = { behavior: "smooth" };
+                divNotes.scrollIntoView(opt);
+            }, 200);
+        }
 
         const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
         console.log({ save });
