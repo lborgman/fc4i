@@ -705,7 +705,8 @@ export async function applyShapeEtc(shapeEtc, eltJmnode) {
             console.log("clicked eltSpan");
             const modCustRend = await importFc4i("jsmind-cust-rend");
             const renderer = await modCustRend.getOurCustomRenderer();
-            renderer.editNodeDialog(eltJmnode, true);
+            // renderer.editNodeDialog(eltJmnode, true);
+            renderer.editNotesDialog(eltJmnode);
         });
     }
 

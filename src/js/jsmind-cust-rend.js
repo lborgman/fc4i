@@ -73,13 +73,13 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
     eltToolbar.style.display = "none";
     const btnEdit = modMdc.mkMDCiconButton("edit", "Edit my notes");
     btnEdit.style = `
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    border-radius: 50%;
-    color: green;
-    background: color-mix(in srgb, var(--mdc-theme-primary) 30%, #ffffff);
-`;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        border-radius: 50%;
+        color: green;
+        background: color-mix(in srgb, var(--mdc-theme-primary) 30%, #ffffff);
+    `;
     eltContainer.style.position = "relative";
     eltContainer.appendChild(btnEdit);
     btnEdit.addEventListener("click", evt => {
@@ -700,6 +700,49 @@ export class CustomRenderer4jsMind {
         });
     }
 
+    async editNotesDialog(eltJmnode) {
+        const node_ID = jsMind.my_get_nodeID_from_DOM_element(eltJmnode);
+        const node = this.THEjmDisplayed.get_node(node_ID)
+        const node_data = node.data;
+        const shapeEtc = node_data.shapeEtc || {};
+        const initialNotesVal = shapeEtc.notes || "";
+        const taNotes = mkElt("textarea");
+        const body = mkElt("div", undefined, [
+            // mkElt("h2", undefined, "Node Notes"),
+            mkElt("h2", undefined, node.topic),
+            taNotes
+        ]);
+        const easyMDE = await setupEasyMDE4Notes(taNotes, initialNotesVal);
+        easyMDE.value(initialNotesVal);
+
+        function somethingToSaveNotes() {
+            return easyMDE.value().trim() != initialNotesVal;
+        }
+        let btnSave;
+        function getBtnSave() {
+            if (btnSave) return btnSave;
+            // const contBtns = body.querySelector(".mdc-dialog__actions");
+            const contBtns = body.closest(".mdc-dialog__surface").querySelector(".mdc-dialog__actions");
+            // FIX-ME: Should be the first?
+            btnSave = contBtns.querySelector("button");
+            if (btnSave.textContent != "save") throw Error("Did not find the save button");
+            return btnSave;
+        }
+        function setStateBtnSave() {
+            const btn = getBtnSave();
+            if (!btn) return;
+            btn.disabled = !somethingToSaveNotes();
+        }
+        const debounceStateBtnSave = debounce(setStateBtnSave, 300);
+        function requestSetStateBtnSave() { debounceStateBtnSave(); }
+        requestSetStateBtnSave();
+
+        const save = await modMdc.mkMDCdialogConfirm(body, "save", "cancel");
+        console.log({ save });
+        if (save) {
+            if (!somethingToSaveNotes()) throw Error("Save button enabled but nothing to save?");
+        }
+    }
     async editNodeDialog(eltJmnode, scrollToNotes) {
         const modJsEditCommon = await importFc4i("jsmind-edit-common");
         const modIsDisplayed = await importFc4i("is-displayed");
