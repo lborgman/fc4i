@@ -207,7 +207,7 @@ export function mkZoomButtons(elt, horOrVer) {
         left: 170px;
         display: flex;
         background: wheat;
-        z-index: 9999;
+        z-index: 5;
     `;
     return cont;
 }

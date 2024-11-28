@@ -96,6 +96,7 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
             btnPreview.click();
             btnBold.click();
             btnBold.click();
+            taNotes.focus();
         }, 10);
     });
     return easyMDE;
