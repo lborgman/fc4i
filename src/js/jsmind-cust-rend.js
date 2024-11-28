@@ -72,6 +72,7 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
     const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
     eltToolbar.style.display = "none";
     const btnEdit = modMdc.mkMDCiconButton("edit", "Edit my notes");
+    btnEdit.id = "edit-my-notes";
     btnEdit.style = `
         position: absolute;
         right: 5px;
@@ -84,10 +85,18 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
     eltContainer.appendChild(btnEdit);
     btnEdit.addEventListener("click", evt => {
         evt.preventDefault();
+        btnEdit.remove();
         eltToolbar.style.display = "";
         eltToolbar.scrollIntoView();
-        btnEdit.remove();
-        easyMDE.togglePreview();
+        const btnPreview = eltToolbar.querySelector("button.preview");
+        const btnBold = eltToolbar.querySelector("button.bold");
+        // FIX-ME: There must be a better way to do this???
+        setTimeout(() => {
+            // easyMDE.togglePreview();
+            btnPreview.click();
+            btnBold.click();
+            btnBold.click();
+        }, 10);
     });
     return easyMDE;
 }
@@ -714,6 +723,18 @@ export class CustomRenderer4jsMind {
         ]);
         const easyMDE = await setupEasyMDE4Notes(taNotes, initialNotesVal);
         easyMDE.value(initialNotesVal);
+        // debugger;
+        const btnEdit = body.querySelector("#edit-my-notes");
+        btnEdit.addEventListener("click", evt => {
+        });
+        setTimeout(() => {
+            const btn = getBtnSave();
+            console.log({ btn });
+            // debugger;
+            btn.focus();
+            const ae = document.activeElement;
+            console.log({ ae });
+        }, 2000);
 
         function somethingToSaveNotes() {
             return easyMDE.value().trim() != initialNotesVal;
