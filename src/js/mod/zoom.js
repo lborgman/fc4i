@@ -116,7 +116,10 @@ export function pinchZoom(element) {
  */
 function changeScale(elt, amount) {
     const transforms = getCssTransforms(elt);
-    let scale = transforms.scale * amount;
+    const oldScale = transforms.scale;
+    let scale = oldScale * amount;
+    if (amount < 1 && oldScale > 1) scale = Math.max(1, scale);
+    if (amount > 1 && oldScale < 1) scale = Math.min(1, scale);
     if (0.95 < scale && scale < 1.05) scale = 1;
     // const x = transforms.x;
     // const y = transforms.y;
@@ -152,6 +155,7 @@ function mkZoomButton(elt, inOrOut) {
         width: 32px;
         background-color: transparent;
         font-size: 24px;
+        border: none;
     `;
     btn.addEventListener("click", () => {
         console.log("btn ", dir, amount);
@@ -169,7 +173,7 @@ function mkDisplayZoomed() {
     div.style = `
         display: inline-flex;
         align-items: center;
-        padding: 4px;
+        NOpadding: 4px;
     `;
     return div;
 }
@@ -202,12 +206,7 @@ export function mkZoomButtons(elt, horOrVer) {
     cont.appendChild(btnMinus);
     // @ts-ignore
     cont.style = `
-        position: fixed;
-        top: 8px;
-        left: 170px;
         display: flex;
-        background: wheat;
-        z-index: 5;
     `;
     return cont;
 }

@@ -119,6 +119,7 @@ export async function setupFsmListeners(eltFsm) {
     const modZoom = await importFc4i("zoom");
     modZoom.pinchZoom(eltFsm);
     const zoomButtons = modZoom.mkZoomButtons(eltFsm, "horizontal");
+    zoomButtons.id = "mm4i-zoom-buttons";
     document.body.appendChild(zoomButtons);
 
     const eltInner = eltFsm;
