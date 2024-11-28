@@ -66,7 +66,6 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
         // toolbar: [],
     });
     easyMDE.value(valNotes);
-    easyMDE.togglePreview();
     const eltCursorDiv = easyMDE.codemirror.display.cursorDiv;
     const eltContainer = eltCursorDiv.closest("div.EasyMDEContainer");
     const eltToolbar = eltContainer.querySelector("div.editor-toolbar");
@@ -83,6 +82,8 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
     `;
     eltContainer.style.position = "relative";
     eltContainer.appendChild(btnEdit);
+    easyMDE.togglePreview();
+    taNotes.blur();
     btnEdit.addEventListener("click", evt => {
         evt.preventDefault();
         btnEdit.remove();
@@ -96,7 +97,7 @@ async function setupEasyMDE4Notes(taNotes, valNotes) {
             btnPreview.click();
             btnBold.click();
             btnBold.click();
-            // taNotes.focus();
+            taNotes.focus();
         }, 10);
     });
     return easyMDE;
