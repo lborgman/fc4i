@@ -1,9 +1,9 @@
 //========== Specific ====================================================
-const SW_VERSION = "0.4.2229";
+const SW_VERSION = "0.5.0000";
 
 
 // https://www.npmjs.com/package/workbox-sw
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.1.0/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox-sw.js');
 
 
 // throw Error("Test worker error");
